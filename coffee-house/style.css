@@ -1,3 +1,83 @@
+@font-face {
+    font-family: Inter;
+    src: url(assets/fonts/Inter-Regular.otf);
+}
+
+@font-face {
+    font-family: Inter-italic;
+    src: url(assets/fonts/Inter-Italic.otf);
+}
+
+html {
+    scroll-behavior: smooth;
+    max-width: 100vw;
+}
+
 * {
     box-sizing: border-box;
 }
+
+body {    
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 0;
+    background-color: #E1D4C9;
+}
+
+.header,
+.main,
+.footer {
+    width: 100%;
+    max-width: 1440px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+    padding: 20px 40px;
+}
+
+.nav-list {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    list-style: none;
+    padding-left: 0;
+}
+
+.nav-item a {
+    text-decoration: none;
+    font-family: Inter;
+    color: #403F3D;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 150%;
+}
+
+.menu-link-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-family: Inter;
+    color: #403F3D;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+}
+
