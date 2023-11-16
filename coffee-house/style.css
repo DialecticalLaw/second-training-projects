@@ -311,3 +311,64 @@ body {
     height: 590px;
     background-image: url(assets/img/about-4.png);
 }
+
+.mobile-app-section {
+    display: flex;
+    align-items: center;
+    gap: 100px;
+    padding: 0 40px;
+}
+
+.mobile-app-info {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.mobile-app-info .main-text {
+    width: 600px;
+}
+
+.mobile-app-links {
+    display: flex;
+    gap: 20px;
+}
+
+.app-store-block,
+.google-play-block {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 200px;
+    height: 64px;
+    padding: 12px 20px;
+    border-radius: 100px;
+    border: 1px solid #665F55;
+}
+
+.app-description-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.app-description-block :nth-child(1) {
+    color: #403F3D;
+    font-family: Inter;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 140%;
+}
+
+.app-description-block :nth-child(2) {
+    color: #403F3D;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 150%;
+}
+
+.app-icon {
+    width: 36px;
+    height: 36px;
+}
