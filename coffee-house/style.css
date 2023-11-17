@@ -372,3 +372,83 @@ body {
     width: 36px;
     height: 36px;
 }
+
+.footer {
+    width: 100%;
+    max-width: 1440px;
+    margin-top: 100px;
+    padding: 0 40px 40px 40px;
+}
+
+.footer-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    padding: 100px;
+    background-color: #665F55;
+    border-radius: 40px;
+}
+
+.footer-container-1,
+.footer-container-2 {
+    width: 50%;
+}
+
+.footer-container-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+.footer-container-1 .main-text {
+    color: #E1D4C9;
+}
+
+.social-block {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.social-link {
+    width: 60px;
+    height: 60px;
+}
+
+.footer-container-2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+.footer-container-2 .additional-text-2 {
+    text-align: left;
+    color: #E1D4C9;
+}
+
+.contacts-block {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.contacts-block p {
+    color: #E1D4C9;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+}
+
+.contact-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
