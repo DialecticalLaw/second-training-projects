@@ -1,11 +1,12 @@
 @font-face {
     font-family: Inter;
-    src: url(assets/fonts/Inter-Regular.otf);
+    src: url(assets/fonts/Inter-VariableFont_slnt\,wght.ttf);
 }
 
 @font-face {
     font-family: Inter-italic;
-    src: url(assets/fonts/Inter-Italic.otf);
+    font-style: italic;
+    src: url(assets/fonts/Inter-VariableFont_slnt\,wght.ttf);
 }
 
 * {
@@ -51,8 +52,38 @@ body {
     padding: 20px 40px;
 }
 
+.link,
+.link-footer {
+    position: relative;
+}
+
+.link::after,
+.link-footer::after {
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #403F3D;
+    content: '';
+    opacity: 0;
+    transform: scaleX(0);
+    transition: 0.5s;
+}
+
+.link-footer::after {
+    background-color: #E1D4C9;
+}
+
+.link:hover::after,
+.link-footer:hover::after {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
 .nav {
     width: 100%;
+    margin-top: -5px;
 }
 
 .nav-list {
@@ -73,18 +104,26 @@ body {
     line-height: 150%;
 }
 
+.logo {
+    margin-top: 3px;
+}
+
 .menu-link-header {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-top: -2px;
     text-decoration: none;
     font-family: Inter;
     color: #403F3D;
     font-family: Inter;
     font-size: 16px;
-    font-style: normal;
     font-weight: 600;
     line-height: 150%;
+}
+
+.header-coffee-icon {
+    margin-top: -6px;
 }
 
 .main {
@@ -142,6 +181,7 @@ body {
 }
 
 .enjoy-block p.additional-text {
+    margin-top: 1px;
     color: #E1D4C9;
 }
 
@@ -149,7 +189,6 @@ body {
     color: #E1D4C9;
     line-height: 105%;
     font-size: 72px;
-    letter-spacing: 1px;
 }
 
 .enjoy-block .special-text {
@@ -157,15 +196,35 @@ body {
 }
 
 .menu-link-enjoy {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 200px;
-    padding: 20px 78px;
+    height: 64px;
     border-radius: 100px;
     background-color: #E1D4C9;
     text-decoration: none;
     font-weight: 600;
+}
+
+.menu-link-enjoy span {
+    transition: 0.5s;
+}
+
+.enjoy-coffee-icon {
+    position: absolute;
+    right: 64px;
+    opacity: 0;
+    transition: 0.5s;
+}
+
+.menu-link-enjoy:hover span {
+    margin-right: 28px;
+}
+
+.menu-link-enjoy:hover .enjoy-coffee-icon {
+    opacity: 1;
 }
 
 .additional-text-2 {
@@ -218,6 +277,7 @@ body {
     align-items: center;
     gap: 16px;
     max-width: 480px;
+    margin-top: 1px;
 }
 
 .slider-description p {
@@ -229,14 +289,33 @@ body {
     position: absolute;
     width: 60px;
     height: 60px;
+    margin-top: -45px;
+    cursor: pointer;
+    transition: 0.4s;
+    fill: transparent;
+}
+
+.left-arrow path,
+.right-arrow path {
+    transition: 0.4s;
+}
+
+.left-arrow:hover path,
+.right-arrow:hover path {
+    stroke: #E1D4C9;
+}
+
+.left-arrow:hover,
+.right-arrow:hover {
+    fill: #665F55;
 }
 
 .left-arrow {
-    left: 0;
+    left: 5px;
 }
 
 .right-arrow {
-    right: 0;
+    right: 5px;
 }
 
 .pagination-block {
@@ -270,6 +349,7 @@ body {
 .about-img-wrapper {
     display: flex;
     gap: 40px;
+    margin-top: -1px;
 }
 
 .about-img-block {
@@ -286,6 +366,14 @@ body {
     background-size: 110%;
     background-position: center;
     border-radius: 20px;
+    transition: 0.9s;
+}
+
+.img-unit-1:hover,
+.img-unit-2:hover,
+.img-unit-3:hover,
+.img-unit-4:hover {
+    background-size: 100%;
 }
 
 .img-unit-1 {
@@ -343,7 +431,24 @@ body {
     height: 64px;
     padding: 12px 20px;
     border-radius: 100px;
+    cursor: pointer;
     border: 1px solid #665F55;
+    transition: 0.9s;
+}
+
+.app-store-block:hover,
+.google-play-block:hover {
+    background-color: #665F55;
+}
+
+.app-store-block:hover .app-icon path,
+.google-play-block:hover .app-icon path {
+    fill: #E1D4C9;
+}
+
+.app-store-block:hover .app-description-block p,
+.google-play-block:hover .app-description-block p {
+    color: #E1D4C9;
 }
 
 .app-description-block {
@@ -358,6 +463,7 @@ body {
     font-size: 10px;
     font-weight: 600;
     line-height: 140%;
+    transition: 0.9s;
 }
 
 .app-description-block :nth-child(2) {
@@ -366,11 +472,17 @@ body {
     font-size: 16px;
     font-weight: 600;
     line-height: 150%;
+    transition: 0.9s;
 }
 
 .app-icon {
     width: 36px;
     height: 36px;
+    fill: transparent;
+}
+
+.app-icon path {
+    transition: 0.9s;
 }
 
 .footer {
@@ -417,6 +529,21 @@ body {
 .social-link {
     width: 60px;
     height: 60px;
+    fill: transparent;
+    cursor: pointer;
+    transition: 0.6s;
+}
+
+.social-link:hover {
+    fill: #E1D4C9;
+}
+
+.social-link path {
+    transition: 0.6s;
+}
+
+.social-link:hover path {
+    stroke: #403F3D;
 }
 
 .footer-container-2 {
@@ -425,6 +552,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     gap: 40px;
+    margin-top: -3px;
 }
 
 .footer-container-2 .additional-text-2 {
@@ -435,11 +563,15 @@ body {
 .contacts-block {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
 }
 
-.contacts-block p {
+.contacts-block p,
+.contacts-block a {
+    display: flex;
+    width: max-content;
     color: #E1D4C9;
+    text-decoration: none;
     font-family: Inter;
     font-size: 16px;
     font-style: normal;
@@ -450,5 +582,5 @@ body {
 .contact-icon {
     width: 20px;
     height: 20px;
-    margin-right: 5px;
+    margin-right: 8px;
 }
