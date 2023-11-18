@@ -635,6 +635,17 @@ body {
     font-size: 16px;
     font-weight: 600;
     line-height: 150%;
+    cursor: pointer;
+    transition: 0.6s;
+}
+
+.offer-button:hover {
+    background-color: #665F55;
+    color: #E1D4C9;
+}
+
+.offer-button:hover span {
+    background-color: #E1D4C9;
 }
 
 .offer-button span {
@@ -646,6 +657,7 @@ body {
     padding: 3px 7px;
     border-radius: 100px;
     background-color: #C1B6AD;
+    transition: 0.6s;
 }
 
 .active-offer-button span {
@@ -688,6 +700,11 @@ body {
     height: 506px;
     border: 1px solid #C1B6AD;
     border-radius: 40px;
+    cursor: pointer;
+}
+
+.product-item:hover .product-img {
+    background-size: 100%;
 }
 
 .product-img {
@@ -697,6 +714,7 @@ body {
     background-repeat: no-repeat;
     background-size: 110%;
     background-position: center;
+    transition: 0.6s;
 }
 
 .product-info-block {
