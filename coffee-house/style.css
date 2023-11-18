@@ -524,23 +524,36 @@ body {
     gap: 12px;
 }
 
-.social-link {
+.social-link-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 60px;
     height: 60px;
-    fill: transparent;
-    cursor: pointer;
+    border-radius: 100px;
+    background-color: transparent;
+    border: 1px solid #C1B6AD;
     transition: 0.6s;
+    cursor: pointer;
 }
 
-.social-link:hover {
-    fill: #E1D4C9;
+.social-link-wrapper:hover {
+    background-color: #E1D4C9;
+}
+
+.social-link {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    cursor: pointer;
+    transition: 0.6s;
 }
 
 .social-link path {
     transition: 0.6s;
 }
 
-.social-link:hover path {
+.social-link-wrapper:hover .social-link path {
     stroke: #403F3D;
 }
 
@@ -643,3 +656,11 @@ body {
     color: #E1D4C9;
 }
 
+.active-menu-link-header {
+    cursor: default;
+}
+
+.active-menu-link-header::after {
+    transform: none;
+    opacity: 1;
+}
