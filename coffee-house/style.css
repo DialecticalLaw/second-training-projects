@@ -610,7 +610,7 @@ body {
     gap: 40px;
 }
 
-.offer-section p {
+.offer-section h1 {
     max-width: 800px;
     text-align: center;
 }
@@ -670,6 +670,7 @@ body {
 
 .active-offer-button {
     color: #E1D4C9;
+    cursor: default;
 }
 
 .active-menu-link-header {
@@ -681,7 +682,7 @@ body {
     opacity: 1;
 }
 
-.products-section {
+.products-block-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
