@@ -83,7 +83,7 @@ body {
 }
 
 .burger-button {
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -819,6 +819,10 @@ body {
 }
 
 @media screen and (max-width: 880px) {
+    .burger-button {
+        display: flex;
+    }
+
     .burger-menu-content {
         position: fixed;
         top: 100px;
