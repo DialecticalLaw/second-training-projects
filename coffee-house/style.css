@@ -41,7 +41,7 @@ body {
 .main,
 .footer {
     width: 100%;
-    width: 1440px;
+    max-width: 1440px;
 }
 
 .header {
@@ -132,6 +132,7 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 100px;
+    padding: 0 40px;
 }
 
 .enjoy-section {
@@ -242,7 +243,6 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 0 40px;
     gap: 40px;
 }
 
@@ -343,12 +343,12 @@ body {
     align-items: center;
     gap: 40px;
     width: 100%;
-    padding: 0 40px
 }
 
 .about-img-wrapper {
     display: flex;
-    gap: 40px;
+    justify-content: space-between;
+    width: 100%;
     margin-top: -1px;
 }
 
@@ -402,15 +402,16 @@ body {
 
 .mobile-app-section {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 100px;
-    padding: 0 40px;
+    width: 100%;
 }
 
 .mobile-app-info {
     display: flex;
     flex-direction: column;
     gap: 40px;
+    max-width: 630px;
 }
 
 .mobile-app-info .main-text {
@@ -493,9 +494,8 @@ body {
 .footer-wrapper {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 100px;
     padding: 100px;
     background-color: #665F55;
     border-radius: 40px;
@@ -512,6 +512,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     gap: 40px;
+    width: max-content;
 }
 
 .footer-container-1 .main-text {
@@ -563,6 +564,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     gap: 40px;
+    max-width: 530px;
     margin-top: -3px;
 }
 
@@ -689,7 +691,6 @@ body {
     flex-wrap: wrap;
     gap: 40px;
     width: 100%;
-    padding: 0 40px;
 }
 
 .product-item {
@@ -735,3 +736,56 @@ body {
     left: 19px;
     bottom: 18px;
 }
+
+@media screen and (max-width: 1418px) {
+    .about-img-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+
+    .img-unit-2,
+    .img-unit-3 {
+        display: none;
+    }
+
+    .img-unit-1,
+    .img-unit-4 {
+        width: 688px;
+    }
+
+    .main-text,
+    .special-text {
+        font-size: 3.7rem;
+    }
+
+    .footer-container-2 {
+        width: 32%;
+    }
+}
+
+@media screen and (max-width: 1350px) {
+    #favorite.main-text {
+        text-align: center;
+    }
+
+    .mobile-app-section {
+        flex-direction: column;
+        gap: 100px;
+    }
+
+    .footer-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 100px;
+        padding: 100px 60px;
+    }
+
+    .footer-container-2 {
+        width: max-content;
+    }
+}
+
+/* @media screen and (max-width: 880px) {
+    
+} */
