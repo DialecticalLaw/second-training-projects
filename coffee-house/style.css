@@ -76,12 +76,6 @@ body {
     background-color: #E1D4C9;
 }
 
-.link:hover::after,
-.link-footer:hover::after {
-    opacity: 1;
-    transform: scaleX(1);
-}
-
 .burger-button {
     display: none;
     flex-direction: column;
@@ -252,14 +246,6 @@ body {
     transition: 0.5s;
 }
 
-.menu-link-enjoy:hover span {
-    margin-right: 28px;
-}
-
-.menu-link-enjoy:hover .enjoy-coffee-icon {
-    opacity: 1;
-}
-
 .additional-text-2 {
     text-align: center;
     font-family: Inter;
@@ -332,16 +318,6 @@ body {
     transition: 0.4s;
 }
 
-.left-arrow:hover path,
-.right-arrow:hover path {
-    stroke: #E1D4C9;
-}
-
-.left-arrow:hover,
-.right-arrow:hover {
-    fill: #665F55;
-}
-
 .left-arrow {
     left: 5px;
 }
@@ -399,13 +375,6 @@ body {
     background-position: center;
     border-radius: 20px;
     transition: 0.9s;
-}
-
-.img-unit-1:hover,
-.img-unit-2:hover,
-.img-unit-3:hover,
-.img-unit-4:hover {
-    background-size: 100%;
 }
 
 .img-unit-1 {
@@ -467,21 +436,6 @@ body {
     cursor: pointer;
     border: 1px solid #665F55;
     transition: 0.9s;
-}
-
-.app-store-block:hover,
-.google-play-block:hover {
-    background-color: #665F55;
-}
-
-.app-store-block:hover .app-icon path,
-.google-play-block:hover .app-icon path {
-    fill: #E1D4C9;
-}
-
-.app-store-block:hover .app-description-block p,
-.google-play-block:hover .app-description-block p {
-    color: #E1D4C9;
 }
 
 .app-description-block {
@@ -570,10 +524,6 @@ body {
     cursor: pointer;
 }
 
-.social-link-wrapper:hover {
-    background-color: #E1D4C9;
-}
-
 .social-link {
     width: 24px;
     height: 24px;
@@ -584,10 +534,6 @@ body {
 
 .social-link path {
     transition: 0.6s;
-}
-
-.social-link-wrapper:hover .social-link path {
-    stroke: #403F3D;
 }
 
 .footer-container-2 {
@@ -673,15 +619,6 @@ body {
     transition: 0.6s;
 }
 
-.offer-button:hover {
-    background-color: #665F55;
-    color: #E1D4C9;
-}
-
-.offer-button:hover span {
-    background-color: #E1D4C9;
-}
-
 .offer-button span {
     display: flex;
     justify-content: center;
@@ -737,10 +674,6 @@ body {
     cursor: pointer;
 }
 
-.product-item:hover .product-img {
-    background-size: 100%;
-}
-
 .product-img {
     width: 310px;
     height: 310px;
@@ -788,7 +721,7 @@ body {
 
     .main-text,
     .special-text {
-        font-size: 3.7rem;
+        font-size: 3.75rem;
     }
 
     .footer-container-2 {
@@ -873,11 +806,121 @@ body {
         margin-right: 28px;
     }
 
-    .menu-link-enjoy:hover {
+    .menu-link-enjoy {
         margin-right: 28px;
     }
 
     .enjoy-coffee-icon {
         opacity: 1;
+    }
+
+    .left-arrow {
+        left: 0;
+    }
+
+    .right-arrow {
+        right: 0;
+    }
+
+    .img-unit-1,
+    .img-unit-2,
+    .img-unit-3,
+    .img-unit-4 {
+        background-size: 105.5%;
+    }
+
+
+    .mobile-app-section {
+        align-items: flex-start;
+    }
+
+    #mobile-app {
+        width: 688px;
+    }
+
+    .mobile-screens {
+        align-self: center;
+    }
+
+    .mobile-app-info h2 {
+        width: 688px;
+    }
+
+    .footer-wrapper {
+        gap: 98px;
+        height: 736px;
+    }
+
+    .footer-container-2 {
+        margin-bottom: 3px;
+    }
+}
+
+@media (hover: hover) {
+    .link:hover::after,
+    .link-footer:hover::after {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+
+    .menu-link-enjoy:hover span {
+        margin-right: 28px;
+    }
+
+    .menu-link-enjoy:hover .enjoy-coffee-icon {
+        opacity: 1;
+    }
+
+    .left-arrow:hover path,
+    .right-arrow:hover path {
+        stroke: #E1D4C9;
+    }
+
+    .left-arrow:hover,
+    .right-arrow:hover {
+        fill: #665F55;
+    }
+
+    .img-unit-1:hover,
+    .img-unit-2:hover,
+    .img-unit-3:hover,
+    .img-unit-4:hover {
+        background-size: 100%;
+    }
+
+    .app-store-block:hover,
+    .google-play-block:hover {
+        background-color: #665F55;
+    }
+
+    .app-store-block:hover .app-icon path,
+    .google-play-block:hover .app-icon path {
+        fill: #E1D4C9;
+    }
+
+    .app-store-block:hover .app-description-block p,
+    .google-play-block:hover .app-description-block p {
+        color: #E1D4C9;
+    }
+
+    .social-link-wrapper:hover {
+        background-color: #E1D4C9;
+    }
+
+    .social-link-wrapper:hover .social-link path {
+        stroke: #403F3D;
+    }
+
+    .offer-button:hover {
+        background-color: #665F55;
+        color: #E1D4C9;
+    }
+
+    .offer-button:hover span {
+        background-color: #E1D4C9;
+    }
+
+    .product-item:hover .product-img {
+        background-size: 100%;
     }
 }
