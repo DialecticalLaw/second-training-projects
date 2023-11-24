@@ -56,6 +56,7 @@ body {
 .link,
 .link-footer {
     position: relative;
+    cursor: default;
 }
 
 .link::after,
@@ -128,10 +129,12 @@ body {
     font-size: 16px;
     font-weight: 600;
     line-height: 150%;
+    cursor: default;
 }
 
 .logo {
     margin-top: 3px;
+    cursor: default;
 }
 
 .menu-link-header {
@@ -146,6 +149,7 @@ body {
     font-size: 16px;
     font-weight: 600;
     line-height: 150%;
+    cursor: default;
 }
 
 .header-coffee-icon {
@@ -233,6 +237,7 @@ body {
     background-color: #E1D4C9;
     text-decoration: none;
     font-weight: 600;
+    cursor: default;
 }
 
 .menu-link-enjoy span {
@@ -1018,6 +1023,18 @@ body {
 }
 
 @media (hover: hover) {
+    .menu-link-header {
+        cursor: pointer;
+    }
+
+    .nav-item a {
+        cursor: pointer;
+    }
+
+    .logo {
+        cursor: pointer;
+    }
+
     .burger-button {
         cursor: pointer;
     }
@@ -1026,6 +1043,10 @@ body {
     .link-footer:hover::after {
         opacity: 1;
         transform: scaleX(1);
+    }
+
+    .menu-link-enjoy {
+        cursor: pointer;
     }
 
     .menu-link-enjoy:hover span {
@@ -1088,6 +1109,10 @@ body {
 
     .social-link-wrapper:hover .social-link path {
         stroke: #403F3D;
+    }
+
+    .link-footer {
+        cursor: pointer;
     }
 
     .offer-button {
