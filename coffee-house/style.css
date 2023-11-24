@@ -308,7 +308,6 @@ body {
     width: 60px;
     height: 60px;
     margin-top: -45px;
-    cursor: pointer;
     transition: 0.4s;
     fill: transparent;
 }
@@ -433,7 +432,6 @@ body {
     height: 64px;
     padding: 12px 20px;
     border-radius: 100px;
-    cursor: pointer;
     border: 1px solid #665F55;
     transition: 0.9s;
 }
@@ -520,14 +518,12 @@ body {
     background-color: transparent;
     border: 1px solid #C1B6AD;
     transition: 0.6s;
-    cursor: pointer;
 }
 
 .social-link {
     width: 24px;
     height: 24px;
     fill: none;
-    cursor: pointer;
     transition: 0.6s;
 }
 
@@ -614,7 +610,6 @@ body {
     font-size: 16px;
     font-weight: 600;
     line-height: 150%;
-    cursor: pointer;
     transition: 0.6s;
 }
 
@@ -640,7 +635,6 @@ body {
 
 .active-offer-button {
     color: #E1D4C9;
-    cursor: default;
 }
 
 .active-menu-link-header {
@@ -653,6 +647,7 @@ body {
 }
 
 .products-block-wrapper {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -670,7 +665,6 @@ body {
     height: 506px;
     border: 1px solid #C1B6AD;
     border-radius: 40px;
-    cursor: pointer;
 }
 
 .product-img {
@@ -703,7 +697,6 @@ body {
 
 .refresh {
     display: none;
-    cursor: pointer;
 }
 
 @media screen and (max-width: 1418px) {
@@ -856,7 +849,6 @@ body {
         background-size: 105.5%;
     }
 
-
     .mobile-app-section {
         align-items: flex-start;
     }
@@ -880,6 +872,17 @@ body {
 
     .footer-container-2 {
         margin-bottom: 3px;
+    }
+}
+
+@media screen and (max-width: 742px) {
+    .refresh {
+        position: absolute;
+        bottom: -100px;
+    }
+
+    .footer-menu {
+        margin-top: 200px;
     }
 }
 
@@ -995,6 +998,14 @@ body {
     .footer-container-2 {
         margin: 0;
     }
+
+    .offer-buttons-wrapper {
+        gap: 6px;
+    }
+
+    .offer-section h1 {
+        width: 348px;
+    }
 }
 
 @media screen and (max-width: 410px) {
@@ -1030,6 +1041,11 @@ body {
         stroke: #E1D4C9;
     }
 
+    .left-arrow,
+    .right-arrow {
+        cursor: pointer;
+    }
+
     .left-arrow:hover,
     .right-arrow:hover {
         fill: #665F55;
@@ -1040,6 +1056,11 @@ body {
     .img-unit-3:hover,
     .img-unit-4:hover {
         background-size: 100%;
+    }
+
+    .app-store-block,
+    .google-play-block {
+        cursor: pointer;
     }
 
     .app-store-block:hover,
@@ -1057,12 +1078,24 @@ body {
         color: #E1D4C9;
     }
 
+    .social-link-wrapper {
+        cursor: pointer;
+    }
+
     .social-link-wrapper:hover {
         background-color: #E1D4C9;
     }
 
     .social-link-wrapper:hover .social-link path {
         stroke: #403F3D;
+    }
+
+    .offer-button {
+        cursor: pointer;
+    }
+
+    .active-offer-button {
+        cursor: default;
     }
 
     .offer-button:hover {
@@ -1074,7 +1107,15 @@ body {
         background-color: #E1D4C9;
     }
 
+    .product-item {
+        cursor: pointer;
+    }
+
     .product-item:hover .product-img {
         background-size: 100%;
+    }
+
+    .refresh {
+        cursor: pointer;
     }
 }
