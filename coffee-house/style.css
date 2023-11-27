@@ -134,7 +134,6 @@ body {
 
 .logo {
     margin-top: 3px;
-    cursor: default;
 }
 
 .menu-link-header {
@@ -642,10 +641,6 @@ body {
     color: #E1D4C9;
 }
 
-.active-menu-link-header {
-    cursor: default;
-}
-
 .active-menu-link-header::after {
     transform: none;
     opacity: 1;
@@ -1027,11 +1022,11 @@ body {
         cursor: pointer;
     }
 
-    .nav-item a {
-        cursor: pointer;
+    .active-menu-link-header {
+        cursor: default;
     }
 
-    .logo {
+    .nav-item a {
         cursor: pointer;
     }
 
