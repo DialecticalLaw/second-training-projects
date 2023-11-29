@@ -180,9 +180,12 @@ body {
 }
 
 .enjoy-section {
+    position: relative;
     width: 100%;
     max-width: 1360px;
     height: 644px;
+    overflow: hidden;
+    z-index: 0;
     padding: 100px;
     background-image: url(assets/img/img-hero.png);
     background-color: rgba(211, 211, 211, 0.5);
@@ -192,6 +195,16 @@ body {
     border-radius: 40px;
 }
 
+.enjoy-video {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
 .enjoy-block {
     display: flex;
     flex-direction: column;
@@ -199,6 +212,7 @@ body {
     align-items: flex-start;
     width: 530px;
     gap: 40px;
+    z-index: 5;
 }
 
 .main-text {
