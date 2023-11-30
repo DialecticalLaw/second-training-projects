@@ -729,20 +729,11 @@ body {
 }
 
 @media screen and (max-width: 1418px) {
-    .about-img-wrapper {
-        flex-direction: column;
-        align-items: center;
-        gap: 40px;
-    }
-
-    .img-unit-2,
-    .img-unit-3 {
-        display: none;
-    }
-
     .img-unit-1,
+    .img-unit-2,
+    .img-unit-3,
     .img-unit-4 {
-        width: 688px;
+        width: 560px;
     }
 
     .main-text,
@@ -778,6 +769,90 @@ body {
 
     .footer-container-2 {
         width: max-content;
+    }
+}
+
+@media screen and (max-width: 1218px) {
+    .img-unit-1,
+    .img-unit-4 {
+        width: 480px;
+        height: 530px;
+    }
+
+    .img-unit-2,
+    .img-unit-3 {
+        width: 480px;
+        height: 400px;
+    }
+}
+
+@media screen and (max-width: 1050px) {
+    .img-unit-1,
+    .img-unit-4 {
+        width: 400px;
+        height: 400px;
+    }
+
+    .img-unit-2,
+    .img-unit-3 {
+        width: 400px;
+        height: 270px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .img-unit-1,
+    .img-unit-4 {
+        width: 330px;
+        height: 330px;
+    }
+
+    .img-unit-2,
+    .img-unit-3 {
+        width: 330px;
+        height: 200px;
+    }
+}
+
+@media screen and (max-width: 1218px) {
+    .img-unit-1,
+    .img-unit-4 {
+        width: 480px;
+        height: 530px;
+    }
+
+    .img-unit-2,
+    .img-unit-3 {
+        width: 480px;
+        height: 400px;
+    }
+}
+
+@media screen and (max-width: 1050px) {
+    .img-unit-1,
+    .img-unit-4 {
+        width: 400px;
+        height: 400px;
+    }
+
+    .img-unit-2,
+    .img-unit-3 {
+        width: 400px;
+        height: 270px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .img-unit-1,
+    .img-unit-4 {
+        width: 330px;
+        height: 330px;
+    }
+
+    .img-unit-2,
+    .img-unit-3 {
+        width: 330px;
+        height: 200px;
     }
 }
 
@@ -887,9 +962,24 @@ body {
         height: 40px;
         margin: 0;
     }
-}
 
-@media screen and (max-width: 836px) {
+    .about-img-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+
+    .img-unit-2,
+    .img-unit-3 {
+        display: none;
+    }
+
+    .img-unit-1,
+    .img-unit-4 {
+        width: 688px;
+        height: 590px;
+    }
+
     .refresh {
         display: flex;
         justify-content: center;
