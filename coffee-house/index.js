@@ -1,5 +1,4 @@
 const body = document.querySelector('body');
-const header = document.querySelector('header');
 const burgerMenuContent = document.querySelector('.burger-menu-content');
 const burgerButton = document.querySelector('.burger-button');
 
@@ -30,6 +29,7 @@ const leftArrow = document.querySelector('.left-arrow');
 const rightArrow = document.querySelector('.right-arrow');
 const slides = document.querySelectorAll('.slide');
 const pags = document.querySelectorAll('.pag');
+const sliderWrapper = document.querySelector('.slider-wrapper');
 
 leftArrow.addEventListener('click', moveSlides);
 rightArrow.addEventListener('click', moveSlides);
@@ -40,7 +40,7 @@ function moveSlides(event) {
     
     const currentTranslate = checkSlideTranslate();
 
-    if (event.clientY === 0) {
+    if (event.clientX === 0) {
         if (leftArrow.contains(event.target)) {
             if (currentTranslate === 0) {
                 for (let slide of slides) {
@@ -172,3 +172,48 @@ function nextSlideAuto() {
         document.querySelector('.pag-active').insertAdjacentHTML('afterbegin', '<div class="pag-progress" style="width: 0%;"></div>');
     }, 500);
 }
+
+// touch support \/
+
+let x1 = 0;
+let x2 = 0;
+let moveCoord = 0;
+let moveDifference = 0;
+
+sliderWrapper.addEventListener('touchstart', function (event) {
+    x1 = event.touches[0].clientX;
+})
+
+sliderWrapper.addEventListener('touchmove', function (event) {
+    moveCoord = event.touches[0].clientX;
+    const maxCoord = Math.max(x1, moveCoord);
+    const minCoord = Math.min(x1, moveCoord);
+    moveDifference = maxCoord - minCoord;
+    if (x1 < moveCoord) {
+        for (slide of slides) {
+            slide.style.left = moveDifference + 'px';
+        }
+    } else {
+        for (slide of slides) {
+            slide.style.left = `-${moveDifference}px`;
+        }
+    }
+})
+
+sliderWrapper.addEventListener('touchend', function (event) {
+    for (slide of slides) {
+        slide.style.left = '0';
+    }
+    x2 = event.changedTouches[0].clientX;
+    const maxCoord = Math.max(x1, x2);
+    const minCoord = Math.min(x1, x2);
+    if (maxCoord - minCoord > 30) {
+        if (x1 > x2) {
+            let clickEvent = new MouseEvent('click', {clientX: 5});
+            rightArrow.dispatchEvent(clickEvent);
+        } else {
+            let clickEvent = new MouseEvent('click', {clientX: 5});
+            leftArrow.dispatchEvent(clickEvent);
+        }
+    }
+})
