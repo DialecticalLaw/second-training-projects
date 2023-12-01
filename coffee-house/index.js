@@ -31,11 +31,57 @@ const rightArrow = document.querySelector('.right-arrow');
 const slides = document.querySelectorAll('.slide');
 const pags = document.querySelectorAll('.pag');
 
-leftArrow.addEventListener('click', moveSlides)
-rightArrow.addEventListener('click', moveSlides)
+leftArrow.addEventListener('click', moveSlides);
+rightArrow.addEventListener('click', moveSlides);
 
 function moveSlides(event) {
+    leftArrow.removeEventListener('click', moveSlides);
+    rightArrow.removeEventListener('click', moveSlides);
+    
     const currentTranslate = checkSlideTranslate();
+
+    if (event.clientY === 0) {
+        if (leftArrow.contains(event.target)) {
+            if (currentTranslate === 0) {
+                for (let slide of slides) {
+                    slide.style.transform = `translateX(-200%)`;
+                    updatePagActive();
+                }
+            } else {
+                for (let slide of slides) {
+                    slide.style.transform = `translateX(${currentTranslate + 100}%)`;
+                    updatePagActive();
+                }
+            }
+        } else if (rightArrow.contains(event.target)) {
+            if (currentTranslate === -200) {
+                for (let slide of slides) {
+                    slide.style.transform = `translateX(0%)`;
+                    updatePagActive();
+                }
+            } else {
+                for (let slide of slides) {
+                    slide.style.transform = `translateX(${currentTranslate - 100}%)`;
+                    updatePagActive();
+                }
+            }
+        }
+        leftArrow.addEventListener('click', moveSlides);
+        rightArrow.addEventListener('click', moveSlides);
+        return;
+    }
+
+    clearInterval(progressInterval);
+    sliderProgressPercent = 0;
+    document.querySelector('.pag-progress').style.width = '0%';
+    const pagProgress = document.querySelector('.pag-progress');
+    setTimeout(() => {
+        pagProgress.remove();
+        progressInterval = setInterval(updateProgress, 500);
+        leftArrow.addEventListener('click', moveSlides);
+        rightArrow.addEventListener('click', moveSlides);
+    }, 500);
+
     if (leftArrow.contains(event.target)) {
         if (currentTranslate === 0) {
             for (let slide of slides) {
@@ -60,9 +106,8 @@ function moveSlides(event) {
                 updatePagActive();
             }
         }
-    } else {
-        return;
     }
+    document.querySelector('.pag-active').insertAdjacentHTML('afterbegin', '<div class="pag-progress style="width: 0%;""></div>');
 }
 
 function checkSlideTranslate() {
@@ -103,7 +148,9 @@ function updatePagActive() {
 
 let sliderProgressPercent = 0;
 
-setInterval(() => {
+let progressInterval = setInterval(updateProgress, 500);
+
+function updateProgress() {
     sliderProgressPercent += 10;
     if (sliderProgressPercent < 100) {
         document.querySelector('.pag-progress').style.width = `${sliderProgressPercent}%`;
@@ -114,7 +161,7 @@ setInterval(() => {
             nextSlideAuto();
         }, 480);
     }
-}, 500);
+}
 
 function nextSlideAuto() {
     document.querySelector('.pag-progress').style.width = '0%';
@@ -122,6 +169,6 @@ function nextSlideAuto() {
     rightArrow.dispatchEvent(clickEvent);
     setTimeout(() => {
         document.querySelector('.pag-progress').remove();
-        document.querySelector('.pag-active').insertAdjacentHTML('afterbegin', '<div class="pag-progress"></div>');
+        document.querySelector('.pag-active').insertAdjacentHTML('afterbegin', '<div class="pag-progress" style="width: 0%;"></div>');
     }, 500);
 }
