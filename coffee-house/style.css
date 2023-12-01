@@ -307,18 +307,26 @@ body {
     width: 100%;
 }
 
-.slide-wrapper {
+.slider-wrapper {
+    display: flex;
+    width: 480px;
+    overflow: hidden;
+}
+
+.slide {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 20px;
     max-width: 480px;
+    transition: 0.5s ease;
 }
 
 .slider-img {
     width: 480px;
     height: 480px;
+    user-select: none;
 }
 
 .slider-description {
@@ -372,7 +380,12 @@ body {
     background-color: #C1B6AD;
 }
 
-.pag-active {
+.pag-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    border-radius: 100px;
     background-color: #665F55;
 }
 
@@ -1095,6 +1108,10 @@ body {
     .mobile-screens {
         width: 348px;
         height: 348px;
+    }
+
+    .slider-wrapper {
+        width: 348px;
     }
 
     .slider-img {
