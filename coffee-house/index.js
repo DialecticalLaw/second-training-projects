@@ -35,25 +35,29 @@ leftArrow.addEventListener('click', moveSlides)
 rightArrow.addEventListener('click', moveSlides)
 
 function moveSlides(event) {
-    const currentTranslate = Number(checkSlideTranslate());
+    const currentTranslate = checkSlideTranslate();
     if (leftArrow.contains(event.target)) {
         if (currentTranslate === 0) {
             for (let slide of slides) {
                 slide.style.transform = `translateX(-200%)`;
+                updatePagActive();
             }
         } else {
             for (let slide of slides) {
                 slide.style.transform = `translateX(${currentTranslate + 100}%)`;
+                updatePagActive();
             }
         }
     } else if (rightArrow.contains(event.target)) {
         if (currentTranslate === -200) {
             for (let slide of slides) {
                 slide.style.transform = `translateX(0%)`;
+                updatePagActive();
             }
         } else {
             for (let slide of slides) {
                 slide.style.transform = `translateX(${currentTranslate - 100}%)`;
+                updatePagActive();
             }
         }
     } else {
@@ -69,5 +73,55 @@ function checkSlideTranslate() {
             result += fullProperty[i];
         }
     }
-    return result;
+    return Number(result);
+}
+
+function updatePagActive() {
+    const slidesTranslate = checkSlideTranslate();
+    switch (slidesTranslate) {
+        case 0:
+            pags[0].classList.add('pag-active');
+            pags[1].classList.remove('pag-active');
+            pags[2].classList.remove('pag-active');
+            break;
+        case -100:
+            pags[1].classList.add('pag-active');
+            pags[0].classList.remove('pag-active');
+            pags[2].classList.remove('pag-active');
+            break;
+        case -200:
+            pags[2].classList.add('pag-active');
+            pags[0].classList.remove('pag-active');
+            pags[1].classList.remove('pag-active');
+            break;
+        default:
+            return;
+    }
+}
+
+// switching timer \/
+
+let sliderProgressPercent = 0;
+
+setInterval(() => {
+    sliderProgressPercent += 10;
+    if (sliderProgressPercent < 100) {
+        document.querySelector('.pag-progress').style.width = `${sliderProgressPercent}%`;
+    } else {
+        document.querySelector('.pag-progress').style.width = `${sliderProgressPercent}%`;
+        sliderProgressPercent = 0;
+        setTimeout(() => {
+            nextSlideAuto();
+        }, 480);
+    }
+}, 500);
+
+function nextSlideAuto() {
+    document.querySelector('.pag-progress').style.width = '0%';
+    let clickEvent = new MouseEvent('click');
+    rightArrow.dispatchEvent(clickEvent);
+    setTimeout(() => {
+        document.querySelector('.pag-progress').remove();
+        document.querySelector('.pag-active').insertAdjacentHTML('afterbegin', '<div class="pag-progress"></div>');
+    }, 500);
 }
