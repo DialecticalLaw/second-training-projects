@@ -190,12 +190,24 @@ sliderWrapper.addEventListener('touchmove', function (event) {
     const minCoord = Math.min(x1, moveCoord);
     moveDifference = maxCoord - minCoord;
     if (x1 < moveCoord) {
-        for (slide of slides) {
-            slide.style.left = moveDifference + 'px';
+        if (moveDifference <= 80) {
+            for (slide of slides) {
+                slide.style.left = moveDifference + 'px';
+            }
+        } else {
+            for (slide of slides) {
+                slide.style.left = '80px';
+            }
         }
     } else {
-        for (slide of slides) {
-            slide.style.left = `-${moveDifference}px`;
+        if (moveDifference <= 80) {
+            for (slide of slides) {
+                slide.style.left = `-${moveDifference}px`;
+            }
+        } else {
+            for (slide of slides) {
+                slide.style.left = '-80px';
+            }
         }
     }
 })
