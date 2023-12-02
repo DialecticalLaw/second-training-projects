@@ -40,17 +40,27 @@ function moveSlides(event) {
     
     const currentTranslate = checkSlideTranslate();
 
+    let timer = true;
+
     if (event.clientX === 0) {
         if (leftArrow.contains(event.target)) {
             if (currentTranslate === 0) {
                 for (let slide of slides) {
                     slide.style.transform = `translateX(-200%)`;
                     updatePagActive();
+                    if (timer === false) {
+                        progressInterval = setInterval(updateProgress, 500);
+                        timer = true;
+                    }
                 }
             } else {
                 for (let slide of slides) {
                     slide.style.transform = `translateX(${currentTranslate + 100}%)`;
                     updatePagActive();
+                    if (timer === false) {
+                        progressInterval = setInterval(updateProgress, 500);
+                        timer = true;
+                    }
                 }
             }
         } else if (rightArrow.contains(event.target)) {
@@ -58,11 +68,19 @@ function moveSlides(event) {
                 for (let slide of slides) {
                     slide.style.transform = `translateX(0%)`;
                     updatePagActive();
+                    if (timer === false) {
+                        progressInterval = setInterval(updateProgress, 500);
+                        timer = true;
+                    }
                 }
             } else {
                 for (let slide of slides) {
                     slide.style.transform = `translateX(${currentTranslate - 100}%)`;
                     updatePagActive();
+                    if (timer === false) {
+                        progressInterval = setInterval(updateProgress, 500);
+                        timer = true;
+                    }
                 }
             }
         }
@@ -87,11 +105,19 @@ function moveSlides(event) {
             for (let slide of slides) {
                 slide.style.transform = `translateX(-200%)`;
                 updatePagActive();
+                if (timer === false) {
+                    progressInterval = setInterval(updateProgress, 500);
+                    timer = true;
+                }
             }
         } else {
             for (let slide of slides) {
                 slide.style.transform = `translateX(${currentTranslate + 100}%)`;
                 updatePagActive();
+                if (timer === false) {
+                    progressInterval = setInterval(updateProgress, 500);
+                    timer = true;
+                }
             }
         }
     } else if (rightArrow.contains(event.target)) {
@@ -99,11 +125,19 @@ function moveSlides(event) {
             for (let slide of slides) {
                 slide.style.transform = `translateX(0%)`;
                 updatePagActive();
+                if (timer === false) {
+                    progressInterval = setInterval(updateProgress, 500);
+                    timer = true;
+                }
             }
         } else {
             for (let slide of slides) {
                 slide.style.transform = `translateX(${currentTranslate - 100}%)`;
                 updatePagActive();
+                if (timer === false) {
+                    progressInterval = setInterval(updateProgress, 500);
+                    timer = true;
+                }
             }
         }
     }
@@ -181,6 +215,8 @@ let moveCoord = 0;
 let moveDifference = 0;
 
 sliderWrapper.addEventListener('touchstart', function (event) {
+    clearInterval(progressInterval);
+    timer = false;
     x1 = event.touches[0].clientX;
 })
 
@@ -212,6 +248,16 @@ sliderWrapper.addEventListener('touchmove', function (event) {
     }
 })
 
+sliderWrapper.addEventListener('mouseenter', function () {
+    clearInterval(progressInterval);
+    timer = false;
+})
+
+sliderWrapper.addEventListener('mouseleave', function () {
+    progressInterval = setInterval(updateProgress, 500);
+    timer = true;
+})
+
 sliderWrapper.addEventListener('touchend', function (event) {
     for (slide of slides) {
         slide.style.left = '0';
@@ -227,5 +273,8 @@ sliderWrapper.addEventListener('touchend', function (event) {
             let clickEvent = new MouseEvent('click', {clientX: 5});
             leftArrow.dispatchEvent(clickEvent);
         }
+    } else {
+        progressInterval = setInterval(updateProgress, 500);
+        timer = true;
     }
 })
