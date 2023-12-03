@@ -267,10 +267,10 @@ sliderWrapper.addEventListener('touchend', function (event) {
     const minCoord = Math.min(x1, x2);
     if (maxCoord - minCoord > 30) {
         if (x1 > x2) {
-            let clickEvent = new MouseEvent('click', {clientX: 5});
+            const clickEvent = new MouseEvent('click', {clientX: 5});
             rightArrow.dispatchEvent(clickEvent);
         } else {
-            let clickEvent = new MouseEvent('click', {clientX: 5});
+            const clickEvent = new MouseEvent('click', {clientX: 5});
             leftArrow.dispatchEvent(clickEvent);
         }
     } else {

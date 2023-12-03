@@ -24,3 +24,62 @@ function closeInterface(event) {
 }
 
 // burger /\
+
+// product cards \/
+
+const productCards = document.querySelectorAll('.product-item');
+const offerButtons = document.querySelectorAll('.offer-button');
+const coffeeButton = document.querySelector('.coffee-offer-button');
+const refreshButton = document.querySelector('.refresh');
+
+for (let button of offerButtons) {
+    button.addEventListener('click', updateCards);
+}
+
+const clickEvent = new PointerEvent('click');
+coffeeButton.dispatchEvent(clickEvent);
+
+async function updateCards(event) {
+    const currentTarget = event.currentTarget;
+    for (let button of offerButtons) {
+        button.classList.remove('active-offer-button');
+    }
+    currentTarget.classList.add('active-offer-button');
+
+    const productJson = await fetch('../products.json');
+    const productStorage = await productJson.json();
+    const targetCategory = currentTarget.classList[1].slice(0, -13);
+
+    if (targetCategory === 'tea') {
+        document.querySelector('.item-5').style.display = 'none';
+        document.querySelector('.item-6').style.display = 'none';
+        document.querySelector('.item-7').style.display = 'none';
+        document.querySelector('.item-8').style.display = 'none';
+        document.querySelector('.refresh').style.display = 'none';
+    } else {
+        document.querySelector('.item-5').removeAttribute('style');
+        document.querySelector('.item-6').removeAttribute('style');
+        document.querySelector('.item-7').removeAttribute('style');
+        document.querySelector('.item-8').removeAttribute('style');
+        document.querySelector('.refresh').removeAttribute('style');
+    }
+
+    const requiredProducts = productStorage.filter(item => item.category === targetCategory);
+
+    for (let i = 0; i < requiredProducts.length; i++) {
+        productCards[i].firstElementChild.style['background-image'] = `url("../assets/img/${requiredProducts[i].name.replaceAll(' ', '')}.png")`; // product image
+        productCards[i].lastElementChild.children[0].innerHTML = requiredProducts[i].name; // product name
+        productCards[i].lastElementChild.children[1].innerHTML = requiredProducts[i].description; // product description
+        productCards[i].lastElementChild.children[2].innerHTML = '$' + requiredProducts[i].price; // product price
+    }
+}
+
+refreshButton.addEventListener('click', loadMore);
+
+function loadMore() {
+    document.querySelector('.item-5').style.display = 'flex';
+    document.querySelector('.item-6').style.display = 'flex';
+    document.querySelector('.item-7').style.display = 'flex';
+    document.querySelector('.item-8').style.display = 'flex';
+    document.querySelector('.refresh').style.display = 'none';
+}
