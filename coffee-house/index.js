@@ -33,42 +33,26 @@ const sliderWrapper = document.querySelector('.slider-wrapper');
 
 leftArrow.addEventListener('click', moveSlides);
 rightArrow.addEventListener('click', moveSlides);
+let timer = true;
 
 function moveSlides(event) {
     leftArrow.removeEventListener('click', moveSlides);
     rightArrow.removeEventListener('click', moveSlides);
+    sliderWrapper.removeEventListener('touchstart', touchStartAction);
+    sliderWrapper.removeEventListener('touchend', touchEndAction);
+    sliderWrapper.removeEventListener('touchmove', touchMoveAction);
+    sliderWrapper.removeEventListener('mouseenter', mouseEnterAction);
+    sliderWrapper.removeEventListener('mouseleave', mouseLeaveAction);
     
     const currentTranslate = checkSlideTranslate();
 
-    let timer = true;
-
     if (event.clientX === 0) {
-        if (leftArrow.contains(event.target)) {
-            if (currentTranslate === 0) {
-                for (let slide of slides) {
-                    slide.style.transform = `translateX(-200%)`;
-                    updatePagActive();
-                    if (timer === false) {
-                        progressInterval = setInterval(updateProgress, 500);
-                        timer = true;
-                    }
-                }
-            } else {
-                for (let slide of slides) {
-                    slide.style.transform = `translateX(${currentTranslate + 100}%)`;
-                    updatePagActive();
-                    if (timer === false) {
-                        progressInterval = setInterval(updateProgress, 500);
-                        timer = true;
-                    }
-                }
-            }
-        } else if (rightArrow.contains(event.target)) {
+        if (rightArrow.contains(event.target)) {
             if (currentTranslate === -200) {
                 for (let slide of slides) {
                     slide.style.transform = `translateX(0%)`;
                     updatePagActive();
-                    if (timer === false) {
+                    if (!timer) {
                         progressInterval = setInterval(updateProgress, 500);
                         timer = true;
                     }
@@ -77,7 +61,7 @@ function moveSlides(event) {
                 for (let slide of slides) {
                     slide.style.transform = `translateX(${currentTranslate - 100}%)`;
                     updatePagActive();
-                    if (timer === false) {
+                    if (!timer) {
                         progressInterval = setInterval(updateProgress, 500);
                         timer = true;
                     }
@@ -86,18 +70,28 @@ function moveSlides(event) {
         }
         leftArrow.addEventListener('click', moveSlides);
         rightArrow.addEventListener('click', moveSlides);
+        sliderWrapper.addEventListener('touchstart', touchStartAction);
+        sliderWrapper.addEventListener('touchend', touchEndAction);
+        sliderWrapper.addEventListener('touchmove', touchMoveAction);
+        sliderWrapper.addEventListener('mouseenter', mouseEnterAction);
+        sliderWrapper.addEventListener('mouseleave', mouseLeaveAction);
         return;
     }
 
     clearInterval(progressInterval);
+    timer = false;
     sliderProgressPercent = 0;
     document.querySelector('.pag-progress').style.width = '0%';
     const pagProgress = document.querySelector('.pag-progress');
     setTimeout(() => {
         pagProgress.remove();
-        progressInterval = setInterval(updateProgress, 500);
         leftArrow.addEventListener('click', moveSlides);
         rightArrow.addEventListener('click', moveSlides);
+        sliderWrapper.addEventListener('touchstart', touchStartAction);
+        sliderWrapper.addEventListener('touchend', touchEndAction);
+        sliderWrapper.addEventListener('touchmove', touchMoveAction);
+        sliderWrapper.addEventListener('mouseenter', mouseEnterAction);
+        sliderWrapper.addEventListener('mouseleave', mouseLeaveAction);
     }, 500);
 
     if (leftArrow.contains(event.target)) {
@@ -105,7 +99,7 @@ function moveSlides(event) {
             for (let slide of slides) {
                 slide.style.transform = `translateX(-200%)`;
                 updatePagActive();
-                if (timer === false) {
+                if (!timer) {
                     progressInterval = setInterval(updateProgress, 500);
                     timer = true;
                 }
@@ -114,7 +108,7 @@ function moveSlides(event) {
             for (let slide of slides) {
                 slide.style.transform = `translateX(${currentTranslate + 100}%)`;
                 updatePagActive();
-                if (timer === false) {
+                if (!timer) {
                     progressInterval = setInterval(updateProgress, 500);
                     timer = true;
                 }
@@ -125,7 +119,7 @@ function moveSlides(event) {
             for (let slide of slides) {
                 slide.style.transform = `translateX(0%)`;
                 updatePagActive();
-                if (timer === false) {
+                if (!timer) {
                     progressInterval = setInterval(updateProgress, 500);
                     timer = true;
                 }
@@ -134,7 +128,7 @@ function moveSlides(event) {
             for (let slide of slides) {
                 slide.style.transform = `translateX(${currentTranslate - 100}%)`;
                 updatePagActive();
-                if (timer === false) {
+                if (!timer) {
                     progressInterval = setInterval(updateProgress, 500);
                     timer = true;
                 }
@@ -181,7 +175,6 @@ function updatePagActive() {
 // switching timer \/
 
 let sliderProgressPercent = 0;
-
 let progressInterval = setInterval(updateProgress, 500);
 
 function updateProgress() {
@@ -214,13 +207,17 @@ let x2 = 0;
 let moveCoord = 0;
 let moveDifference = 0;
 
-sliderWrapper.addEventListener('touchstart', function (event) {
+sliderWrapper.addEventListener('touchstart', touchStartAction);
+
+function touchStartAction(event) {
     clearInterval(progressInterval);
     timer = false;
     x1 = event.touches[0].clientX;
-})
+}
 
-sliderWrapper.addEventListener('touchmove', function (event) {
+sliderWrapper.addEventListener('touchmove', touchMoveAction);
+
+function touchMoveAction(event) {
     moveCoord = event.touches[0].clientX;
     const maxCoord = Math.max(x1, moveCoord);
     const minCoord = Math.min(x1, moveCoord);
@@ -246,19 +243,27 @@ sliderWrapper.addEventListener('touchmove', function (event) {
             }
         }
     }
-})
+}
 
-sliderWrapper.addEventListener('mouseenter', function () {
+sliderWrapper.addEventListener('mouseenter', mouseEnterAction);
+
+function mouseEnterAction() {
     clearInterval(progressInterval);
     timer = false;
-})
+}
 
-sliderWrapper.addEventListener('mouseleave', function () {
-    progressInterval = setInterval(updateProgress, 500);
-    timer = true;
-})
+sliderWrapper.addEventListener('mouseleave', mouseLeaveAction);
 
-sliderWrapper.addEventListener('touchend', function (event) {
+function mouseLeaveAction() {
+    if (!timer) {
+        progressInterval = setInterval(updateProgress, 500);
+        timer = true;
+    }
+}
+
+sliderWrapper.addEventListener('touchend', touchEndAction);
+
+function touchEndAction(event) {
     for (slide of slides) {
         slide.style.left = '0';
     }
@@ -274,7 +279,9 @@ sliderWrapper.addEventListener('touchend', function (event) {
             leftArrow.dispatchEvent(clickEvent);
         }
     } else {
-        progressInterval = setInterval(updateProgress, 500);
-        timer = true;
+        if (!timer) {
+            progressInterval = setInterval(updateProgress, 500);
+            timer = true;
+        }
     }
-})
+}
