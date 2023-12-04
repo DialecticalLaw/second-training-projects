@@ -55,9 +55,9 @@ coffeeButton.dispatchEvent(clickEvent);
 async function updateCards(event) {
     const currentTarget = event.currentTarget;
     for (let button of offerButtons) {
-        button.classList.remove('active-offer-button');
+        button.classList.remove('active-button');
     }
-    currentTarget.classList.add('active-offer-button');
+    currentTarget.classList.add('active-button');
 
     const productJson = await fetch('../products.json');
     const productStorage = await productJson.json();
