@@ -23,6 +23,21 @@ function closeInterface(event) {
     }
 }
 
+let initialWindowWidth = window.innerWidth;
+
+window.addEventListener('resize', function () { // close the burger menu when going from 768px to higher values 
+    if (window.innerWidth > initialWindowWidth && window.innerWidth > 768 && initialWindowWidth <= 768) {
+        body.classList.remove('lock');
+        burgerMenuContent.classList.remove('burger-menu-active');
+        burgerButton.classList.remove('burger-button-active');
+        initialWindowWidth = window.innerWidth;
+    } else {
+        initialWindowWidth = window.innerWidth;
+    }
+})
+
+// burger /\
+
 // Slider \/
 
 const leftArrow = document.querySelector('.left-arrow');
