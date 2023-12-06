@@ -7,6 +7,8 @@ burgerButton.addEventListener('click', toggleBurger);
 const modalWrapper = document.querySelector('.modal-wrapper');
 const modalMenu = document.querySelector('.modal-menu');
 const modalCloseButton = document.querySelector('.modal-close-button')
+const sizeButtons = document.querySelectorAll('.size-button');
+const additivesButtons = document.querySelectorAll('.additives-button');
 
 function toggleBurger() {
     window.scrollTo(0, 0);
@@ -31,6 +33,14 @@ function closeInterface(event) {
             modalWrapper.classList.remove('modal-wrapper-blackout');
             setTimeout(() => {
                 modalWrapper.classList.remove('modal-wrapper-on');
+                
+                sizeButtons[0].classList.add('active-button');
+                sizeButtons[1].classList.remove('active-button');
+                sizeButtons[2].classList.remove('active-button');
+
+                for (let button of additivesButtons) {
+                    button.classList.remove('active-button');
+                }
             }, 500);
         }
     }
@@ -121,9 +131,6 @@ const modalImg = document.querySelector('.modal-img');
 for (let card of productCards) {
     card.addEventListener('click', openModalMenu);
 }
-
-const sizeButtons = document.querySelectorAll('.size-button');
-const additivesButtons = document.querySelectorAll('.additives-button');
 
 const selectedProductAddition = {};
 
