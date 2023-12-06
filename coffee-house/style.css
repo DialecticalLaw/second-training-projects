@@ -656,6 +656,7 @@ body {
     align-items: center;
     gap: 8px;
     height: 46px;
+    min-width: max-content;
     padding: 8px 16px 8px 8px;
     background-color: transparent;
     border-radius: 100px;
@@ -761,6 +762,7 @@ body {
     z-index: 2;
     width: 100%;
     height: 100%;
+    padding: 0 40px;
     transition: 0.5s;
 }
 
@@ -791,6 +793,7 @@ body {
 }
 
 .modal-img {
+    flex-shrink: 0;
     width: 310px;
     height: 310px;
     border-radius: 40px;
@@ -804,6 +807,7 @@ body {
     flex-direction: column;
     gap: 20px;
     max-width: 458px;
+    width: 100%;
     padding-left: 20px;
 }
 
@@ -820,7 +824,9 @@ body {
 .size-buttons-block,
 .additives-buttons-block {
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
+    width: 100%;
     margin-top: 8px;
 }
 
@@ -962,47 +968,9 @@ body {
         width: 330px;
         height: 200px;
     }
-}
 
-@media screen and (max-width: 1218px) {
-    .img-unit-1,
-    .img-unit-4 {
-        width: 480px;
-        height: 530px;
-    }
-
-    .img-unit-2,
-    .img-unit-3 {
-        width: 480px;
-        height: 400px;
-    }
-}
-
-@media screen and (max-width: 1050px) {
-    .img-unit-1,
-    .img-unit-4 {
-        width: 400px;
-        height: 400px;
-    }
-
-    .img-unit-2,
-    .img-unit-3 {
-        width: 400px;
-        height: 270px;
-    }
-}
-
-@media screen and (max-width: 900px) {
-    .img-unit-1,
-    .img-unit-4 {
-        width: 330px;
-        height: 330px;
-    }
-
-    .img-unit-2,
-    .img-unit-3 {
-        width: 330px;
-        height: 200px;
+    .modal-menu {
+        width: 100%;
     }
 }
 
@@ -1171,6 +1139,31 @@ body {
     .right-arrow {
         display: none;
     }
+
+    .modal-img {
+        display: none;
+    }
+
+    .modal-description-block {
+        max-width: 100%;
+        align-items: center;
+    }
+
+    .price-block {
+        width: 100%;
+    }
+
+    .modal-wrapper {
+        padding: 0 19px;
+    }
+}
+
+@media screen and (max-height: 632px) {
+    .modal-menu {
+        height: 100svh;
+        overflow-y: auto;
+        border-radius: 15px;
+    }
 }
 
 @media screen and (max-width: 690px) {
@@ -1284,6 +1277,15 @@ body {
 
     .offer-section h1 {
         width: 348px;
+    }
+
+    .modal-menu {
+        padding: 16px 0;
+    }
+
+    .modal-description-block {
+        align-items: flex-start;
+        padding: 0 16px;
     }
 }
 

@@ -19,6 +19,8 @@ function toggleBurger() {
 
 document.addEventListener('click', closeInterface);
 
+let isModalOpen = false;
+
 function closeInterface(event) {
     if (burgerButton.classList.contains('burger-button-active')) {
         if (event.target.classList.contains('link') && !event.target.classList.contains('active-menu-link-header')) {
@@ -26,7 +28,7 @@ function closeInterface(event) {
             burgerMenuContent.classList.remove('burger-menu-active');
             burgerButton.classList.remove('burger-button-active');
         }
-    } else if (modalWrapper.classList.contains('modal-wrapper-on')) {
+    } else if (modalMenu.classList.contains('modal-menu-on') && isModalOpen === true) {
         if (!modalMenu.contains(event.target) || modalCloseButton.contains(event.target)) {
             body.classList.remove('lock');
             modalMenu.classList.remove('modal-menu-on');
@@ -41,6 +43,11 @@ function closeInterface(event) {
                 for (let button of additivesButtons) {
                     button.classList.remove('active-button');
                 }
+
+                for (let card of productCards) {
+                    card.addEventListener('click', openModalMenu);
+                }
+                isModalOpen = false;
             }, 500);
         }
     }
@@ -49,7 +56,7 @@ function closeInterface(event) {
 let initialWindowWidth = window.innerWidth;
 
 window.addEventListener('resize', function () { // close the burger menu when going from 768px to higher values 
-    if (window.innerWidth > initialWindowWidth && window.innerWidth > 768 && initialWindowWidth <= 768) {
+    if (window.innerWidth > initialWindowWidth && window.innerWidth > 768 && initialWindowWidth <= 768 && !modalWrapper.classList.contains('modal-wrapper-on')) {
         body.classList.remove('lock');
         burgerMenuContent.classList.remove('burger-menu-active');
         burgerButton.classList.remove('burger-button-active');
@@ -135,6 +142,9 @@ for (let card of productCards) {
 const selectedProductAddition = {};
 
 async function openModalMenu(event) {
+    for (let card of productCards) {
+        card.removeEventListener('click', openModalMenu);
+    }
     const targetCard = event.currentTarget;
     const productName = targetCard.lastElementChild.firstElementChild.innerHTML.replaceAll(' ', '');
     const productsJson = await fetch ('../products.json');
@@ -170,6 +180,9 @@ async function openModalMenu(event) {
         modalWrapper.classList.add('modal-wrapper-blackout');
         modalMenu.classList.add('modal-menu-on');
     }, 20);
+    setTimeout(() => {
+        isModalOpen = true;
+    }, 500);
 }
 
 for (let button of sizeButtons) {
