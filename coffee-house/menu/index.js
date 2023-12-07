@@ -84,6 +84,16 @@ coffeeButton.dispatchEvent(clickEvent);
 
 async function updateCards(event) {
     const currentTarget = event.currentTarget;
+
+    for (let button of offerButtons) {
+        button.removeEventListener('click', updateCards);
+        button.setAttribute('style', 'opacity: 0.4; pointer-events: none');
+    }
+
+    for (let card of productCards) {
+        card.removeEventListener('click', openModalMenu);
+    }
+
     for (let button of offerButtons) {
         button.classList.remove('active-button');
     }
@@ -95,26 +105,70 @@ async function updateCards(event) {
 
     if (targetCategory === 'tea') {
         document.querySelector('.item-5').style.display = 'none';
+        document.querySelector('.item-5').setAttribute('style', 'display: none; opacity: 0');
         document.querySelector('.item-6').style.display = 'none';
+        document.querySelector('.item-6').setAttribute('style', 'display: none; opacity: 0');
         document.querySelector('.item-7').style.display = 'none';
+        document.querySelector('.item-7').setAttribute('style', 'display: none; opacity: 0');
         document.querySelector('.item-8').style.display = 'none';
+        document.querySelector('.item-8').setAttribute('style', 'display: none; opacity: 0');
         document.querySelector('.refresh').style.display = 'none';
     } else {
-        document.querySelector('.item-5').removeAttribute('style');
-        document.querySelector('.item-6').removeAttribute('style');
-        document.querySelector('.item-7').removeAttribute('style');
-        document.querySelector('.item-8').removeAttribute('style');
+        document.querySelector('.item-5').style.removeProperty('display');
+        document.querySelector('.item-6').style.removeProperty('display');
+        document.querySelector('.item-7').style.removeProperty('display');
+        document.querySelector('.item-8').style.removeProperty('display');
         document.querySelector('.refresh').removeAttribute('style');
     }
 
     const requiredProducts = productStorage.filter(item => item.category === targetCategory);
 
-    for (let i = 0; i < requiredProducts.length; i++) {
+    const hideCards = new Promise(function(resolve) {
+        for (let i = 0; i < requiredProducts.length; i++) {
+            switchCardsDisplay(i + 1, 'hide');
+            if (i < requiredProducts.length) {
+                setTimeout(() => {
+                    resolve();
+                }, 1250);
+            }
+        }
+    });
+
+    function switchCardsDisplay(cardNum, action) {
+        if (action === 'hide') {
+            setTimeout(() => {
+                document.querySelector(`.item-${cardNum}`).setAttribute('style', 'transform: scale(0); opacity: 0');
+            }, 120 * cardNum);
+        } else {
+            setTimeout(() => {
+                document.querySelector(`.item-${cardNum}`).removeAttribute('style');
+            }, 120 * cardNum);
+        }
+    }
+
+    hideCards.then(() => {
+        for (let i = 0; i < requiredProducts.length; i++) {
         productCards[i].firstElementChild.style['background-image'] = `url("../assets/img/${requiredProducts[i].name.replaceAll(' ', '')}.png")`; // product image
         productCards[i].lastElementChild.children[0].innerHTML = requiredProducts[i].name; // product name
         productCards[i].lastElementChild.children[1].innerHTML = requiredProducts[i].description; // product description
         productCards[i].lastElementChild.children[2].innerHTML = '$' + requiredProducts[i].price; // product price
     }
+    }).then(() => {
+        for (let i = 0; i < requiredProducts.length; i++) {
+            switchCardsDisplay(i + 1, 'show');
+        }
+    }).then(() => {
+        setTimeout(() => {
+            for (let button of offerButtons) {
+            button.addEventListener('click', updateCards);
+            button.removeAttribute('style');
+        }
+
+        for (let card of productCards) {
+            card.addEventListener('click', openModalMenu);
+        }
+        }, 1000);
+    })
 }
 
 refreshButton.addEventListener('click', loadMore);

@@ -720,6 +720,7 @@ body {
     height: 506px;
     border: 1px solid #C1B6AD;
     border-radius: 40px;
+    transition: 0.4s;
 }
 
 .product-img {
@@ -729,7 +730,7 @@ body {
     background-repeat: no-repeat;
     background-size: 110%;
     background-position: center;
-    transition: 0.6s;
+    transition: 0.6s background-size;
 }
 
 .product-info-block {
@@ -781,7 +782,8 @@ body {
     max-width: 800px;
     opacity: 0;
     padding: 16px;
-    transform: translateY(-200%);
+    transform: translateY(-100%) scaleX(0) scaleY(0);
+    transform-origin: center;
     border-radius: 40px;
     background-color: #E1D4C9;
     transition: 0.5s ease;
@@ -789,7 +791,7 @@ body {
 
 .modal-menu-on {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scaleX(1) scaleY(1);
 }
 
 .modal-img {
