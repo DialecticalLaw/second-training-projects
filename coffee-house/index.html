@@ -20,7 +20,7 @@
                         <li class="nav-item"><a href="#contacts" class="nav-link link">Contact us</a></li>
                     </ul>
                 </nav>
-                <a href="menu/menu.html" class="menu-link-header link">Menu <svg class="header-coffee-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <a href="menu/index.html" class="menu-link-header link">Menu <svg class="header-coffee-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <path d="M14.167 9.76667V11.6667C14.167 14.8883 11.5553 17.5 8.33366 17.5C5.112 17.5 2.50033 14.8883 2.50033 11.6667V9.76667C2.50033 9.4353 2.76896 9.16667 3.10033 9.16667H13.567C13.8984 9.16667 14.167 9.4353 14.167 9.76667Z" stroke="#403F3D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M10.0003 7.50008C10.0003 6.66675 10.5956 5.83341 11.786 5.83341V5.83341C13.101 5.83341 14.167 4.76743 14.167 3.45246V2.91675" stroke="#403F3D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M6.66634 7.5V7.08333C6.66634 5.70262 7.78563 4.58333 9.16634 4.58333V4.58333C10.0868 4.58333 10.833 3.83714 10.833 2.91667V2.5" stroke="#403F3D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -34,10 +34,11 @@
         </header>
         <main class="main">
             <section class="enjoy-section">
+                <video src="assets/video-enjoy.webm" class="enjoy-video" loop autoplay muted></video>
                 <div class="enjoy-block">
                     <h1 class="main-text"><span class="special-text">Enjoy</span> premium coffee at our charming cafe</h1>
                     <p class="additional-text">With its inviting atmosphere and delicious coffee options, the Coffee House Resource is a popular destination for coffee lovers and those seeking a warm and inviting space to enjoy their favorite beverage.</p>
-                    <a class="menu-link-enjoy additional-text" href="menu/menu.html"><span>Menu </span><svg class="enjoy-coffee-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <a class="menu-link-enjoy additional-text" href="menu/index.html"><span>Menu </span><svg class="enjoy-coffee-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path d="M14.167 9.76667V11.6667C14.167 14.8883 11.5553 17.5 8.33366 17.5C5.112 17.5 2.50033 14.8883 2.50033 11.6667V9.76667C2.50033 9.4353 2.76896 9.16667 3.10033 9.16667H13.567C13.8984 9.16667 14.167 9.4353 14.167 9.76667Z" stroke="#403F3D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M10.0003 7.50008C10.0003 6.66675 10.5956 5.83341 11.786 5.83341V5.83341C13.101 5.83341 14.167 4.76743 14.167 3.45246V2.91675" stroke="#403F3D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M6.66634 7.5V7.08333C6.66634 5.70262 7.78563 4.58333 9.16634 4.58333V4.58333C10.0868 4.58333 10.833 3.83714 10.833 2.91667V2.5" stroke="#403F3D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -56,16 +57,36 @@
                         <rect x="0.5" y="0.5" width="59" height="59" rx="29.5" stroke="#665F55"/>
                         <path d="M24 30H36.5M36.5 30L30.5 24M36.5 30L30.5 36" stroke="#403F3D" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                    <div class="slide-wrapper">
-                        <img src="assets/img/coffee-slider-1.png" alt="coffee" class="slider-img">
-                        <div class="slider-description">
-                            <p class="additional-text-2">S’mores Frappuccino</p>
-                            <p class="additional-text">This new drink takes an espresso and mixes it with brown sugar and cinnamon before being topped with oat milk.</p>
-                            <p class="additional-text-2">$5.50</p>
+                    <div class="slider-wrapper">
+                        <div class="slide" style="transform: translateX(0); left: 0;">
+                            <img src="assets/img/coffee-slider-1.png" alt="coffee" class="slider-img">
+                            <div class="slider-description">
+                                <p class="additional-text-2">S’mores Frappuccino</p>
+                                <p class="additional-text">This new drink takes an espresso and mixes it with brown sugar and cinnamon before being topped with oat milk.</p>
+                                <p class="additional-text-2">$5.50</p>
+                            </div>
+                        </div>
+                        <div class="slide" style="transform: translateX(0); left: 0;">
+                            <img src="assets/img/coffee-slider-2.png" alt="coffee" class="slider-img">
+                            <div class="slider-description">
+                                <p class="additional-text-2">Caramel Macchiato</p>
+                                <p class="additional-text">Fragrant and unique classic espresso with rich caramel-peanut syrup, with cream under whipped thick foam.</p>
+                                <p class="additional-text-2">$5.00</p>
+                            </div>
+                        </div>
+                        <div class="slide" style="transform: translateX(0); left: 0;">
+                            <img src="assets/img/coffee-slider-3.png" alt="coffee" class="slider-img">
+                            <div class="slider-description">
+                                <p class="additional-text-2">Ice coffee</p>
+                                <p class="additional-text">A popular summer drink that tones and invigorates. Prepared from coffee, milk and ice.</p>
+                                <p class="additional-text-2">$4.50</p>
+                            </div>
                         </div>
                     </div>
                     <div class="pagination-block">
-                        <div class="pag pag-active"></div>
+                        <div class="pag pag-active">
+                            <div class="pag-progress"></div>
+                        </div>
                         <div class="pag"></div>
                         <div class="pag"></div>
                     </div>
@@ -166,5 +187,6 @@
             </div>
         </footer>
     </div>
+    <script src="index.js"></script>
 </body>
 </html>
