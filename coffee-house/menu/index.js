@@ -74,6 +74,7 @@ const productCards = document.querySelectorAll('.product-item');
 const offerButtons = document.querySelectorAll('.offer-button');
 const coffeeButton = document.querySelector('.coffee-offer-button');
 const refreshButton = document.querySelector('.refresh');
+const loadProgress = document.querySelector('.load-progress');
 
 for (let button of offerButtons) {
     button.addEventListener('click', updateCards);
@@ -98,6 +99,9 @@ async function updateCards(event) {
         button.classList.remove('active-button');
     }
     currentTarget.classList.add('active-button');
+    currentTarget.classList.add('active-button-animation');
+
+    loadProgress.setAttribute('style', 'width: 15%; opacity: 1; transition: 0.5s');
 
     const productJson = await fetch('../products.json');
     const productStorage = await productJson.json();
@@ -123,12 +127,15 @@ async function updateCards(event) {
 
     const requiredProducts = productStorage.filter(item => item.category === targetCategory);
 
+    loadProgress.style.width = '35%';
+
     const hideCards = new Promise(function(resolve) {
         for (let i = 0; i < requiredProducts.length; i++) {
             switchCardsDisplay(i + 1, 'hide');
             if (i < requiredProducts.length) {
                 setTimeout(() => {
                     resolve();
+                    loadProgress.style.width = '60%';
                 }, 1250);
             }
         }
@@ -157,17 +164,23 @@ async function updateCards(event) {
         for (let i = 0; i < requiredProducts.length; i++) {
             switchCardsDisplay(i + 1, 'show');
         }
+        loadProgress.style.width = '80%';
     }).then(() => {
         setTimeout(() => {
             for (let button of offerButtons) {
             button.addEventListener('click', updateCards);
             button.removeAttribute('style');
-        }
+            }
 
-        for (let card of productCards) {
-            card.addEventListener('click', openModalMenu);
-        }
-        }, 1000);
+            for (let card of productCards) {
+                card.addEventListener('click', openModalMenu);
+            }
+            loadProgress.style.width = '100%';
+            currentTarget.classList.remove('active-button-animation');
+            setTimeout(() => {
+                loadProgress.removeAttribute('style');
+            }, 500);
+    }, 1000);
     })
 }
 

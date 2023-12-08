@@ -632,11 +632,24 @@ body {
 }
 
 .offer-section {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 40px;
+    width: 100%;
+}
+
+.load-progress {
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    content: '';
+    width: 0%;
+    height: 3px;
+    opacity: 0;
+    background-color: #403F3D;
 }
 
 .offer-section h1 {
@@ -691,6 +704,14 @@ body {
     color: #E1D4C9;
     background-color: #665F55;
     pointer-events: none;
+}
+
+.active-button-animation {
+    animation-name: active-button-load;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
 }
 
 .additives-button.active-button {
@@ -1440,5 +1461,15 @@ body {
 
     .refresh {
         cursor: pointer;
+    }
+}
+
+@keyframes active-button-load {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.1);
     }
 }
