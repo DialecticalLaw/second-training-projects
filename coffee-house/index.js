@@ -15,7 +15,7 @@ document.addEventListener('click', closeInterface);
 
 function closeInterface(event) {
     if (burgerButton.classList.contains('burger-button-active')) {
-        if (event.target.classList.contains('link') && !event.target.classList.contains('active-menu-link-header')) {
+        if (event.target.classList.contains('link') || event.target.classList.contains('logo')) {
             body.classList.remove('lock');
             burgerMenuContent.classList.remove('burger-menu-active');
             burgerButton.classList.remove('burger-button-active');

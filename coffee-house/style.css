@@ -92,6 +92,7 @@ body {
     height: 44px;
     border: 1px solid #665F55;
     border-radius: 100px;
+    transition: 0.5s;
 }
 
 .burger-button-active {
