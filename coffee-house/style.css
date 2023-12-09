@@ -92,6 +92,7 @@ body {
     height: 44px;
     border: 1px solid #665F55;
     border-radius: 100px;
+    transition: 0.5s;
 }
 
 .burger-button-active {
@@ -631,11 +632,24 @@ body {
 }
 
 .offer-section {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 40px;
+    width: 100%;
+}
+
+.load-progress {
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    content: '';
+    width: 0%;
+    height: 3px;
+    opacity: 0;
+    background-color: #403F3D;
 }
 
 .offer-section h1 {
@@ -690,6 +704,14 @@ body {
     color: #E1D4C9;
     background-color: #665F55;
     pointer-events: none;
+}
+
+.active-button-animation {
+    animation-name: active-button-load;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
 }
 
 .additives-button.active-button {
@@ -753,6 +775,11 @@ body {
 
 .refresh {
     display: none;
+    transition: 0.3s;
+}
+
+.refresh-opacity {
+    opacity: 0.3;
 }
 
 .modal-wrapper {
@@ -768,30 +795,34 @@ body {
 }
 
 .modal-wrapper-on {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
 }
 
 .modal-wrapper-blackout {
     background-color: rgba(64, 63, 61, 0.80);
 }
 
+.modal-coordinates-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
 .modal-menu {
+    position: absolute;
     display: flex;
     max-width: 800px;
     opacity: 0;
     padding: 16px;
-    transform: translateY(-100%) scaleX(0) scaleY(0);
+    transform: scale(0);
     transform-origin: center;
     border-radius: 40px;
     background-color: #E1D4C9;
-    transition: 0.5s ease;
 }
 
-.modal-menu-on {
-    opacity: 1;
-    transform: translateY(0) scaleX(1) scaleY(1);
+.modal-menu-closing {
+    transform: translateY(-150%) scale3d(0.4, 0.4, 1) !important;
+    opacity: 0 !important;
 }
 
 .modal-img {
@@ -1439,5 +1470,15 @@ body {
 
     .refresh {
         cursor: pointer;
+    }
+}
+
+@keyframes active-button-load {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.1);
     }
 }
