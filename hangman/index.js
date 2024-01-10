@@ -173,7 +173,7 @@ function startGame() {
     startGame();
   } else {
     localStorage.setItem('oldAnswer', dictionary[randomNum].word);
-    mainHint.innerHTML = dictionary[randomNum].hint;
+    mainHint.innerHTML = `<b>Подсказка:</b> ${dictionary[randomNum].hint}`;
 
     for (let i = 0; i < dictionary[randomNum].word.length; i++) {
       const encryptedLetter = document.createElement('div');
