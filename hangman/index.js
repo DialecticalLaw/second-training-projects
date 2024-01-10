@@ -1,3 +1,9 @@
+if (!localStorage.getItem('oldAnswer')) {
+  localStorage.setItem('oldAnswer', undefined);
+}
+
+// Начало генерирования HTML
+
 const body = document.querySelector('body');
 
 const container = document.createElement('div');
@@ -23,7 +29,6 @@ header.insertAdjacentElement('beforeend', headerTitle);
 
 const mainHint = document.createElement('p');
 mainHint.classList.add('main__hint');
-mainHint.innerHTML = '*тут будет подсказка*' //////////// REMOVE THIS LATER!!!
 main.insertAdjacentElement('afterbegin', mainHint);
 
 const keyboard = document.createElement('div');
@@ -33,11 +38,15 @@ main.insertAdjacentElement('beforeend', keyboard);
 const alphabet = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я'];
 
 for (let letter of alphabet) {
-    const letterBtn = document.createElement('button');
-    letterBtn.classList.add('keyboard__btn');
-    letterBtn.innerHTML = letter;
-    keyboard.insertAdjacentElement('beforeend', letterBtn);
+  const letterBtn = document.createElement('button');
+  letterBtn.classList.add('keyboard__btn');
+  letterBtn.innerHTML = letter;
+  keyboard.insertAdjacentElement('beforeend', letterBtn);
 }
+
+const guessWord = document.createElement('div');
+guessWord.classList.add('guess-word');
+main.insertAdjacentElement('beforeend', guessWord);
 
 const mainTries = document.createElement('p');
 mainTries.classList.add('main__tries');
@@ -104,3 +113,74 @@ footerRss.href = 'https://rs.school/js-stage0/';
 footerRss.target = '_blank';
 footerRss.innerHTML = '<img src="https://rs.school/images/rs_school_js.svg" alt="rss">';
 footer.insertAdjacentElement('beforeend', footerRss);
+
+// Конец генерирования HTML
+
+const dictionary = [{
+  word: 'хобби',
+  hint: 'Увлечение в свободное время'
+},
+{
+  word: 'бумага',
+  hint: 'Материал, используемый в книгах, журналах. На нём пишут, из него вырезают'
+},
+{
+  word: 'колесо',
+  hint: 'Ну... Оно круглое!'
+},
+{
+  word: 'рыба',
+  hint: 'Подходит котик к продавцу ЭТОГО и спрашивает: <i>вы ЭТО продаёте?</i> А ему в ответ: <i>нет, только показываем.</i> Котик: <i>красивое...</i>'
+},
+{
+  word: 'язык',
+  hint: 'Он есть во рту, на нём пишут и даже говорят. Что же это?'
+},
+{
+  word: 'Капибара',
+  hint: 'Это животное называют самом большим грызуном. А ещё они милые'
+},
+{
+  word: 'кошелёк',
+  hint: 'Как правило, в нём пусто'
+},
+{
+  word: 'Посылка',
+  hint: '<i>"Это то, что становится вашим лучшим другом во время налогового сезона и вашим худшим врагом, когда вы сталкиваетесь с термином "бюрократия"."</i> - ChatGPT'
+},
+{
+  word: 'Соединение',
+  hint: 'Ответ - пшш... Приём, как слышшпш.... <i>*связь потеряна*</i>'
+},
+{
+  word: 'время',
+  hint: 'В детстве идёт долго. С возрастом ускоряется. Уже не возвращается'
+},
+{
+  word: 'вертолёт',
+  hint: 'А муха тоже ... , но без коробки передач'
+},
+{
+  word: 'голубь',
+  hint: 'Раньше они почту разносили. А теперь безработные... Живут на "бабушкины пособия".'
+},]
+
+startGame();
+
+function startGame() {
+  const randomNum = Math.floor(Math.random() * 12);
+  if (dictionary[randomNum].word === localStorage.getItem('oldAnswer')) {
+    startGame();
+  } else {
+    localStorage.setItem('oldAnswer', dictionary[randomNum].word);
+    mainHint.innerHTML = dictionary[randomNum].hint;
+
+    for (let i = 0; i < dictionary[randomNum].word.length; i++) {
+      const encryptedLetter = document.createElement('div');
+      encryptedLetter.classList.add('guess-word__line');
+      guessWord.insertAdjacentElement('beforeend', encryptedLetter);
+    }
+
+    console.log(dictionary[randomNum].word);
+  }
+}
