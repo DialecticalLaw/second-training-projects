@@ -47,7 +47,7 @@ body {
 .header__title {
   color: #ffffff;
   font-family: Comfortaa;
-  font-size: 3rem;
+  font-size: 3.2rem;
 }
 
 .main {
@@ -60,7 +60,7 @@ body {
 .main__hint,
 .main__tries {
   font-family: Comfortaa;
-  font-size: 30px;
+  font-size: 1.8rem;
   color: #ffffff
 }
 
@@ -78,7 +78,7 @@ body {
   height: 50px;
   border-radius: 25%;
   font-family: Comfortaa;
-  font-size: 30px;
+  font-size: 1.8rem;
   background-color: #232323;
   color: #12ffff;
   box-shadow: 0 0 5px 1px #000000;
@@ -90,5 +90,31 @@ body {
 }
 
 .footer {
+  justify-content: space-between;
+  align-items: flex-end;
   height: 10%;
+}
+
+.github-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.footer__year,
+.github-link {
+  font-family: Comfortaa;
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.github-link__icon {
+  width: 50px;
+  height: 50px;
+}
+
+.footer__link_rss {
+  width: 120px;
 }
