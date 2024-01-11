@@ -192,13 +192,18 @@ function startGame() {
 }
 
 function checkGuess(event) {
+  let keyRegexp = /[а-я]/i
+  if (event.key !== undefined && !keyRegexp.test(event.key)) {
+    return;
+  }
+
   if (event.target.classList.contains('keyboard__btn')) {
     event.key = event.target.innerHTML;
     event.target.disabled = true;
     event.target.classList.add('keyboard__btn_disabled');
   }
-  let letterPositions = [];
 
+  let letterPositions = [];
   for (let i = 0; i < answer.length; i++) {
     if (answer[i] === event.key.toLowerCase()) {
       letterPositions.push(i);
