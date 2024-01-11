@@ -41,10 +41,8 @@ modalWindow.insertAdjacentElement('beforeend', modalAnswer);
 const modalBtn = document.createElement('button');
 modalBtn.classList.add('modal-wrapper__btn');
 modalBtn.innerHTML = 'Играть снова';
+modalBtn.addEventListener('click', playAgain);
 modalWindow.insertAdjacentElement('beforeend', modalBtn);
-
-modalAnswer.innerHTML = 'Правильный ответ: муравей'; // УДАЛИТЬ
-modalTitle.innerHTML = 'Победа'; // УДАЛИТЬ
 
 const headerTitle = document.createElement('h1');
 headerTitle.classList.add('header__title');
@@ -88,39 +86,44 @@ canvas.height = 350;
 main.insertAdjacentElement('beforeend', canvas);
 
 const context = canvas.getContext('2d');
-context.strokeStyle = '#12ffff';
-context.lineWidth = '5';
-context.lineJoin = 'round';
 
-context.beginPath(); // Рисование виселицы - снизу вверх
-context.moveTo(0, 350);
-context.lineTo(300, 350);
-context.closePath();
-context.stroke();
+function drawGallows() {
+  context.strokeStyle = '#12ffff';
+  context.lineWidth = '5';
+  context.lineJoin = 'round';
 
-context.beginPath();
-context.moveTo(50, 350);
-context.lineTo(50, 0);
-context.closePath();
-context.stroke();
+  context.beginPath(); // Рисование виселицы - снизу вверх
+  context.moveTo(0, 350);
+  context.lineTo(300, 350);
+  context.closePath();
+  context.stroke();
 
-context.beginPath();
-context.moveTo(50, 50);
-context.lineTo(100, 0);
-context.closePath();
-context.stroke();
+  context.beginPath();
+  context.moveTo(50, 350);
+  context.lineTo(50, 0);
+  context.closePath();
+  context.stroke();
 
-context.beginPath();
-context.moveTo(50, 0);
-context.lineTo(220, 0);
-context.closePath();
-context.stroke();
+  context.beginPath();
+  context.moveTo(50, 50);
+  context.lineTo(100, 0);
+  context.closePath();
+  context.stroke();
 
-context.beginPath();
-context.moveTo(220, 0);
-context.lineTo(220, 50);
-context.closePath();
-context.stroke();
+  context.beginPath();
+  context.moveTo(50, 0);
+  context.lineTo(220, 0);
+  context.closePath();
+  context.stroke();
+
+  context.beginPath();
+  context.moveTo(220, 0);
+  context.lineTo(220, 50);
+  context.closePath();
+  context.stroke();
+}
+
+drawGallows();
 
 const githubLink = document.createElement('a');
 githubLink.classList.add('github-link');
@@ -353,4 +356,29 @@ function showModal(result) {
     default:
       break;
   }
+}
+
+function playAgain() {
+  document.querySelector('.incorrect-counter').innerHTML = '0 / 6';
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  drawGallows();
+
+  const disabledButtons = document.querySelectorAll('.keyboard__btn_disabled');
+  for (let btn of disabledButtons) {
+    btn.disabled = false;
+    btn.classList.remove('keyboard__btn_disabled');
+  }
+
+  const guessWordItems = document.querySelectorAll('.guess-word__line');
+  for (let item of guessWordItems) {
+    item.remove();
+  }
+
+  startGame();
+
+  modalWindow.classList.remove('modal-wrapper__window_on');
+  modalWrapper.classList.remove('modal-wrapper-blackout');
+  setTimeout(() => {
+    modalWrapper.classList.remove('modal-wrapper-on');
+  }, 405);
 }
