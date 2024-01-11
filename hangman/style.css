@@ -85,6 +85,12 @@ body {
   cursor: pointer;
 }
 
+.keyboard__btn_disabled {
+  cursor: default;
+  opacity: 0.5;
+  color: #168282;
+}
+
 .guess-word {
   display: flex;
   gap: 10px;

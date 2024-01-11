@@ -194,6 +194,8 @@ function startGame() {
 function checkGuess(event) {
   if (event.target.classList.contains('keyboard__btn')) {
     event.key = event.target.innerHTML;
+    event.target.disabled = true;
+    event.target.classList.add('keyboard__btn_disabled');
   }
   let letterPositions = [];
 
