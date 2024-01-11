@@ -22,6 +22,30 @@ const footer = document.createElement('footer');
 footer.classList.add('footer');
 container.insertAdjacentElement('beforeend', footer);
 
+const modalWrapper = document.createElement('div');
+modalWrapper.classList.add('modal-wrapper');
+container.insertAdjacentElement('afterbegin', modalWrapper);
+
+const modalWindow = document.createElement('div');
+modalWindow.classList.add('modal-wrapper__window');
+modalWrapper.insertAdjacentElement('afterbegin', modalWindow);
+
+const modalTitle = document.createElement('h2');
+modalTitle.classList.add('modal-wrapper__title');
+modalWindow.insertAdjacentElement('beforeend', modalTitle);
+
+const modalAnswer = document.createElement('p');
+modalAnswer.classList.add('modal-wrapper__answer');
+modalWindow.insertAdjacentElement('beforeend', modalAnswer);
+
+const modalBtn = document.createElement('button');
+modalBtn.classList.add('modal-wrapper__btn');
+modalBtn.innerHTML = 'Играть снова';
+modalWindow.insertAdjacentElement('beforeend', modalBtn);
+
+modalAnswer.innerHTML = 'Правильный ответ: муравей'; // УДАЛИТЬ
+modalTitle.innerHTML = 'Победа'; // УДАЛИТЬ
+
 const headerTitle = document.createElement('h1');
 headerTitle.classList.add('header__title');
 headerTitle.innerHTML = 'Виселица';
@@ -215,7 +239,7 @@ function checkGuess(event) {
       }
     }
   }
-  
+
   let letterPositions = [];
   for (let i = 0; i < answer.length; i++) {
     if (answer[i] === event.key.toLowerCase()) {
@@ -235,6 +259,18 @@ function showLetters(letterPositions, key) {
     const lineOnPosition = document.querySelectorAll('.guess-word__line')[position];
     lineOnPosition.classList.add('guess-word__letter');
     lineOnPosition.innerHTML = key;
+  }
+
+  const guessWordItems = document.querySelectorAll('.guess-word__line');
+  let isWordGuessed = true;
+  for (let item of guessWordItems) {
+    if (!item.classList.contains('guess-word__letter')) {
+      isWordGuessed = false;
+    }
+  }
+
+  if (isWordGuessed) {
+    showModal('win');
   }
 }
 
@@ -283,6 +319,36 @@ function drawBodyPart() {
       context.lineTo(260, 230);
       context.stroke();
       document.querySelector('.incorrect-counter').innerHTML = '6 / 6';
+      showModal('lose');
+      break;
+    default:
+      break;
+  }
+}
+
+function showModal(result) {
+  switch (result) {
+    case 'win':
+      modalTitle.innerHTML = 'Вы выиграли';
+      modalTitle.style.color = '#00ff00';
+      modalAnswer.innerHTML = `Правильный ответ: ${answer}`;
+
+      modalWrapper.classList.add('modal-wrapper-on');
+      setTimeout(() => {
+        modalWrapper.classList.add('modal-wrapper-blackout');
+        modalWindow.classList.add('modal-wrapper__window_on');
+      }, 15);
+      break;
+    case 'lose':
+      modalTitle.innerHTML = 'Вы проиграли';
+      modalTitle.style.color = '#ff1717';
+      modalAnswer.innerHTML = `Правильный ответ: ${answer}`;
+
+      modalWrapper.classList.add('modal-wrapper-on');
+      setTimeout(() => {
+        modalWrapper.classList.add('modal-wrapper-blackout');
+        modalWindow.classList.add('modal-wrapper__window_on');
+      }, 15);
       break;
     default:
       break;
