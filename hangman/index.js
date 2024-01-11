@@ -41,8 +41,11 @@ for (let letter of alphabet) {
   const letterBtn = document.createElement('button');
   letterBtn.classList.add('keyboard__btn');
   letterBtn.innerHTML = letter;
+  letterBtn.addEventListener('click', checkGuess);
   keyboard.insertAdjacentElement('beforeend', letterBtn);
 }
+
+document.addEventListener('keydown', checkGuess);
 
 const guessWord = document.createElement('div');
 guessWord.classList.add('guess-word');
@@ -137,7 +140,7 @@ const dictionary = [{
   hint: 'Он есть во рту, на нём пишут и даже говорят. Что же это?'
 },
 {
-  word: 'Капибара',
+  word: 'капибара',
   hint: 'Это животное называют самом большим грызуном. А ещё они милые'
 },
 {
@@ -145,11 +148,11 @@ const dictionary = [{
   hint: 'Как правило, в нём пусто'
 },
 {
-  word: 'Посылка',
+  word: 'посылка',
   hint: '<i>"Это то, что становится вашим лучшим другом во время налогового сезона и вашим худшим врагом, когда вы сталкиваетесь с термином "бюрократия"."</i> - ChatGPT'
 },
 {
-  word: 'Соединение',
+  word: 'соединение',
   hint: 'Ответ - пшш... Приём, как слышшпш.... <i>*связь потеряна*</i>'
 },
 {
@@ -165,6 +168,8 @@ const dictionary = [{
   hint: 'Раньше они почту разносили. А теперь безработные... Живут на "бабушкины пособия".'
 },]
 
+let answer;
+
 startGame();
 
 function startGame() {
@@ -174,6 +179,7 @@ function startGame() {
   } else {
     localStorage.setItem('oldAnswer', dictionary[randomNum].word);
     mainHint.innerHTML = `<b>Подсказка:</b> ${dictionary[randomNum].hint}`;
+    answer = dictionary[randomNum].word;
 
     for (let i = 0; i < dictionary[randomNum].word.length; i++) {
       const encryptedLetter = document.createElement('div');
@@ -182,5 +188,30 @@ function startGame() {
     }
 
     console.log(dictionary[randomNum].word);
+  }
+}
+
+function checkGuess(event) {
+  if (event.target.classList.contains('keyboard__btn')) {
+    event.key = event.target.innerHTML;
+  }
+  let letterPositions = [];
+
+  for (let i = 0; i < answer.length; i++) {
+    if (answer[i] === event.key.toLowerCase()) {
+      letterPositions.push(i);
+    }
+  }
+
+  if (letterPositions) {
+    showLetters(letterPositions, event.key.toLowerCase());
+  }
+}
+
+function showLetters(letterPositions, key) {
+  for (let position of letterPositions) {
+    const lineOnPosition = document.querySelectorAll('.guess-word__line')[position];
+    lineOnPosition.classList.add('guess-word__letter');
+    lineOnPosition.innerHTML = key;
   }
 }

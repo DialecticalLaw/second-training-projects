@@ -28,7 +28,7 @@ body {
   min-height: 100vh;
   margin: 0 auto;
   padding: 15px;
-  background-color: #232323;
+  background-color: #191919;
 }
 
 .header,
@@ -79,7 +79,7 @@ body {
   border-radius: 25%;
   font-family: Comfortaa;
   font-size: 1.8rem;
-  background-color: #232323;
+  background-color: #191919;
   color: #12ffff;
   box-shadow: 0 0 5px 1px #000000;
   cursor: pointer;
@@ -96,6 +96,13 @@ body {
   height: 40px;
 }
 
+.guess-word__letter {
+  font-family: Comfortaa;
+  font-size: 40px;
+  color: #ffffff;
+  text-align: center;
+}
+
 .guess-word__line::after {
   content: '';
   position: absolute;
@@ -104,6 +111,10 @@ body {
   width: 100%;
   height: 2px;
   background-color: #ffffff;
+}
+
+.guess-word__letter::after {
+  content: none;
 }
 
 .incorrect-counter {
