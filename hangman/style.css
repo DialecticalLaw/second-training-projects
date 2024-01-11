@@ -34,7 +34,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #b30000; 
+  background: #0c9a9a;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #096a6a;
+  border: 2px dashed #ffffff;
 }
 
 .container {
@@ -43,6 +48,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
   width: 100%;
   min-height: 100vh;
   margin: 0 auto;
@@ -131,7 +137,7 @@ body {
 }
 
 .header__title {
-  color: #ffffff;
+  color: #12ffff;
   font-family: Comfortaa;
   font-size: 3.2rem;
 }
@@ -156,7 +162,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 20px;
   max-width: 750px;
 }
 
@@ -168,14 +174,24 @@ body {
   font-size: 1.8rem;
   background-color: #191919;
   color: #12ffff;
-  box-shadow: 0 0 5px 1px #000000;
+  box-shadow: 0 0 5px 1.5px #000000;
   cursor: pointer;
+  border: none;
+  transition: 0.4s;
+}
+
+.keyboard__btn:active {
+  transform: scale(0.8);
 }
 
 .keyboard__btn_disabled {
   cursor: default;
   opacity: 0.5;
   color: #168282;
+}
+
+.keyboard__btn_disabled:active {
+  transform: none;
 }
 
 .guess-word {
@@ -214,16 +230,41 @@ body {
   color: #ff1717;
 }
 
+#hangman {
+  padding: 20px;
+  box-shadow: inset 0 0 13px 1px #050505;
+}
+
 .footer {
   justify-content: space-between;
   align-items: flex-end;
 }
 
 .github-link {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
+  overflow: hidden;
+  transition: 0.4s;
+}
+
+.github-link:active {
+  transform: scale(0.8);
+}
+
+.github-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  transform: translateX(-100%);
+  transition: 0.4s;
 }
 
 .footer__year,
@@ -241,4 +282,23 @@ body {
 
 .footer__link_rss {
   width: 120px;
+  transition: 0.4s;
+}
+
+.footer__link_rss:active {
+  transform: scale(0.8);
+}
+
+@media (hover: hover) {
+  .keyboard__btn:hover {
+    box-shadow: 0 0 5px 1.5px #12ffff;
+  }
+
+  .keyboard__btn_disabled:hover {
+    box-shadow: 0 0 5px 1.5px #000000;
+  }
+
+  .github-link:hover::after {
+    transform: translateX(0);
+  }
 }
