@@ -114,7 +114,7 @@ const footerRss = document.createElement('a');
 footerRss.classList.add('footer__link_rss');
 footerRss.href = 'https://rs.school/js-stage0/';
 footerRss.target = '_blank';
-footerRss.innerHTML = '<img src="https://rs.school/images/rs_school_js.svg" alt="rss">';
+footerRss.innerHTML = '<img src="assets/img/rs-logo-js-inverse.svg" alt="rss">';
 footer.insertAdjacentElement('beforeend', footerRss);
 
 // Конец генерирования HTML
@@ -192,7 +192,7 @@ function startGame() {
 }
 
 function checkGuess(event) {
-  let keyRegexp = /[а-я]/i
+  let keyRegexp = /[а-яё]/i
   if (event.key !== undefined && !keyRegexp.test(event.key)) {
     return;
   }
@@ -201,8 +201,21 @@ function checkGuess(event) {
     event.key = event.target.innerHTML;
     event.target.disabled = true;
     event.target.classList.add('keyboard__btn_disabled');
-  }
+  } else if (event.key) {
+    const letterButtons = document.querySelectorAll('.keyboard__btn');
+    for (let btn of letterButtons) {
+      if (btn.innerHTML === event.key.toUpperCase()) {
+        if (btn.classList.contains('keyboard__btn_disabled')) {
+          return;
+        }
 
+        btn.disabled = true;
+        btn.classList.add('keyboard__btn_disabled');
+        break;
+      }
+    }
+  }
+  
   let letterPositions = [];
   for (let i = 0; i < answer.length; i++) {
     if (answer[i] === event.key.toLowerCase()) {
