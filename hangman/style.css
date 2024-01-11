@@ -1,0 +1,225 @@
+@font-face {
+  font-family: Comfortaa;
+  src: url(assets/fonts/Comfortaa-VariableFont_wght.ttf);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  max-width: 100vw;
+}
+
+body {
+  padding: 0;
+  max-width: 100%;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 15px;
+  background-color: #191919;
+}
+
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.modal-wrapper-on {
+  display: flex;
+  transition: 0.4s;
+}
+
+.modal-wrapper-blackout {
+  background-color: #000000d7;
+}
+
+.modal-wrapper__window {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  width: max-content;
+  max-width: 90%;
+  opacity: 0;
+  padding: 20px;
+  background-color: #121212;
+  box-shadow: 0 0 12px 1px #000000;
+  border-radius: 30px;
+  transform: scale(0.7);
+  transition: 0.4s;
+}
+
+.modal-wrapper__window_on {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.modal-wrapper__title,
+.modal-wrapper__answer,
+.modal-wrapper__btn {
+  font-family: Comfortaa;
+}
+
+.modal-wrapper__title {
+  font-size: 50px;
+  color: rgb(0, 255, 0);
+}
+
+.modal-wrapper__answer {
+  font-size: 35px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.modal-wrapper__btn {
+  width: 100%;
+  font-size: 32px;
+  color: #000000;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.header,
+.main,
+.footer {
+  display: flex;
+  width: 100%;
+  max-width: 1440px;
+}
+
+.header {
+  justify-content: center;
+}
+
+.header__title {
+  color: #ffffff;
+  font-family: Comfortaa;
+  font-size: 3.2rem;
+}
+
+.main {
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+
+.main__hint,
+.main__tries {
+  font-family: Comfortaa;
+  font-size: 1.8rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+.keyboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  max-width: 750px;
+}
+
+.keyboard__btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 25%;
+  font-family: Comfortaa;
+  font-size: 1.8rem;
+  background-color: #191919;
+  color: #12ffff;
+  box-shadow: 0 0 5px 1px #000000;
+  cursor: pointer;
+}
+
+.keyboard__btn_disabled {
+  cursor: default;
+  opacity: 0.5;
+  color: #168282;
+}
+
+.guess-word {
+  display: flex;
+  gap: 10px;
+}
+
+.guess-word__line {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.guess-word__letter {
+  font-family: Comfortaa;
+  font-size: 40px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.guess-word__line::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #ffffff;
+}
+
+.guess-word__letter::after {
+  content: none;
+}
+
+.incorrect-counter {
+  color: #ff1717;
+}
+
+.footer {
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.github-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.footer__year,
+.github-link {
+  font-family: Comfortaa;
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.github-link__icon {
+  width: 50px;
+  height: 50px;
+}
+
+.footer__link_rss {
+  width: 120px;
+}
