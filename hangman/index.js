@@ -203,8 +203,10 @@ function checkGuess(event) {
     }
   }
 
-  if (letterPositions) {
+  if (letterPositions.length) {
     showLetters(letterPositions, event.key.toLowerCase());
+  } else {
+    drawBodyPart();
   }
 }
 
@@ -213,5 +215,56 @@ function showLetters(letterPositions, key) {
     const lineOnPosition = document.querySelectorAll('.guess-word__line')[position];
     lineOnPosition.classList.add('guess-word__letter');
     lineOnPosition.innerHTML = key;
+  }
+}
+
+function drawBodyPart() {
+  const incorrectCount = Number(document.querySelector('.incorrect-counter').innerHTML[0]);
+  context.strokeStyle = '#ffffff';
+  context.lineCap = 'round';
+  switch (incorrectCount) {
+    case 0:
+      context.beginPath();
+      context.arc(220, 80, 30, 0, Math.PI * 2, true);
+      context.stroke();
+      document.querySelector('.incorrect-counter').innerHTML = '1 / 6';
+      break;
+    case 1:
+      context.beginPath();
+      context.moveTo(220, 110);
+      context.lineTo(220,190);
+      context.stroke();
+      document.querySelector('.incorrect-counter').innerHTML = '2 / 6';
+      break;
+    case 2:
+      context.beginPath();
+      context.moveTo(220, 120);
+      context.lineTo(180, 170);
+      context.stroke();
+      document.querySelector('.incorrect-counter').innerHTML = '3 / 6';
+      break;
+    case 3:
+      context.beginPath();
+      context.moveTo(220, 120);
+      context.lineTo(260, 170);
+      context.stroke();
+      document.querySelector('.incorrect-counter').innerHTML = '4 / 6';
+      break;
+    case 4:
+      context.beginPath();
+      context.moveTo(220, 190);
+      context.lineTo(180, 230);
+      context.stroke();
+      document.querySelector('.incorrect-counter').innerHTML = '5 / 6';
+      break;
+    case 5:
+      context.beginPath();
+      context.moveTo(220, 190);
+      context.lineTo(260, 230);
+      context.stroke();
+      document.querySelector('.incorrect-counter').innerHTML = '6 / 6';
+      break;
+    default:
+      break;
   }
 }
