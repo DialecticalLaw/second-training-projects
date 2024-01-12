@@ -53,9 +53,20 @@ const mainHint = document.createElement('p');
 mainHint.classList.add('main__hint');
 main.insertAdjacentElement('afterbegin', mainHint);
 
+const interfaceWrapper = document.createElement('div');
+interfaceWrapper.classList.add('interface-wrapper');
+main.insertAdjacentElement('beforeend', interfaceWrapper);
+
+const canvas = document.createElement('canvas');
+canvas.id = 'hangman';
+canvas.innerHTML = 'Ваш браузер устарел и не поддерживает новые функции. Пожалуйста, обновите его';
+canvas.width = 300;
+canvas.height = 350;
+interfaceWrapper.insertAdjacentElement('beforeend', canvas);
+
 const keyboard = document.createElement('div');
 keyboard.classList.add('keyboard');
-main.insertAdjacentElement('beforeend', keyboard);
+interfaceWrapper.insertAdjacentElement('beforeend', keyboard);
 
 const alphabet = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я'];
 
@@ -67,8 +78,6 @@ for (let letter of alphabet) {
   keyboard.insertAdjacentElement('beforeend', letterBtn);
 }
 
-document.addEventListener('keydown', checkGuess);
-
 const guessWord = document.createElement('div');
 guessWord.classList.add('guess-word');
 main.insertAdjacentElement('beforeend', guessWord);
@@ -77,13 +86,6 @@ const mainTries = document.createElement('p');
 mainTries.classList.add('main__tries');
 mainTries.innerHTML = 'Неправильных ответов: <span class="incorrect-counter">0 / 6</span>';
 main.insertAdjacentElement('beforeend', mainTries);
-
-const canvas = document.createElement('canvas');
-canvas.id = 'hangman';
-canvas.innerHTML = 'Ваш браузер устарел и не поддерживает новые функции. Пожалуйста, обновите его';
-canvas.width = 300;
-canvas.height = 350;
-main.insertAdjacentElement('beforeend', canvas);
 
 const context = canvas.getContext('2d');
 
@@ -145,6 +147,8 @@ footerRss.innerHTML = '<img src="assets/img/rs-logo-js-inverse.svg" alt="rss">';
 footer.insertAdjacentElement('beforeend', footerRss);
 
 // Конец генерирования HTML
+
+document.addEventListener('keydown', checkGuess);
 
 const dictionary = [{
   word: 'хобби',
