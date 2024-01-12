@@ -238,8 +238,11 @@ let answer;
 
 startGame();
 
-if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
-  alert('Перед началом игры убедитесь, что включена русская раскладка на вашей клавиатуре');
+if (!localStorage.getItem('isAlertShown')) {
+  if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+    alert('Перед началом игры убедитесь, что включена русская раскладка на вашей клавиатуре');
+  }
+  localStorage.setItem('isAlertShown', true);
 }
 
 function startGame() {
