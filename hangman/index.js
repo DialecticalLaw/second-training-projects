@@ -148,8 +148,6 @@ footer.insertAdjacentElement('beforeend', footerRss);
 
 // Конец генерирования HTML
 
-document.addEventListener('keydown', checkGuess);
-
 const dictionary = [{
   word: 'хобби',
   hint: 'Увлечение в свободное время'
@@ -203,6 +201,10 @@ let answer;
 
 startGame();
 
+if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+  alert('Перед началом игры убедитесь, что включена русская раскладка на вашей клавиатуре');
+}
+
 function startGame() {
   const randomNum = Math.floor(Math.random() * 12);
   if (dictionary[randomNum].word === localStorage.getItem('oldAnswer')) {
@@ -221,6 +223,8 @@ function startGame() {
     console.log(dictionary[randomNum].word);
   }
 }
+
+document.addEventListener('keydown', checkGuess);
 
 function checkGuess(event) {
   let keyRegexp = /[а-яё]/i
