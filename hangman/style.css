@@ -120,8 +120,15 @@ body {
   width: 100%;
   font-size: 32px;
   color: #000000;
+  background-color: #ffffff;
   border-radius: 20px;
   cursor: pointer;
+  border: none;
+  transition: 0.4s;
+}
+
+.modal-wrapper__btn:active {
+  transform: scaleX(0.9);
 }
 
 .header,
@@ -300,5 +307,11 @@ body {
 
   .github-link:hover::after {
     transform: translateX(0);
+  }
+
+  .modal-wrapper__btn:hover {
+    background-color: #191919;
+    box-shadow: inset 0 0 6px 1px #ffffff;
+    color: #12ffff;
   }
 }
