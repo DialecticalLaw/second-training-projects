@@ -1,7 +1,3 @@
-if (!localStorage.getItem('oldAnswer')) {
-  localStorage.setItem('oldAnswer', undefined);
-}
-
 // Начало генерирования HTML
 
 const body = document.querySelector('body');
@@ -53,9 +49,20 @@ const mainHint = document.createElement('p');
 mainHint.classList.add('main__hint');
 main.insertAdjacentElement('afterbegin', mainHint);
 
+const interfaceWrapper = document.createElement('div');
+interfaceWrapper.classList.add('interface-wrapper');
+main.insertAdjacentElement('beforeend', interfaceWrapper);
+
+const canvas = document.createElement('canvas');
+canvas.id = 'hangman';
+canvas.innerHTML = 'Ваш браузер устарел и не поддерживает новые функции. Пожалуйста, обновите его';
+canvas.width = 300;
+canvas.height = 350;
+interfaceWrapper.insertAdjacentElement('beforeend', canvas);
+
 const keyboard = document.createElement('div');
 keyboard.classList.add('keyboard');
-main.insertAdjacentElement('beforeend', keyboard);
+interfaceWrapper.insertAdjacentElement('beforeend', keyboard);
 
 const alphabet = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я'];
 
@@ -67,8 +74,6 @@ for (let letter of alphabet) {
   keyboard.insertAdjacentElement('beforeend', letterBtn);
 }
 
-document.addEventListener('keydown', checkGuess);
-
 const guessWord = document.createElement('div');
 guessWord.classList.add('guess-word');
 main.insertAdjacentElement('beforeend', guessWord);
@@ -77,13 +82,6 @@ const mainTries = document.createElement('p');
 mainTries.classList.add('main__tries');
 mainTries.innerHTML = 'Неправильных ответов: <span class="incorrect-counter">0 / 6</span>';
 main.insertAdjacentElement('beforeend', mainTries);
-
-const canvas = document.createElement('canvas');
-canvas.id = 'hangman';
-canvas.innerHTML = 'Ваш браузер устарел и не поддерживает новые функции. Пожалуйста, обновите его';
-canvas.width = 300;
-canvas.height = 350;
-main.insertAdjacentElement('beforeend', canvas);
 
 const context = canvas.getContext('2d');
 
@@ -193,14 +191,58 @@ const dictionary = [{
 {
   word: 'голубь',
   hint: 'Раньше они почту разносили. А теперь безработные... Живут на "бабушкины пособия".'
-},]
+},
+{
+  word: 'муравей',
+  hint: 'Крошечный, но очень трудолюбивый. Вместе с товарищами может всё'
+},
+{
+  word: 'вселенная',
+  hint: 'Она поражает своей красотой и жестокостью. Никто не знает точно, насколько она огромная...'
+},
+{
+  word: 'лотерея',
+  hint: 'В неё реально выиграть?'
+},
+{
+  word: 'ответ',
+  hint: 'Что ищешь?'
+},
+{
+  word: 'документ',
+  hint: '<i>"Это лист бумаги, который имеет удивительное свойство превращаться в магический свиток невидимости, как только ты его хочешь найти."</i> - ChatGPT'
+},
+{
+  word: 'разговор',
+  hint: '<i>"Это уникальная игра в теннис, где мячом служат слова, а сеткой - недопонимание. Иногда, к сожалению, ракетки заменяются на тяжёлые аргументы."</i> - ChatGPT'
+},
+{
+  word: 'солнце',
+  hint: 'Огромный шар, содержащий в себе огромное количество энергии. Самый близкий к нам из себе подобных'
+},
+{
+  word: 'переводчик',
+  hint: 'Бывает электронный. Бывает человек. Помогает понять кого угодно'
+},
+{
+  word: 'подсказка',
+  hint: 'хм... Это и есть ответ'
+},
+];
 
 let answer;
 
 startGame();
 
+if (!localStorage.getItem('isAlertShown')) {
+  if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+    alert('Перед началом игры убедитесь, что включена русская раскладка на вашей клавиатуре');
+  }
+  localStorage.setItem('isAlertShown', true);
+}
+
 function startGame() {
-  const randomNum = Math.floor(Math.random() * 12);
+  const randomNum = Math.floor(Math.random() * 21);
   if (dictionary[randomNum].word === localStorage.getItem('oldAnswer')) {
     startGame();
   } else {
@@ -217,6 +259,8 @@ function startGame() {
     console.log(dictionary[randomNum].word);
   }
 }
+
+document.addEventListener('keydown', checkGuess);
 
 function checkGuess(event) {
   let keyRegexp = /[а-яё]/i
