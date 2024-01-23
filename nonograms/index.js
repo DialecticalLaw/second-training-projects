@@ -8,10 +8,10 @@ const header = document.createElement('header');
 header.classList.add('header');
 container.insertAdjacentElement('beforeend', header);
 
-const title = document.createElement('h1');
-title.classList.add('title');
-title.textContent = 'Nonograms';
-header.insertAdjacentElement('beforeend', title);
+const haaderTitle = document.createElement('h1');
+haaderTitle.classList.add('header__title');
+haaderTitle.textContent = 'Nonograms';
+header.insertAdjacentElement('beforeend', haaderTitle);
 
 const main = document.createElement('main');
 main.classList.add('main');
@@ -27,9 +27,13 @@ choosePuzzle.classList.add('choose-puzzle');
 choosePuzzle.textContent = 'Choose a puzzle';
 main.insertAdjacentElement('beforeend', choosePuzzle);
 
+const gameBoardContent = document.createElement('div');
+gameBoardContent.classList.add('game-board-content');
+main.insertAdjacentElement('beforeend', gameBoardContent);
+
 const stopwatchMenuContainer = document.createElement('div');
 stopwatchMenuContainer.classList.add('stopwatch-menu-container');
-main.insertAdjacentElement('beforeend', stopwatchMenuContainer);
+gameBoardContent.insertAdjacentElement('beforeend', stopwatchMenuContainer);
 
 const stopwatch = document.createElement('p');
 stopwatch.classList.add('stopwatch');
@@ -43,11 +47,11 @@ stopwatchMenuContainer.insertAdjacentElement('beforeend', menuBtn);
 
 const gameBoard = document.createElement('div');
 gameBoard.classList.add('game-board');
-main.insertAdjacentElement('beforeend', gameBoard);
+gameBoardContent.insertAdjacentElement('beforeend', gameBoard);
 
 const interactionButtonsContainer = document.createElement('div');
 interactionButtonsContainer.classList.add('interaction-buttons-container');
-main.insertAdjacentElement('beforeend', interactionButtonsContainer);
+gameBoardContent.insertAdjacentElement('beforeend', interactionButtonsContainer);
 
 const resetBtn = document.createElement('button');
 resetBtn.classList.add('reset-btn');

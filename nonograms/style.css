@@ -18,3 +18,56 @@ body {
   max-width: 100%;
 }
 
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header,
+.main,
+.footer {
+  display: flex;
+  width: 100%;
+  max-width: 1440px;
+}
+
+.header {
+  justify-content: center;
+}
+
+.header__title {
+  font-family: Comfortaa;
+  font-size: 3.2rem;
+}
+
+.main {
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+
+.game-board-content {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+}
+
+.stopwatch-menu-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.interaction-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
