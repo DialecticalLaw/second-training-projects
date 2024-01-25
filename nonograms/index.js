@@ -350,3 +350,12 @@ function addEmptyClue(elem, num) {
     elem.insertAdjacentHTML('afterbegin', '<p></p>');
   }
 }
+
+window.addEventListener('resize', () => {
+  const leftCluesParagraphs = document.querySelectorAll('.left-clue p');
+  const cellSize = document.querySelector('.cell').getBoundingClientRect().width;
+  for (let clue of leftCluesParagraphs) {
+    clue.style.width = `${cellSize}px`;
+    clue.style.height = `${cellSize}px`;
+  }
+});
