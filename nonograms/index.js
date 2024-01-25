@@ -402,10 +402,15 @@ function markSquares(event) {
   
 }
 
-playArea.addEventListener('pointerleave', (event) => {
+playArea.addEventListener('pointerleave', () => {
   const cells = document.querySelectorAll('.cell');
   for (let cell of cells) {
     cell.dataset.invisible = false;
   }
   isPointerDown = false;
+})
+
+playArea.addEventListener('contextmenu', (event) => {
+  event.preventDefault();
+  return false;
 })
