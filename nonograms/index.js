@@ -225,23 +225,21 @@ function startGame(mode) {
       drawClues(10);
       break;
     case '15x15':
-      // currentLevel = levelStorage[2][Math.floor(Math.random() * 5)];
-      // drawPlayArea(15);
-      // drawClues(15);
+      currentLevel = levelStorage[2][Math.floor(Math.random() * 5)];
+      drawPlayArea(15);
+      drawClues(15);
       break;
     default:
       break;
   }
 }
 
-startGame('5x5');
+startGame('10x10');
 
 function drawPlayArea(size) {
   gameBoard.style['grid-template'] = `auto ${size}fr / auto ${size}fr`;
   topCluesContainer.style['grid-template-columns'] = `repeat(${size}, 1fr`;
   topCluesContainer.style['grid-column-start'] = '2';
-  // leftCluesContainer.style['grid-template-rows'] = `repeat(${size}, 1fr`;
-  // leftCluesContainer.style['grid-row-start'] = '2';
   playArea.style['grid-template'] = `repeat(${size}, 1fr) / repeat(${size}, 1fr)`;
   playArea.style['grid-area'] = `2 / 2 / 2 / 2`;
 
@@ -249,9 +247,9 @@ function drawPlayArea(size) {
     for (let column = 0; column < size; column++) {
       const cell = document.createElement('div');
       cell.classList.add('cell');
-      if (column === 4 || column === 9 && size > 10) cell.classList.add('divideRight');
+      if (column === 4 && size > 5 || column === 9 && size > 10) cell.classList.add('divideRight');
       if (column === 5 || column === 10) cell.classList.add('divideLeft');
-      if (row === 4 || row === 9 && size > 10) cell.classList.add('divideBottom');
+      if (row === 4 && size > 5 || row === 9 && size > 10) cell.classList.add('divideBottom');
       if (row === 5 || row === 10) cell.classList.add('divideTop');
       playArea.insertAdjacentElement('beforeend', cell);
     }
@@ -271,7 +269,7 @@ function drawClues(size) {
     const leftClue = document.createElement('div');
     topClue.classList.add('top-clue');
     leftClue.classList.add('left-clue');
-    if (row === 4 || row === 9 && size > 10) {
+    if (row === 4 && size > 5 || row === 9 && size > 10) {
       topClue.classList.add('divideRight');
       leftClue.classList.add('divideBottom');
     }
