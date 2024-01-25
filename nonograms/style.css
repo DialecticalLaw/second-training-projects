@@ -129,6 +129,9 @@ body {
 
 .cell {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   aspect-ratio: 1 / 1;
   outline: 0.5px solid #000000;
@@ -138,6 +141,30 @@ body {
 .cell-marked {
   background-color: #000000;
   outline: 0.5px solid #ffffff;
+}
+
+.cross::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 20%;
+  width: 90%;
+  height: 4px;
+  transform-origin: left;
+  transform: rotate(45deg);
+  background-color: #000000;
+}
+
+.cross::before {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  left: 20%;
+  width: 90%;
+  height: 4px;
+  transform-origin: left;
+  transform: rotate(-45deg);
+  background-color: #000000;
 }
 
 .divideRight::after {

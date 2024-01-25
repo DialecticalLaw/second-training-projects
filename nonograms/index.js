@@ -363,18 +363,43 @@ window.addEventListener('resize', () => {
 
 isPointerDown = false;
 let actionType;
+let buttonType;
 
 playArea.addEventListener('pointerdown', (event) => {
-  isPointerDown = true;
-  if (event.target.classList.contains('cell')) {
-    if (!event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false') {
-      actionType = 'filling';
-      event.target.classList.add('cell-marked');
-      event.target.dataset.invisible = true;
-    } else if (event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false') {
-      actionType = 'emptying';
-      event.target.classList.remove('cell-marked');
-      event.target.dataset.invisible = true;
+  if (event.button === 0) {
+    buttonType = 'left';
+    isPointerDown = true;
+    if (event.target.classList.contains('cell')) {
+      if (!event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false') {
+        actionType = 'filling';
+        event.target.classList.add('cell-marked');
+        if (event.target.classList.contains('cell-cross')) {
+          event.target.classList.remove('cell-cross');
+          event.target.innerHTML = '';
+        }
+        event.target.dataset.invisible = true;
+      } else if (event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false') {
+        actionType = 'emptying';
+        event.target.classList.remove('cell-marked');
+        event.target.dataset.invisible = true;
+      }
+    }
+  } else if (event.button === 2) {
+    buttonType = 'right';
+    isPointerDown = true;
+    if (event.target.classList.contains('cell')) {
+      if (!event.target.classList.contains('cell-cross') && event.target.dataset.invisible === 'false') {
+        actionType = 'filling';
+        if (event.target.classList.contains('cell-marked')) event.target.classList.remove('cell-marked');
+        event.target.classList.add('cell-cross');
+        event.target.innerHTML = '<div class="cross"></div>';
+        event.target.dataset.invisible = true;
+      } else if (event.target.classList.contains('cell-cross') && event.target.dataset.invisible === 'false') {
+        actionType = 'emptying';
+        event.target.classList.remove('cell-cross');
+        event.target.innerHTML = '';
+        event.target.dataset.invisible = true;
+      }
     }
   }
 });
@@ -391,15 +416,31 @@ playArea.addEventListener('pointermove', markSquares);
 
 function markSquares(event) {
   if (isPointerDown && event.target.classList.contains('cell')) {
-    if (!event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false' && actionType === 'filling') {
-      event.target.classList.add('cell-marked');
-      event.target.dataset.invisible = true;
-    } else if (event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false' && actionType === 'emptying') {
-      event.target.classList.remove('cell-marked');
-      event.target.dataset.invisible = true;
+    if (buttonType === 'left') {
+      if (!event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false' && actionType === 'filling') {
+        event.target.classList.add('cell-marked');
+        if (event.target.classList.contains('cell-cross')) {
+          event.target.classList.remove('cell-cross');
+          event.target.innerHTML = '';
+        }
+        event.target.dataset.invisible = true;
+      } else if (event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false' && actionType === 'emptying') {
+        event.target.classList.remove('cell-marked');
+        event.target.dataset.invisible = true;
+      }
+    } else if (buttonType === 'right') {
+      if (!event.target.classList.contains('cell-cross') && event.target.dataset.invisible === 'false' && actionType === 'filling') {
+        if (event.target.classList.contains('cell-marked')) event.target.classList.remove('cell-marked');
+        event.target.classList.add('cell-cross');
+        event.target.innerHTML = '<div class="cross"></div>';
+        event.target.dataset.invisible = true;
+      } else if (event.target.classList.contains('cell-cross') && event.target.dataset.invisible === 'false' && actionType === 'emptying') {
+        event.target.classList.remove('cell-cross');
+        event.target.innerHTML = '';
+        event.target.dataset.invisible = true;
+      }
     }
   }
-  
 }
 
 playArea.addEventListener('pointerleave', () => {
