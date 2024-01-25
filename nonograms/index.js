@@ -234,7 +234,7 @@ function startGame(mode) {
   }
 }
 
-startGame('10x10');
+startGame('5x5');
 
 function drawPlayArea(size) {
   gameBoard.style['grid-template'] = `auto ${size}fr / auto ${size}fr`;
@@ -247,6 +247,7 @@ function drawPlayArea(size) {
     for (let column = 0; column < size; column++) {
       const cell = document.createElement('div');
       cell.classList.add('cell');
+      cell.dataset.invisible = false;
       if (column === 4 && size > 5 || column === 9 && size > 10) cell.classList.add('divideRight');
       if (column === 5 || column === 10) cell.classList.add('divideLeft');
       if (row === 4 && size > 5 || row === 9 && size > 10) cell.classList.add('divideBottom');
@@ -359,3 +360,52 @@ window.addEventListener('resize', () => {
     clue.style.height = `${cellSize}px`;
   }
 });
+
+isPointerDown = false;
+let actionType;
+
+playArea.addEventListener('pointerdown', (event) => {
+  isPointerDown = true;
+  if (event.target.classList.contains('cell')) {
+    if (!event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false') {
+      actionType = 'filling';
+      event.target.classList.add('cell-marked');
+      event.target.dataset.invisible = true;
+    } else if (event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false') {
+      actionType = 'emptying';
+      event.target.classList.remove('cell-marked');
+      event.target.dataset.invisible = true;
+    }
+  }
+});
+
+playArea.addEventListener('pointerup', () => {
+  const cells = document.querySelectorAll('.cell');
+  for (let cell of cells) {
+    cell.dataset.invisible = false;
+  }
+  isPointerDown = false;
+});
+
+playArea.addEventListener('pointermove', markSquares);
+
+function markSquares(event) {
+  if (isPointerDown && event.target.classList.contains('cell')) {
+    if (!event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false' && actionType === 'filling') {
+      event.target.classList.add('cell-marked');
+      event.target.dataset.invisible = true;
+    } else if (event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false' && actionType === 'emptying') {
+      event.target.classList.remove('cell-marked');
+      event.target.dataset.invisible = true;
+    }
+  }
+  
+}
+
+playArea.addEventListener('pointerleave', (event) => {
+  const cells = document.querySelectorAll('.cell');
+  for (let cell of cells) {
+    cell.dataset.invisible = false;
+  }
+  isPointerDown = false;
+})
