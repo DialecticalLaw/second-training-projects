@@ -61,7 +61,7 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 30px;
-  padding-top: 45px;
+  padding: 45px 0;
 }
 
 .random-game-btn,
@@ -88,13 +88,14 @@ body {
 .stopwatch-menu-container {
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
   width: 100%;
 }
 
 .stopwatch {
-  color: var(--main-color);
+  color: #009500;
   font-family: CuteFont;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
 }
 
@@ -245,6 +246,43 @@ body {
   display: flex;
   justify-content: space-between;
   width: 100%;
+}
+
+.footer {
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.github-link {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  overflow: hidden;
+  transition: 0.4s;
+}
+
+.footer__year,
+.github-link {
+  font-family: CuteFont;
+  font-size: 2.5rem;
+  color: #000000;
+  text-decoration: none;
+}
+
+.footer__year {
+  align-self: center;
+}
+
+.github-link__icon {
+  width: 50px;
+  height: 50px;
+}
+
+.footer__link_rss {
+  width: 120px;
+  transition: 0.4s;
 }
 
 @media screen and (orientation: landscape) {
