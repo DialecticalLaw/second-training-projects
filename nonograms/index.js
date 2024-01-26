@@ -335,7 +335,7 @@ function startGame(mode) {
   }
 }
 
-startGame('5x5');
+startGame('15x15');
 
 function drawPlayArea(size) {
   gameBoard.style['grid-template'] = `auto ${size}fr / auto ${size}fr`;
@@ -586,5 +586,5 @@ function isVictory() {
 }
 
 function showModal() {
-  console.log('MODAL')
+  console.log('MODAL');
 }

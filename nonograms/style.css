@@ -1,6 +1,10 @@
 @font-face {
-  font-family: Comfortaa;
-  src: url(assets/fonts/Comfortaa-VariableFont_wght.ttf);
+  font-family: CuteFont;
+  src: url(assets/fonts/CuteFont-Regular.ttf);
+}
+
+:root {
+  --main-color: rgb(136, 0, 255);
 }
   
 * {
@@ -28,7 +32,7 @@ body {
   min-height: 100vh;
   margin: 0 auto;
   padding: 20px;
-  background-color: rgb(232, 232, 232);
+  background-color: rgb(255, 255, 255);
 }
 
 .header,
@@ -44,8 +48,12 @@ body {
 }
 
 .header__title {
-  font-family: Comfortaa;
-  font-size: 3.2rem;
+  font-family: CuteFont;
+  font-size: 4rem;
+  animation-name: rainbow;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: steps(1, end);
 }
 
 .main {
@@ -53,19 +61,42 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 30px;
+  padding-top: 45px;
+}
+
+.random-game-btn,
+.choose-puzzle,
+.menu-btn,
+.reset-btn,
+.solution-btn {
+  padding: 10px;
+  font-family: CuteFont;
+  font-size: 2rem;
+  font-weight: bold;
+  border: 4px solid var(--main-color);
+  color: var(--main-color);
+  background-color: transparent;
+  cursor: pointer;
 }
 
 .game-board-content {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-self: flex-end;
+  align-self: center;
 }
 
 .stopwatch-menu-container {
   display: flex;
   justify-content: space-between;
   width: 100%;
+}
+
+.stopwatch {
+  color: var(--main-color);
+  font-family: CuteFont;
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 .game-board {
@@ -77,6 +108,7 @@ body {
 .game-board__top-clues {
   display: grid;
   align-items: end;
+  background-color: #dcdcff;
 }
 
 .game-board__left-clues {
@@ -88,6 +120,8 @@ body {
   justify-content: space-between;
   align-items: flex-end;
   height: 100%;
+  border-right: 4px solid #000000;
+  background-color: #edffdc;
 }
 
 .left-clue p,
@@ -98,8 +132,9 @@ body {
   text-align: center;
   width: 100%;
   height: 100%;
-  font-family: Comfortaa;
-  font-size: 200%;
+  font-family: CuteFont;
+  font-size: 2.5rem;
+  font-weight: bold;
   outline: 0.5px solid #000000;
   user-select: none;
 }
@@ -215,14 +250,52 @@ body {
 
 @media screen and (orientation: landscape) {
   .game-board-content {
-    width: 55dvh;
+    width: 50dvh;
     height: max-content;
   }
 }
 
 @media screen and (orientation: portrait) {
   .game-board-content {
-    width: 55vw;
+    width: 50vw;
     height: max-content;
+  }
+}
+
+@keyframes rainbow {
+  0% {
+    color: #ff0000;
+    filter: drop-shadow(0 0 2px #ff0000);
+    box-shadow: 0 -5px 0 #ff0000;
+  }
+  14% {
+    color: #ff8400;
+    filter: drop-shadow(0 0 2px #ff8400);
+    box-shadow: 5px 0 0 #ff8400;
+  }
+  28% {
+    color: #ffff00;
+    filter: drop-shadow(0 0 2px #ffff00);
+    box-shadow: 0 5px 0 #ffff00;
+  }
+  42% {
+    color: #008000;
+    filter: drop-shadow(0 0 2px #008000);
+    box-shadow: -5px 0 0 #008000;
+  }
+  56% {
+    color: #00ffff;
+    filter: drop-shadow(0 0 2px #00ffff);
+    box-shadow: 0 -5px 0 #00ffff, 0 5px 0 #00ffff;
+  }
+  71% {
+    color: #0000ff;
+    filter: drop-shadow(0 0 2px #0000ff);
+    box-shadow: -5px 0 0 #0000ff, 5px 0 0 #0000ff;
+  }
+  84% {
+    color: #800080;
+    filter: drop-shadow(0 0 2px #800080);
+    box-shadow: none;
   }
 }
