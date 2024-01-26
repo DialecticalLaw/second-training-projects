@@ -335,7 +335,7 @@ function startGame(mode) {
   }
 }
 
-startGame('15x15');
+startGame('5x5');
 
 function drawPlayArea(size) {
   gameBoard.style['grid-template'] = `auto ${size}fr / auto ${size}fr`;
@@ -461,6 +461,23 @@ window.addEventListener('resize', () => {
     clue.style.height = `${cellSize}px`;
   }
 });
+
+window.addEventListener('resize', changeGameBoardIndent);
+
+function changeGameBoardIndent() {
+  if (body.offsetWidth < 500) {
+    gameBoardContent.removeAttribute('style');
+    return;
+  }
+  gameBoardContent.style['align-self'] = 'flex-start';
+  let resultMargin = leftCluesContainer.offsetWidth;
+  const totalGameBoardWidth = gameBoardContent.offsetWidth + leftCluesContainer.offsetWidth;
+  const mainCenter = main.offsetWidth / 2;
+  resultMargin += mainCenter - totalGameBoardWidth / 2;
+  gameBoardContent.style['margin-left'] = `${resultMargin}px`;
+}
+
+changeGameBoardIndent();
 
 isPointerDown = false;
 let actionType;

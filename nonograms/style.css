@@ -83,7 +83,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-self: center;
 }
 
 .stopwatch-menu-container {
