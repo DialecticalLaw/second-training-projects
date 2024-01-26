@@ -479,6 +479,9 @@ playArea.addEventListener('pointerdown', (event) => {
           event.target.innerHTML = '';
         }
         event.target.dataset.invisible = true;
+        if (isVictory()) {
+          showModal();
+        }
       } else if (event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false') {
         actionType = 'emptying';
         event.target.classList.remove('cell-marked');
@@ -525,6 +528,9 @@ function markSquares(event) {
           event.target.innerHTML = '';
         }
         event.target.dataset.invisible = true;
+        if (isVictory()) {
+          showModal();
+        }
       } else if (event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false' && actionType === 'emptying') {
         event.target.classList.remove('cell-marked');
         event.target.dataset.invisible = true;
@@ -556,3 +562,29 @@ playArea.addEventListener('contextmenu', (event) => {
   event.preventDefault();
   return false;
 })
+
+function isVictory() {
+  const playAreaSize = currentLevel.board.length;
+  const currentBoard = Array.from({ length: playAreaSize }, () => []);
+  const cells = document.querySelectorAll('.cell');
+
+  let column = 0;
+  let row = 0;
+  while (column < cells.length) {
+    if (cells[column].classList.contains('cell-marked')) {
+      currentBoard[row].push(1);
+    } else {
+      currentBoard[row].push(0);
+    }
+    if ((column + 1) % playAreaSize === 0 && column !== 0) {
+      row++;
+    }
+    column++;
+  }
+  if (JSON.stringify(currentBoard) === JSON.stringify(currentLevel.board)) return true;
+  return false;
+}
+
+function showModal() {
+  console.log('MODAL')
+}
