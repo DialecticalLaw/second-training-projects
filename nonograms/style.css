@@ -320,6 +320,10 @@ body {
   outline: 0.5px solid #ffffff;
 }
 
+.cross {
+  pointer-events: none;
+}
+
 .cross::after {
   content: '';
   position: absolute;
