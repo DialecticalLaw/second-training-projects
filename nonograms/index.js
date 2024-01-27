@@ -4,6 +4,28 @@ const container = document.createElement('div');
 container.classList.add('container');
 body.insertAdjacentElement('beforeend', container);
 
+const victoryModalWrapper = document.createElement('div');
+victoryModalWrapper.classList.add('victory-modal-wrapper');
+container.insertAdjacentElement('beforeend', victoryModalWrapper);
+
+const victoryModal = document.createElement('div');
+victoryModal.classList.add('victory-modal');
+victoryModalWrapper.insertAdjacentElement('beforeend', victoryModal);
+
+const victoryModalDescription = document.createElement('p');
+victoryModalDescription.classList.add('victory-modal__description');
+victoryModal.insertAdjacentElement('beforeend', victoryModalDescription);
+
+const victoryModalRandomBtn = document.createElement('button');
+victoryModalRandomBtn.classList.add('victory-modal__button_random-game');
+victoryModalRandomBtn.textContent = 'Random game';
+victoryModal.insertAdjacentElement('beforeend', victoryModalRandomBtn);
+
+const victoryModalCloseBtn = document.createElement('button');
+victoryModalCloseBtn.classList.add('victory-modal__button_close');
+victoryModalCloseBtn.textContent = 'Close';
+victoryModal.insertAdjacentElement('beforeend', victoryModalCloseBtn);
+
 const header = document.createElement('header');
 header.classList.add('header');
 container.insertAdjacentElement('beforeend', header);
@@ -351,11 +373,10 @@ function startGame(mode) {
   }
 }
 
-startGame('15x15');
+startGame('5x5');
 
 function drawPlayArea(size) {
   playArea.style['grid-template'] = `repeat(${size}, 1fr) / repeat(${size}, 1fr)`;
-  playArea.style['grid-area'] = `2 / 2 / 2 / 2`;
 
   for (let row = 0; row < size; row++) {
     for (let column = 0; column < size; column++) {
@@ -522,7 +543,7 @@ playArea.addEventListener('pointerdown', (event) => {
         }
         event.target.dataset.invisible = true;
         if (isVictory()) {
-          showModal();
+          showVictoryModal();
         }
       } else if (event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false') {
         actionType = 'emptying';
@@ -571,7 +592,7 @@ function markSquares(event) {
         }
         event.target.dataset.invisible = true;
         if (isVictory()) {
-          showModal();
+          showVictoryModal();
         }
       } else if (event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false' && actionType === 'emptying') {
         event.target.classList.remove('cell-marked');
@@ -627,6 +648,37 @@ function isVictory() {
   return false;
 }
 
-function showModal() {
-  console.log('MODAL');
+function showVictoryModal() {
+  victoryModalDescription.innerHTML = `Great! You have solved the nonogram in <span>${convertIntoSeconds(stopwatch.textContent)}</span> seconds!`;
+  victoryModalWrapper.classList.add('victory-modal-wrapper-on');
+  setTimeout(() => {
+    victoryModalWrapper.classList.add('victory-modal-wrapper-blackout');
+    victoryModal.classList.add('victory-modal-on');
+  }, 20);
+  setTimeout(() => {
+    document.addEventListener('pointerdown', closeModalOnOutsideClick);
+  }, 400);
+}
+
+function convertIntoSeconds(time) {
+  return time;
+}
+
+victoryModalCloseBtn.addEventListener('click', closeVictoryModal);
+
+function closeVictoryModal() {
+  document.removeEventListener('pointerdown', closeModalOnOutsideClick);
+  victoryModalWrapper.classList.remove('victory-modal-wrapper-blackout');
+  victoryModal.classList.remove('victory-modal-on');
+  setTimeout(() => {
+    victoryModalWrapper.classList.remove('victory-modal-wrapper-on');
+  }, 500);
+}
+
+function closeModalOnOutsideClick(event) {
+  if (victoryModalWrapper.classList.contains('victory-modal-wrapper-on')) {
+    if (!victoryModal.contains(event.target)) {
+      closeVictoryModal()
+    }
+  }
 }
