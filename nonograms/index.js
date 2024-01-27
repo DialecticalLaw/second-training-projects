@@ -737,7 +737,7 @@ function showVictoryModal() {
     victoryModal.classList.add('victory-modal-on');
   }, 20);
   setTimeout(() => {
-    document.addEventListener('pointerdown', closeModalOnOutsideClick);
+    document.addEventListener('pointerdown', closeVictoryOnOutsideClick);
   }, 400);
 }
 
@@ -750,7 +750,7 @@ victoryModalCloseBtn.addEventListener('click', () => {
 });
 
 function closeVictoryModal() {
-    document.removeEventListener('pointerdown', closeModalOnOutsideClick);
+    document.removeEventListener('pointerdown', closeVictoryOnOutsideClick);
     victoryModalWrapper.classList.remove('victory-modal-wrapper-blackout');
     victoryModal.classList.remove('victory-modal-on');
     setTimeout(() => {
