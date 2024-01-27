@@ -4,6 +4,39 @@ const container = document.createElement('div');
 container.classList.add('container');
 body.insertAdjacentElement('beforeend', container);
 
+const menuModalWrapper = document.createElement('div');
+menuModalWrapper.classList.add('menu-modal-wrapper');
+container.insertAdjacentElement('beforeend', menuModalWrapper);
+
+const menuModal = document.createElement('div');
+menuModal.classList.add('menu-modal');
+menuModalWrapper.insertAdjacentElement('beforeend', menuModal);
+
+menuModal.innerHTML = `<svg class="menu-modal__icon_close-button" style="enable-background:new 0 0 128 128;" version="1.1" viewBox="0 0 128 128" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style type="text/css">
+.st0{fill:#C93636;}
+.st1{fill:#f1ffd8;}
+</style><circle class="st0" cx="64" cy="64" r="64"/><path class="st1" d="M100.3,90.4L73.9,64l26.3-26.4c0.4-0.4,0.4-1,0-1.4l-8.5-8.5c-0.4-0.4-1-0.4-1.4,0L64,54.1L37.7,27.8  c-0.4-0.4-1-0.4-1.4,0l-8.5,8.5c-0.4,0.4-0.4,1,0,1.4L54,64L27.7,90.3c-0.4,0.4-0.4,1,0,1.4l8.5,8.5c0.4,0.4,1.1,0.4,1.4,0L64,73.9  l26.3,26.3c0.4,0.4,1.1,0.4,1.5,0.1l8.5-8.5C100.7,91.4,100.7,90.8,100.3,90.4z"/></svg>`;
+
+const menuModalChoosePuzzleBtn = document.createElement('button');
+menuModalChoosePuzzleBtn.classList.add('menu-modal__button_choose-puzzle');
+menuModalChoosePuzzleBtn.textContent = 'Choose a puzzle';
+menuModal.insertAdjacentElement('beforeend', menuModalChoosePuzzleBtn);
+
+const menuModalSaveBtn = document.createElement('button');
+menuModalSaveBtn.classList.add('menu-modal__button_save');
+menuModalSaveBtn.textContent = 'Save game';
+menuModal.insertAdjacentElement('beforeend', menuModalSaveBtn);
+
+const menuModalLoadBtn = document.createElement('button');
+menuModalLoadBtn.classList.add('menu-modal__button_load');
+menuModalLoadBtn.textContent = 'Load game';
+menuModal.insertAdjacentElement('beforeend', menuModalLoadBtn);
+
+const menuModalRecentBtn = document.createElement('button');
+menuModalRecentBtn.classList.add('menu-modal__button_recent');
+menuModalRecentBtn.textContent = 'Recent victories';
+menuModal.insertAdjacentElement('beforeend', menuModalRecentBtn);
+
 const victoryModalWrapper = document.createElement('div');
 victoryModalWrapper.classList.add('victory-modal-wrapper');
 container.insertAdjacentElement('beforeend', victoryModalWrapper);
@@ -47,11 +80,6 @@ const randomGameBtn = document.createElement('button');
 randomGameBtn.classList.add('random-game-btn');
 randomGameBtn.textContent = 'Random game';
 main.insertAdjacentElement('beforeend', randomGameBtn);
-
-const choosePuzzle = document.createElement('button');
-choosePuzzle.classList.add('choose-puzzle');
-choosePuzzle.textContent = 'Choose a puzzle';
-main.insertAdjacentElement('beforeend', choosePuzzle);
 
 const gameBoardContent = document.createElement('div');
 gameBoardContent.classList.add('game-board-content');
@@ -692,22 +720,42 @@ function convertIntoSeconds(time) {
   return time;
 }
 
-victoryModalCloseBtn.addEventListener('click', closeVictoryModal);
+victoryModalCloseBtn.addEventListener('click', () => {
+  closeVictoryModal();
+});
 
 function closeVictoryModal() {
-  document.removeEventListener('pointerdown', closeModalOnOutsideClick);
-  victoryModalWrapper.classList.remove('victory-modal-wrapper-blackout');
-  victoryModal.classList.remove('victory-modal-on');
-  setTimeout(() => {
-    victoryModalWrapper.classList.remove('victory-modal-wrapper-on');
-  }, 500);
+    document.removeEventListener('pointerdown', closeModalOnOutsideClick);
+    victoryModalWrapper.classList.remove('victory-modal-wrapper-blackout');
+    victoryModal.classList.remove('victory-modal-on');
+    setTimeout(() => {
+      victoryModalWrapper.classList.remove('victory-modal-wrapper-on');
+    }, 500);
+    
 }
 
-function closeModalOnOutsideClick(event) {
+document.querySelector('.menu-modal__icon_close-button').addEventListener('click', closeMenuModal);
+
+function closeMenuModal() {
+  menuModalWrapper.classList.remove('menu-modal-wrapper-blackout');
+  menuModal.classList.remove('menu-modal-on');
+  setTimeout(() => {
+    menuModalWrapper.classList.remove('menu-modal-wrapper-on');
+  }, 400);
+}
+
+document.addEventListener('pointerdown', closeMenuOnOutsideClick);
+
+function closeVictoryOnOutsideClick(event) {
   if (victoryModalWrapper.classList.contains('victory-modal-wrapper-on')) {
-    if (!victoryModal.contains(event.target)) {
-      closeVictoryModal()
-    }
+    if (!victoryModal.contains(event.target)) closeVictoryModal();
+  }
+  
+}
+
+function closeMenuOnOutsideClick(event) {
+  if (menuModalWrapper.classList.contains('menu-modal-wrapper-on')) {
+    if (!menuModal.contains(event.target)) closeMenuModal();
   }
 }
 
@@ -723,3 +771,11 @@ function updateStopwatch() {
   const newSecondsStr = newSecondsNum > 9 ? newSecondsNum.toString() : `0${newSecondsNum}`;
   stopwatch.textContent = `${time.slice(0, 3)}${newSecondsStr}`;
 }
+
+menuBtn.addEventListener('click', () => {
+  menuModalWrapper.classList.add('menu-modal-wrapper-on');
+  setTimeout(() => {
+    menuModalWrapper.classList.add('menu-modal-wrapper-blackout');
+    menuModal.classList.add('menu-modal-on');
+  }, 20);
+})
