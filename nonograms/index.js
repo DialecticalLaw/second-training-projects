@@ -380,6 +380,14 @@ const levelStorage = [[
 let currentLevel;
 
 function startGame(mode) {
+  if (document.querySelector('.cell')) {
+    const cells = document.querySelectorAll('.cell');
+    const topClues = document.querySelectorAll('.top-clue');
+    const leftClues = document.querySelectorAll('.left-clue');
+    for (let cell of cells) cell.remove();
+    for (let elem of topClues) elem.remove();
+    for (let elem of leftClues) elem.remove();
+  }
   switch (mode) {
     case '5x5':
       currentLevel = levelStorage[0][Math.floor(Math.random() * 5)];
@@ -395,6 +403,23 @@ function startGame(mode) {
       currentLevel = levelStorage[2][Math.floor(Math.random() * 5)];
       drawPlayArea(15);
       drawClues(15);
+      break;
+    case 'random':
+      const randomNum = Math.floor(Math.random() * 3);
+      currentLevel = levelStorage[randomNum][Math.floor(Math.random() * 5)];
+      if (randomNum === 0) {
+        drawPlayArea(5);
+        drawClues(5);
+      }
+      if (randomNum === 1) {
+        drawPlayArea(10);
+        drawClues(10);
+      }
+      if (randomNum === 2) {
+        drawPlayArea(15);
+        drawClues(15);
+      }
+      changeGameBoardIndent();
       break;
     default:
       break;
@@ -771,6 +796,8 @@ function updateStopwatch() {
   const newSecondsStr = newSecondsNum > 9 ? newSecondsNum.toString() : `0${newSecondsNum}`;
   stopwatch.textContent = `${time.slice(0, 3)}${newSecondsStr}`;
 }
+
+randomGameBtn.addEventListener('click', () => startGame('random'));
 
 menuBtn.addEventListener('click', () => {
   menuModalWrapper.classList.add('menu-modal-wrapper-on');
