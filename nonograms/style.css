@@ -160,10 +160,16 @@ body {
 }
 
 .stopwatch {
-  color: #009500;
+  color: #7a7a7a;
   font-family: CuteFont;
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: bold;
+  transition: 1s;
+}
+
+.stopwatch-active {
+  color: #009500;
+  font-size: 2.6rem;
 }
 
 .game-board__top-clues {

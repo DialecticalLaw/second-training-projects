@@ -529,11 +529,21 @@ isPointerDown = false;
 let actionType;
 let buttonType;
 
+let isStopwatchStart = false;
+let stopWatchUpdateInterval;
+
 playArea.addEventListener('pointerdown', (event) => {
   if (event.button === 0) {
     buttonType = 'left';
     isPointerDown = true;
     if (event.target.classList.contains('cell')) {
+      if (!isStopwatchStart) {
+        stopWatchUpdateInterval = setInterval(() => {
+          updateStopwatch();
+        }, 1000);
+        stopwatch.classList.add('stopwatch-active');
+        isStopwatchStart = true;
+      }
       if (!event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false') {
         actionType = 'filling';
         event.target.classList.add('cell-marked');
@@ -549,23 +559,39 @@ playArea.addEventListener('pointerdown', (event) => {
         actionType = 'emptying';
         event.target.classList.remove('cell-marked');
         event.target.dataset.invisible = true;
+        if (isVictory()) {
+          showVictoryModal();
+        }
       }
     }
   } else if (event.button === 2) {
     buttonType = 'right';
     isPointerDown = true;
     if (event.target.classList.contains('cell')) {
+      if (!isStopwatchStart) {
+        stopWatchUpdateInterval = setInterval(() => {
+          updateStopwatch();
+        }, 1000);
+        stopwatch.classList.add('stopwatch-active');
+        isStopwatchStart = true;
+      }
       if (!event.target.classList.contains('cell-cross') && event.target.dataset.invisible === 'false') {
         actionType = 'filling';
         if (event.target.classList.contains('cell-marked')) event.target.classList.remove('cell-marked');
         event.target.classList.add('cell-cross');
         event.target.innerHTML = '<div class="cross"></div>';
         event.target.dataset.invisible = true;
+        if (isVictory()) {
+          showVictoryModal();
+        }
       } else if (event.target.classList.contains('cell-cross') && event.target.dataset.invisible === 'false') {
         actionType = 'emptying';
         event.target.classList.remove('cell-cross');
         event.target.innerHTML = '';
         event.target.dataset.invisible = true;
+        if (isVictory()) {
+          showVictoryModal();
+        }
       }
     }
   }
@@ -649,6 +675,8 @@ function isVictory() {
 }
 
 function showVictoryModal() {
+  clearInterval(stopWatchUpdateInterval);
+  stopwatch.classList.remove('stopwatch-active');
   victoryModalDescription.innerHTML = `Great! You have solved the nonogram in <span>${convertIntoSeconds(stopwatch.textContent)}</span> seconds!`;
   victoryModalWrapper.classList.add('victory-modal-wrapper-on');
   setTimeout(() => {
@@ -681,4 +709,17 @@ function closeModalOnOutsideClick(event) {
       closeVictoryModal()
     }
   }
+}
+
+function updateStopwatch() {
+  const time = stopwatch.textContent;
+  if (Number(time.slice(-2)) === 59) {
+    const newMinuteNum = Number(time.slice(0, 2)) + 1;
+    const newMinuteStr = newMinuteNum > 9 ? newMinuteNum.toString() : `0${newMinuteNum}`;
+    stopwatch.textContent = `${newMinuteStr}:00`;
+    return;
+  }
+  const newSecondsNum = Number(time.slice(-2)) + 1;
+  const newSecondsStr = newSecondsNum > 9 ? newSecondsNum.toString() : `0${newSecondsNum}`;
+  stopwatch.textContent = `${time.slice(0, 3)}${newSecondsStr}`;
 }
