@@ -49,17 +49,13 @@ menuBtn.classList.add('menu-btn');
 menuBtn.textContent = 'Menu';
 stopwatchMenuContainer.insertAdjacentElement('beforeend', menuBtn);
 
-const gameBoard = document.createElement('div');
-gameBoard.classList.add('game-board');
-gameBoardContent.insertAdjacentElement('beforeend', gameBoard);
+const playArea = document.createElement('div');
+playArea.classList.add('game-board__play-area');
+gameBoardContent.insertAdjacentElement('beforeend', playArea);
 
 const topCluesContainer = document.createElement('div');
 topCluesContainer.classList.add('game-board__top-clues');
-gameBoard.insertAdjacentElement('beforeend', topCluesContainer);
-
-const playArea = document.createElement('div');
-playArea.classList.add('game-board__play-area');
-gameBoard.insertAdjacentElement('beforeend', playArea);
+playArea.insertAdjacentElement('beforeend', topCluesContainer);
 
 const leftCluesContainer = document.createElement('div');
 leftCluesContainer.classList.add('game-board__left-clues');
@@ -355,12 +351,9 @@ function startGame(mode) {
   }
 }
 
-startGame('5x5');
+startGame('15x15');
 
 function drawPlayArea(size) {
-  gameBoard.style['grid-template'] = `auto ${size}fr / auto ${size}fr`;
-  topCluesContainer.style['grid-template-columns'] = `repeat(${size}, 1fr`;
-  topCluesContainer.style['grid-column-start'] = '2';
   playArea.style['grid-template'] = `repeat(${size}, 1fr) / repeat(${size}, 1fr)`;
   playArea.style['grid-area'] = `2 / 2 / 2 / 2`;
 
@@ -460,8 +453,13 @@ function drawClues(size) {
   }
 
   const leftCluesParagraphs = document.querySelectorAll('.left-clue p');
+  const topCluesParagraphs = document.querySelectorAll('.top-clue p');
   const cellSize = document.querySelector('.cell').getBoundingClientRect().width;
   for (let clue of leftCluesParagraphs) {
+    clue.style.width = `${cellSize}px`;
+    clue.style.height = `${cellSize}px`;
+  }
+  for (let clue of topCluesParagraphs) {
     clue.style.width = `${cellSize}px`;
     clue.style.height = `${cellSize}px`;
   }
@@ -475,8 +473,13 @@ function addEmptyClue(elem, num) {
 
 window.addEventListener('resize', () => {
   const leftCluesParagraphs = document.querySelectorAll('.left-clue p');
+  const topCluesParagraphs = document.querySelectorAll('.top-clue p');
   const cellSize = document.querySelector('.cell').getBoundingClientRect().width;
   for (let clue of leftCluesParagraphs) {
+    clue.style.width = `${cellSize}px`;
+    clue.style.height = `${cellSize}px`;
+  }
+  for (let clue of topCluesParagraphs) {
     clue.style.width = `${cellSize}px`;
     clue.style.height = `${cellSize}px`;
   }
@@ -485,6 +488,8 @@ window.addEventListener('resize', () => {
 window.addEventListener('resize', changeGameBoardIndent);
 
 function changeGameBoardIndent() {
+  const topCluesContainerHeight = topCluesContainer.offsetHeight;
+  stopwatchMenuContainer.style['margin-bottom'] = `${topCluesContainerHeight}px`
   if (body.offsetWidth < 500) {
     gameBoardContent.removeAttribute('style');
     return;

@@ -83,6 +83,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-self: flex-end;
 }
 
 .stopwatch-menu-container {
@@ -99,15 +100,13 @@ body {
   font-weight: bold;
 }
 
-.game-board {
-  display: grid;
-  height: max-content;
-  align-items: start;
-}
-
 .game-board__top-clues {
-  display: grid;
-  align-items: end;
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  border-bottom: 4px solid #000000;
   background-color: #dcdcff;
 }
 
@@ -133,7 +132,7 @@ body {
   width: 100%;
   height: 100%;
   font-family: CuteFont;
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   font-weight: bold;
   outline: 0.5px solid #000000;
   user-select: none;
