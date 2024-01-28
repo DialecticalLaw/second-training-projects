@@ -454,6 +454,7 @@ function startGame(mode) {
     for (let elem of leftClues) elem.remove();
   }
   playArea.classList.remove('game-board__play-area_inactive');
+  if (solutionBtn.hasAttribute('disabled')) solutionBtn.removeAttribute('disabled');
   switch (mode) {
     case 'default':
       currentLevel = levelStorage[0][Math.floor(Math.random() * 5)];
@@ -463,9 +464,9 @@ function startGame(mode) {
     case 'random':
       if (isStopwatchStart) {
         clearInterval(stopWatchUpdateInterval);
-        isStopwatchStart = false;
         stopwatch.classList.remove('stopwatch-active');
         stopwatch.textContent = '00:00';
+        isStopwatchStart = false;
       }
       const randomNum = Math.floor(Math.random() * 3);
       currentLevel = levelStorage[randomNum][Math.floor(Math.random() * 5)];
@@ -791,6 +792,7 @@ function isVictory() {
 
 function showVictoryModal() {
   playArea.classList.add('game-board__play-area_inactive');
+  solutionBtn.disabled = true;
   clearInterval(stopWatchUpdateInterval);
   stopwatch.classList.remove('stopwatch-active');
   victoryModalDescription.innerHTML = `Great! You have solved the nonogram in <span>${convertIntoSeconds(stopwatch.textContent)}</span> seconds!`;
@@ -875,9 +877,9 @@ menuBtn.addEventListener('click', () => {
 resetBtn.addEventListener('click', resetGame);
 
 async function resetGame() {
-  resetBtn.removeEventListener('click', resetGame);
   playArea.classList.add('game-board__play-area_inactive');
   resetBtn.disabled = true;
+  solutionBtn.disabled = true;
   clearInterval(stopWatchUpdateInterval);
   isStopwatchStart = false;
   stopwatch.classList.remove('stopwatch-active');
@@ -888,7 +890,6 @@ async function resetGame() {
   const markedCells = document.querySelectorAll('.cell-marked');
   const crossCells = document.querySelectorAll('.cell-cross');
   const notEmptyCells = [...markedCells, ...crossCells];
-  console.log(notEmptyCells)
   const topClues = document.querySelectorAll('.top-clue');
   const leftClues = document.querySelectorAll('.left-clue');
   for (let cell of notEmptyCells) {
@@ -908,9 +909,21 @@ async function resetGame() {
   drawClues(playAreaSize);
   playArea.classList.remove('game-board__play-area_inactive');
   resetBtn.removeAttribute('disabled');
-  resetBtn.addEventListener('click', resetGame);
+  solutionBtn.removeAttribute('disabled');
 }
 
 solutionBtn.addEventListener('click', () => {
+  playArea.classList.add('game-board__play-area_inactive');
+  solutionBtn.disabled = true;
+  clearInterval(stopWatchUpdateInterval);
+  stopwatch.classList.remove('stopwatch-active');
 
+  const cells = document.querySelectorAll('.cell');
+  const currentLevelCells = currentLevel.board.flat();
+  for (let i = 0; i < cells.length; i++) {
+    cells[i].classList.remove('cell-marked');
+    cells[i].classList.remove('cell-cross');
+    if (cells[i].firstElementChild) cells[i].firstElementChild.remove();
+    if (currentLevelCells[i] === 1) cells[i].classList.add('cell-marked');
+  }
 });

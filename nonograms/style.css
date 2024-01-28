@@ -430,6 +430,12 @@ button:active {
   width: 100%;
 }
 
+.reset-btn[disabled],
+.solution-btn[disabled] {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .footer {
   justify-content: space-between;
   align-items: flex-end;
@@ -532,16 +538,19 @@ button:active {
     background-color: var(--main-color);
   }
 
-  .reset-btn[disabled] {
-    opacity: 0.5;
-    cursor: default;
-  }
-
   .reset-btn[disabled]:hover .button-animation {
     display: none;
   }
 
   .reset-btn[disabled]:hover span {
+    color: var(--main-color);
+  }
+
+  .solution-btn[disabled]:hover .button-animation {
+    display: none;
+  }
+
+  .solution-btn[disabled]:hover span {
     color: var(--main-color);
   }
 
