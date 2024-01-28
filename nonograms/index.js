@@ -455,20 +455,10 @@ function startGame(mode) {
   }
   playArea.classList.remove('game-board__play-area_inactive');
   switch (mode) {
-    case '5x5':
+    case 'default':
       currentLevel = levelStorage[0][Math.floor(Math.random() * 5)];
       drawPlayArea(5);
       drawClues(5);
-      break;
-    case '10x10':
-      currentLevel = levelStorage[1][Math.floor(Math.random() * 5)];
-      drawPlayArea(10);
-      drawClues(10);
-      break;
-    case '15x15':
-      currentLevel = levelStorage[2][Math.floor(Math.random() * 5)];
-      drawPlayArea(15);
-      drawClues(15);
       break;
     case 'random':
       if (isStopwatchStart) {
@@ -498,7 +488,7 @@ function startGame(mode) {
   }
 }
 
-startGame('5x5');
+startGame('default');
 
 function drawPlayArea(size) {
   playArea.style['grid-template'] = `repeat(${size}, 1fr) / repeat(${size}, 1fr)`;
@@ -920,3 +910,7 @@ async function resetGame() {
   resetBtn.removeAttribute('disabled');
   resetBtn.addEventListener('click', resetGame);
 }
+
+solutionBtn.addEventListener('click', () => {
+
+});
