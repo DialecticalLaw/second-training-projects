@@ -22,6 +22,11 @@ menuModalChoosePuzzleBtn.classList.add('menu-modal__button_choose-puzzle');
 menuModalChoosePuzzleBtn.textContent = 'Choose a puzzle';
 menuModal.insertAdjacentElement('beforeend', menuModalChoosePuzzleBtn);
 
+const chooseIcon = document.createElement('img');
+chooseIcon.classList.add('action-icon');
+chooseIcon.src = 'assets/img/choose.svg';
+menuModalChoosePuzzleBtn.insertAdjacentElement('beforeend', chooseIcon);
+
 const menuModalSaveBtn = document.createElement('button');
 menuModalSaveBtn.classList.add('menu-modal__button_save');
 menuModalSaveBtn.textContent = 'Save game';
@@ -36,6 +41,11 @@ const menuModalRecentBtn = document.createElement('button');
 menuModalRecentBtn.classList.add('menu-modal__button_recent');
 menuModalRecentBtn.textContent = 'Recent victories';
 menuModal.insertAdjacentElement('beforeend', menuModalRecentBtn);
+
+const recentIcon = document.createElement('img');
+recentIcon.classList.add('action-icon');
+recentIcon.src = 'assets/img/recent.svg';
+menuModalRecentBtn.insertAdjacentElement('beforeend', recentIcon);
 
 const victoryModalWrapper = document.createElement('div');
 victoryModalWrapper.classList.add('victory-modal-wrapper');
@@ -53,6 +63,11 @@ const victoryModalRandomBtn = document.createElement('button');
 victoryModalRandomBtn.classList.add('victory-modal__button_random-game');
 victoryModalRandomBtn.textContent = 'Random game';
 victoryModal.insertAdjacentElement('beforeend', victoryModalRandomBtn);
+
+const victoryModalDiceIcon = document.createElement('img');
+victoryModalDiceIcon.classList.add('action-icon');
+victoryModalDiceIcon.src = 'assets/img/dice.svg';
+victoryModalRandomBtn.insertAdjacentElement('beforeend', victoryModalDiceIcon);
 
 const victoryModalCloseBtn = document.createElement('button');
 victoryModalCloseBtn.classList.add('victory-modal__button_close');
@@ -81,6 +96,11 @@ randomGameBtn.classList.add('random-game-btn');
 randomGameBtn.textContent = 'Random game';
 main.insertAdjacentElement('beforeend', randomGameBtn);
 
+const diceIcon = document.createElement('img');
+diceIcon.classList.add('action-icon');
+diceIcon.src = 'assets/img/dice.svg';
+randomGameBtn.insertAdjacentElement('beforeend', diceIcon);
+
 const gameBoardContent = document.createElement('div');
 gameBoardContent.classList.add('game-board-content');
 main.insertAdjacentElement('beforeend', gameBoardContent);
@@ -98,6 +118,11 @@ const menuBtn = document.createElement('button');
 menuBtn.classList.add('menu-btn');
 menuBtn.textContent = 'Menu';
 stopwatchMenuContainer.insertAdjacentElement('beforeend', menuBtn);
+
+const menuIcon = document.createElement('img');
+menuIcon.classList.add('action-icon');
+menuIcon.src = 'assets/img/menu.svg';
+menuBtn.insertAdjacentElement('beforeend', menuIcon);
 
 const playArea = document.createElement('div');
 playArea.classList.add('game-board__play-area');
@@ -120,10 +145,20 @@ resetBtn.classList.add('reset-btn');
 resetBtn.textContent = 'Reset game';
 interactionButtonsContainer.insertAdjacentElement('beforeend', resetBtn);
 
+const resetIcon = document.createElement('img');
+resetIcon.classList.add('action-icon');
+resetIcon.src = 'assets/img/reset.svg';
+resetBtn.insertAdjacentElement('beforeend', resetIcon);
+
 const solutionBtn = document.createElement('button');
 solutionBtn.classList.add('solution-btn');
 solutionBtn.textContent = 'Solution';
 interactionButtonsContainer.insertAdjacentElement('beforeend', solutionBtn);
+
+const solutionIcon = document.createElement('img');
+solutionIcon.classList.add('action-icon');
+solutionIcon.src = 'assets/img/solution.svg';
+solutionBtn.insertAdjacentElement('beforeend', solutionIcon);
 
 const githubLink = document.createElement('a');
 githubLink.classList.add('github-link');

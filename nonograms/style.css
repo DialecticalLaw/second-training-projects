@@ -4,7 +4,7 @@
 }
 
 :root {
-  --main-color: rgb(136, 0, 255);
+  --main-color: #8800ff;
 }
   
 * {
@@ -64,6 +64,7 @@ body {
   opacity: 0;
   padding: 20px;
   background-color: #dcdcff;
+  box-shadow: inset 0 0 10px 3px #000000;
   border-radius: 30px;
   transform: scale(0.4);
   transition: 0.4s;
@@ -112,6 +113,7 @@ body {
   opacity: 0;
   padding: 15px;
   background-color: #dcdcff;
+  box-shadow: inset 0 0 10px 3px #000000;
   border-radius: 30px;
   transform: scale(0.4);
   transition: 0.4s;
@@ -191,7 +193,36 @@ body {
   border: 4px solid var(--main-color);
   color: var(--main-color);
   background-color: transparent;
+  filter: drop-shadow(12px 12px 5px #00000043);
   cursor: pointer;
+}
+
+.random-game-btn,
+.victory-modal__button_random-game,
+.menu-btn,
+.reset-btn,
+.solution-btn,
+.menu-modal__button_choose-puzzle,
+.menu-modal__button_recent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.action-icon {
+  width: 35px;
+  height: 35px;
+}
+
+.menu-btn {
+  border: 4px solid #32c800ca;
+  color: #32c800ca;
+}
+
+.reset-btn,
+.solution-btn {
+  margin-top: 4px;
 }
 
 .menu-modal__button_save {
@@ -221,6 +252,7 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-self: flex-end;
+  filter: drop-shadow(8px 9px 5px #0000003f);
 }
 
 .stopwatch-menu-container {
@@ -313,6 +345,7 @@ body {
   aspect-ratio: 1 / 1;
   outline: 0.5px solid #000000;
   user-select: none;
+  transition: 0.1s;
 }
 
 .cell-marked {
@@ -399,6 +432,7 @@ body {
   font-size: 2.5rem;
   color: #000000;
   text-decoration: none;
+  filter: drop-shadow(12px 12px 5px #00000043);
 }
 
 .footer__year {
@@ -412,6 +446,7 @@ body {
 
 .footer__link_rss {
   width: 120px;
+  filter: drop-shadow(12px 12px 5px #00000043);
   transition: 0.4s;
 }
 
