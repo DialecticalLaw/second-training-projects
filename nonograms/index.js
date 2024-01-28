@@ -807,7 +807,9 @@ function showVictoryModal() {
 }
 
 function convertIntoSeconds(time) {
-  return time;
+  const secondsInMinutes = Number(time.slice(0, 2)) * 60;
+  const seconds = Number(time.slice('-2'));
+  return secondsInMinutes + seconds;
 }
 
 victoryModalCloseBtn.addEventListener('click', () => {
