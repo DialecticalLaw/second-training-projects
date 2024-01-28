@@ -453,6 +453,7 @@ function startGame(mode) {
     for (let elem of topClues) elem.remove();
     for (let elem of leftClues) elem.remove();
   }
+  playArea.classList.remove('game-board__play-area_inactive');
   switch (mode) {
     case '5x5':
       currentLevel = levelStorage[0][Math.floor(Math.random() * 5)];
@@ -799,6 +800,7 @@ function isVictory() {
 }
 
 function showVictoryModal() {
+  playArea.classList.add('game-board__play-area_inactive');
   clearInterval(stopWatchUpdateInterval);
   stopwatch.classList.remove('stopwatch-active');
   victoryModalDescription.innerHTML = `Great! You have solved the nonogram in <span>${convertIntoSeconds(stopwatch.textContent)}</span> seconds!`;
@@ -884,8 +886,7 @@ resetBtn.addEventListener('click', resetGame);
 
 async function resetGame() {
   resetBtn.removeEventListener('click', resetGame);
-  playArea.style.opacity = '0.5';
-  playArea.style['pointer-events'] = 'none';
+  playArea.classList.add('game-board__play-area_inactive');
   resetBtn.disabled = true;
   clearInterval(stopWatchUpdateInterval);
   isStopwatchStart = false;
@@ -915,8 +916,7 @@ async function resetGame() {
   for (let elem of leftClues) elem.remove();
   drawPlayArea(playAreaSize);
   drawClues(playAreaSize);
-  playArea.style.opacity = '1';
-  playArea.style['pointer-events'] = 'auto';
+  playArea.classList.remove('game-board__play-area_inactive');
   resetBtn.removeAttribute('disabled');
   resetBtn.addEventListener('click', resetGame);
 }
