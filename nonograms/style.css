@@ -431,7 +431,9 @@ button:active {
 }
 
 .reset-btn[disabled],
-.solution-btn[disabled] {
+.solution-btn[disabled],
+.menu-btn[disabled],
+.random-game-btn[disabled] {
   opacity: 0.5;
   cursor: default;
 }
@@ -538,20 +540,18 @@ button:active {
     background-color: var(--main-color);
   }
 
-  .reset-btn[disabled]:hover .button-animation {
+  .reset-btn[disabled]:hover .button-animation,
+  .solution-btn[disabled]:hover .button-animation,
+  .random-game-btn[disabled]:hover .button-animation,
+  .menu-btn[disabled]:hover .button-animation {
     display: none;
   }
 
-  .reset-btn[disabled]:hover span {
-    color: var(--main-color);
-  }
-
-  .solution-btn[disabled]:hover .button-animation {
-    display: none;
-  }
-
-  .solution-btn[disabled]:hover span {
-    color: var(--main-color);
+  .reset-btn[disabled]:hover span,
+  .solution-btn[disabled]:hover span,
+  .menu-btn[disabled]:hover span,
+  .random-game-btn[disabled]:hover span {
+    color: inherit;
   }
 
   .menu-btn .button-animation {

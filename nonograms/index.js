@@ -880,6 +880,8 @@ async function resetGame() {
   playArea.classList.add('game-board__play-area_inactive');
   resetBtn.disabled = true;
   solutionBtn.disabled = true;
+  menuBtn.disabled = true;
+  randomGameBtn.disabled = true;
   clearInterval(stopWatchUpdateInterval);
   isStopwatchStart = false;
   stopwatch.classList.remove('stopwatch-active');
@@ -909,6 +911,8 @@ async function resetGame() {
   drawClues(playAreaSize);
   playArea.classList.remove('game-board__play-area_inactive');
   resetBtn.removeAttribute('disabled');
+  menuBtn.removeAttribute('disabled');
+  randomGameBtn.removeAttribute('disabled');
   solutionBtn.removeAttribute('disabled');
 }
 
