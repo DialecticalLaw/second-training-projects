@@ -470,6 +470,12 @@ function startGame(mode) {
       drawClues(15);
       break;
     case 'random':
+      if (isStopwatchStart) {
+        clearInterval(stopWatchUpdateInterval);
+        isStopwatchStart = false;
+        stopwatch.classList.remove('stopwatch-active');
+        stopwatch.textContent = '00:00';
+      }
       const randomNum = Math.floor(Math.random() * 3);
       currentLevel = levelStorage[randomNum][Math.floor(Math.random() * 5)];
       if (randomNum === 0) {
@@ -881,6 +887,10 @@ async function resetGame() {
   playArea.style.opacity = '0.5';
   playArea.style['pointer-events'] = 'none';
   resetBtn.disabled = true;
+  clearInterval(stopWatchUpdateInterval);
+  isStopwatchStart = false;
+  stopwatch.classList.remove('stopwatch-active');
+  stopwatch.textContent = '00:00';
   const playAreaSize = currentLevel.board.length;
   const transition = playAreaSize === 15 ? '0.01' : '0.03';
   const cells = document.querySelectorAll('.cell');
