@@ -873,3 +873,40 @@ menuBtn.addEventListener('click', () => {
     menuModal.classList.add('menu-modal-on');
   }, 20);
 })
+
+resetBtn.addEventListener('click', resetGame);
+
+async function resetGame() {
+  resetBtn.removeEventListener('click', resetGame);
+  playArea.style.opacity = '0.5';
+  playArea.style['pointer-events'] = 'none';
+  resetBtn.disabled = true;
+  const playAreaSize = currentLevel.board.length;
+  const transition = playAreaSize === 15 ? '0.01' : '0.03';
+  const cells = document.querySelectorAll('.cell');
+  const markedCells = document.querySelectorAll('.cell-marked');
+  const crossCells = document.querySelectorAll('.cell-cross');
+  const notEmptyCells = [...markedCells, ...crossCells];
+  console.log(notEmptyCells)
+  const topClues = document.querySelectorAll('.top-clue');
+  const leftClues = document.querySelectorAll('.left-clue');
+  for (let cell of notEmptyCells) {
+    await new Promise((resolve) => {
+      cell.style.transition = `${transition}s`;
+      cell.classList.remove('cell-marked');
+      if (cell.classList.contains('cell-cross')) cell.firstElementChild.remove();
+      setTimeout(() => {
+        resolve();
+      }, Number(transition.slice(-1) + '0'));
+    })
+  }
+  for (let cell of cells) cell.remove();
+  for (let elem of topClues) elem.remove();
+  for (let elem of leftClues) elem.remove();
+  drawPlayArea(playAreaSize);
+  drawClues(playAreaSize);
+  playArea.style.opacity = '1';
+  playArea.style['pointer-events'] = 'auto';
+  resetBtn.removeAttribute('disabled');
+  resetBtn.addEventListener('click', resetGame);
+}
