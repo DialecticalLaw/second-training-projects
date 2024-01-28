@@ -18,8 +18,8 @@ menuModal.innerHTML = `<svg class="menu-modal__icon_close-button" style="enable-
 </style><circle class="st0" cx="64" cy="64" r="64"/><path class="st1" d="M100.3,90.4L73.9,64l26.3-26.4c0.4-0.4,0.4-1,0-1.4l-8.5-8.5c-0.4-0.4-1-0.4-1.4,0L64,54.1L37.7,27.8  c-0.4-0.4-1-0.4-1.4,0l-8.5,8.5c-0.4,0.4-0.4,1,0,1.4L54,64L27.7,90.3c-0.4,0.4-0.4,1,0,1.4l8.5,8.5c0.4,0.4,1.1,0.4,1.4,0L64,73.9  l26.3,26.3c0.4,0.4,1.1,0.4,1.5,0.1l8.5-8.5C100.7,91.4,100.7,90.8,100.3,90.4z"/></svg>`;
 
 const menuModalChoosePuzzleBtn = document.createElement('button');
+menuModalChoosePuzzleBtn.insertAdjacentHTML('beforeend', '<span>Choose a puzzle</span>');
 menuModalChoosePuzzleBtn.classList.add('menu-modal__button_choose-puzzle');
-menuModalChoosePuzzleBtn.textContent = 'Choose a puzzle';
 menuModal.insertAdjacentElement('beforeend', menuModalChoosePuzzleBtn);
 
 const chooseIcon = document.createElement('img');
@@ -27,25 +27,37 @@ chooseIcon.classList.add('action-icon');
 chooseIcon.src = 'assets/img/choose.svg';
 menuModalChoosePuzzleBtn.insertAdjacentElement('beforeend', chooseIcon);
 
+menuModalChoosePuzzleBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+menuModalChoosePuzzleBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+
 const menuModalSaveBtn = document.createElement('button');
+menuModalSaveBtn.insertAdjacentHTML('beforeend', '<span>Save game</span>');
 menuModalSaveBtn.classList.add('menu-modal__button_save');
-menuModalSaveBtn.textContent = 'Save game';
 menuModal.insertAdjacentElement('beforeend', menuModalSaveBtn);
 
+menuModalSaveBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+menuModalSaveBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+
 const menuModalLoadBtn = document.createElement('button');
+menuModalLoadBtn.insertAdjacentHTML('beforeend', '<span>Load game</span>');
 menuModalLoadBtn.classList.add('menu-modal__button_load');
-menuModalLoadBtn.textContent = 'Load game';
 menuModal.insertAdjacentElement('beforeend', menuModalLoadBtn);
 
+menuModalLoadBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+menuModalLoadBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+
 const menuModalRecentBtn = document.createElement('button');
+menuModalRecentBtn.insertAdjacentHTML('beforeend', '<span>Recent victories</span>');
 menuModalRecentBtn.classList.add('menu-modal__button_recent');
-menuModalRecentBtn.textContent = 'Recent victories';
 menuModal.insertAdjacentElement('beforeend', menuModalRecentBtn);
 
 const recentIcon = document.createElement('img');
 recentIcon.classList.add('action-icon');
 recentIcon.src = 'assets/img/recent.svg';
 menuModalRecentBtn.insertAdjacentElement('beforeend', recentIcon);
+
+menuModalRecentBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+menuModalRecentBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
 
 const victoryModalWrapper = document.createElement('div');
 victoryModalWrapper.classList.add('victory-modal-wrapper');
@@ -60,8 +72,8 @@ victoryModalDescription.classList.add('victory-modal__description');
 victoryModal.insertAdjacentElement('beforeend', victoryModalDescription);
 
 const victoryModalRandomBtn = document.createElement('button');
+victoryModalRandomBtn.insertAdjacentHTML('beforeend', '<span>Random game</span>');
 victoryModalRandomBtn.classList.add('victory-modal__button_random-game');
-victoryModalRandomBtn.textContent = 'Random game';
 victoryModal.insertAdjacentElement('beforeend', victoryModalRandomBtn);
 
 const victoryModalDiceIcon = document.createElement('img');
@@ -69,19 +81,25 @@ victoryModalDiceIcon.classList.add('action-icon');
 victoryModalDiceIcon.src = 'assets/img/dice.svg';
 victoryModalRandomBtn.insertAdjacentElement('beforeend', victoryModalDiceIcon);
 
+victoryModalRandomBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+victoryModalRandomBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+
 const victoryModalCloseBtn = document.createElement('button');
+victoryModalCloseBtn.insertAdjacentHTML('beforeend', '<span>Close</span>');
 victoryModalCloseBtn.classList.add('victory-modal__button_close');
-victoryModalCloseBtn.textContent = 'Close';
 victoryModal.insertAdjacentElement('beforeend', victoryModalCloseBtn);
+
+victoryModalCloseBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+victoryModalCloseBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
 
 const header = document.createElement('header');
 header.classList.add('header');
 container.insertAdjacentElement('beforeend', header);
 
-const haaderTitle = document.createElement('h1');
-haaderTitle.classList.add('header__title');
-haaderTitle.textContent = 'Nonograms';
-header.insertAdjacentElement('beforeend', haaderTitle);
+const headerTitle = document.createElement('h1');
+headerTitle.classList.add('header__title');
+headerTitle.textContent = 'Nonograms';
+header.insertAdjacentElement('beforeend', headerTitle);
 
 const main = document.createElement('main');
 main.classList.add('main');
@@ -92,14 +110,17 @@ footer.classList.add('footer');
 container.insertAdjacentElement('beforeend', footer);
 
 const randomGameBtn = document.createElement('button');
+randomGameBtn.insertAdjacentHTML('beforeend', '<span>Random game</span>');
 randomGameBtn.classList.add('random-game-btn');
-randomGameBtn.textContent = 'Random game';
 main.insertAdjacentElement('beforeend', randomGameBtn);
 
 const diceIcon = document.createElement('img');
 diceIcon.classList.add('action-icon');
 diceIcon.src = 'assets/img/dice.svg';
 randomGameBtn.insertAdjacentElement('beforeend', diceIcon);
+
+randomGameBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+randomGameBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
 
 const gameBoardContent = document.createElement('div');
 gameBoardContent.classList.add('game-board-content');
@@ -115,14 +136,17 @@ stopwatch.textContent = '00:00';
 stopwatchMenuContainer.insertAdjacentElement('beforeend', stopwatch);
 
 const menuBtn = document.createElement('button');
+menuBtn.insertAdjacentHTML('beforeend', '<span>Menu</span>');
 menuBtn.classList.add('menu-btn');
-menuBtn.textContent = 'Menu';
 stopwatchMenuContainer.insertAdjacentElement('beforeend', menuBtn);
 
 const menuIcon = document.createElement('img');
 menuIcon.classList.add('action-icon');
 menuIcon.src = 'assets/img/menu.svg';
 menuBtn.insertAdjacentElement('beforeend', menuIcon);
+
+menuBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+menuBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
 
 const playArea = document.createElement('div');
 playArea.classList.add('game-board__play-area');
@@ -141,8 +165,8 @@ interactionButtonsContainer.classList.add('interaction-buttons-container');
 gameBoardContent.insertAdjacentElement('beforeend', interactionButtonsContainer);
 
 const resetBtn = document.createElement('button');
+resetBtn.insertAdjacentHTML('beforeend', '<span>Reset game</span>');
 resetBtn.classList.add('reset-btn');
-resetBtn.textContent = 'Reset game';
 interactionButtonsContainer.insertAdjacentElement('beforeend', resetBtn);
 
 const resetIcon = document.createElement('img');
@@ -150,15 +174,21 @@ resetIcon.classList.add('action-icon');
 resetIcon.src = 'assets/img/reset.svg';
 resetBtn.insertAdjacentElement('beforeend', resetIcon);
 
+resetBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+resetBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+
 const solutionBtn = document.createElement('button');
+solutionBtn.insertAdjacentHTML('beforeend', '<span>Solution</span>');
 solutionBtn.classList.add('solution-btn');
-solutionBtn.textContent = 'Solution';
 interactionButtonsContainer.insertAdjacentElement('beforeend', solutionBtn);
 
 const solutionIcon = document.createElement('img');
 solutionIcon.classList.add('action-icon');
 solutionIcon.src = 'assets/img/solution.svg';
 solutionBtn.insertAdjacentElement('beforeend', solutionIcon);
+
+solutionBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+solutionBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
 
 const githubLink = document.createElement('a');
 githubLink.classList.add('github-link');
