@@ -864,6 +864,10 @@ function updateStopwatch() {
   stopwatch.textContent = `${time.slice(0, 3)}${newSecondsStr}`;
 }
 
+victoryModalRandomBtn.addEventListener('click', () => {
+  closeVictoryModal();
+  startGame('random');
+});
 randomGameBtn.addEventListener('click', () => startGame('random'));
 
 menuBtn.addEventListener('click', () => {
