@@ -12,52 +12,57 @@ const menuModal = document.createElement('div');
 menuModal.classList.add('menu-modal');
 menuModalWrapper.insertAdjacentElement('beforeend', menuModal);
 
-menuModal.innerHTML = `<svg class="menu-modal__icon_close-button" style="enable-background:new 0 0 128 128;" version="1.1" viewBox="0 0 128 128" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style type="text/css">
-.st0{fill:#C93636;}
-.st1{fill:#f1ffd8;}
-</style><circle class="st0" cx="64" cy="64" r="64"/><path class="st1" d="M100.3,90.4L73.9,64l26.3-26.4c0.4-0.4,0.4-1,0-1.4l-8.5-8.5c-0.4-0.4-1-0.4-1.4,0L64,54.1L37.7,27.8  c-0.4-0.4-1-0.4-1.4,0l-8.5,8.5c-0.4,0.4-0.4,1,0,1.4L54,64L27.7,90.3c-0.4,0.4-0.4,1,0,1.4l8.5,8.5c0.4,0.4,1.1,0.4,1.4,0L64,73.9  l26.3,26.3c0.4,0.4,1.1,0.4,1.5,0.1l8.5-8.5C100.7,91.4,100.7,90.8,100.3,90.4z"/></svg>`;
+function createMenuElems() {
+  menuModal.innerHTML = `<svg class="menu-modal__icon_close-button" style="enable-background:new 0 0 128 128;" version="1.1" viewBox="0 0 128 128" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style type="text/css">
+  .st0{fill:#C93636;}
+  .st1{fill:#f1ffd8;}
+  </style><circle class="st0" cx="64" cy="64" r="64"/><path class="st1" d="M100.3,90.4L73.9,64l26.3-26.4c0.4-0.4,0.4-1,0-1.4l-8.5-8.5c-0.4-0.4-1-0.4-1.4,0L64,54.1L37.7,27.8  c-0.4-0.4-1-0.4-1.4,0l-8.5,8.5c-0.4,0.4-0.4,1,0,1.4L54,64L27.7,90.3c-0.4,0.4-0.4,1,0,1.4l8.5,8.5c0.4,0.4,1.1,0.4,1.4,0L64,73.9  l26.3,26.3c0.4,0.4,1.1,0.4,1.5,0.1l8.5-8.5C100.7,91.4,100.7,90.8,100.3,90.4z"/></svg>`;
 
-const menuModalChoosePuzzleBtn = document.createElement('button');
-menuModalChoosePuzzleBtn.insertAdjacentHTML('beforeend', '<span>Choose a puzzle</span>');
-menuModalChoosePuzzleBtn.classList.add('menu-modal__button_choose-puzzle');
-menuModal.insertAdjacentElement('beforeend', menuModalChoosePuzzleBtn);
+  const menuModalChoosePuzzleBtn = document.createElement('button');
+  menuModalChoosePuzzleBtn.insertAdjacentHTML('beforeend', '<span>Choose a puzzle</span>');
+  menuModalChoosePuzzleBtn.classList.add('menu-modal__button_choose-puzzle');
+  menuModalChoosePuzzleBtn.addEventListener('click', openChooseOptions);
+  menuModal.insertAdjacentElement('beforeend', menuModalChoosePuzzleBtn);
 
-const chooseIcon = document.createElement('img');
-chooseIcon.classList.add('action-icon');
-chooseIcon.src = 'assets/img/choose.svg';
-menuModalChoosePuzzleBtn.insertAdjacentElement('beforeend', chooseIcon);
+  const chooseIcon = document.createElement('img');
+  chooseIcon.classList.add('action-icon');
+  chooseIcon.src = 'assets/img/choose.svg';
+  menuModalChoosePuzzleBtn.insertAdjacentElement('beforeend', chooseIcon);
 
-menuModalChoosePuzzleBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
-menuModalChoosePuzzleBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+  menuModalChoosePuzzleBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+  menuModalChoosePuzzleBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
 
-const menuModalSaveBtn = document.createElement('button');
-menuModalSaveBtn.insertAdjacentHTML('beforeend', '<span>Save game</span>');
-menuModalSaveBtn.classList.add('menu-modal__button_save');
-menuModal.insertAdjacentElement('beforeend', menuModalSaveBtn);
+  const menuModalSaveBtn = document.createElement('button');
+  menuModalSaveBtn.insertAdjacentHTML('beforeend', '<span>Save game</span>');
+  menuModalSaveBtn.classList.add('menu-modal__button_save');
+  menuModal.insertAdjacentElement('beforeend', menuModalSaveBtn);
 
-menuModalSaveBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
-menuModalSaveBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+  menuModalSaveBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+  menuModalSaveBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
 
-const menuModalLoadBtn = document.createElement('button');
-menuModalLoadBtn.insertAdjacentHTML('beforeend', '<span>Load game</span>');
-menuModalLoadBtn.classList.add('menu-modal__button_load');
-menuModal.insertAdjacentElement('beforeend', menuModalLoadBtn);
+  const menuModalLoadBtn = document.createElement('button');
+  menuModalLoadBtn.insertAdjacentHTML('beforeend', '<span>Load game</span>');
+  menuModalLoadBtn.classList.add('menu-modal__button_load');
+  menuModal.insertAdjacentElement('beforeend', menuModalLoadBtn);
 
-menuModalLoadBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
-menuModalLoadBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+  menuModalLoadBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+  menuModalLoadBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
 
-const menuModalRecentBtn = document.createElement('button');
-menuModalRecentBtn.insertAdjacentHTML('beforeend', '<span>Recent victories</span>');
-menuModalRecentBtn.classList.add('menu-modal__button_recent');
-menuModal.insertAdjacentElement('beforeend', menuModalRecentBtn);
+  const menuModalRecentBtn = document.createElement('button');
+  menuModalRecentBtn.insertAdjacentHTML('beforeend', '<span>Recent victories</span>');
+  menuModalRecentBtn.classList.add('menu-modal__button_recent');
+  menuModal.insertAdjacentElement('beforeend', menuModalRecentBtn);
 
-const recentIcon = document.createElement('img');
-recentIcon.classList.add('action-icon');
-recentIcon.src = 'assets/img/recent.svg';
-menuModalRecentBtn.insertAdjacentElement('beforeend', recentIcon);
+  const recentIcon = document.createElement('img');
+  recentIcon.classList.add('action-icon');
+  recentIcon.src = 'assets/img/recent.svg';
+  menuModalRecentBtn.insertAdjacentElement('beforeend', recentIcon);
 
-menuModalRecentBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
-menuModalRecentBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+  menuModalRecentBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+  menuModalRecentBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+}
+
+createMenuElems();
 
 const victoryModalWrapper = document.createElement('div');
 victoryModalWrapper.classList.add('victory-modal-wrapper');
@@ -444,7 +449,7 @@ const levelStorage = [[
 
 let currentLevel;
 
-function startGame(mode) {
+function startGame(mode, levelInfo) {
   if (document.querySelector('.cell')) {
     const cells = document.querySelectorAll('.cell');
     const topClues = document.querySelectorAll('.top-clue');
@@ -484,6 +489,28 @@ function startGame(mode) {
       }
       changeGameBoardIndent();
       break;
+    case 'chosen':
+      switch (levelInfo.levelSize) {
+        case '5x5':
+          for (let level of levelStorage[0]) if (level.name === levelInfo.levelName) currentLevel = level;
+          drawPlayArea(5);
+          drawClues(5);
+          break;
+        case '10x10':
+          for (let level of levelStorage[1]) if (level.name === levelInfo.levelName) currentLevel = level;
+          drawPlayArea(10);
+          drawClues(10);
+          break;
+        case '15x15':
+          for (let level of levelStorage[2]) if (level.name === levelInfo.levelName) currentLevel = level;
+          drawPlayArea(15);
+          drawClues(15);
+          break;
+        default:
+          break;
+      }
+    changeGameBoardIndent();
+    break;
     default:
       break;
   }
@@ -935,3 +962,152 @@ solutionBtn.addEventListener('click', () => {
     if (currentLevelCells[i] === 1) cells[i].classList.add('cell-marked');
   }
 });
+
+async function openChooseOptions() {
+  const menuModalButtons = document.querySelectorAll('.menu-modal button');
+  for (let i = 0; i < menuModalButtons.length; i++) {
+    await new Promise((resolve) => {
+      menuModalButtons[i].style.transition = '0.2s';
+      menuModalButtons[i].style.opacity = '0';
+      if ((i + 1) % 2 === 0) {
+        menuModalButtons[i].style.transform = 'translateX(-200%)';
+      } else {
+        menuModalButtons[i].style.transform = 'translateX(200%)';
+      }
+      setTimeout(() => {
+        resolve();
+      }, 200);
+    })
+  }
+  menuModal.innerHTML = `<svg class="menu-modal__icon_back-button" fill="#ff0000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  viewBox="0 0 272.074 272.074" style="enable-background:new 0 0 272.074 272.074;" xml:space="preserve">
+<g>
+<g>
+  <path d="M97.739,233.779c-7.731,0-14.994-3.014-20.45-8.471L7.706,155.661c-1.08-1.17-2.024-2.365-2.847-3.605
+    c-0.373-0.553-0.701-1.176-1.022-1.8l-0.488-0.9c-0.418-0.733-0.823-1.478-1.15-2.275s-0.572-1.626-0.803-2.468l-0.244-0.816
+    c-0.231-0.688-0.443-1.388-0.585-2.108c-0.366-1.844-0.559-3.734-0.566-5.604c0-1.902,0.193-3.811,0.566-5.707
+    c0.129-0.662,0.328-1.33,0.553-1.992l0.283-0.951c0.231-0.823,0.469-1.632,0.797-2.429c0.341-0.816,0.733-1.536,1.138-2.256
+    l0.469-0.88c0.328-0.643,0.662-1.279,1.073-1.889c0.977-1.472,2.095-2.847,3.31-4.107l0.283-0.289l68.825-68.819
+    c5.463-5.463,12.725-8.471,20.45-8.471c7.731,0,14.994,3.008,20.45,8.477c5.463,5.456,8.471,12.719,8.471,20.45
+    c0,7.725-3.008,14.987-8.471,20.45l-19.448,19.448h144.405c15.945,0,28.921,12.976,28.921,28.921s-12.976,28.921-28.921,28.921
+    H98.742l19.454,19.454c5.463,5.463,8.471,12.719,8.471,20.45s-3.008,14.987-8.471,20.45
+    C112.727,230.772,105.464,233.779,97.739,233.779z M17.931,147.775l68.452,68.439c6.067,6.067,16.646,6.08,22.719,0
+    c3.033-3.04,4.704-7.07,4.704-11.363c0-4.293-1.671-8.323-4.704-11.363l-41.395-41.395h175.44c8.863,0,16.067-7.204,16.067-16.067
+    c0-8.856-7.204-16.067-16.067-16.067H67.707l41.395-41.389c3.033-3.033,4.704-7.07,4.704-11.363s-1.671-8.329-4.704-11.363
+    c-6.061-6.067-16.652-6.073-22.719,0l-68.819,68.825c-0.758,0.758-1.42,1.575-2.005,2.449l-1.054,1.973
+    c-0.154,0.27-0.315,0.533-0.437,0.816c-0.109,0.27-0.186,0.611-0.283,0.945l-0.476,1.575c-0.353,1.523-0.463,2.584-0.463,3.605
+    c0,1.054,0.116,2.108,0.321,3.149l0.623,2.044c0.084,0.321,0.154,0.643,0.283,0.945s0.296,0.566,0.443,0.835l0.791,1.472
+    c0.81,1.317,1.452,2.082,2.14,2.796L17.931,147.775z"/></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>`;
+  menuModal.firstElementChild.addEventListener('click', menuModalBack);
+
+  const btnContainer = document.createElement('div');
+  btnContainer.classList.add('menu-modal__btn-container');
+  btnContainer.setAttribute('style', 'opacity: 0; transform: scale(0); transition: 0.4s');
+  menuModal.insertAdjacentElement('beforeend', btnContainer);
+
+  const easyLevelsBtn = document.createElement('button');
+  easyLevelsBtn.classList.add('menu-modal__easy-levels');
+  easyLevelsBtn.insertAdjacentHTML('beforeend', '<span>5x5</span>');
+  easyLevelsBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+  easyLevelsBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+  btnContainer.insertAdjacentElement('beforeend', easyLevelsBtn);
+
+  const mediumLevelsBtn = document.createElement('button');
+  mediumLevelsBtn.classList.add('menu-modal__medium-levels');
+  mediumLevelsBtn.insertAdjacentHTML('beforeend', '<span>10x10</span>');
+  mediumLevelsBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+  mediumLevelsBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+  btnContainer.insertAdjacentElement('beforeend', mediumLevelsBtn);
+
+  const hardLevelsBtn = document.createElement('button');
+  hardLevelsBtn.classList.add('menu-modal__hard-levels');
+  hardLevelsBtn.insertAdjacentHTML('beforeend', '<span>15x15</span>');
+  hardLevelsBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+  hardLevelsBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+  btnContainer.insertAdjacentElement('beforeend', hardLevelsBtn);
+
+  const levelsForm = document.createElement('form');
+  levelsForm.classList.add('menu-modal__levels-form');
+  levelsForm.setAttribute('style', 'opacity: 0; transform: scale(0); transition: 0.4s');
+  menuModal.insertAdjacentElement('beforeend', levelsForm);
+
+  const levelsLabel = document.createElement('label');
+  levelsLabel.classList.add('menu-modal__levels-label');
+  levelsLabel.htmlFor = 'levels-select';
+  levelsLabel.textContent = 'Choose a level';
+  levelsForm.insertAdjacentElement('beforeend', levelsLabel);
+
+  const levelsSelect = document.createElement('select');
+  levelsSelect.id = 'levels-select';
+  levelsSelect.name = 'levels';
+  levelsForm.insertAdjacentElement('beforeend', levelsSelect);
+
+  const confirmBtn = document.createElement('button');
+  confirmBtn.classList.add('menu-modal__confirm-btn');
+  confirmBtn.setAttribute('style', 'opacity: 0; transform: scale(0); transition: 0.4s');
+  confirmBtn.insertAdjacentHTML('beforeend', '<span>Confirm</span>');
+  confirmBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
+  confirmBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
+  menuModal.insertAdjacentElement('beforeend', confirmBtn);
+
+  setTimeout(() => {
+    const menuModalElems = document.querySelectorAll('.menu-modal > *');
+    for (let elem of menuModalElems) elem.setAttribute('style', 'opacity: 1; transform: scale(1); transition: 0.4s');
+    setTimeout(() => {
+      for (let elem of menuModalElems) elem.removeAttribute('style');
+    }, 300);
+  }, 20);
+
+  const levelButtons = document.querySelectorAll('.menu-modal__btn-container button');
+  easyLevelsBtn.addEventListener('click', (event) => {
+    for (let btn of levelButtons) btn.classList.remove('menu-modal__selected-level');
+    event.currentTarget.classList.add('menu-modal__selected-level');
+    chooseLevel(0)
+  });
+  mediumLevelsBtn.addEventListener('click', (event) => {
+    for (let btn of levelButtons) btn.classList.remove('menu-modal__selected-level');
+    event.currentTarget.classList.add('menu-modal__selected-level');
+    chooseLevel(1)
+  });
+  hardLevelsBtn.addEventListener('click', (event) => {
+    for (let btn of levelButtons) btn.classList.remove('menu-modal__selected-level');
+    event.currentTarget.classList.add('menu-modal__selected-level');
+    chooseLevel(2)
+  });
+  easyLevelsBtn.click();
+
+  confirmBtn.addEventListener('click', () => {
+    startGame('chosen', {levelName: levelsSelect.value, levelSize: document.querySelector('.menu-modal__selected-level span').textContent});
+    closeMenuModal();
+    setTimeout(() => {
+      menuModalBack();
+    }, 400);
+  });
+}
+
+function chooseLevel(chosenLevel) {
+  const options = document.querySelectorAll('.menu-modal__option');
+  for (let option of options) option.remove();
+  for (let level of levelStorage[chosenLevel]) {
+    const option = document.createElement('option');
+    option.classList.add('menu-modal__option');
+    option.textContent = level.name;
+    option.value = level.name;
+    document.querySelector('#levels-select').insertAdjacentElement('beforeend', option);
+  }
+}
+
+function menuModalBack() {
+  const menuModalElems = document.querySelectorAll('.menu-modal > *');
+  for (let elem of menuModalElems) {
+    elem.setAttribute('style', 'opacity: 1; transition: 0.3s; transform: translateX(0)');
+    setTimeout(() => {
+      elem.setAttribute('style', 'opacity: 0; transition: 0.3s; transform: translateX(50%)');
+    }, 20);
+  }
+
+  setTimeout(() => {
+    for (let elem of menuModalElems) elem.remove();
+    createMenuElems();
+  }, 320);
+}
