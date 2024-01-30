@@ -36,6 +36,7 @@ function createMenuElems() {
   const menuModalSaveBtn = document.createElement('button');
   menuModalSaveBtn.insertAdjacentHTML('beforeend', '<span>Save game</span>');
   menuModalSaveBtn.classList.add('menu-modal__button_save');
+  menuModalSaveBtn.addEventListener('click', saveGame);
   menuModal.insertAdjacentElement('beforeend', menuModalSaveBtn);
 
   menuModalSaveBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
@@ -44,6 +45,7 @@ function createMenuElems() {
   const menuModalLoadBtn = document.createElement('button');
   menuModalLoadBtn.insertAdjacentHTML('beforeend', '<span>Load game</span>');
   menuModalLoadBtn.classList.add('menu-modal__button_load');
+  menuModalLoadBtn.addEventListener('click', loadGame);
   menuModal.insertAdjacentElement('beforeend', menuModalLoadBtn);
 
   menuModalLoadBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-top"></div>');
@@ -1109,4 +1111,33 @@ function menuModalBack() {
     for (let elem of menuModalElems) elem.remove();
     createMenuElems();
   }, 320);
+}
+
+function saveGame() {
+  const savedGame = {
+    board: [],
+    name: currentLevel.name,
+    size: currentLevel.board.length
+  };
+  const cells = document.querySelectorAll('.cell');
+  for (let cell of cells) {
+    if (!cell.classList[1]) {
+      savedGame.board.push('empty');
+    } else {
+      savedGame.board.push(cell.classList[1]);
+    }
+  localStorage.setItem('savedGame', JSON.stringify(savedGame));
+  }
+}
+
+function loadGame() {
+  closeMenuModal();
+  const savedGame = JSON.parse(localStorage.getItem('savedGame'));
+  console.log(savedGame)
+  startGame('chosen', {levelName: savedGame.name, levelSize: `${savedGame.size}x${savedGame.size}`});
+  const cells = document.querySelectorAll('.cell');
+  for (let i = 0; i < cells.length; i++) {
+    if (savedGame.board[i] !== 'empty') cells[i].classList.add(savedGame.board[i]);
+    if (savedGame.board[i] === 'cell-cross') cells[i].insertAdjacentHTML('beforeend', '<div class="cross"></div>');
+  }
 }
