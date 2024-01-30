@@ -795,6 +795,13 @@ playArea.addEventListener('pointerleave', () => {
 
 playArea.addEventListener('contextmenu', (event) => {
   event.preventDefault();
+  if (event.button === 2) return false;
+  let rightClickEvent = new PointerEvent('pointerdown', {bubbles: true, button: 2, target: event.target});
+  event.target.style['box-shadow'] = '0 0 6px 1px #ff0000';
+  setTimeout(() => {
+    event.target.removeAttribute('style');
+  }, 100);
+  event.target.dispatchEvent(rightClickEvent);
   return false;
 })
 
