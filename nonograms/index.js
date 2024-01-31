@@ -898,6 +898,7 @@ function closeVictoryOnOutsideClick(event) {
 }
 
 function closeMenuOnOutsideClick(event) {
+  menuModalBack();
   if (menuModalWrapper.classList.contains('menu-modal-wrapper-on')) {
     if (!menuModal.contains(event.target)) closeMenuModal();
   }
@@ -1129,6 +1130,7 @@ function chooseLevel(chosenLevel) {
 }
 
 function menuModalBack() {
+  if (menuModal.firstElementChild.classList.contains('menu-modal__icon_close-button')) return;
   const menuModalElems = document.querySelectorAll('.menu-modal > *');
   for (let elem of menuModalElems) {
     elem.setAttribute('style', 'opacity: 1; transition: 0.3s; transform: translateX(0)');
