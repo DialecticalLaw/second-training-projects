@@ -6,6 +6,27 @@ const container = document.createElement('div');
 container.classList.add('container');
 body.insertAdjacentElement('beforeend', container);
 
+const fillingSound = document.createElement('audio');
+fillingSound.src = 'assets/sounds/filling.mp3';
+container.insertAdjacentElement('beforeend', fillingSound);
+
+const emptyingSound = document.createElement('audio');
+emptyingSound.src = 'assets/sounds/emptying.mp3';
+container.insertAdjacentElement('beforeend', emptyingSound);
+
+const crossSound = document.createElement('audio');
+crossSound.src = 'assets/sounds/cross.mp3';
+container.insertAdjacentElement('beforeend', crossSound);
+
+const victorySound = document.createElement('audio');
+victorySound.src = 'assets/sounds/victory.mp3';
+container.insertAdjacentElement('beforeend', victorySound);
+
+fillingSound.volume = 0.4;
+emptyingSound.volume = 0.2;
+crossSound.volume = 0.4;
+victorySound.volume = 0.4;
+
 const menuModalWrapper = document.createElement('div');
 menuModalWrapper.classList.add('menu-modal-wrapper');
 container.insertAdjacentElement('beforeend', menuModalWrapper);
@@ -150,6 +171,14 @@ const headerTitle = document.createElement('h1');
 headerTitle.classList.add('header__title');
 headerTitle.textContent = 'Nonograms';
 header.insertAdjacentElement('beforeend', headerTitle);
+
+const audioIcon = document.createElement('img');
+audioIcon.src = 'assets/img/volumeup.svg';
+audioIcon.alt = 'sounds';
+audioIcon.classList.add('header__audio-icon');
+header.insertAdjacentElement('beforeend', audioIcon);
+
+audioIcon.addEventListener('click', switchSoundsMuteStatus);
 
 const main = document.createElement('main');
 main.classList.add('main');
@@ -734,6 +763,13 @@ playArea.addEventListener('pointerdown', (event) => {
       }
       if (!event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false') {
         actionType = 'filling';
+        if (fillingSound.currentTime !== 0) {
+          fillingSound.pause();
+          fillingSound.currentTime = 0;
+          fillingSound.play();
+        } else {
+          fillingSound.play();
+        }
         event.target.classList.add('cell-marked');
         if (event.target.classList.contains('cell-cross')) {
           event.target.classList.remove('cell-cross');
@@ -745,6 +781,13 @@ playArea.addEventListener('pointerdown', (event) => {
         }
       } else if (event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false') {
         actionType = 'emptying';
+        if (emptyingSound.currentTime !== 0) {
+          emptyingSound.pause();
+          emptyingSound.currentTime = 0;
+          emptyingSound.play();
+        } else {
+          emptyingSound.play();
+        }
         event.target.classList.remove('cell-marked');
         event.target.dataset.invisible = true;
         if (isVictory()) {
@@ -765,6 +808,13 @@ playArea.addEventListener('pointerdown', (event) => {
       }
       if (!event.target.classList.contains('cell-cross') && event.target.dataset.invisible === 'false') {
         actionType = 'filling';
+        if (crossSound.currentTime !== 0) {
+          crossSound.pause();
+          crossSound.currentTime = 0;
+          crossSound.play();
+        } else {
+          crossSound.play();
+        }
         if (event.target.classList.contains('cell-marked')) event.target.classList.remove('cell-marked');
         event.target.classList.add('cell-cross');
         event.target.innerHTML = '<div class="cross"></div>';
@@ -774,6 +824,13 @@ playArea.addEventListener('pointerdown', (event) => {
         }
       } else if (event.target.classList.contains('cell-cross') && event.target.dataset.invisible === 'false') {
         actionType = 'emptying';
+        if (emptyingSound.currentTime !== 0) {
+          emptyingSound.pause();
+          emptyingSound.currentTime = 0;
+          emptyingSound.play();
+        } else {
+          emptyingSound.play();
+        }
         event.target.classList.remove('cell-cross');
         event.target.innerHTML = '';
         event.target.dataset.invisible = true;
@@ -799,6 +856,13 @@ function markSquares(event) {
   if (isPointerDown && event.target.classList.contains('cell')) {
     if (buttonType === 'left') {
       if (!event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false' && actionType === 'filling') {
+        if (fillingSound.currentTime !== 0) {
+          fillingSound.pause();
+          fillingSound.currentTime = 0;
+          fillingSound.play();
+        } else {
+          fillingSound.play();
+        }
         event.target.classList.add('cell-marked');
         if (event.target.classList.contains('cell-cross')) {
           event.target.classList.remove('cell-cross');
@@ -809,16 +873,37 @@ function markSquares(event) {
           showVictoryModal();
         }
       } else if (event.target.classList.contains('cell-marked') && event.target.dataset.invisible === 'false' && actionType === 'emptying') {
+        if (emptyingSound.currentTime !== 0) {
+          emptyingSound.pause();
+          emptyingSound.currentTime = 0;
+          emptyingSound.play();
+        } else {
+          emptyingSound.play();
+        }
         event.target.classList.remove('cell-marked');
         event.target.dataset.invisible = true;
       }
     } else if (buttonType === 'right') {
       if (!event.target.classList.contains('cell-cross') && event.target.dataset.invisible === 'false' && actionType === 'filling') {
+        if (crossSound.currentTime !== 0) {
+          crossSound.pause();
+          crossSound.currentTime = 0;
+          crossSound.play();
+        } else {
+          crossSound.play();
+        }
         if (event.target.classList.contains('cell-marked')) event.target.classList.remove('cell-marked');
         event.target.classList.add('cell-cross');
         event.target.innerHTML = '<div class="cross"></div>';
         event.target.dataset.invisible = true;
       } else if (event.target.classList.contains('cell-cross') && event.target.dataset.invisible === 'false' && actionType === 'emptying') {
+        if (emptyingSound.currentTime !== 0) {
+          emptyingSound.pause();
+          emptyingSound.currentTime = 0;
+          emptyingSound.play();
+        } else {
+          emptyingSound.play();
+        }
         event.target.classList.remove('cell-cross');
         event.target.innerHTML = '';
         event.target.dataset.invisible = true;
@@ -874,6 +959,13 @@ function showVictoryModal() {
   solutionBtn.disabled = true;
   clearInterval(stopWatchUpdateInterval);
   stopwatch.classList.remove('stopwatch-active');
+  if (victorySound.currentTime !== 0) {
+    victorySound.pause();
+    victorySound.currentTime = 0;
+    victorySound.play();
+  } else {
+    victorySound.play();
+  }
   victoryModalDescription.innerHTML = `Great! You have solved the nonogram in <span>${convertIntoSeconds(stopwatch.textContent)}</span> seconds!`;
 
   const recentGames = JSON.parse(localStorage.getItem('five-recent-games-stats'));
@@ -1326,5 +1418,21 @@ function updatePlayBoardTheme() {
     for (let divide of dividesLeft) divide.classList.remove('divide-dark-theme');
     for (let divide of dividesTop) divide.classList.remove('divide-dark-theme');
     for (let divide of dividesBottom) divide.classList.remove('divide-dark-theme');
+  }
+}
+
+function switchSoundsMuteStatus() {
+  if (!fillingSound.muted) {
+    fillingSound.muted = true;
+    emptyingSound.muted = true;
+    crossSound.muted = true;
+    victorySound.muted = true;
+    audioIcon.src = 'assets/img/volumeoff.svg';
+  } else {
+    fillingSound.muted = false;
+    emptyingSound.muted = false;
+    crossSound.muted = false;
+    victorySound.muted = false;
+    audioIcon.src = 'assets/img/volumeup.svg';
   }
 }
