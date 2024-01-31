@@ -145,6 +145,35 @@ body {
   width: 25%;
 }
 
+.menu-modal__recent-games-title {
+  font-size: 3.2rem;
+  font-family: CuteFont;
+  font-weight: bold;
+  color: #ff8400;
+}
+
+.menu-modal__recent-game :nth-child(1) {
+  color: #00eeff;
+}
+
+.menu-modal__recent-game :nth-child(2) {
+  color: #00b7ff;
+}
+
+.menu-modal__recent-game :nth-child(3) {
+  color: #008cff;
+}
+
+.menu-modal__recent-games-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #ffffff;
+  font-size: 1.7rem;
+  font-family: CuteFont;
+  font-weight: bold;
+}
+
 .victory-modal-wrapper {
   z-index: 2;
   position: fixed;
