@@ -107,6 +107,45 @@ const header = document.createElement('header');
 header.classList.add('header');
 container.insertAdjacentElement('beforeend', header);
 
+const themeForm = document.createElement('form');
+themeForm.classList.add('header__theme-form');
+header.insertAdjacentElement('beforeend',themeForm);
+
+const themeWrapper = document.createElement('div');
+themeWrapper.classList.add('header__theme-wrapper');
+themeForm.insertAdjacentElement('beforeend', themeWrapper);
+
+const lightThemeLabel = document.createElement('label');
+lightThemeLabel.classList.add('header__label_light-theme');
+themeWrapper.insertAdjacentElement('beforeend', lightThemeLabel);
+
+lightThemeLabel.insertAdjacentHTML('beforeend', '<img class="header__theme-icon" src="assets/img/sun.svg" alt="sun"> Light');
+
+const lightThemeInput = document.createElement('input');
+lightThemeInput.classList.add('header__input_light-theme');
+lightThemeInput.type = 'radio';
+lightThemeInput.name = 'theme';
+lightThemeInput.checked = true;
+lightThemeInput.addEventListener('click', switchTheme);
+lightThemeLabel.insertAdjacentElement('beforeend', lightThemeInput);
+
+const darkThemeLabel = document.createElement('label');
+darkThemeLabel.classList.add('header__label_dark-theme');
+themeWrapper.insertAdjacentElement('beforeend', darkThemeLabel);
+
+darkThemeLabel.insertAdjacentHTML('beforeend', '<img class="header__theme-icon" src="assets/img/moon.svg" alt="sun"> Dark');
+
+const darkThemeInput = document.createElement('input');
+darkThemeInput.classList.add('header__input_dark-theme');
+darkThemeInput.type = 'radio';
+darkThemeInput.name = 'theme';
+darkThemeInput.addEventListener('click', switchTheme);
+darkThemeLabel.insertAdjacentElement('beforeend', darkThemeInput);
+
+const themeHighlighter = document.createElement('div');
+themeHighlighter.classList.add('header__theme-highlighter');
+themeWrapper.insertAdjacentElement('beforeend', themeHighlighter);
+
 const headerTitle = document.createElement('h1');
 headerTitle.classList.add('header__title');
 headerTitle.textContent = 'Nonograms';
@@ -493,7 +532,6 @@ function startGame(mode, levelInfo) {
         drawPlayArea(15);
         drawClues(15);
       }
-      changeGameBoardIndent();
       break;
     case 'chosen':
       switch (levelInfo.levelSize) {
@@ -515,11 +553,12 @@ function startGame(mode, levelInfo) {
         default:
           break;
       }
-    changeGameBoardIndent();
     break;
     default:
       break;
   }
+  changeGameBoardIndent();
+  updatePlayBoardTheme();
 }
 
 startGame('default');
@@ -532,10 +571,10 @@ function drawPlayArea(size) {
       const cell = document.createElement('div');
       cell.classList.add('cell');
       cell.dataset.invisible = false;
-      if (column === 4 && size > 5 || column === 9 && size > 10) cell.classList.add('divideRight');
-      if (column === 5 || column === 10) cell.classList.add('divideLeft');
-      if (row === 4 && size > 5 || row === 9 && size > 10) cell.classList.add('divideBottom');
-      if (row === 5 || row === 10) cell.classList.add('divideTop');
+      if (column === 4 && size > 5 || column === 9 && size > 10) cell.classList.add('divide-right');
+      if (column === 5 || column === 10) cell.classList.add('divide-left');
+      if (row === 4 && size > 5 || row === 9 && size > 10) cell.classList.add('divide-bottom');
+      if (row === 5 || row === 10) cell.classList.add('divide-top');
       playArea.insertAdjacentElement('beforeend', cell);
     }
   }
@@ -555,12 +594,12 @@ function drawClues(size) {
     topClue.classList.add('top-clue');
     leftClue.classList.add('left-clue');
     if (row === 4 && size > 5 || row === 9 && size > 10) {
-      topClue.classList.add('divideRight');
-      leftClue.classList.add('divideBottom');
+      topClue.classList.add('divide-right');
+      leftClue.classList.add('divide-bottom');
     }
     if (row === 5 || row === 10) {
-      topClue.classList.add('divideLeft');
-      leftClue.classList.add('divideTop');
+      topClue.classList.add('divide-left');
+      leftClue.classList.add('divide-top');
     }
     topCluesContainer.insertAdjacentElement('beforeend', topClue);
     leftCluesContainer.insertAdjacentElement('beforeend', leftClue);
@@ -845,9 +884,7 @@ function showVictoryModal() {
     timeInSeconds: convertIntoSeconds(stopwatch.textContent)
   })
   recentGames.pop()
-  console.log(recentGames)
   const sortedRecentGames = recentGamesQuickSort(recentGames);
-  console.log(sortedRecentGames);
   localStorage.setItem('five-recent-games-stats', JSON.stringify(sortedRecentGames));
 
   victoryModalWrapper.classList.add('victory-modal-wrapper-on');
@@ -968,6 +1005,7 @@ async function resetGame() {
   for (let elem of leftClues) elem.remove();
   drawPlayArea(playAreaSize);
   drawClues(playAreaSize);
+  updatePlayBoardTheme();
   playArea.classList.remove('game-board__play-area_inactive');
   resetBtn.removeAttribute('disabled');
   menuBtn.removeAttribute('disabled');
@@ -1155,10 +1193,11 @@ function saveGame() {
   };
   const cells = document.querySelectorAll('.cell');
   for (let cell of cells) {
-    if (!cell.classList[1]) {
+    const cellClass = Array.from(cell.classList).filter((item) => item === 'cell-marked' || item === 'cell-cross').join();
+    if (!cellClass.length) {
       savedGame.board.push('empty');
     } else {
-      savedGame.board.push(cell.classList[1]);
+      savedGame.board.push(cellClass);
     }
   localStorage.setItem('savedGame', JSON.stringify(savedGame));
   }
@@ -1167,13 +1206,17 @@ function saveGame() {
 function loadGame() {
   closeMenuModal();
   const savedGame = JSON.parse(localStorage.getItem('savedGame'));
-  console.log(savedGame)
   startGame('chosen', {levelName: savedGame.name, levelSize: `${savedGame.size}x${savedGame.size}`});
   const cells = document.querySelectorAll('.cell');
+  console.log(savedGame.board)
   for (let i = 0; i < cells.length; i++) {
-    if (savedGame.board[i] !== 'empty') cells[i].classList.add(savedGame.board[i]);
-    if (savedGame.board[i] === 'cell-cross') cells[i].insertAdjacentHTML('beforeend', '<div class="cross"></div>');
+    if (savedGame.board[i] === 'cell-marked') cells[i].classList.add('cell-marked');
+    if (savedGame.board[i] === 'cell-cross') {
+      cells[i].classList.add('cell-cross');
+      cells[i].insertAdjacentHTML('beforeend', '<div class="cross"></div>');
+    }
   }
+  updatePlayBoardTheme();
 }
 
 async function openRecentGames() {
@@ -1216,4 +1259,64 @@ function recentGamesQuickSort(arr) {
   const lessThanPivot = arr.slice(1).filter((item) => item.timeInSeconds <= pivot.timeInSeconds);
   const biggerThanPivot = arr.slice(1).filter((item) => item.timeInSeconds > pivot.timeInSeconds);
   return recentGamesQuickSort(lessThanPivot).concat(pivot, recentGamesQuickSort(biggerThanPivot));
+}
+
+function switchTheme(event) {
+  if (event.target.classList.contains('header__input_dark-theme')) {
+    container.classList.add('container-dark-theme');
+    menuModal.classList.add('modal-dark-theme');
+    victoryModal.classList.add('modal-dark-theme');
+    themeHighlighter.classList.add('header__theme-highlighter_dark-theme');
+    stopwatch.classList.add('stopwatch-dark-theme');
+    playArea.classList.add('play-area-dark-theme');
+    updatePlayBoardTheme();
+    githubLink.classList.add('text-dark-theme');
+    footerYear.classList.add('text-dark-theme');
+    footerRss.classList.add('rss-dark-theme');
+  }
+  if (event.target.classList.contains('header__input_light-theme')) {
+    container.classList.remove('container-dark-theme');
+    menuModal.classList.remove('modal-dark-theme');
+    victoryModal.classList.remove('modal-dark-theme');
+    themeHighlighter.classList.remove('header__theme-highlighter_dark-theme');
+    stopwatch.classList.remove('stopwatch-dark-theme');
+    playArea.classList.remove('play-area-dark-theme');
+    updatePlayBoardTheme();
+    githubLink.classList.remove('text-dark-theme');
+    footerYear.classList.remove('text-dark-theme');
+    footerRss.classList.remove('rss-dark-theme');
+  }
+}
+
+function updatePlayBoardTheme() {
+  const topClues = document.querySelectorAll('.top-clue');
+  const leftClues = document.querySelectorAll('.left-clue');
+  const cells = document.querySelectorAll('.cell');
+  const dividesRight = document.querySelectorAll('.divide-right');
+  const dividesLeft = document.querySelectorAll('.divide-left');
+  const dividesTop = document.querySelectorAll('.divide-top');
+  const dividesBottom = document.querySelectorAll('.divide-bottom');
+
+  if (playArea.classList.contains('play-area-dark-theme')) {
+    topCluesContainer.classList.add('game-board__top-clues_dark-theme');
+    leftCluesContainer.classList.add('game-board__left-clues_dark-theme');
+    for (let clue of topClues) clue.classList.add('top-clue-dark-theme');
+    for (let clue of leftClues) clue.classList.add('left-clue-dark-theme');
+    for (let cell of cells) cell.classList.add('cell-dark-theme');
+    for (let divide of dividesRight) divide.classList.add('divide-dark-theme');
+    for (let divide of dividesLeft) divide.classList.add('divide-dark-theme');
+    for (let divide of dividesTop) divide.classList.add('divide-dark-theme');
+    for (let divide of dividesBottom) divide.classList.add('divide-dark-theme');
+
+  } else {
+    topCluesContainer.classList.remove('game-board__top-clues_dark-theme');
+    leftCluesContainer.classList.remove('game-board__left-clues_dark-theme');
+    for (let clue of topClues) clue.classList.remove('top-clue-dark-theme');
+    for (let clue of leftClues) clue.classList.remove('left-clue-dark-theme');
+    for (let cell of cells) cell.classList.remove('cell-dark-theme');
+    for (let divide of dividesRight) divide.classList.remove('divide-dark-theme');
+    for (let divide of dividesLeft) divide.classList.remove('divide-dark-theme');
+    for (let divide of dividesTop) divide.classList.remove('divide-dark-theme');
+    for (let divide of dividesBottom) divide.classList.remove('divide-dark-theme');
+  }
 }

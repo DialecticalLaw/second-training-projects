@@ -38,6 +38,10 @@ body {
   background-size: cover;
 }
 
+.container-dark-theme {
+  background-image: url("assets/img/dark.jpg");
+}
+
 .menu-modal-wrapper {
   z-index: 2;
   position: fixed;
@@ -246,12 +250,95 @@ body {
   filter: blur(6px);
 }
 
+.modal-dark-theme {
+  background-color: #006dbb34;
+}
+
 .header {
+  position: relative;
   justify-content: center;
+  align-items: center;
   padding-top: 20px;
 }
 
+.header__theme-form {
+  position: absolute;
+  left: 20px;
+  width: max-content;
+  height: max-content;
+  padding: 5px;
+  background-color: #b5b5b5aa;
+  box-shadow: 0 0 6px 2px #b5b5b5aa;
+  border-radius: 40px;
+}
+
+.header__theme-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.header__theme-highlighter {
+  z-index: 0;
+  position: absolute;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  border-radius: 40px;
+  background-color: #6a6a6aaa;
+  box-shadow: inset 0 0 6px 0.5px #ffff00;
+  transform: translateX(0);
+  transition: 0.4s;
+}
+
+.header__theme-highlighter_dark-theme {
+  background-color: #d6d6d6aa;
+  box-shadow: inset 0 0 6px 0.5px var(--main-color);
+}
+
+.header__label_dark-theme:has(.header__input_dark-theme:checked) ~ .header__theme-highlighter {
+  transform: translateX(100%);
+}
+
+.header__label_light-theme,
+.header__label_dark-theme {
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 50%;
+  padding: 3px;
+  font-family: CuteFont;
+  font-size: 1.7rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.header__label_dark-theme:has(.header__input_dark-theme:checked) {
+  color: var(--main-color);
+}
+
+.header__label_light-theme:has(.header__input_light-theme:checked) {
+  color: #ffff00;
+}
+
+.header__theme-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.header__input_light-theme,
+.header__input_dark-theme {
+  appearance: none;
+}
+
 .header__title {
+  margin: 0 auto;
   padding: 0 15px;
   font-family: CuteFont;
   font-size: 4rem;
@@ -415,6 +502,10 @@ button:active {
   transition: 1s;
 }
 
+.stopwatch-dark-theme {
+  color: #dedede;
+}
+
 .stopwatch-active {
   color: #009500;
   transform: scale(1);
@@ -430,6 +521,11 @@ button:active {
   background-color: #dcdcff;
 }
 
+.game-board__top-clues_dark-theme {
+  border-bottom: 4px solid #ffffff;
+  background-color: #292c71;
+}
+
 .game-board__left-clues {
   position: absolute;
   top: 0;
@@ -441,6 +537,11 @@ button:active {
   height: 100%;
   border-right: 4px solid #000000;
   background-color: #edffdc;
+}
+
+.game-board__left-clues_dark-theme {
+  border-right: 4px solid #ffffff;
+  background-color: #215251;
 }
 
 .left-clue p,
@@ -456,6 +557,12 @@ button:active {
   font-weight: bold;
   outline: 0.5px solid #000000;
   user-select: none;
+}
+
+.left-clue-dark-theme p,
+.top-clue-dark-theme p {
+  color: #ffffff;
+  outline: 0.5px solid #ffffff;
 }
 
 .top-clue {
@@ -481,6 +588,10 @@ button:active {
   outline: 4px solid #000000;
 }
 
+.play-area-dark-theme {
+  outline: 4px solid #ffffff;
+}
+
 .game-board__play-area_inactive {
   pointer-events: none;
   opacity: 0.5;
@@ -498,23 +609,41 @@ button:active {
   transition: 0.1s;
 }
 
+.cell-dark-theme {
+  outline: 0.5px solid #ffffff;
+}
+
 .cell-marked {
   background-color: #000000;
   outline: 0.5px solid #ffffff;
+}
+
+.cell-dark-theme.cell-marked {
+  background-color: #ffffff;
+  outline: 0.5px solid #000000;
 }
 
 .cross {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  background-color: #ff000010;
+  background-color: #ff00001c;
   background-image: url("assets/img/cross.svg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
-.divideRight::after {
+.cell-dark-theme .cross {
+  background-color: #ff000037;
+  background-image: url("assets/img/light-cross.svg");
+}
+
+.cross-dark-theme {
+  background-image: url("assets/img/light-cross.svg");
+}
+
+.divide-right::after {
   content: '';
   position: absolute;
   top: 0;
@@ -524,7 +653,7 @@ button:active {
   background-color: #000000;
 }
 
-.divideLeft::after {
+.divide-left::after {
   content: '';
   position: absolute;
   top: 0;
@@ -534,7 +663,7 @@ button:active {
   background-color: #000000;
 }
 
-.divideTop::before {
+.divide-top::before {
   content: '';
   position: absolute;
   top: 0;
@@ -544,7 +673,7 @@ button:active {
   background-color: #000000;
 }
 
-.divideBottom::before {
+.divide-bottom::before {
   content: '';
   position: absolute;
   bottom: 0;
@@ -552,6 +681,14 @@ button:active {
   width: 100%;
   height: 2.5px;
   background-color: #000000;
+}
+
+.divide-dark-theme::after {
+  background-color: #ffffff;
+}
+
+.divide-dark-theme::before {
+  background-color: #ffffff;
 }
 
 .interaction-buttons-container {
@@ -615,10 +752,26 @@ button:active {
   height: 50px;
 }
 
+.text-dark-theme .github-link__icon #Icons1 #github {
+  fill: #ffffff !important;
+}
+
+.text-dark-theme {
+  color: #ffffff;
+}
+
+.text-dark-theme::after {
+  background-color: #ffffff;
+}
+
 .footer__link_rss {
   width: 120px;
   filter: var(--default-shadow);
   transition: 0.4s;
+}
+
+.rss-dark-theme {
+  filter: drop-shadow(0 0 5px #ffffff);
 }
 
 @media screen and (orientation: landscape) {
