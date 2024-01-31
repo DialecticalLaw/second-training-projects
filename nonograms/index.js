@@ -1189,7 +1189,8 @@ function saveGame() {
   const savedGame = {
     board: [],
     name: currentLevel.name,
-    size: currentLevel.board.length
+    size: currentLevel.board.length,
+    time: stopwatch.textContent
   };
   const cells = document.querySelectorAll('.cell');
   for (let cell of cells) {
@@ -1208,7 +1209,6 @@ function loadGame() {
   const savedGame = JSON.parse(localStorage.getItem('savedGame'));
   startGame('chosen', {levelName: savedGame.name, levelSize: `${savedGame.size}x${savedGame.size}`});
   const cells = document.querySelectorAll('.cell');
-  console.log(savedGame.board)
   for (let i = 0; i < cells.length; i++) {
     if (savedGame.board[i] === 'cell-marked') cells[i].classList.add('cell-marked');
     if (savedGame.board[i] === 'cell-cross') {
@@ -1217,6 +1217,14 @@ function loadGame() {
     }
   }
   updatePlayBoardTheme();
+  stopwatch.textContent = savedGame.time;
+  if (!isStopwatchStart) {
+    stopWatchUpdateInterval = setInterval(() => {
+      updateStopwatch();
+    }, 1000);
+    stopwatch.classList.add('stopwatch-active');
+    isStopwatchStart = true;
+  }
 }
 
 async function openRecentGames() {
