@@ -68,16 +68,16 @@ body {
   gap: 25px;
   opacity: 0;
   padding: 40px;
-  background-color: #25b70031;
+  background-color: #00b63342;
   box-shadow: inset 0 0 10px 3px #000000;
   border-radius: 30px;
-  transform: scale(0) translateY(200%);
+  transform: scaleX(0) translateY(100%);
   transition: 0.4s;
 }
 
 .menu-modal-on {
   opacity: 1;
-  transform: scale(1) translateY(0);
+  transform: scaleX(1) translateY(0);
 }
 
 .menu-modal__icon_close-button {
@@ -168,7 +168,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding-top: 10px;
   color: #ffffff;
+  border-top: 2px solid #ffffff;
   font-size: 1.7rem;
   font-family: CuteFont;
   font-weight: bold;
@@ -205,7 +207,7 @@ body {
   background-color: #25b70031;
   box-shadow: inset 0 0 10px 3px #000000;
   border-radius: 30px;
-  transform: scale(0.4);
+  transform: scale(0);
   transition: 0.4s;
 }
 
