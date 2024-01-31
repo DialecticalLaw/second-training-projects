@@ -898,9 +898,11 @@ function closeVictoryOnOutsideClick(event) {
 }
 
 function closeMenuOnOutsideClick(event) {
-  menuModalBack();
   if (menuModalWrapper.classList.contains('menu-modal-wrapper-on')) {
-    if (!menuModal.contains(event.target)) closeMenuModal();
+    if (!menuModal.contains(event.target)) {
+      closeMenuModal();
+      menuModalBack();
+    }
   }
 }
 
