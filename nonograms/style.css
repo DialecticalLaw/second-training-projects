@@ -63,8 +63,8 @@ body {
 
 .menu-modal {
   position: relative;
-  width: 50%;
-  height: 60%;
+  width: 40%;
+  height: 50%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -914,6 +914,13 @@ button:active {
 
   .github-link:hover::after {
     transform: translateX(0);
+  }
+}
+
+@media screen and (max-width: 1130px) {
+  .menu-modal {
+    width: 50%;
+    height: 60%;
   }
 }
 
