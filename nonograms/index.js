@@ -1324,6 +1324,7 @@ function loadGame() {
 }
 
 async function openRecentGames() {
+  document.querySelector('.menu-modal__button_recent').removeEventListener('click', openRecentGames);
   await clearMenuContent()
   menuModal.innerHTML = backIconSvgCode;
   menuModal.firstElementChild.addEventListener('click', menuModalBack);
