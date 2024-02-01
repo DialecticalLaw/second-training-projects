@@ -1031,7 +1031,7 @@ function closeVictoryOnOutsideClick(event) {
 }
 
 function closeMenuOnOutsideClick(event) {
-  if (menuModalWrapper.classList.contains('menu-modal-wrapper-on')) {
+  if (menuModal.classList.contains('menu-modal-on')) {
     if (!menuModal.contains(event.target)) {
       closeMenuModal();
       menuModalBack();
