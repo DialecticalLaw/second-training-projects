@@ -525,12 +525,12 @@ button:active {
   left: 0;
   width: 100%;
   display: flex;
-  border-bottom: 4px solid #000000;
+  border-bottom: 4px solid #454545;
   background-color: #dcdcff;
 }
 
 .game-board__top-clues_dark-theme {
-  border-bottom: 4px solid #ffffff;
+  border-bottom: 4px solid #c0c0c0;
   background-color: #292c71;
 }
 
@@ -543,12 +543,12 @@ button:active {
   justify-content: space-between;
   align-items: flex-end;
   height: 100%;
-  border-right: 4px solid #000000;
+  border-right: 4px solid #454545;
   background-color: #edffdc;
 }
 
 .game-board__left-clues_dark-theme {
-  border-right: 4px solid #ffffff;
+  border-right: 4px solid #c0c0c0;
   background-color: #215251;
 }
 
@@ -603,11 +603,11 @@ button:active {
 .game-board__play-area {
   position: relative;
   display: grid;
-  outline: 4px solid #000000;
+  outline: 4px solid #454545;
 }
 
 .play-area-dark-theme {
-  outline: 4px solid #ffffff;
+  outline: 4px solid #c0c0c0;
 }
 
 .game-board__play-area_inactive {
@@ -667,8 +667,8 @@ button:active {
   top: 0;
   right: 0;
   height: 100%;
-  width: 2.5px;
-  background-color: #000000;
+  width: 2px;
+  background-color: #454545;
 }
 
 .divide-left::after {
@@ -677,8 +677,8 @@ button:active {
   top: 0;
   left: 0;
   height: 100%;
-  width: 2.5px;
-  background-color: #000000;
+  width: 2px;
+  background-color: #454545;
 }
 
 .divide-top::before {
@@ -687,8 +687,8 @@ button:active {
   top: 0;
   left: 0;
   width: 100%;
-  height: 2.5px;
-  background-color: #000000;
+  height: 2px;
+  background-color: #454545;
 }
 
 .divide-bottom::before {
@@ -697,16 +697,16 @@ button:active {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 2.5px;
-  background-color: #000000;
+  height: 2px;
+  background-color: #454545;
 }
 
 .divide-dark-theme::after {
-  background-color: #ffffff;
+  background-color: #c0c0c0;
 }
 
 .divide-dark-theme::before {
-  background-color: #ffffff;
+  background-color: #c0c0c0;
 }
 
 .interaction-buttons-container {
@@ -1089,27 +1089,27 @@ button:active {
   }
 
   .game-board__play-area {
-    outline: 3px solid #000000;
+    outline: 3px solid #454545;
   }
 
   .play-area-dark-theme {
-    outline: 3px solid #ffffff;
+    outline: 3px solid #c0c0c0;
   }
 
   .game-board__top-clues {
-    border-bottom: 3px solid #000000;
+    border-bottom: 3px solid #454545;
   }
 
   .game-board__left-clues {
-    border-right: 3px solid #000000;
+    border-right: 3px solid #454545;
   }
 
   .game-board__top-clues_dark-theme {
-    border-bottom: 3px solid #ffffff;
+    border-bottom: 3px solid #c0c0c0;
   }
 
   .game-board__left-clues_dark-theme {
-    border-right: 3px solid #ffffff;
+    border-right: 3px solid #c0c0c0;
   }
 }
 
