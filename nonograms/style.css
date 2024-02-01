@@ -572,6 +572,16 @@ button:active {
   outline: 0.5px solid #ffffff;
 }
 
+.left-clue .max-clue,
+.top-clue .max-clue {
+  color: #c800ff;
+}
+
+.left-clue-dark-theme .max-clue,
+.top-clue-dark-theme .max-clue {
+  color: #ebe300;
+}
+
 .top-clue {
   position: relative;
   display: flex;

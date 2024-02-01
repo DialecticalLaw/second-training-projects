@@ -663,13 +663,21 @@ function drawClues(size) {
 
   for (let i = 0; i < topClues.length; i++) {
     for (let clue of resultClues.topClues[i]) {
-      topClues[i].insertAdjacentHTML('beforeend', `<p>${clue}</p>`);
+      if (clue === currentLevel.board.length) {
+        topClues[i].insertAdjacentHTML('beforeend', `<p class="max-clue">${clue}</p>`);
+      } else {
+        topClues[i].insertAdjacentHTML('beforeend', `<p>${clue}</p>`);
+      }
     }
   }
 
   for (let i = 0; i < leftClues.length; i++) {
     for (let clue of resultClues.leftClues[i]) {
-      leftClues[i].insertAdjacentHTML('beforeend', `<p>${clue}</p>`);
+      if (clue === currentLevel.board.length) {
+        leftClues[i].insertAdjacentHTML('beforeend', `<p class="max-clue">${clue}</p>`);
+      } else {
+        leftClues[i].insertAdjacentHTML('beforeend', `<p>${clue}</p>`);
+      }
     }
   }
 
