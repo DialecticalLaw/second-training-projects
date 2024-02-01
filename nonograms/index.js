@@ -1282,6 +1282,13 @@ function menuModalBack() {
 }
 
 function saveGame() {
+  const saveBtn = document.querySelector('.menu-modal__button_save');
+  saveBtn.style.filter = 'drop-shadow(0 0 12px #ffff00)';
+  saveBtn.style.color = '#ffffff';
+  saveBtn.style.outline = '1px solid #ffffff';
+  setTimeout(() => {
+    saveBtn.removeAttribute('style');
+  }, 1500);
   const savedGame = {
     board: [],
     name: currentLevel.name,
