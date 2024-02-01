@@ -735,11 +735,7 @@ window.addEventListener('resize', changeGameBoardIndent);
 
 function changeGameBoardIndent() {
   const topCluesContainerHeight = topCluesContainer.offsetHeight;
-  stopwatchMenuContainer.style['margin-bottom'] = `${topCluesContainerHeight}px`
-  if (body.offsetWidth < 500) {
-    gameBoardContent.removeAttribute('style');
-    return;
-  }
+  stopwatchMenuContainer.style['margin-bottom'] = `${topCluesContainerHeight}px`;
   gameBoardContent.style['align-self'] = 'flex-start';
   let resultMargin = leftCluesContainer.offsetWidth;
   const totalGameBoardWidth = gameBoardContent.offsetWidth + leftCluesContainer.offsetWidth;

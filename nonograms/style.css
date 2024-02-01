@@ -67,9 +67,8 @@ body {
   height: 60%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  gap: 25px;
   opacity: 0;
   padding: 40px;
   background-color: #00b63342;
@@ -172,7 +171,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-top: 10px;
+  padding: 10px 0 0 0;
+  text-align: center;
+  list-style: none;
   color: #ffffff;
   border-top: 2px solid #ffffff;
   font-size: 1.7rem;
@@ -367,9 +368,9 @@ button {
   position: relative;
   display: flex;
   opacity: 1;
-  padding: 10px;
+  padding: 5px;
   font-family: CuteFont;
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: bold;
   border: 4px solid var(--main-color);
   color: var(--main-color);
@@ -412,12 +413,12 @@ button:active {
 .menu-modal__button_recent {
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .action-icon {
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
 }
 
 .menu-modal__easy-levels {
@@ -722,6 +723,11 @@ button:active {
   cursor: default;
 }
 
+.reset-btn,
+.solution-btn {
+  width: 50%;
+}
+
 .footer {
   justify-content: space-between;
   align-items: flex-end;
@@ -793,14 +799,14 @@ button:active {
 
 @media screen and (orientation: landscape) {
   .game-board-content {
-    width: 50dvh;
+    width: 45dvh;
     height: max-content;
   }
 }
 
 @media screen and (orientation: portrait) {
   .game-board-content {
-    width: 50vw;
+    width: 45vw;
     height: max-content;
   }
 }
@@ -908,6 +914,265 @@ button:active {
 
   .github-link:hover::after {
     transform: translateX(0);
+  }
+}
+
+@media screen and (max-height: 715px) {
+  button {
+    font-size: 1.4rem;
+  }
+}
+
+@media screen and (max-height: 660px) {
+  .menu-modal {
+    height: 85%;
+  }
+
+  .menu-modal__recent-games-list {
+    gap: 0;
+  }
+
+  button {
+    padding: 2px;
+    border: 2px solid var(--main-color);
+    font-size: 1.2rem;
+  }
+
+  .menu-modal__button_save {
+    border: 2px solid #245bff;
+  }
+  
+  .menu-modal__button_load {
+    border: 2px solid #07a4ff;
+  }
+  
+  .menu-modal__button_recent {
+    border: 2px solid #ff8400;
+  }
+  
+  .victory-modal__button_close {
+    border: 2px solid #ff0000;
+  }
+
+  .menu-btn {
+    border: 2px solid #32c800ca;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .menu-modal__recent-games-title {
+    font-size: 2.4rem;
+  }
+
+  .menu-modal__recent-games-list {
+    font-size: 1.4rem;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .menu-modal {
+    padding: 20px;
+  }
+
+  .menu-modal__icon_back-button {
+    top: 10px;
+    left: 10px;
+  }
+
+  .menu-modal__icon_close-button {
+    top: 10px;
+    right: 10px;
+  }
+
+  .menu-modal__levels-label {
+    font-size: 2rem;
+  }
+
+  .victory-modal__description {
+    font-size: 2rem;
+  }
+
+  .header__label_dark-theme,
+  .header__label_light-theme {
+    font-size: 1.3rem;
+  }
+
+  .header__theme-icon {
+    width: 15px;
+    height: 15px;
+  }
+
+  .header__title {
+    font-size: 3rem;
+  }
+
+  .header__audio-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  button {
+    font-size: 1.5rem;
+  }
+
+  .stopwatch {
+    font-size: 2.3;
+  }
+  
+  .action-icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .left-clue p,
+  .top-clue p {
+    font-size: 1.3rem;
+  }
+
+  .github-link__icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .github-link,
+  .footer__year {
+    font-size: 2rem;
+  }
+
+  .footer__link_rss {
+    width: 90px;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .header__theme-wrapper {
+    gap: 5px;
+  }
+
+  .header__label_dark-theme,
+  .header__label_light-theme {
+    font-size: 1rem;
+  }
+
+  .header__theme-icon {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+@media screen and (max-width: 625px) {
+  button {
+    font-size: 1.2rem;
+  }
+
+  .divide-right::after {
+    width: 1.5px;
+  }
+  
+  .divide-left::after {
+    width: 1.5px;
+  }
+  
+  .divide-top::before {
+    height: 1.5px;
+  }
+  
+  .divide-bottom::before {
+    height: 1.5px;
+  }
+
+  .game-board__play-area {
+    outline: 3px solid #000000;
+  }
+
+  .play-area-dark-theme {
+    outline: 3px solid #ffffff;
+  }
+
+  .game-board__top-clues {
+    border-bottom: 3px solid #000000;
+  }
+
+  .game-board__left-clues {
+    border-right: 3px solid #000000;
+  }
+
+  .game-board__top-clues_dark-theme {
+    border-bottom: 3px solid #ffffff;
+  }
+
+  .game-board__left-clues_dark-theme {
+    border-right: 3px solid #ffffff;
+  }
+}
+
+@media screen and (max-width: 565px) {
+  .menu-modal__levels-label,
+  #levels-select {
+    font-size: 1.5rem;
+  }
+
+  .header__theme-form {
+    padding: 2px;
+  }
+
+  .header__label_dark-theme,
+  .header__label_light-theme {
+    font-size: 1rem;
+  }
+
+  .header__theme-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .action-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .header__title {
+    font-size: 2.5rem;
+  }
+
+  button {
+    padding: 2px;
+    border: 2px solid var(--main-color);
+    font-size: 1rem;
+  }
+
+  .menu-modal__button_save {
+    border: 2px solid #245bff;
+  }
+  
+  .menu-modal__button_load {
+    border: 2px solid #07a4ff;
+  }
+  
+  .menu-modal__button_recent {
+    border: 2px solid #ff8400;
+  }
+  
+  .victory-modal__button_close {
+    border: 2px solid #ff0000;
+  }
+
+  .menu-btn {
+    border: 2px solid #32c800ca;
+  }
+
+  .github-link__icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .github-link,
+  .footer__year {
+    font-size: 1.5rem;
+  }
+
+  .footer__link_rss {
+    width: 70px;
   }
 }
 
