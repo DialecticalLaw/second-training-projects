@@ -32,7 +32,14 @@ body {
   width: 100%;
   min-height: 100vh;
   margin: 0 auto;
-  background-color: rgb(255, 255, 255);
+  background-image: url("assets/img/light.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.container-dark-theme {
+  background-image: url("assets/img/dark.jpg");
 }
 
 .menu-modal-wrapper {
@@ -56,33 +63,122 @@ body {
 
 .menu-modal {
   position: relative;
-  width: 50%;
-  height: max-content;
+  width: 40%;
+  height: 50%;
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   align-items: center;
-  gap: 30px;
   opacity: 0;
-  padding: 20px;
-  background-color: #dcdcff;
+  padding: 40px;
+  background-color: #00b63342;
   box-shadow: inset 0 0 10px 3px #000000;
   border-radius: 30px;
-  transform: scale(0) translateY(200%);
+  transform: scaleX(0) translateY(100%);
   transition: 0.4s;
 }
 
 .menu-modal-on {
   opacity: 1;
-  transform: scale(1) translateY(0);
+  transform: scaleX(1) translateY(0);
 }
 
 .menu-modal__icon_close-button {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 25px;
+  right: 25px;
   width: 35px;
   height: 35px;
   cursor: pointer;
+}
+
+.menu-modal__icon_back-button {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.menu-modal__icon_back-button:active {
+  opacity: 0.4;
+}
+
+.menu-modal__btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  width: 90%;
+}
+
+.menu-modal__levels-form {
+  display: flex;
+  gap: 15px;
+}
+
+.menu-modal__levels-label,
+.menu-modal__option,
+#levels-select {
+  font-family: CuteFont;
+  font-weight: bold;
+  font-size: 3rem;
+  color: #ff8400;
+}
+
+.menu-modal__levels-label {
+  border-bottom: 4px solid #ff8400;
+}
+
+.menu-modal__option,
+#levels-select {
+  background-color: #004474;
+  color: #ff8400;
+  font-size: 2rem;
+  border: 2px solid #ff8400;
+  box-shadow: 0 0 10px 0.5px #ff8400;
+}
+
+.menu-modal__easy-levels,
+.menu-modal__medium-levels,
+.menu-modal__hard-levels {
+  display: flex;
+  justify-content: center;
+  width: 25%;
+}
+
+.menu-modal__recent-games-title {
+  font-size: 3.2rem;
+  font-family: CuteFont;
+  font-weight: bold;
+  color: #ff8400;
+}
+
+.menu-modal__recent-game :nth-child(1) {
+  color: #00eeff;
+}
+
+.menu-modal__recent-game :nth-child(2) {
+  color: #00b7ff;
+}
+
+.menu-modal__recent-game :nth-child(3) {
+  color: #008cff;
+}
+
+.menu-modal__recent-games-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 0 0 0;
+  text-align: center;
+  list-style: none;
+  color: #ffffff;
+  border-top: 2px solid #ffffff;
+  font-size: 1.7rem;
+  font-family: CuteFont;
+  font-weight: bold;
 }
 
 .victory-modal-wrapper {
@@ -113,10 +209,10 @@ body {
   gap: 30px;
   opacity: 0;
   padding: 15px;
-  background-color: #dcdcff;
+  background-color: #25b70031;
   box-shadow: inset 0 0 10px 3px #000000;
   border-radius: 30px;
-  transform: scale(0.4);
+  transform: scale(0);
   transition: 0.4s;
 }
 
@@ -127,13 +223,14 @@ body {
 
 .victory-modal__description {
   font-family: CuteFont;
+  color: #ffffff;
   font-size: 2.5rem;
   font-weight: bold;
   text-align: center;
 }
 
 .victory-modal__description span {
-  color: #008000;
+  color: #ffff00;
 }
 
 .header,
@@ -154,9 +251,91 @@ body {
   filter: blur(6px);
 }
 
+.modal-dark-theme {
+  background-color: #006dbb34;
+}
+
 .header {
+  position: relative;
   justify-content: center;
+  align-items: center;
   padding-top: 20px;
+}
+
+.header__theme-form {
+  position: absolute;
+  left: 20px;
+  width: max-content;
+  height: max-content;
+  padding: 5px;
+  background-color: #b5b5b5aa;
+  box-shadow: 0 0 6px 2px #b5b5b5aa;
+  border-radius: 40px;
+}
+
+.header__theme-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.header__theme-highlighter {
+  z-index: 0;
+  position: absolute;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  border-radius: 40px;
+  background-color: #6a6a6aaa;
+  box-shadow: inset 0 0 6px 0.5px #ffff00;
+  transform: translateX(0);
+  transition: 0.4s;
+}
+
+.header__theme-highlighter_dark-theme {
+  background-color: #d6d6d6aa;
+  box-shadow: inset 0 0 6px 0.5px var(--main-color);
+}
+
+.header__label_dark-theme:has(.header__input_dark-theme:checked) ~ .header__theme-highlighter {
+  transform: translateX(100%);
+}
+
+.header__label_light-theme,
+.header__label_dark-theme {
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 50%;
+  padding: 3px;
+  font-family: CuteFont;
+  font-size: 1.7rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.header__label_dark-theme:has(.header__input_dark-theme:checked) {
+  color: var(--main-color);
+}
+
+.header__label_light-theme:has(.header__input_light-theme:checked) {
+  color: #ffff00;
+}
+
+.header__theme-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.header__input_light-theme,
+.header__input_dark-theme {
+  appearance: none;
 }
 
 .header__title {
@@ -167,6 +346,14 @@ body {
   animation-duration: 3s;
   animation-iteration-count: infinite;
   animation-timing-function: steps(1, end);
+}
+
+.header__audio-icon {
+  position: absolute;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
 }
 
 .main {
@@ -181,15 +368,16 @@ button {
   position: relative;
   display: flex;
   opacity: 1;
-  padding: 10px;
+  padding: 5px;
   font-family: CuteFont;
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: bold;
   border: 4px solid var(--main-color);
   color: var(--main-color);
   background-color: transparent;
   filter: var(--default-shadow);
   cursor: pointer;
+  user-select: none;
   transition: 0.4s;
 }
 
@@ -204,6 +392,10 @@ button:active {
 .menu-modal__button_save :not(.button-animation),
 .menu-modal__button_load :not(.button-animation),
 .menu-modal__button_recent :not(.button-animation),
+.menu-modal__easy-levels :not(.button-animation),
+.menu-modal__medium-levels :not(.button-animation),
+.menu-modal__hard-levels :not(.button-animation),
+.menu-modal__confirm-btn :not(.button-animation),
 .menu-btn :not(.button-animation),
 .reset-btn :not(.button-animation),
 .solution-btn :not(.button-animation) {
@@ -221,12 +413,45 @@ button:active {
 .menu-modal__button_recent {
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .action-icon {
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
+}
+
+.menu-modal__easy-levels {
+  border: 4px solid #32c800ca;
+  color: #32c800ca;
+}
+
+.menu-modal__medium-levels {
+  border: 4px solid #ffff00;
+  color: #ffff00;
+}
+
+.menu-modal__hard-levels {
+  border: 4px solid #ff0000;
+  color: #ff0000;
+}
+
+.menu-modal__selected-level {
+  pointer-events: none;
+  opacity: 0.3;
+  color: #000000;
+  animation: selected-level-animation 0.5s ease-out infinite alternate;
+}
+
+.menu-modal__selected-level .button-animation {
+  animation: selected-button-animation 0.5s ease-out infinite alternate;
+}
+
+.menu-modal__confirm-btn {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0;
 }
 
 .menu-btn {
@@ -285,6 +510,10 @@ button:active {
   transition: 1s;
 }
 
+.stopwatch-dark-theme {
+  color: #dedede;
+}
+
 .stopwatch-active {
   color: #009500;
   transform: scale(1);
@@ -296,8 +525,13 @@ button:active {
   left: 0;
   width: 100%;
   display: flex;
-  border-bottom: 4px solid #000000;
+  border-bottom: 4px solid #454545;
   background-color: #dcdcff;
+}
+
+.game-board__top-clues_dark-theme {
+  border-bottom: 4px solid #c0c0c0;
+  background-color: #292c71;
 }
 
 .game-board__left-clues {
@@ -309,8 +543,13 @@ button:active {
   justify-content: space-between;
   align-items: flex-end;
   height: 100%;
-  border-right: 4px solid #000000;
+  border-right: 4px solid #454545;
   background-color: #edffdc;
+}
+
+.game-board__left-clues_dark-theme {
+  border-right: 4px solid #c0c0c0;
+  background-color: #215251;
 }
 
 .left-clue p,
@@ -326,6 +565,22 @@ button:active {
   font-weight: bold;
   outline: 0.5px solid #000000;
   user-select: none;
+}
+
+.left-clue-dark-theme p,
+.top-clue-dark-theme p {
+  color: #ffffff;
+  outline: 0.5px solid #ffffff;
+}
+
+.left-clue .max-clue,
+.top-clue .max-clue {
+  color: #c800ff;
+}
+
+.left-clue-dark-theme .max-clue,
+.top-clue-dark-theme .max-clue {
+  color: #ebe300;
 }
 
 .top-clue {
@@ -348,7 +603,11 @@ button:active {
 .game-board__play-area {
   position: relative;
   display: grid;
-  outline: 4px solid #000000;
+  outline: 4px solid #454545;
+}
+
+.play-area-dark-theme {
+  outline: 4px solid #c0c0c0;
 }
 
 .game-board__play-area_inactive {
@@ -368,60 +627,86 @@ button:active {
   transition: 0.1s;
 }
 
+.cell-dark-theme {
+  outline: 0.5px solid #ffffff;
+}
+
 .cell-marked {
   background-color: #000000;
   outline: 0.5px solid #ffffff;
+}
+
+.cell-dark-theme.cell-marked {
+  background-color: #ffffff;
+  outline: 0.5px solid #000000;
 }
 
 .cross {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  background-color: #ff000010;
+  background-color: #ff00001c;
   background-image: url("assets/img/cross.svg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
-.divideRight::after {
+.cell-dark-theme .cross {
+  background-color: #ff000037;
+  background-image: url("assets/img/light-cross.svg");
+}
+
+.cross-dark-theme {
+  background-image: url("assets/img/light-cross.svg");
+}
+
+.divide-right::after {
   content: '';
   position: absolute;
   top: 0;
   right: 0;
   height: 100%;
-  width: 2.5px;
-  background-color: #000000;
+  width: 2px;
+  background-color: #454545;
 }
 
-.divideLeft::after {
+.divide-left::after {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
-  width: 2.5px;
-  background-color: #000000;
+  width: 2px;
+  background-color: #454545;
 }
 
-.divideTop::before {
+.divide-top::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 2.5px;
-  background-color: #000000;
+  height: 2px;
+  background-color: #454545;
 }
 
-.divideBottom::before {
+.divide-bottom::before {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 2.5px;
-  background-color: #000000;
+  height: 2px;
+  background-color: #454545;
+}
+
+.divide-dark-theme::after {
+  background-color: #c0c0c0;
+}
+
+.divide-dark-theme::before {
+  background-color: #c0c0c0;
 }
 
 .interaction-buttons-container {
@@ -436,6 +721,11 @@ button:active {
 .random-game-btn[disabled] {
   opacity: 0.5;
   cursor: default;
+}
+
+.reset-btn,
+.solution-btn {
+  width: 50%;
 }
 
 .footer {
@@ -485,27 +775,47 @@ button:active {
   height: 50px;
 }
 
+.text-dark-theme .github-link__icon #Icons1 #github {
+  fill: #ffffff !important;
+}
+
+.text-dark-theme {
+  color: #ffffff;
+}
+
+.text-dark-theme::after {
+  background-color: #ffffff;
+}
+
 .footer__link_rss {
   width: 120px;
   filter: var(--default-shadow);
   transition: 0.4s;
 }
 
+.rss-dark-theme {
+  filter: drop-shadow(0 0 5px #ffffff);
+}
+
 @media screen and (orientation: landscape) {
   .game-board-content {
-    width: 50dvh;
+    width: 45dvh;
     height: max-content;
   }
 }
 
 @media screen and (orientation: portrait) {
   .game-board-content {
-    width: 50vw;
+    width: 45vw;
     height: max-content;
   }
 }
 
 @media (hover: hover) {
+  .header__audio-icon:hover {
+    transform: scale(1.2);
+  }
+
   .button-animation-top {
     position: absolute;
     top: 0;
@@ -536,7 +846,8 @@ button:active {
   .victory-modal__button_random-game .button-animation,
   .menu-modal__button_choose-puzzle .button-animation,
   .reset-btn .button-animation,
-  .solution-btn .button-animation {
+  .solution-btn .button-animation,
+  .menu-modal__confirm-btn .button-animation {
     background-color: var(--main-color);
   }
 
@@ -554,8 +865,17 @@ button:active {
     color: inherit;
   }
 
-  .menu-btn .button-animation {
+  .menu-btn .button-animation,
+  .menu-modal__easy-levels .button-animation {
     background-color: #32c800ca;
+  }
+
+  .menu-modal__medium-levels .button-animation {
+    background-color: #ffff00;
+  }
+
+  .menu-modal__hard-levels .button-animation {
+    background-color: #ff0000;
   }
 
   .menu-modal__button_save .button-animation {
@@ -583,8 +903,283 @@ button:active {
     color: #ffffff;
   }
 
+
+  .menu-modal__icon_back-button:hover {
+    transform: rotate(-25deg);
+  }
+
+  .menu-modal__medium-levels:hover span {
+    color: #000000;
+  }
+
   .github-link:hover::after {
     transform: translateX(0);
+  }
+}
+
+@media screen and (max-width: 1130px) {
+  .menu-modal {
+    width: 50%;
+    height: 60%;
+  }
+}
+
+@media screen and (max-height: 715px) {
+  button {
+    font-size: 1.4rem;
+  }
+}
+
+@media screen and (max-height: 660px) {
+  .menu-modal {
+    height: 85%;
+  }
+
+  .menu-modal__recent-games-list {
+    gap: 0;
+  }
+
+  button {
+    padding: 2px;
+    border: 2px solid var(--main-color);
+    font-size: 1.2rem;
+  }
+
+  .menu-modal__button_save {
+    border: 2px solid #245bff;
+  }
+  
+  .menu-modal__button_load {
+    border: 2px solid #07a4ff;
+  }
+  
+  .menu-modal__button_recent {
+    border: 2px solid #ff8400;
+  }
+  
+  .victory-modal__button_close {
+    border: 2px solid #ff0000;
+  }
+
+  .menu-btn {
+    border: 2px solid #32c800ca;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .menu-modal__recent-games-title {
+    font-size: 2.4rem;
+  }
+
+  .menu-modal__recent-games-list {
+    font-size: 1.4rem;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .menu-modal {
+    padding: 20px;
+  }
+
+  .menu-modal__icon_back-button {
+    top: 10px;
+    left: 10px;
+  }
+
+  .menu-modal__icon_close-button {
+    top: 10px;
+    right: 10px;
+  }
+
+  .menu-modal__levels-label {
+    font-size: 2rem;
+  }
+
+  .victory-modal__description {
+    font-size: 2rem;
+  }
+
+  .header__label_dark-theme,
+  .header__label_light-theme {
+    font-size: 1.3rem;
+  }
+
+  .header__theme-icon {
+    width: 15px;
+    height: 15px;
+  }
+
+  .header__title {
+    font-size: 3rem;
+  }
+
+  .header__audio-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  button {
+    font-size: 1.5rem;
+  }
+
+  .stopwatch {
+    font-size: 2.3;
+  }
+  
+  .action-icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .left-clue p,
+  .top-clue p {
+    font-size: 1.3rem;
+  }
+
+  .github-link__icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .github-link,
+  .footer__year {
+    font-size: 2rem;
+  }
+
+  .footer__link_rss {
+    width: 90px;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .header__theme-wrapper {
+    gap: 5px;
+  }
+
+  .header__label_dark-theme,
+  .header__label_light-theme {
+    font-size: 1rem;
+  }
+
+  .header__theme-icon {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+@media screen and (max-width: 625px) {
+  button {
+    font-size: 1.2rem;
+  }
+
+  .divide-right::after {
+    width: 1.5px;
+  }
+  
+  .divide-left::after {
+    width: 1.5px;
+  }
+  
+  .divide-top::before {
+    height: 1.5px;
+  }
+  
+  .divide-bottom::before {
+    height: 1.5px;
+  }
+
+  .game-board__play-area {
+    outline: 3px solid #454545;
+  }
+
+  .play-area-dark-theme {
+    outline: 3px solid #c0c0c0;
+  }
+
+  .game-board__top-clues {
+    border-bottom: 3px solid #454545;
+  }
+
+  .game-board__left-clues {
+    border-right: 3px solid #454545;
+  }
+
+  .game-board__top-clues_dark-theme {
+    border-bottom: 3px solid #c0c0c0;
+  }
+
+  .game-board__left-clues_dark-theme {
+    border-right: 3px solid #c0c0c0;
+  }
+}
+
+@media screen and (max-width: 565px) {
+  .menu-modal__levels-label,
+  #levels-select {
+    font-size: 1.5rem;
+  }
+
+  .header__theme-form {
+    padding: 2px;
+  }
+
+  .header__label_dark-theme,
+  .header__label_light-theme {
+    font-size: 1rem;
+  }
+
+  .header__theme-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .action-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .header__title {
+    font-size: 2.5rem;
+  }
+
+  button {
+    padding: 2px;
+    border: 2px solid var(--main-color);
+    font-size: 1rem;
+  }
+
+  .menu-modal__button_save {
+    border: 2px solid #245bff;
+  }
+  
+  .menu-modal__button_load {
+    border: 2px solid #07a4ff;
+  }
+  
+  .menu-modal__button_recent {
+    border: 2px solid #ff8400;
+  }
+  
+  .victory-modal__button_close {
+    border: 2px solid #ff0000;
+  }
+
+  .menu-btn {
+    border: 2px solid #32c800ca;
+  }
+
+  .github-link__icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .github-link,
+  .footer__year {
+    font-size: 1.5rem;
+  }
+
+  .footer__link_rss {
+    width: 70px;
   }
 }
 
@@ -623,5 +1218,16 @@ button:active {
     color: #800080;
     filter: drop-shadow(0 0 2px #800080);
     box-shadow: none;
+  }
+}
+
+@keyframes selected-button-animation {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
   }
 }
