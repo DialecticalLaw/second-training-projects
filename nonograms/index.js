@@ -927,6 +927,7 @@ playArea.addEventListener('pointerleave', () => {
 playArea.addEventListener('contextmenu', (event) => {
   event.preventDefault();
   if (event.button === 2) return false;
+  if (!event.target.classList.contains('cell')) return false;
   let rightClickEvent = new PointerEvent('pointerdown', {bubbles: true, button: 2, target: event.target});
   event.target.style['box-shadow'] = '0 0 6px 1px #ff0000';
   setTimeout(() => {
@@ -1283,6 +1284,18 @@ function menuModalBack() {
 
 function saveGame() {
   const saveBtn = document.querySelector('.menu-modal__button_save');
+  if (playArea.classList.contains('game-board__play-area_inactive')) {
+    saveBtn.style.border = '4px solid #ff0000';
+    saveBtn.style.color = '#ff0000';
+    saveBtn.style.filter = 'drop-shadow(0 0 18px #ff0000)';
+    saveBtn.style['pointer-events'] = 'none';
+    saveBtn.textContent = 'No save needed';
+    setTimeout(() => {
+      saveBtn.removeAttribute('style');
+      saveBtn.textContent = 'Save game';
+    }, 2000);
+    return;
+  }
   saveBtn.style.filter = 'drop-shadow(0 0 12px #ffff00)';
   saveBtn.style.color = '#ffffff';
   saveBtn.style.outline = '1px solid #ffffff';
