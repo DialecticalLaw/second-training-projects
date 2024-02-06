@@ -66,7 +66,7 @@ function createMenuElems() {
   menuModalSaveBtn.insertAdjacentHTML('beforeend', '<div class="button-animation button-animation-bottom"></div>');
 
   const menuModalLoadBtn = document.createElement('button');
-  menuModalLoadBtn.insertAdjacentHTML('beforeend', '<span>Load game</span>');
+  menuModalLoadBtn.insertAdjacentHTML('beforeend', '<span>Continue last game</span>');
   menuModalLoadBtn.classList.add('menu-modal__button_load');
   menuModalLoadBtn.addEventListener('click', loadGame);
   menuModal.insertAdjacentElement('beforeend', menuModalLoadBtn);
