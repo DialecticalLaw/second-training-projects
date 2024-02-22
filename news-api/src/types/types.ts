@@ -18,6 +18,11 @@ export interface ResponseNews {
     readonly articles: Article[];
 }
 
+export interface ResponseSources {
+    status: string;
+    sources: Source[];
+}
+
 export interface Source {
     readonly id: string;
     readonly name: string;
