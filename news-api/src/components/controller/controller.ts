@@ -1,7 +1,8 @@
 import AppLoader from './appLoader';
+import { ResponseSources, CallbackSources } from '../../types/types';
 
 class AppController extends AppLoader {
-    getSources(callback) {
+    getSources(callback: CallbackSources<ResponseSources>): void {
         super.getResp(
             {
                 endpoint: 'sources',
@@ -10,13 +11,13 @@ class AppController extends AppLoader {
         );
     }
 
-    getNews(e, callback) {
-        let target = e.target;
-        const newsContainer = e.currentTarget;
+    getNews(e: PointerEvent, callback: CallbackSources<ResponseSources>): void {
+        let target = e.target as HTMLDivElement | HTMLSpanElement;
+        const newsContainer = e.currentTarget as HTMLDivElement;
 
         while (target !== newsContainer) {
             if (target.classList.contains('source__item')) {
-                const sourceId = target.getAttribute('data-source-id');
+                const sourceId = target.getAttribute('data-source-id') as string;
                 if (newsContainer.getAttribute('data-source') !== sourceId) {
                     newsContainer.setAttribute('data-source', sourceId);
                     super.getResp(
@@ -31,7 +32,7 @@ class AppController extends AppLoader {
                 }
                 return;
             }
-            target = target.parentNode;
+            target = target.parentElement as HTMLDivElement;
         }
     }
 }
