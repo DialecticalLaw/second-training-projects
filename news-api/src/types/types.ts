@@ -1,7 +1,7 @@
 export interface Article {
     readonly source: {
-        id: string;
-        name: string;
+        readonly id: string;
+        readonly name: string;
     };
     readonly author: string;
     readonly title: string;
@@ -19,8 +19,8 @@ export interface ResponseNews {
 }
 
 export interface ResponseSources {
-    status: string;
-    sources: Source[];
+    readonly status: string;
+    readonly sources: Source[];
 }
 
 export interface Source {
@@ -34,8 +34,8 @@ export interface Source {
 }
 
 export type UrlOptions = {
-    [sourceId: string]: string | undefined;
-    apiKey: string;
+    readonly [sourceId: string]: string | undefined;
+    readonly apiKey: string;
 };
 
-export type CallbackSources<Data> = (data: Data) => void;
+export type CallbackResponse<Type1, Type2> = (data: Type1 | Type2) => void;

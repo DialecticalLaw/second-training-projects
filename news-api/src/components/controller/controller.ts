@@ -1,8 +1,8 @@
 import AppLoader from './appLoader';
-import { ResponseSources, CallbackSources } from '../../types/types';
+import { ResponseSources, CallbackResponse, ResponseNews } from '../../types/types';
 
 class AppController extends AppLoader {
-    getSources(callback: CallbackSources<ResponseSources>): void {
+    getSources(callback: CallbackResponse<ResponseSources, ResponseNews>): void {
         super.getResp(
             {
                 endpoint: 'sources',
@@ -11,7 +11,7 @@ class AppController extends AppLoader {
         );
     }
 
-    getNews(e: PointerEvent, callback: CallbackSources<ResponseSources>): void {
+    getNews(e: MouseEvent, callback: CallbackResponse<ResponseSources, ResponseNews>): void {
         let target = e.target as HTMLDivElement | HTMLSpanElement;
         const newsContainer = e.currentTarget as HTMLDivElement;
 

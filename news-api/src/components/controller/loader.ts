@@ -1,4 +1,4 @@
-import { ResponseSources, UrlOptions, CallbackSources } from '../../types/types';
+import { ResponseSources, UrlOptions, CallbackResponse, ResponseNews } from '../../types/types';
 
 class Loader {
     baseLink: string;
@@ -10,7 +10,7 @@ class Loader {
 
     getResp(
         { endpoint, options = {} }: { endpoint: string; options?: { sourceId?: string; sources?: string } },
-        callback: CallbackSources<ResponseSources> = (): void => {
+        callback: CallbackResponse<ResponseSources, ResponseNews> = (): void => {
             console.error('No callback for GET response');
         }
     ): void {
@@ -41,13 +41,16 @@ class Loader {
     load(
         method: string,
         endpoint: string,
-        callback: CallbackSources<ResponseSources>,
+        callback: CallbackResponse<ResponseSources, ResponseNews>,
         options: { sourceId?: string } = {}
     ): void {
         fetch(this.makeUrl(options, endpoint), { method })
             .then(this.errorHandler)
-            .then((res: Response): ResponseSources => res.json() as Promise<string> & ResponseSources)
-            .then((data: ResponseSources): void => callback(data))
+            .then(
+                (res: Response): ResponseSources | ResponseNews =>
+                    res.json() as Promise<string> & (ResponseSources | ResponseNews)
+            )
+            .then((data: ResponseNews | ResponseSources): void => callback(data))
             .catch((err: Error): void => console.error(err));
     }
 }
