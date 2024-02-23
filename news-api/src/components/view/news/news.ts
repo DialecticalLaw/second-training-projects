@@ -7,7 +7,7 @@ class News {
             data.length >= 10 ? data.filter((_item: Article, idx: number): boolean => idx < 10) : data;
         const fragment: DocumentFragment = document.createDocumentFragment();
 
-        news.forEach((item: Article, idx: number) => {
+        news.forEach((item: Article, idx: number): void => {
             const newsItem: HTMLDivElement = document.createElement('div');
             newsItem.classList.add('news__item');
 

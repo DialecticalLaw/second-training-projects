@@ -2,10 +2,10 @@ import './sources.css';
 import { Source } from '../../../types/types';
 
 class Sources {
-    draw(data: Source[]) {
+    draw(data: Source[]): void {
         const fragment: DocumentFragment = document.createDocumentFragment();
 
-        data.forEach((item: Source) => {
+        data.forEach((item: Source): void => {
             const sourceItem: HTMLDivElement = document.createElement('div');
             sourceItem.classList.add('source__item');
 
