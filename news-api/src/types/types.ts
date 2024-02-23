@@ -32,3 +32,10 @@ export interface Source {
     readonly language: string;
     readonly country: string;
 }
+
+export type UrlOptions = {
+    [sourceId: string]: string | undefined;
+    apiKey: string;
+};
+
+export type CallbackSources<Data> = (data: Data) => void;
