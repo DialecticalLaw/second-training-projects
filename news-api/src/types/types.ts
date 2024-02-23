@@ -39,3 +39,8 @@ export type UrlOptions = {
 };
 
 export type CallbackResponse<Type1, Type2> = (data: Type1 | Type2) => void;
+
+export enum EndpointKind {
+    Everything = 'everything',
+    Sources = 'sources',
+}

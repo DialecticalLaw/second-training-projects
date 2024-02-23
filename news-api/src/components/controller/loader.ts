@@ -1,4 +1,4 @@
-import { ResponseSources, UrlOptions, CallbackResponse, ResponseNews } from '../../types/types';
+import { ResponseSources, UrlOptions, CallbackResponse, ResponseNews, EndpointKind } from '../../types/types';
 
 class Loader {
     baseLink: string;
@@ -9,7 +9,7 @@ class Loader {
     }
 
     getResp(
-        { endpoint, options = {} }: { endpoint: string; options?: { sourceId?: string; sources?: string } },
+        { endpoint, options = {} }: { endpoint: EndpointKind; options?: { sourceId?: string; sources?: string } },
         callback: CallbackResponse<ResponseSources, ResponseNews> = (): void => {
             console.error('No callback for GET response');
         }
@@ -40,7 +40,7 @@ class Loader {
 
     load(
         method: string,
-        endpoint: string,
+        endpoint: EndpointKind,
         callback: CallbackResponse<ResponseSources, ResponseNews>,
         options: { sourceId?: string } = {}
     ): void {
