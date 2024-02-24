@@ -138,3 +138,69 @@ footer {
 .footer__copyright:before {
     content: '©';
 }
+
+@media screen and (max-width: 945px) {
+    header h1 {
+        font-size: 3rem;
+    }
+
+    .gh-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .gh-name,
+    .year {
+        font-size: 1.1rem;
+    }
+
+    .rss-link {
+        width: 100px;
+    }
+}
+
+@media screen and (max-width: 620px) {
+    footer {
+        padding: 5px;
+    }
+
+    .gh-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .gh-name,
+    .year {
+        font-size: 0.9rem;
+    }
+
+    .rss-link {
+        width: 80px;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    header h1 {
+        font-size: 2.2rem;
+    }
+
+    footer {
+        flex-direction: column;
+        gap: 15px;
+        height: auto;
+    }
+
+    .gh-icon {
+        width: 35px;
+        height: 35px;
+    }
+
+    .gh-name,
+    .year {
+        font-size: 1rem;
+    }
+
+    .rss-link {
+        width: 90px;
+    }
+}
