@@ -3,6 +3,52 @@
     src: url(../../../fonts/Audiowide-Regular.ttf);
 }
 
+.search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.search__label {
+    font-size: 1.5rem;
+    color: #caff29;
+}
+
+.search__input {
+    width: 30%;
+    font-size: 1.5rem;
+    border: 2px solid #a9a9a9;
+    outline: none;
+    background-color: transparent;
+    color: #ffffff;
+    font-family: Audiowide;
+}
+
+.search__input:focus {
+    border: 2px solid #caff29;
+}
+
+.search__input::placeholder {
+    font-family: Audiowide;
+    color: #6f6f6f;
+}
+
+.search__input::-webkit-search-cancel-button {
+    appearance: none;
+    width: 30px;
+    height: 30px;
+    background-image: url('../../../img/close-button.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.search__icon,
+.reset__icon {
+    cursor: pointer;
+}
+
 .sources {
     display: flex;
     flex-wrap: nowrap;
@@ -51,6 +97,10 @@
     font-weight: bold;
     transition: 0.25s;
     cursor: pointer;
+}
+
+.source__item-disabled {
+    display: none;
 }
 
 .source__item:hover,

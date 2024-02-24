@@ -12,11 +12,16 @@ class App {
 
     public start(): void {
         const sourcesElem: HTMLDivElement | null = document.querySelector('.sources');
-        if (sourcesElem !== null) {
-            sourcesElem.addEventListener('click', (e: MouseEvent) =>
+        const searchIcon: HTMLImageElement | null = document.querySelector('.search__icon');
+        const resetIcon: HTMLImageElement | null = document.querySelector('.reset__icon');
+        if (sourcesElem && searchIcon && resetIcon) {
+            sourcesElem.addEventListener('click', (e: MouseEvent): void =>
                 this.controller.getNews(e, (data: ResponseNews | ResponseSources): void => this.view.drawNews(data))
             );
-            this.controller.getSources((data: ResponseSources | ResponseNews) => this.view.drawSources(data));
+            this.controller.getSources((data: ResponseSources | ResponseNews): void => this.view.drawSources(data));
+            document.addEventListener('keydown', this.view.searchSources.bind(this.view));
+            searchIcon.addEventListener('click', this.view.searchSources.bind(this.view));
+            resetIcon.addEventListener('click', this.view.searchSources.bind(this.view));
         }
     }
 }

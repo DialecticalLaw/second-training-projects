@@ -22,6 +22,19 @@ class Sources {
         const sourcesElem = document.querySelector('.sources') as HTMLDivElement;
         sourcesElem.append(fragment);
     }
+
+    public drawFoundSources(data: string[]): void {
+        const sourceItems: Element[] = [...document.querySelectorAll('.source__item')];
+        for (const source of sourceItems) {
+            const sourceChild = source.firstElementChild as HTMLSpanElement;
+            const sourceName = sourceChild.textContent as string;
+            if (data.includes(sourceName)) {
+                source.classList.remove('source__item-disabled');
+            } else {
+                source.classList.add('source__item-disabled');
+            }
+        }
+    }
 }
 
 export default Sources;

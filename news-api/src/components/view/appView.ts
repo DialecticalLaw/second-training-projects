@@ -24,6 +24,44 @@ export class AppView {
             this.sources.draw(values);
         }
     }
+
+    private isSourceMatch(source: string, template: string): boolean {
+        for (let i: number = 0; i < template.length; i++) {
+            if (source[i] !== template[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public searchSources(event: KeyboardEvent | MouseEvent): void {
+        if (event instanceof KeyboardEvent && event.key !== 'Enter') return;
+        event.preventDefault();
+
+        const searchInput: HTMLInputElement | null = document.querySelector('.search__input');
+        const sourceItems: Element[] = [...document.querySelectorAll('.source__item')];
+        const sourceItemsNames: Element[] = [...document.querySelectorAll('.source__item-name')];
+        const eventTarget = event.target as HTMLImageElement;
+
+        if (searchInput && sourceItemsNames.length && eventTarget) {
+            if (searchInput.value === '' || eventTarget.classList.contains('reset__icon')) {
+                for (const source of sourceItems) {
+                    source.classList.remove('source__item-disabled');
+                }
+                return;
+            }
+
+            const filteredSources: Element[] = sourceItemsNames.filter((item: Element): boolean => {
+                const itemText = item.textContent as string;
+                return this.isSourceMatch(itemText.toLowerCase().trim(), searchInput.value.toLowerCase().trim());
+            });
+
+            const values: string[] = filteredSources.map((item: Element): string => item.textContent || '');
+            this.sources.drawFoundSources(values);
+        } else {
+            return;
+        }
+    }
 }
 
 export default AppView;
