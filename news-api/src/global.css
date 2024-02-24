@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Audiowide;
+    src: url(fonts/Audiowide-Regular.ttf);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -14,7 +19,7 @@ body {
     padding: 0;
     color: #fff;
     background: #17181c;
-    font-family: sans-serif;
+    font-family: Audiowide;
 }
 
 .container {
@@ -25,6 +30,10 @@ body {
     width: 100%;
     min-height: 100dvh;
     margin: 0 auto;
+    background-image: url('img/background.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 header {
@@ -32,12 +41,15 @@ header {
 }
 
 header h1 {
-    font-size: 40px;
+    font-size: 4rem;
+    font-family: Audiowide;
     font-weight: 800;
+    color: #caff29;
 }
 
 main {
     width: 100%;
+    min-height: 120px;
 }
 
 footer {
@@ -93,6 +105,7 @@ footer {
 
 .rss-link {
     width: 120px;
+    filter: drop-shadow(0 0 4px rgb(255, 255, 255));
     transition: 0.2s;
 }
 
@@ -106,16 +119,16 @@ footer {
 
 .footer__copyright {
     font-size: 14px;
-    color: #333;
+    color: #646464;
     text-align: center;
 }
 
 .footer__copyright a {
-    color: #444;
+    color: #646464;
 }
 
 .footer__copyright a:hover {
-    color: #555;
+    color: #9b9b9b;
 }
 
 .footer__copyright:before {
