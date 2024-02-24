@@ -4,21 +4,21 @@ import { Article, ResponseNews, Source } from '../../types/types';
 import { ResponseSources } from '../../types/types';
 
 export class AppView {
-    news: News;
-    sources: Sources;
+    private news: News;
+    private sources: Sources;
     constructor() {
         this.news = new News();
         this.sources = new Sources();
     }
 
-    drawNews(data: ResponseNews | ResponseSources): void {
+    public drawNews(data: ResponseNews | ResponseSources): void {
         if ('totalResults' in data) {
             const values: Article[] = data?.articles ? data?.articles : [];
             this.news.draw(values);
         }
     }
 
-    drawSources(data: ResponseSources | ResponseNews): void {
+    public drawSources(data: ResponseSources | ResponseNews): void {
         if ('sources' in data) {
             const values: Source[] = data?.sources ? data?.sources : [];
             this.sources.draw(values);

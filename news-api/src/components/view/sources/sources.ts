@@ -2,7 +2,7 @@ import './sources.css';
 import { Source } from '../../../types/types';
 
 class Sources {
-    draw(data: Source[]): void {
+    public draw(data: Source[]): void {
         const fragment: DocumentFragment = document.createDocumentFragment();
 
         data.forEach((item: Source): void => {
