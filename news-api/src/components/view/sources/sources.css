@@ -118,6 +118,13 @@
     display: none;
 }
 
+.source__item-current {
+    border-color: #caff29;
+    color: #caff29;
+    box-shadow: 0 0.5em 0.5em -0.4em #caff29;
+    transform: translateY(-0.25em);
+}
+
 .source__item:hover,
 .source__item:focus {
     border-color: #caff29;

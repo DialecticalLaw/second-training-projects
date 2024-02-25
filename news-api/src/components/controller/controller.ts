@@ -14,9 +14,14 @@ class AppController extends AppLoader {
     public getNews(e: MouseEvent, callback: CallbackResponse<ResponseSources, ResponseNews>): void {
         let target = e.target as HTMLDivElement | HTMLSpanElement;
         const newsContainer = e.currentTarget as HTMLDivElement;
+        const newsItems: Element[] = [...document.querySelectorAll('.source__item')];
+        for (const item of newsItems) {
+            item.classList.remove('source__item-current');
+        }
 
         while (target !== newsContainer) {
             if (target.classList.contains('source__item')) {
+                target.classList.add('source__item-current');
                 const sourceId = target.getAttribute('data-source-id') as string;
                 if (newsContainer.getAttribute('data-source') !== sourceId) {
                     newsContainer.setAttribute('data-source', sourceId);
