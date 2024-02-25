@@ -56,7 +56,7 @@ export class AppView {
                 return this.isSourceMatch(itemText.toLowerCase().trim(), searchInput.value.toLowerCase().trim());
             });
 
-            const values: string[] = filteredSources.map((item: Element): string => item.textContent || '');
+            const values: Readonly<string[]> = filteredSources.map((item: Element): string => item.textContent || '');
             this.sources.drawFoundSources(values);
         } else {
             return;

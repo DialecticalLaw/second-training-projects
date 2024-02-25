@@ -44,3 +44,8 @@ export enum EndpointKind {
     Everything = 'everything',
     Sources = 'sources',
 }
+
+export type Options = {
+    sourceId: string;
+    sources: string;
+};

@@ -2,10 +2,10 @@ import './sources.css';
 import { Source } from '../../../types/types';
 
 class Sources {
-    public draw(data: Source[]): void {
+    public draw(data: Array<Pick<Source, 'id' | 'name'>>): void {
         const fragment: DocumentFragment = document.createDocumentFragment();
 
-        data.forEach((item: Source): void => {
+        data.forEach((item: Pick<Source, 'id' | 'name'>): void => {
             const sourceItem: HTMLDivElement = document.createElement('div');
             sourceItem.classList.add('source__item');
 
@@ -23,7 +23,7 @@ class Sources {
         sourcesElem.append(fragment);
     }
 
-    public drawFoundSources(data: string[]): void {
+    public drawFoundSources(data: Readonly<string[]>): void {
         const sourceItems: Element[] = [...document.querySelectorAll('.source__item')];
         for (const source of sourceItems) {
             const sourceChild = source.firstElementChild as HTMLSpanElement;

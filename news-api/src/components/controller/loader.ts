@@ -1,4 +1,4 @@
-import { ResponseSources, UrlOptions, CallbackResponse, ResponseNews, EndpointKind } from '../../types/types';
+import { ResponseSources, UrlOptions, CallbackResponse, ResponseNews, EndpointKind, Options } from '../../types/types';
 
 class Loader {
     private baseLink: string;
@@ -9,7 +9,7 @@ class Loader {
     }
 
     protected getResp(
-        { endpoint, options = {} }: { endpoint: EndpointKind; options?: { sourceId?: string; sources?: string } },
+        { endpoint, options = {} }: { endpoint: EndpointKind; options?: Partial<Options> },
         callback: CallbackResponse<ResponseSources, ResponseNews> = (): void => {
             console.error('No callback for GET response');
         }
