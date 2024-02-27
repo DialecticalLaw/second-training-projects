@@ -35,11 +35,6 @@ export interface Source {
     readonly country: string;
 }
 
-// export type UrlOptions = {
-//     readonly [sourceId: string]: string | undefined;
-//     readonly apiKey: string;
-// };
-
 export type CallbackResponseArg = ResponseNews | ResponseSources;
 
 export type CallbackResponse = (data: CallbackResponseArg) => void;
