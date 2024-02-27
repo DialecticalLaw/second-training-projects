@@ -136,6 +136,12 @@
     left: 0%;
 }
 
+@media screen and (max-width: 740px) {
+    .news {
+        padding: 0 15px;
+    }
+}
+
 @media (min-width: 640px) {
     .news__item {
         flex-direction: row;
