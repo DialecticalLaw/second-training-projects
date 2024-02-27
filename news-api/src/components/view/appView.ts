@@ -51,8 +51,11 @@ export class AppView {
             }
 
             const filteredSources: Element[] = sourceItemsNames.filter((item: Element): boolean => {
-                const itemText = item.textContent as string;
-                return this.isSourceMatch(itemText.toLowerCase().trim(), searchInput.value.toLowerCase().trim());
+                if (item.textContent) {
+                    const itemText: string = item.textContent;
+                    return this.isSourceMatch(itemText.toLowerCase().trim(), searchInput.value.toLowerCase().trim());
+                }
+                return false;
             });
 
             const values: Readonly<string[]> = filteredSources.map((item: Element): string => item.textContent || '');
