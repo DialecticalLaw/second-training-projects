@@ -1,4 +1,4 @@
-import { ResponseSources, UrlOptions, CallbackResponse, ResponseNews, EndpointKind, Options } from '../../types/types';
+import { UrlOptions, CallbackResponse, CallbackResponseArg, EndpointKind, Options } from '../../types/types';
 
 class Loader {
     private baseLink: string;
@@ -10,7 +10,7 @@ class Loader {
 
     protected getResp(
         { endpoint, options = {} }: { endpoint: EndpointKind; options?: Partial<Options> },
-        callback: CallbackResponse<ResponseSources, ResponseNews> = (): void => {
+        callback: CallbackResponse = (): void => {
             console.error('No callback for GET response');
         }
     ): void {
@@ -41,16 +41,13 @@ class Loader {
     private load(
         method: string,
         endpoint: EndpointKind,
-        callback: CallbackResponse<ResponseSources, ResponseNews>,
+        callback: CallbackResponse,
         options: { sourceId?: string } = {}
     ): void {
         fetch(this.makeUrl(options, endpoint), { method })
             .then(this.errorHandler)
-            .then(
-                (res: Response): ResponseSources | ResponseNews =>
-                    res.json() as Promise<string> & (ResponseSources | ResponseNews)
-            )
-            .then((data: ResponseNews | ResponseSources): void => callback(data))
+            .then((res: Response): CallbackResponseArg => res.json() as Promise<string> & CallbackResponseArg)
+            .then((data: CallbackResponseArg): void => callback(data))
             .catch((err: Error): void => console.error(err));
     }
 }

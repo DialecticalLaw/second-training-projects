@@ -1,4 +1,4 @@
-import { ResponseNews, ResponseSources } from '../../types/types';
+import { CallbackResponseArg } from '../../types/types';
 import AppController from '../controller/controller';
 import { AppView } from '../view/appView';
 
@@ -16,9 +16,9 @@ class App {
         const resetIcon: HTMLImageElement | null = document.querySelector('.reset__icon');
         if (sourcesElem && searchIcon && resetIcon) {
             sourcesElem.addEventListener('click', (e: MouseEvent): void =>
-                this.controller.getNews(e, (data: ResponseNews | ResponseSources): void => this.view.drawNews(data))
+                this.controller.getNews(e, (data: CallbackResponseArg): void => this.view.drawNews(data))
             );
-            this.controller.getSources((data: ResponseSources | ResponseNews): void => this.view.drawSources(data));
+            this.controller.getSources((data: CallbackResponseArg): void => this.view.drawSources(data));
             document.addEventListener('keydown', this.view.searchSources.bind(this.view));
             searchIcon.addEventListener('click', this.view.searchSources.bind(this.view));
             resetIcon.addEventListener('click', this.view.searchSources.bind(this.view));

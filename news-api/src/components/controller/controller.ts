@@ -1,8 +1,8 @@
 import AppLoader from './appLoader';
-import { ResponseSources, CallbackResponse, ResponseNews, EndpointKind } from '../../types/types';
+import { CallbackResponse, EndpointKind } from '../../types/types';
 
 class AppController extends AppLoader {
-    public getSources(callback: CallbackResponse<ResponseSources, ResponseNews>): void {
+    public getSources(callback: CallbackResponse): void {
         super.getResp(
             {
                 endpoint: EndpointKind.Sources,
@@ -11,7 +11,7 @@ class AppController extends AppLoader {
         );
     }
 
-    public getNews(e: MouseEvent, callback: CallbackResponse<ResponseSources, ResponseNews>): void {
+    public getNews(e: MouseEvent, callback: CallbackResponse): void {
         let target = e.target as HTMLDivElement | HTMLSpanElement;
         const newsContainer = e.currentTarget as HTMLDivElement;
         const newsItems: Element[] = [...document.querySelectorAll('.source__item')];

@@ -1,8 +1,10 @@
+export interface ArticleSource {
+    readonly id: string;
+    readonly name: string;
+}
+
 export interface Article {
-    readonly source: {
-        readonly id: string;
-        readonly name: string;
-    };
+    readonly source: ArticleSource;
     readonly author: string;
     readonly title: string;
     readonly description: string;
@@ -38,7 +40,9 @@ export type UrlOptions = {
     readonly apiKey: string;
 };
 
-export type CallbackResponse<Type1, Type2> = (data: Type1 | Type2) => void;
+export type CallbackResponseArg = ResponseNews | ResponseSources;
+
+export type CallbackResponse = (data: CallbackResponseArg) => void;
 
 export enum EndpointKind {
     Everything = 'everything',
