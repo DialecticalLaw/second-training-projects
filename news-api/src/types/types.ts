@@ -49,7 +49,7 @@ export enum EndpointKind {
     Sources = 'sources',
 }
 
-export type Options = {
+export interface Options {
     sourceId: string;
     sources: string;
-};
+}
