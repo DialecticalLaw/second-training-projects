@@ -1,15 +1,22 @@
-import { UrlOptions, CallbackResponse, CallbackResponseArg, EndpointKind, Options } from '../../types/types';
+import {
+    CallbackResponse,
+    CallbackResponseArg,
+    EndpointKind,
+    OptionsSources,
+    OptionsApiKey,
+    Options,
+} from '../../types/types';
 
 class Loader {
     private baseLink: string;
-    private options: { apiKey: string };
-    constructor(baseLink: string, options: { apiKey: string }) {
+    private options: OptionsApiKey;
+    constructor(baseLink: string, options: OptionsApiKey) {
         this.baseLink = baseLink;
         this.options = options;
     }
 
     protected getResp(
-        { endpoint, options = {} }: { endpoint: EndpointKind; options?: Partial<Options> },
+        { endpoint, options = {} }: { endpoint: EndpointKind; options?: OptionsSources },
         callback: CallbackResponse = (): void => {
             console.error('No callback for GET response');
         }
@@ -27,8 +34,8 @@ class Loader {
         return res;
     }
 
-    private makeUrl(options: { sourceId?: string }, endpoint: string): string {
-        const urlOptions: UrlOptions = { ...this.options, ...options };
+    private makeUrl(options: OptionsSources, endpoint: string): string {
+        const urlOptions: Options = { ...this.options, ...options };
         let url: string = `${this.baseLink}${endpoint}?`;
 
         Object.keys(urlOptions).forEach((key: string): void => {
@@ -42,7 +49,7 @@ class Loader {
         method: string,
         endpoint: EndpointKind,
         callback: CallbackResponse,
-        options: { sourceId?: string } = {}
+        options: OptionsSources = {}
     ): void {
         fetch(this.makeUrl(options, endpoint), { method })
             .then(this.errorHandler)

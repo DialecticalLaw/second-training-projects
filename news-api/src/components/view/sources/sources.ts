@@ -1,11 +1,11 @@
 import './sources.css';
-import { Source } from '../../../types/types';
+import { SourceMainInfo } from '../../../types/types';
 
 class Sources {
-    public draw(data: Array<Pick<Source, 'id' | 'name'>>): void {
+    public draw(data: Array<SourceMainInfo>): void {
         const fragment: DocumentFragment = document.createDocumentFragment();
 
-        data.forEach((item: Pick<Source, 'id' | 'name'>): void => {
+        data.forEach((item: SourceMainInfo): void => {
             const sourceItem: HTMLDivElement = document.createElement('div');
             sourceItem.classList.add('source__item');
 

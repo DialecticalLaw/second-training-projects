@@ -35,10 +35,10 @@ export interface Source {
     readonly country: string;
 }
 
-export type UrlOptions = {
-    readonly [sourceId: string]: string | undefined;
-    readonly apiKey: string;
-};
+// export type UrlOptions = {
+//     readonly [sourceId: string]: string | undefined;
+//     readonly apiKey: string;
+// };
 
 export type CallbackResponseArg = ResponseNews | ResponseSources;
 
@@ -54,7 +54,18 @@ export enum CallbackResponseArgKeys {
     Sources = 'sources',
 }
 
-export interface Options {
-    sourceId: string;
-    sources: string;
+export type SourceMainInfo = Pick<Source, 'id' | 'name'>;
+
+export interface OptionsSources {
+    sources?: string;
 }
+
+export interface OptionsApiKey {
+    apiKey: string;
+}
+
+interface stringKeysTemplate {
+    [key: string]: string | undefined;
+}
+
+export type Options = OptionsApiKey & OptionsSources & stringKeysTemplate;
