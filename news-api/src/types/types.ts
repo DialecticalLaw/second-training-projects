@@ -49,6 +49,11 @@ export enum EndpointKind {
     Sources = 'sources',
 }
 
+export enum CallbackResponseArgKeys {
+    TotalResults = 'totalResults',
+    Sources = 'sources',
+}
+
 export interface Options {
     sourceId: string;
     sources: string;

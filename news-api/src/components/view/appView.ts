@@ -1,6 +1,6 @@
 import News from './news/news';
 import Sources from './sources/sources';
-import { Article, Source, CallbackResponseArg } from '../../types/types';
+import { Article, Source, CallbackResponseArg, CallbackResponseArgKeys } from '../../types/types';
 
 export class AppView {
     private news: News;
@@ -11,14 +11,14 @@ export class AppView {
     }
 
     public drawNews(data: CallbackResponseArg): void {
-        if ('totalResults' in data) {
+        if (CallbackResponseArgKeys.TotalResults in data) {
             const values: Article[] = data?.articles ? data?.articles : [];
             this.news.draw(values);
         }
     }
 
     public drawSources(data: CallbackResponseArg): void {
-        if ('sources' in data) {
+        if (CallbackResponseArgKeys.Sources in data) {
             const values: Source[] = data?.sources ? data?.sources : [];
             this.sources.draw(values);
         }
