@@ -33,8 +33,12 @@ export class AppView {
         return true;
     }
 
-    public searchSources(event: KeyboardEvent | MouseEvent): void {
+    public searchSources<T>(event: T): void {
         if (event instanceof KeyboardEvent && event.key !== 'Enter') return;
+        if (!(event instanceof Event)) {
+            console.error(`false triggering of searchSources method. Argument (must be an event): ${event}`);
+            return;
+        }
         event.preventDefault();
 
         const searchInput: HTMLInputElement | null = document.querySelector('.search__input');
