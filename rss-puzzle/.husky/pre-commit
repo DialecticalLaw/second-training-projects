@@ -1,0 +1,3 @@
+# rss-puzzle/.husky/pre-commit
+cd rss-puzzle
+npm run ci:format
