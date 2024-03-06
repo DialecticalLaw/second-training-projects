@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  ignorePatterns: ['node_modules/', 'dist/', 'webpack.config.js'],
+  ignorePatterns: ['node_modules/', 'dist/', 'webpack.*'],
   env: {
     browser: true,
     es2021: true
