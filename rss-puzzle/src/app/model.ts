@@ -1,9 +1,17 @@
+import LocalStorageService from './services/local_storage_service';
 import AppView from './view/app_view';
 
 export default class Model {
-  public static initiate(): void {
+  private appView: AppView;
+
+  constructor() {
+    this.appView = new AppView();
+  }
+
+  public initiate(): void {
     AppView.drawBasicMarkup();
-    AppView.displayComponent('loginPage');
+    if (!LocalStorageService.isLocalStorageInit()) LocalStorageService.initLocalStorage();
+    this.appView.displayComponent('loginPage');
   }
 
   public static validate(): void {
@@ -42,14 +50,24 @@ export default class Model {
     }
   }
 
-  public static tryLogin(event: MouseEvent): void {
+  public tryLogin(event: MouseEvent): void {
     event.preventDefault();
     let isLoginInputsValid: boolean = true;
     const hints = [...document.querySelectorAll('.login-form__hint')] as HTMLLIElement[];
     hints.forEach((hint: HTMLLIElement) => {
       if (!hint.classList.contains('valid')) isLoginInputsValid = false;
     });
-    if (isLoginInputsValid) AppView.displayComponent('startScreen');
+    if (isLoginInputsValid) {
+      const nameInput: HTMLInputElement | null = document.querySelector('.login-form__input_name');
+      const surnameInput: HTMLInputElement | null = document.querySelector(
+        '.login-form__input_surname'
+      );
+      if (nameInput && surnameInput) {
+        LocalStorageService.saveData('name', nameInput.value);
+        LocalStorageService.saveData('surname', surnameInput.value);
+        this.appView.displayComponent('startScreen');
+      }
+    }
   }
 
   private static isLoginValidLength(name: HTMLInputElement, surname: HTMLInputElement): boolean {

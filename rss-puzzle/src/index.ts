@@ -1,4 +1,5 @@
 import './global.css';
 import Controller from './app/controller';
 
-Controller.start();
+const app = new Controller();
+app.start();

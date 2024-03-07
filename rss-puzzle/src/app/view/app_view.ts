@@ -3,10 +3,16 @@ import createElem from '../utils/create_elem';
 import appendElem from '../utils/appendElem';
 
 export default class AppView {
-  public static displayComponent(component: string): void {
+  loginPageView: LoginPageView;
+
+  constructor() {
+    this.loginPageView = new LoginPageView();
+  }
+
+  public displayComponent(component: string): void {
     switch (component) {
       case 'loginPage':
-        LoginPageView.draw();
+        this.loginPageView.draw();
         break;
       case 'startScreen':
         break;

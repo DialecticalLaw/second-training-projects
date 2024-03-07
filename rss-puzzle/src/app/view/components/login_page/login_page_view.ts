@@ -1,19 +1,55 @@
 import './login_page_style.css';
 import appendElem from '../../../utils/appendElem';
 import createElem from '../../../utils/create_elem';
+import { LoginWrappers } from '../../../../interfaces';
 export default class LoginPageView {
-  public static draw(): void {
+  loginForm: HTMLFormElement;
+
+  hintsWrapper: HTMLUListElement;
+
+  nameWrapper: HTMLDivElement;
+
+  surnameWrapper: HTMLDivElement;
+
+  constructor() {
+    const [loginForm, hintsWrapper, nameWrapper, surnameWrapper]: LoginWrappers =
+      LoginPageView.createLoginWrappers();
+    this.loginForm = loginForm;
+    this.hintsWrapper = hintsWrapper;
+    this.nameWrapper = nameWrapper;
+    this.surnameWrapper = surnameWrapper;
+  }
+
+  public draw(): void {
     this.drawWrappers();
     this.drawFormElems();
   }
 
-  private static drawWrappers(): void {
+  private drawWrappers(): void {
     const main: HTMLElement | null = document.querySelector('.main');
+    if (main) appendElem(main, [this.loginForm]);
+    appendElem(this.loginForm, [this.hintsWrapper, this.nameWrapper, this.surnameWrapper]);
+  }
+
+  private drawFormElems(): void {
+    const hintElems: HTMLLIElement[] = LoginPageView.createLoginHints();
+    const [nameInput, surnameInput]: HTMLInputElement[] = LoginPageView.createLoginInputs();
+    const [nameLabel, surnameLabel]: HTMLLabelElement[] = LoginPageView.createLoginLabels();
+    const formBtn: HTMLButtonElement = createElem<HTMLButtonElement>('button', {
+      class: 'login-form__button'
+    });
+    formBtn.textContent = 'Login';
+    appendElem(this.hintsWrapper, hintElems);
+    appendElem(this.nameWrapper, [nameInput, nameLabel]);
+    appendElem(this.surnameWrapper, [surnameInput, surnameLabel]);
+    appendElem(this.loginForm, [formBtn]);
+  }
+
+  private static createLoginWrappers(): LoginWrappers {
     const loginForm: HTMLFormElement = createElem<HTMLFormElement>('form', {
       class: 'login-form',
       autocomplete: 'off'
     });
-    if (main) appendElem(main, [loginForm]);
     const hintsWrapper: HTMLUListElement = createElem<HTMLUListElement>('ul', {
       class: 'login-form__hints'
     });
@@ -23,26 +59,7 @@ export default class LoginPageView {
     const surnameWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
       class: 'login-form__surname-wrapper'
     });
-    appendElem(loginForm, [hintsWrapper, nameWrapper, surnameWrapper]);
-  }
-
-  private static drawFormElems(): void {
-    const hintElems: HTMLLIElement[] = this.createLoginHints();
-    const [nameInput, surnameInput]: HTMLInputElement[] = this.createLoginInputs();
-    const [nameLabel, surnameLabel]: HTMLLabelElement[] = this.createLoginLabels();
-    const formBtn: HTMLButtonElement = createElem<HTMLButtonElement>('button', {
-      class: 'login-form__button'
-    });
-    formBtn.textContent = 'Login';
-
-    const loginForm = document.querySelector('.login-form') as HTMLFormElement;
-    const hintsWrapper = document.querySelector('.login-form__hints') as HTMLUListElement;
-    const nameWrapper = document.querySelector('.login-form__name-wrapper') as HTMLDivElement;
-    const surnameWrapper = document.querySelector('.login-form__surname-wrapper') as HTMLDivElement;
-    appendElem(hintsWrapper, hintElems);
-    appendElem(nameWrapper, [nameInput, nameLabel]);
-    appendElem(surnameWrapper, [surnameInput, surnameLabel]);
-    appendElem(loginForm, [formBtn]);
+    return [loginForm, hintsWrapper, nameWrapper, surnameWrapper];
   }
 
   private static createLoginHints(): HTMLLIElement[] {
