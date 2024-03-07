@@ -3,16 +3,30 @@ import createElem from '../utils/create_elem';
 import appendElem from '../utils/appendElem';
 
 export default class AppView {
-  loginPageView: LoginPageView;
-
-  constructor() {
-    this.loginPageView = new LoginPageView();
-  }
-
   public static displayComponent(component: string): void {
     switch (component) {
       case 'loginPage':
         LoginPageView.draw();
+        break;
+      case 'startScreen':
+        break;
+      default:
+        break;
+    }
+  }
+
+  public static switchComponentDisplay<T extends HTMLElement>(
+    elem: T,
+    changeType: string,
+    isValid?: boolean
+  ): void {
+    switch (changeType) {
+      case 'validity':
+        if (isValid) {
+          elem.classList.add('valid');
+        } else {
+          elem.classList.remove('valid');
+        }
         break;
       default:
         break;

@@ -4,9 +4,9 @@
   justify-content: center;
   align-items: center;
   gap: 25px;
-  width: 700px;
-  height: 400px;
-  padding: 10px;
+  width: max-content;
+  height: auto;
+  padding: 45px 10px;
   background-color: #ffffffc8;
   border-radius: 20px;
 }
@@ -41,13 +41,13 @@
 .login-form__label_name,
 .login-form__label_surname {
   font-family: Comfortaa;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: bold;
   text-shadow: 6px 6px 8px var(--shadow-color);
 }
 
 .login-form__button {
-  opacity: 1;
+  opacity: 0.5;
   padding: 10px 25px;
   border: none;
   border-radius: 10px;
@@ -55,17 +55,31 @@
   font-size: 1.5rem;
   font-weight: bold;
   background-color: #ffffff;
+  color: #000000;
   box-shadow: 3px 3px 6px 1px var(--shadow-color);
   transform: scale(1);
   transition: 0.3s;
   cursor: pointer;
 }
 
-.login-form__button:hover {
-  background-color: var(--addition-color);
-  color: #ffffff;
-}
-
 .login-form__button:active {
   transform: scale(0.9);
+}
+
+.login-form__hint {
+  font-family: Comfortaa;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #d10000;
+  text-shadow: 6px 6px 8px var(--shadow-color);
+}
+
+.login-form__hint.valid {
+  color: #008f00;
+}
+
+.login-form__button.valid {
+  color: #ffffff;
+  background-color: var(--addition-color);
+  opacity: 1;
 }

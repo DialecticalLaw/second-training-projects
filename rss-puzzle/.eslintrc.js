@@ -7,7 +7,7 @@ module.exports = {
     es2021: true
   },
   plugins: ['@typescript-eslint'],
-  extends: ['airbnb-base/legacy', 'plugin:@typescript-eslint/recommended'],
+  extends: ['airbnb-base/legacy', 'plugin:@typescript-eslint/recommended', 'prettier'],
   overrides: [
     {
       env: {
