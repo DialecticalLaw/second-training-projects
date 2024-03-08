@@ -3,6 +3,7 @@ import { StartPageWrappers } from '../../../../interfaces';
 import appendElem from '../../../utils/appendElem';
 import createElem from '../../../utils/create_elem';
 import { app } from '../../../../index';
+import LocalStorageService from '../../../services/local_storage_service';
 export default class StartPageView {
   private logoutWrapper: HTMLDivElement;
 
@@ -47,12 +48,18 @@ export default class StartPageView {
   }
 
   private drawStartContent(): void {
+    const greeting: HTMLParagraphElement = createElem<HTMLParagraphElement>('p', {
+      class: 'start-content__greeting'
+    });
+    const userName = LocalStorageService.getData('name');
+    const userSurname = LocalStorageService.getData('surname');
+    greeting.innerHTML = `Hello, <span>${userName} ${userSurname}</span>! Get ready to learn something new!`;
     const startDescription: HTMLParagraphElement = createElem<HTMLParagraphElement>('p', {
       class: 'start-content__description'
     });
     startDescription.textContent =
       'This is an interactive game that can help you improve your English skills. With this game, you can complete puzzles of words and sentences, which will help you expand your vocabulary and improve your grammar. By completing all the levels, you will become a true master of the English language.';
-    appendElem(this.startContentWrapper, [startDescription]);
+    appendElem(this.startContentWrapper, [greeting, startDescription]);
   }
 
   private static createStartPageWrappers(): StartPageWrappers {
