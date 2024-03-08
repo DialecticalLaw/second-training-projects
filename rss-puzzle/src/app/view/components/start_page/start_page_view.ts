@@ -20,8 +20,8 @@ export default class StartPageView {
     this.drawWrappers();
     StartPageView.drawTitle();
     this.drawLogout();
-    app.handleActionRequest('login');
     this.drawStartContent();
+    app.handleActionRequest('loginEnd');
   }
 
   private drawWrappers(): void {
@@ -59,7 +59,9 @@ export default class StartPageView {
     });
     startDescription.textContent =
       'This is an interactive game that can help you improve your English skills. With this game, you can complete puzzles of words and sentences, which will help you expand your vocabulary and improve your grammar. By completing all the levels, you will become a true master of the English language.';
-    appendElem(this.startContentWrapper, [greeting, startDescription]);
+    const startButton = createElem('button', { class: 'start-content__button' });
+    startButton.textContent = 'Start';
+    appendElem(this.startContentWrapper, [greeting, startDescription, startButton]);
   }
 
   private static createStartPageWrappers(): StartPageWrappers {

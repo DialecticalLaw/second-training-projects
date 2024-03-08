@@ -18,6 +18,7 @@ export default class Controller {
     const loginForm: HTMLFormElement | null = document.querySelector('.login-form');
     const loginButton: HTMLButtonElement | null = document.querySelector('.login-form__button');
     const logoutButton: HTMLButtonElement | null = document.querySelector('.logout');
+    const startButton: HTMLButtonElement | null = document.querySelector('.start-content__button');
     switch (action) {
       case 'loginStart':
         if (loginForm && loginButton) {
@@ -25,10 +26,13 @@ export default class Controller {
           loginButton.addEventListener('click', this.model.tryLogin.bind(this.model));
         }
         break;
-      case 'login':
+      case 'loginEnd':
         if (logoutButton && !this.isLogoutListener) {
           logoutButton.addEventListener('click', this.model.logout.bind(this.model));
           this.isLogoutListener = true;
+        }
+        if (startButton) {
+          startButton.addEventListener('click', this.model.startMainPage.bind(this.model));
         }
         break;
       default:

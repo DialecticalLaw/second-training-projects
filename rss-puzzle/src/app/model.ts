@@ -107,11 +107,18 @@ export default class Model {
     return true;
   }
 
+  public startMainPage(): void {
+    const startContent = document.querySelector('.start-content') as HTMLDivElement;
+    AppView.removeComponent([startContent]);
+    this.appView.displayComponent('mainPage');
+  }
+
   public logout(): void {
     const title = document.querySelector('.title') as HTMLHeadingElement;
     const logoutButton = document.querySelector('.logout') as HTMLDivElement;
-    const startContentWrapper = document.querySelector('.start-content') as HTMLDivElement;
-    AppView.removeComponent([title, logoutButton, startContentWrapper]);
+    const startContentWrapper: HTMLDivElement | null = document.querySelector('.start-content');
+    if (startContentWrapper) AppView.removeComponent([startContentWrapper]);
+    AppView.removeComponent([title, logoutButton]);
     LocalStorageService.clearUserData();
     this.appView.displayComponent('loginPage');
   }

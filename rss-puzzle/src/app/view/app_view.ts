@@ -21,6 +21,8 @@ export default class AppView {
       case 'startPage':
         this.startPageView.draw();
         break;
+      case 'mainPage':
+        break;
       default:
         break;
     }
