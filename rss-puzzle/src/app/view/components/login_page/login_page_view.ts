@@ -2,6 +2,7 @@ import './login_page_style.css';
 import appendElem from '../../../utils/appendElem';
 import createElem from '../../../utils/create_elem';
 import { LoginWrappers } from '../../../../interfaces';
+import { app } from '../../../../index';
 export default class LoginPageView {
   loginForm: HTMLFormElement;
 
@@ -23,6 +24,7 @@ export default class LoginPageView {
   public draw(): void {
     this.drawWrappers();
     this.drawFormElems();
+    app.handleActionRequest('loginStart');
   }
 
   private drawWrappers(): void {

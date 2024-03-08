@@ -108,8 +108,10 @@ export default class Model {
   }
 
   public logout(): void {
-    const logoutButton = document.querySelector('.logout') as HTMLButtonElement;
-    AppView.removeComponent([logoutButton]);
+    const title = document.querySelector('.title') as HTMLHeadingElement;
+    const logoutButton = document.querySelector('.logout') as HTMLDivElement;
+    const startContentWrapper = document.querySelector('.start-content') as HTMLDivElement;
+    AppView.removeComponent([title, logoutButton, startContentWrapper]);
     LocalStorageService.clearUserData();
     this.appView.displayComponent('loginPage');
   }

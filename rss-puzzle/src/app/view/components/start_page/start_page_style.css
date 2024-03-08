@@ -1,14 +1,29 @@
+.title {
+  font-family: Comfortaa;
+  font-size: 3.2rem;
+  font-weight: bold;
+  letter-spacing: 4px;
+  color: var(--addition-color);
+  background-color: #ffffffb4;
+  padding: 15px;
+  border-radius: 15px;
+  text-shadow: 3px 3px 4px var(--shadow-color);
+  box-shadow: 0 0 16px 8px #ffffffe3;
+}
+
 .logout {
   position: absolute;
-  top: 0;
-  right: 0;
+  right: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 15px;
+  opacity: 1;
   font-family: Comfortaa;
   font-size: 1.5rem;
   font-weight: bold;
+  color: var(--red-color);
+  transform: scale(1);
   cursor: pointer;
   transition: 0.3s;
 }
@@ -18,9 +33,27 @@
 }
 
 .logout:hover {
-  color: var(--red-color);
+  transform: scale(1.1);
 }
 
 .logout:hover .logout__icon {
-  transform: scale(0.8) translate(-10px);
+  transform: translate(-10px);
+}
+
+.logout:active {
+  opacity: 0.4;
+}
+
+.start-content {
+  background-color: #ffffffb4;
+  box-shadow: 0 0 16px 8px #ffffffe3;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.start-content__description {
+  font-family: Comfortaa;
+  font-size: 1.6rem;
+  text-shadow: 3px 3px 4px var(--shadow-color);
+  text-align: center;
 }

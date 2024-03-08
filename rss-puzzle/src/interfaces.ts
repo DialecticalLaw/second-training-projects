@@ -10,4 +10,4 @@ export interface LocalStorageData {
   isLogin: boolean;
 }
 
-export type StartPageWrappers = [HTMLDivElement];
+export type StartPageWrappers = [HTMLDivElement, HTMLDivElement];
