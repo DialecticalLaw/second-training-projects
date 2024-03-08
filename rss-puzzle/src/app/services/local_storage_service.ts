@@ -1,7 +1,20 @@
 import { LocalStorageData } from '../../interfaces';
 
 export default class LocalStorageService {
-  public static saveData<T extends keyof LocalStorageData>(key: T, data: string): void {
+  public static saveStringData<T extends keyof Omit<LocalStorageData, 'isLogin'>>(
+    key: T,
+    data: string
+  ): void {
+    const JsonLocalStorage = localStorage.getItem('dialecticallaw-rss-puzzle') as string;
+    const parsedLocalStorage: LocalStorageData = JSON.parse(JsonLocalStorage);
+    parsedLocalStorage[key] = data;
+    localStorage.setItem('dialecticallaw-rss-puzzle', JSON.stringify(parsedLocalStorage));
+  }
+
+  public static saveBooleanData<T extends keyof Omit<LocalStorageData, 'name' | 'surname'>>(
+    key: T,
+    data: boolean
+  ): void {
     const JsonLocalStorage = localStorage.getItem('dialecticallaw-rss-puzzle') as string;
     const parsedLocalStorage: LocalStorageData = JSON.parse(JsonLocalStorage);
     parsedLocalStorage[key] = data;
@@ -15,11 +28,14 @@ export default class LocalStorageService {
   }
 
   public static isLocalStorageInit(): boolean {
-    return localStorage.getItem('dialecticallaw-rss-puzzle') !== null;
+    const JsonLocalStorage: string | null = localStorage.getItem('dialecticallaw-rss-puzzle');
+    if (!JsonLocalStorage) return false;
+    const parsedLocalStorage: LocalStorageData = JSON.parse(JsonLocalStorage);
+    return parsedLocalStorage.isLogin;
   }
 
   public static initLocalStorage(): void {
-    localStorage.setItem('dialecticallaw-rss-puzzle', '{}');
+    localStorage.setItem('dialecticallaw-rss-puzzle', JSON.stringify({ isLogin: false }));
   }
 
   public static clearUserData(): void {

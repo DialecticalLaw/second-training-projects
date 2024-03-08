@@ -6,6 +6,7 @@
 :root {
   --addition-color: #187035;
   --shadow-color: #676767;
+  --red-color: #d10000;
 }
 
 * {
@@ -43,6 +44,13 @@ body {
   display: flex;
   width: 100%;
   max-width: 1440px;
+  padding: 15px;
+}
+
+.header {
+  position: relative;
+  justify-content: center;
+  align-items: center;
 }
 
 .main {

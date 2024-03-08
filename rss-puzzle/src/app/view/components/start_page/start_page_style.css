@@ -1,0 +1,26 @@
+.logout {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  font-family: Comfortaa;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.logout__icon {
+  transition: 0.3s;
+}
+
+.logout:hover {
+  color: var(--red-color);
+}
+
+.logout:hover .logout__icon {
+  transform: scale(0.8) translate(-10px);
+}

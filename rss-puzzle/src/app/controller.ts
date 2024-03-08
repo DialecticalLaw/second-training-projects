@@ -14,4 +14,17 @@ export default class Controller {
     if (loginForm) loginForm.addEventListener('input', Model.validate);
     if (loginButton) loginButton.addEventListener('click', this.model.tryLogin.bind(this.model));
   }
+
+  public handleActionRequest(action: string): void {
+    const logoutButton: HTMLButtonElement | null = document.querySelector('.logout');
+    switch (action) {
+      case 'login':
+        if (logoutButton)
+          logoutButton.addEventListener('click', this.model.logout.bind(this.model));
+        break;
+
+      default:
+        break;
+    }
+  }
 }

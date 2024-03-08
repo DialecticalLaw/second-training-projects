@@ -10,8 +10,12 @@ export default class Model {
 
   public initiate(): void {
     AppView.drawBasicMarkup();
-    if (!LocalStorageService.isLocalStorageInit()) LocalStorageService.initLocalStorage();
-    this.appView.displayComponent('loginPage');
+    if (!LocalStorageService.isLocalStorageInit()) {
+      LocalStorageService.initLocalStorage();
+      this.appView.displayComponent('loginPage');
+    } else {
+      this.appView.displayComponent('startPage');
+    }
   }
 
   public static validate(): void {
@@ -63,9 +67,17 @@ export default class Model {
         '.login-form__input_surname'
       );
       if (nameInput && surnameInput) {
-        LocalStorageService.saveData('name', nameInput.value);
-        LocalStorageService.saveData('surname', surnameInput.value);
-        this.appView.displayComponent('startScreen');
+        LocalStorageService.saveStringData('name', nameInput.value);
+        LocalStorageService.saveStringData('surname', surnameInput.value);
+        LocalStorageService.saveBooleanData('isLogin', true);
+        const loginForm = document.querySelector('.login-form') as HTMLFormElement;
+        const hintsWrapper = document.querySelector('.login-form__hints') as HTMLUListElement;
+        const nameWrapper = document.querySelector('.login-form__name-wrapper') as HTMLDivElement;
+        const surnameWrapper = document.querySelector(
+          '.login-form__surname-wrapper'
+        ) as HTMLDivElement;
+        AppView.removeComponent([hintsWrapper, nameWrapper, surnameWrapper, loginForm]);
+        this.appView.displayComponent('startPage');
       }
     }
   }
@@ -93,5 +105,12 @@ export default class Model {
   private static isLoginNotEmpty(name: HTMLInputElement, surname: HTMLInputElement): boolean {
     if (name.value.length === 0 || surname.value.length === 0) return false;
     return true;
+  }
+
+  public logout(): void {
+    const logoutButton = document.querySelector('.logout') as HTMLButtonElement;
+    AppView.removeComponent([logoutButton]);
+    LocalStorageService.clearUserData();
+    this.appView.displayComponent('loginPage');
   }
 }

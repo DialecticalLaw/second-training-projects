@@ -7,4 +7,7 @@ export type LoginWrappers = [HTMLFormElement, HTMLUListElement, HTMLDivElement, 
 export interface LocalStorageData {
   name?: string;
   surname?: string;
+  isLogin: boolean;
 }
+
+export type StartPageWrappers = [HTMLDivElement];

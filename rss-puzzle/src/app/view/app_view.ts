@@ -1,12 +1,16 @@
 import LoginPageView from './components/login_page/login_page_view';
+import StartPageView from './components/start_page/start_page_view';
 import createElem from '../utils/create_elem';
 import appendElem from '../utils/appendElem';
 
 export default class AppView {
-  loginPageView: LoginPageView;
+  private loginPageView: LoginPageView;
+
+  private startPageView: StartPageView;
 
   constructor() {
     this.loginPageView = new LoginPageView();
+    this.startPageView = new StartPageView();
   }
 
   public displayComponent(component: string): void {
@@ -14,11 +18,19 @@ export default class AppView {
       case 'loginPage':
         this.loginPageView.draw();
         break;
-      case 'startScreen':
+      case 'startPage':
+        this.startPageView.draw();
         break;
       default:
         break;
     }
+  }
+
+  public static removeComponent<T extends HTMLElement>(components: T[]): void {
+    components.forEach((component: T) => {
+      component.replaceChildren(); // === remove all children
+      component.remove();
+    });
   }
 
   public static switchComponentDisplay<T extends HTMLElement>(

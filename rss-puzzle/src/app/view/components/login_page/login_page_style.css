@@ -70,7 +70,7 @@
   font-family: Comfortaa;
   font-size: 1rem;
   font-weight: bold;
-  color: #d10000;
+  color: var(--red-color);
   text-shadow: 6px 6px 8px var(--shadow-color);
 }
 
