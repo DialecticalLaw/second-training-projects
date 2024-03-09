@@ -2,7 +2,6 @@ import LocalStorageService from './services/local_storage_service';
 import AppView from './view/app_view';
 import wordCollectionLevel1 from './data/wordCollection/wordCollectionLevel1.json';
 import { Round } from '../interfaces';
-import shuffleArr from './utils/shuffleArr';
 
 export default class Model {
   private appView: AppView;
@@ -123,8 +122,8 @@ export default class Model {
   }
 
   private startRound(round: Round): void {
-    const shuffledSentence = shuffleArr(round.words[0].textExample.split(' '));
-    this.appView.displayComponent('sourceWords', shuffledSentence);
+    const sentence = round.words[0].textExample.split(' ');
+    this.appView.displayComponent('sourceWords', sentence);
   }
 
   public logout(): void {

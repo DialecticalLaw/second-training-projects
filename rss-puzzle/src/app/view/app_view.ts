@@ -17,7 +17,7 @@ export default class AppView {
     this.mainPageView = new MainPageView();
   }
 
-  public displayComponent(componentName: string, components?: string[]): void {
+  public displayComponent(componentName: string, componentsText?: string[]): void {
     switch (componentName) {
       case 'loginPage':
         this.loginPageView.draw();
@@ -29,8 +29,8 @@ export default class AppView {
         this.mainPageView.draw();
         break;
       case 'sourceWords':
-        if (components) {
-          this.mainPageView.drawSources(components);
+        if (componentsText) {
+          this.mainPageView.drawSources(componentsText);
         }
         break;
       default:
