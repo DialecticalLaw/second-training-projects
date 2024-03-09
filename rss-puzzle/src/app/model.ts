@@ -1,5 +1,8 @@
 import LocalStorageService from './services/local_storage_service';
 import AppView from './view/app_view';
+import wordCollectionLevel1 from './data/wordCollection/wordCollectionLevel1.json';
+import { Round } from '../interfaces';
+import shuffleArr from './utils/shuffleArr';
 
 export default class Model {
   private appView: AppView;
@@ -111,6 +114,17 @@ export default class Model {
     const startContent = document.querySelector('.start-content') as HTMLDivElement;
     AppView.removeComponent([startContent]);
     this.appView.displayComponent('mainPage');
+    this.startGame();
+  }
+
+  private startGame(): void {
+    const round = wordCollectionLevel1.rounds[0];
+    this.startRound(round);
+  }
+
+  private startRound(round: Round): void {
+    const shuffledSentence = shuffleArr(round.words[0].textExample.split(' '));
+    this.appView.displayComponent('sourceWords', shuffledSentence);
   }
 
   public logout(): void {
@@ -121,5 +135,12 @@ export default class Model {
     AppView.removeComponent([title, logoutButton]);
     LocalStorageService.clearUserData();
     this.appView.displayComponent('loginPage');
+  }
+
+  public static makeSourceReaction(event: MouseEvent): void {
+    const eventTarget = event.target as HTMLDivElement | null;
+    if (eventTarget) {
+      AppView.moveComponent(eventTarget, 'moveSource');
+    }
   }
 }

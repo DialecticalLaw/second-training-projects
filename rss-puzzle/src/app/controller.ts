@@ -19,6 +19,9 @@ export default class Controller {
     const loginButton: HTMLButtonElement | null = document.querySelector('.login-form__button');
     const logoutButton: HTMLButtonElement | null = document.querySelector('.logout');
     const startButton: HTMLButtonElement | null = document.querySelector('.start-content__button');
+    const allPlayareaSources = [...document.querySelectorAll('.playarea__source')] as
+      | HTMLDivElement[]
+      | null;
     switch (action) {
       case 'loginStart':
         if (loginForm && loginButton) {
@@ -33,6 +36,13 @@ export default class Controller {
         }
         if (startButton) {
           startButton.addEventListener('click', this.model.startMainPage.bind(this.model));
+        }
+        break;
+      case 'startGame':
+        if (allPlayareaSources) {
+          allPlayareaSources.forEach((source: HTMLDivElement) => {
+            source.addEventListener('click', Model.makeSourceReaction);
+          });
         }
         break;
       default:
