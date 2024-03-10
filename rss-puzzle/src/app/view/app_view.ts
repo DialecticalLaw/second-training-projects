@@ -79,7 +79,7 @@ export default class AppView {
     switch (action) {
       case 'moveSource':
         if (component instanceof HTMLDivElement) {
-          MainPageView.moveSource(component);
+          MainPageView.moveSourceOnClick(component);
         }
         break;
       default:

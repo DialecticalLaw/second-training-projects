@@ -65,7 +65,11 @@ export default class MainPageView {
         class: 'playarea__source playarea__source_active'
       });
       source.textContent = word;
-      appendElem(this.sourcesWrapper, [source]);
+      const sourcePlace: HTMLDivElement = createElem<HTMLDivElement>('div', {
+        class: 'playarea__source-place'
+      });
+      appendElem(this.sourcesWrapper, [sourcePlace]);
+      appendElem(sourcePlace, [source]);
     });
     const allSources = [
       ...document.querySelectorAll('.playarea__source_active')
@@ -74,29 +78,52 @@ export default class MainPageView {
       const sourceLink = source;
       sourceLink.style.width = `${source.getBoundingClientRect().width}px`;
     });
-    MainPageView.drawSourcesPlace(words.length);
+    const allSourcePlaces = [
+      ...document.querySelectorAll('.playarea__source-place')
+    ] as HTMLDivElement[];
+    allSourcePlaces.forEach((place: HTMLDivElement) => {
+      const placeLink = place;
+      placeLink.style.width = 'max-content';
+    });
+    MainPageView.drawSourcesPlaceInSentence(words.length);
     app.handleActionRequest('startGame');
   }
 
-  private static drawSourcesPlace(placeCount: number): void {
+  private static drawSourcesPlaceInSentence(placeCount: number): void {
     const currentSentenceElem = [
       ...document.querySelectorAll('.playarea__sentence')
     ][0] as HTMLDivElement;
     for (let i = 0; i < placeCount; i += 1) {
       const sourcePlace: HTMLDivElement = createElem<HTMLDivElement>('div', {
-        class: 'playarea__source-place playarea__source-place_active'
+        class: 'playarea__sentence-place playarea__sentence-place_active'
       });
       appendElem(currentSentenceElem, [sourcePlace]);
     }
   }
 
-  public static moveSource(source: HTMLDivElement): void {
-    const allPlaces = [
-      ...document.querySelectorAll('.playarea__source-place_active')
-    ] as HTMLDivElement[];
-    const vacantPlace = allPlaces.find(
-      (place: HTMLDivElement) => !place.children.length
-    ) as HTMLDivElement;
-    appendElem(vacantPlace, [source]);
+  public static moveSourceOnClick(source: HTMLDivElement): void {
+    const sourceParent: HTMLElement | null = source.parentElement;
+    if (sourceParent) {
+      sourceParent.removeAttribute('style');
+      if (sourceParent.classList.contains('playarea__source-place')) {
+        const allSentencePlaces = [
+          ...document.querySelectorAll('.playarea__sentence-place.playarea__sentence-place_active')
+        ] as HTMLDivElement[];
+        const vacantPlace = allSentencePlaces.find(
+          (place: HTMLDivElement) => !place.children.length
+        ) as HTMLDivElement;
+        vacantPlace.style.width = 'max-content';
+        appendElem(vacantPlace, [source]);
+      } else {
+        const allSourcePlaces = [
+          ...document.querySelectorAll('.playarea__source-place')
+        ] as HTMLDivElement[];
+        const vacantPlace = allSourcePlaces.find(
+          (place: HTMLDivElement) => !place.children.length
+        ) as HTMLDivElement;
+        vacantPlace.style.width = 'max-content';
+        appendElem(vacantPlace, [source]);
+      }
+    }
   }
 }

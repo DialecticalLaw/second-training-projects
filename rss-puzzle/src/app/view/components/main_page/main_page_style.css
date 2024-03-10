@@ -45,7 +45,8 @@
   transform: scale(1.1);
 }
 
-.playarea__source-place {
+.playarea__source-place,
+.playarea__sentence-place {
   width: 100%;
   height: 100%;
   background-color: #ffffffc8;
