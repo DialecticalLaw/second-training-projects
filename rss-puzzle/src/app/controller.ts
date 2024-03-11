@@ -3,11 +3,14 @@ import Model from './model';
 export default class Controller {
   private model: Model;
 
-  isLogoutListener: boolean;
+  private isLogoutListener: boolean;
+
+  private isStartGameListener: boolean;
 
   constructor() {
     this.model = new Model();
     this.isLogoutListener = false;
+    this.isStartGameListener = false;
   }
 
   public start(): void {
@@ -22,6 +25,9 @@ export default class Controller {
     const allPlayareaSources = [...document.querySelectorAll('.playarea__source')] as
       | HTMLDivElement[]
       | null;
+    const continueBtn: HTMLButtonElement | null = document.querySelector(
+      '.playarea__continue-button'
+    );
     switch (action) {
       case 'loginStart':
         if (loginForm && loginButton) {
@@ -39,10 +45,14 @@ export default class Controller {
         }
         break;
       case 'startGame':
-        if (allPlayareaSources) {
+        if (allPlayareaSources && continueBtn) {
           allPlayareaSources.forEach((source: HTMLDivElement) => {
-            source.addEventListener('click', Model.makeSourceReaction);
+            source.addEventListener('click', this.model.makeSourceReaction.bind(this.model));
           });
+          if (!this.isStartGameListener) {
+            continueBtn.addEventListener('click', this.model.stepForward.bind(this.model));
+            this.isStartGameListener = true;
+          }
         }
         break;
       default:

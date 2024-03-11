@@ -1,5 +1,4 @@
 import './main_page_style.css';
-import { MainPageWrappers } from '../../../../interfaces';
 import createElem from '../../../utils/create_elem';
 import appendElem from '../../../utils/appendElem';
 import { app } from '../../../..';
@@ -12,12 +11,15 @@ export default class MainPageView {
 
   private sourcesWrapper: HTMLDivElement;
 
+  private buttonsWrapper: HTMLDivElement;
+
   constructor() {
-    const [playareaWrapper, puzzleWrapper, sourcesWrapper]: MainPageWrappers =
+    const [playareaWrapper, puzzleWrapper, sourcesWrapper, buttonsWrapper]: HTMLDivElement[] =
       MainPageView.createMainPageWrappers();
     this.playareaWrapper = playareaWrapper;
     this.puzzleWrapper = puzzleWrapper;
     this.sourcesWrapper = sourcesWrapper;
+    this.buttonsWrapper = buttonsWrapper;
   }
 
   public draw() {
@@ -30,7 +32,11 @@ export default class MainPageView {
     if (main) {
       appendElem(main, [this.playareaWrapper]);
     }
-    appendElem(this.playareaWrapper, [this.puzzleWrapper, this.sourcesWrapper]);
+    appendElem(this.playareaWrapper, [
+      this.puzzleWrapper,
+      this.sourcesWrapper,
+      this.buttonsWrapper
+    ]);
   }
 
   private drawMainElems(): void {
@@ -43,9 +49,14 @@ export default class MainPageView {
       sentences.push(sentence);
     }
     appendElem(this.puzzleWrapper, sentences);
+    const continueBtn: HTMLDivElement = createElem<HTMLDivElement>('button', {
+      class: 'playarea__continue-button'
+    });
+    continueBtn.textContent = 'Continue';
+    appendElem(this.buttonsWrapper, [continueBtn]);
   }
 
-  private static createMainPageWrappers(): MainPageWrappers {
+  private static createMainPageWrappers(): HTMLDivElement[] {
     const playareaWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
       class: 'playarea'
     });
@@ -55,14 +66,18 @@ export default class MainPageView {
     const sourcesWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
       class: 'playarea__sources'
     });
-    return [playareaWrapper, puzzleWrapper, sourcesWrapper];
+    const buttonsWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
+      class: 'playarea__buttons-wrapper'
+    });
+    return [playareaWrapper, puzzleWrapper, sourcesWrapper, buttonsWrapper];
   }
 
   public drawSources(words: string[]): void {
     const shuffledSentence: string[] = shuffleArr(words);
     shuffledSentence.forEach((word: string) => {
       const source: HTMLDivElement = createElem<HTMLDivElement>('div', {
-        class: 'playarea__source playarea__source_active'
+        class: 'playarea__source playarea__source_active',
+        style: 'transition: 0s; opacity: 0'
       });
       source.textContent = word;
       const sourcePlace: HTMLDivElement = createElem<HTMLDivElement>('div', {
@@ -74,25 +89,33 @@ export default class MainPageView {
     const allSources = [
       ...document.querySelectorAll('.playarea__source_active')
     ] as HTMLDivElement[];
-    allSources.forEach((source: HTMLDivElement) => {
+    allSources.forEach((source: HTMLDivElement): void => {
       const sourceLink = source;
       sourceLink.style.width = `${source.getBoundingClientRect().width}px`;
     });
     const allSourcePlaces = [
       ...document.querySelectorAll('.playarea__source-place')
     ] as HTMLDivElement[];
-    allSourcePlaces.forEach((place: HTMLDivElement) => {
+    allSourcePlaces.forEach((place: HTMLDivElement): void => {
       const placeLink = place;
       placeLink.style.width = 'max-content';
+      const source = place.firstElementChild as HTMLDivElement | null;
+      if (source) {
+        source.style.transform = 'scale(0)';
+        source.style.removeProperty('opacity');
+        setTimeout(() => {
+          source.style.removeProperty('transition');
+          source.style.removeProperty('transform');
+        }, 1);
+      }
     });
-    MainPageView.drawSourcesPlaceInSentence(words.length);
     app.handleActionRequest('startGame');
   }
 
-  private static drawSourcesPlaceInSentence(placeCount: number): void {
-    const currentSentenceElem = [
-      ...document.querySelectorAll('.playarea__sentence')
-    ][0] as HTMLDivElement;
+  public static drawSourcesPlaceInSentence(placeCount: number, sentenceIndex: number): void {
+    const currentSentenceElem = [...document.querySelectorAll('.playarea__sentence')][
+      sentenceIndex
+    ] as HTMLDivElement;
     for (let i = 0; i < placeCount; i += 1) {
       const sourcePlace: HTMLDivElement = createElem<HTMLDivElement>('div', {
         class: 'playarea__sentence-place playarea__sentence-place_active'
@@ -107,7 +130,7 @@ export default class MainPageView {
       sourceParent.removeAttribute('style');
       if (sourceParent.classList.contains('playarea__source-place')) {
         const allSentencePlaces = [
-          ...document.querySelectorAll('.playarea__sentence-place.playarea__sentence-place_active')
+          ...document.querySelectorAll('.playarea__sentence-place_active')
         ] as HTMLDivElement[];
         const vacantPlace = allSentencePlaces.find(
           (place: HTMLDivElement) => !place.children.length

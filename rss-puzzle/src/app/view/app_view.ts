@@ -3,6 +3,7 @@ import StartPageView from './components/start_page/start_page_view';
 import createElem from '../utils/create_elem';
 import appendElem from '../utils/appendElem';
 import MainPageView from './components/main_page/main_page_view';
+import { DisplayOptions, SwitchOptions } from '../../interfaces';
 
 export default class AppView {
   private loginPageView: LoginPageView;
@@ -17,7 +18,7 @@ export default class AppView {
     this.mainPageView = new MainPageView();
   }
 
-  public displayComponent(componentName: string, componentsText?: string[]): void {
+  public displayComponent(componentName: string, options?: DisplayOptions): void {
     switch (componentName) {
       case 'loginPage':
         this.loginPageView.draw();
@@ -29,8 +30,16 @@ export default class AppView {
         this.mainPageView.draw();
         break;
       case 'sourceWords':
-        if (componentsText) {
-          this.mainPageView.drawSources(componentsText);
+        if (
+          options !== undefined &&
+          options.componentsText &&
+          options.sentenceIndex !== undefined
+        ) {
+          this.mainPageView.drawSources(options.componentsText);
+          MainPageView.drawSourcesPlaceInSentence(
+            options.componentsText.length,
+            options.sentenceIndex
+          );
         }
         break;
       default:
@@ -48,14 +57,19 @@ export default class AppView {
   public static switchComponentDisplay<T extends HTMLElement>(
     elem: T,
     changeType: string,
-    isValid?: boolean
+    options: SwitchOptions
   ): void {
     switch (changeType) {
       case 'validity':
-        if (isValid) {
+        if (options.isValid) {
           elem.classList.add('valid');
         } else {
           elem.classList.remove('valid');
+        }
+        break;
+      case 'disable':
+        if (options.class) {
+          elem.classList.remove(options?.class);
         }
         break;
       default:

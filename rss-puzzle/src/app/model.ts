@@ -1,10 +1,16 @@
 import LocalStorageService from './services/local_storage_service';
 import AppView from './view/app_view';
 import wordCollectionLevel1 from './data/wordCollection/wordCollectionLevel1.json';
-import { Round } from '../interfaces';
+import { Level, Round } from '../interfaces';
 
 export default class Model {
   private appView: AppView;
+
+  private currentLevel?: Level;
+
+  private roundIndex?: number;
+
+  private sentenceIndex?: number;
 
   constructor() {
     this.appView = new AppView();
@@ -25,34 +31,34 @@ export default class Model {
     const surnameInput = document.querySelector('.login-form__input_surname') as HTMLInputElement;
     const hints = [...document.querySelectorAll('.login-form__hint')] as HTMLLIElement[];
     if (Model.isLoginValidCharUsage(nameInput, surnameInput)) {
-      AppView.switchComponentDisplay(hints[0], 'validity', true);
+      AppView.switchComponentDisplay(hints[0], 'validity', { isValid: true });
     } else {
-      AppView.switchComponentDisplay(hints[0], 'validity', false);
+      AppView.switchComponentDisplay(hints[0], 'validity', { isValid: false });
     }
 
     if (Model.isLoginFirstCharCapitalized(nameInput, surnameInput)) {
-      AppView.switchComponentDisplay(hints[1], 'validity', true);
+      AppView.switchComponentDisplay(hints[1], 'validity', { isValid: true });
     } else {
-      AppView.switchComponentDisplay(hints[1], 'validity', false);
+      AppView.switchComponentDisplay(hints[1], 'validity', { isValid: false });
     }
 
     if (Model.isLoginValidLength(nameInput, surnameInput)) {
-      AppView.switchComponentDisplay(hints[2], 'validity', true);
+      AppView.switchComponentDisplay(hints[2], 'validity', { isValid: true });
     } else {
-      AppView.switchComponentDisplay(hints[2], 'validity', false);
+      AppView.switchComponentDisplay(hints[2], 'validity', { isValid: false });
     }
 
     if (Model.isLoginNotEmpty(nameInput, surnameInput)) {
-      AppView.switchComponentDisplay(hints[3], 'validity', true);
+      AppView.switchComponentDisplay(hints[3], 'validity', { isValid: true });
     } else {
-      AppView.switchComponentDisplay(hints[3], 'validity', false);
+      AppView.switchComponentDisplay(hints[3], 'validity', { isValid: false });
     }
 
     const loginButton = document.querySelector('.login-form__button') as HTMLButtonElement;
     if (hints.every((hint: HTMLLIElement) => hint.classList.contains('valid'))) {
-      AppView.switchComponentDisplay(loginButton, 'validity', true);
+      AppView.switchComponentDisplay(loginButton, 'validity', { isValid: true });
     } else {
-      AppView.switchComponentDisplay(loginButton, 'validity', false);
+      AppView.switchComponentDisplay(loginButton, 'validity', { isValid: false });
     }
   }
 
@@ -117,13 +123,27 @@ export default class Model {
   }
 
   private startGame(): void {
-    const round = wordCollectionLevel1.rounds[0];
-    this.startRound(round);
+    this.currentLevel = wordCollectionLevel1;
+    if (this.roundIndex === undefined) {
+      this.roundIndex = 0;
+    } else {
+      this.roundIndex += 1;
+    }
+    this.nextSentence();
   }
 
-  private startRound(round: Round): void {
-    const sentence = round.words[0].textExample.split(' ');
-    this.appView.displayComponent('sourceWords', sentence);
+  private nextSentence(): void {
+    if (this.sentenceIndex === undefined) {
+      this.sentenceIndex = 0;
+    }
+    if (this.currentLevel !== undefined && this.roundIndex !== undefined) {
+      const round: Round = this.currentLevel.rounds[this.roundIndex];
+      const sentence = round.words[this.sentenceIndex].textExample.split(' ');
+      this.appView.displayComponent('sourceWords', {
+        componentsText: sentence,
+        sentenceIndex: this.sentenceIndex
+      });
+    }
   }
 
   public logout(): void {
@@ -136,10 +156,87 @@ export default class Model {
     this.appView.displayComponent('loginPage');
   }
 
-  public static makeSourceReaction(event: MouseEvent): void {
+  public makeSourceReaction(event: MouseEvent): void {
     const eventTarget = event.target as HTMLDivElement | null;
-    if (eventTarget) {
+    const continueBtn: HTMLButtonElement | null = document.querySelector(
+      '.playarea__continue-button'
+    );
+    if (eventTarget && continueBtn) {
       AppView.moveComponent(eventTarget, 'moveSource');
+      if (this.isSentenceCorrect()) {
+        AppView.switchComponentDisplay(continueBtn, 'validity', { isValid: true });
+      } else {
+        AppView.switchComponentDisplay(continueBtn, 'validity', { isValid: false });
+      }
     }
+  }
+
+  private isSentenceCorrect(): boolean {
+    const sourcesInSentence = [
+      ...document.querySelectorAll('.playarea__sentence-place .playarea__source_active')
+    ] as HTMLDivElement[];
+    const currentSentence: string[] = [];
+    sourcesInSentence.forEach((source: HTMLDivElement) => {
+      const word: string | null = source.textContent;
+      if (word) {
+        currentSentence.push(word);
+      }
+    });
+    if (this.roundIndex !== undefined && this.sentenceIndex !== undefined) {
+      if (
+        currentSentence.join(' ') ===
+        this.currentLevel?.rounds[this.roundIndex].words[this.sentenceIndex].textExample
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public stepForward(): void {
+    Model.disableActiveElems();
+    if (this.sentenceIndex !== undefined && this.roundIndex !== undefined) {
+      const allSourcePlaces = [
+        ...document.querySelectorAll('.playarea__source-place')
+      ] as HTMLDivElement[];
+      if (this.sentenceIndex < 9) {
+        // next sentence
+        this.sentenceIndex += 1;
+        AppView.removeComponent(allSourcePlaces);
+        this.nextSentence();
+      } else {
+        // next round
+        const allSentencePlaces = [
+          ...document.querySelectorAll('.playarea__sentence-place')
+        ] as HTMLDivElement[];
+        this.roundIndex += 1;
+        this.sentenceIndex = 0;
+        AppView.removeComponent([...allSentencePlaces, ...allSourcePlaces]);
+        this.nextSentence();
+      }
+    }
+    const continueBtn: HTMLButtonElement | null = document.querySelector(
+      '.playarea__continue-button'
+    );
+    if (continueBtn) {
+      AppView.switchComponentDisplay(continueBtn, 'validity', { isValid: false });
+    }
+  }
+
+  private static disableActiveElems(): void {
+    const allSources = [
+      ...document.querySelectorAll('.playarea__source_active')
+    ] as HTMLDivElement[];
+    const allSentencePlaces = [
+      ...document.querySelectorAll('.playarea__sentence-place_active')
+    ] as HTMLDivElement[];
+    allSources.forEach((source: HTMLDivElement) => {
+      AppView.switchComponentDisplay(source, 'disable', { class: 'playarea__source_active' });
+    });
+    allSentencePlaces.forEach((place: HTMLDivElement) => {
+      AppView.switchComponentDisplay(place, 'disable', {
+        class: 'playarea__sentence-place_active'
+      });
+    });
   }
 }

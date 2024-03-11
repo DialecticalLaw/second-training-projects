@@ -12,8 +12,6 @@ export interface LocalStorageData {
 
 export type StartPageWrappers = [HTMLDivElement, HTMLDivElement];
 
-export type MainPageWrappers = [HTMLDivElement, HTMLDivElement, HTMLDivElement];
-
 interface LevelData {
   author: string;
   cutSrc: string;
@@ -23,7 +21,7 @@ interface LevelData {
   year: string;
 }
 
-interface Sentence {
+export interface Sentence {
   audioExample: string;
   id: number;
   textExample: string;
@@ -35,4 +33,19 @@ interface Sentence {
 export interface Round {
   levelData: LevelData;
   words: Sentence[];
+}
+
+export interface Level {
+  rounds: Round[];
+  roundsCount: number;
+}
+
+export interface SwitchOptions {
+  isValid?: boolean;
+  class?: string;
+}
+
+export interface DisplayOptions {
+  componentsText?: string[];
+  sentenceIndex?: number;
 }
