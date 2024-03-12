@@ -147,10 +147,21 @@ export default class Model {
   }
 
   public logout(): void {
+    this.roundIndex = undefined;
+    this.sentenceIndex = undefined;
     const title = document.querySelector('.title') as HTMLHeadingElement;
     const logoutButton = document.querySelector('.logout') as HTMLDivElement;
     const startContentWrapper: HTMLDivElement | null = document.querySelector('.start-content');
     if (startContentWrapper) AppView.removeComponent([startContentWrapper]);
+    const playarea: HTMLDivElement | null = document.querySelector('.playarea');
+    const playareaPuzzles: HTMLDivElement | null = document.querySelector('.playarea__puzzles');
+    const playareaSources: HTMLDivElement | null = document.querySelector('.playarea__sources');
+    const buttonsWrapper: HTMLDivElement | null = document.querySelector(
+      '.playarea__buttons-wrapper'
+    );
+    if (playarea && playareaPuzzles && playareaSources && buttonsWrapper) {
+      AppView.removeComponent([playarea, playareaPuzzles, playareaSources, buttonsWrapper]);
+    }
     AppView.removeComponent([title, logoutButton]);
     LocalStorageService.clearUserData();
     this.appView.displayComponent('loginPage');
@@ -161,14 +172,31 @@ export default class Model {
     const continueBtn: HTMLButtonElement | null = document.querySelector(
       '.playarea__continue-button'
     );
-    if (eventTarget && continueBtn) {
+    const checkBtn: HTMLButtonElement | null = document.querySelector('.playarea__check-button');
+    if (eventTarget && continueBtn && checkBtn) {
       AppView.moveComponent(eventTarget, 'moveSource');
       if (this.isSentenceCorrect()) {
         AppView.switchComponentDisplay(continueBtn, 'validity', { isValid: true });
       } else {
         AppView.switchComponentDisplay(continueBtn, 'validity', { isValid: false });
       }
+      if (Model.isSentenceFilled()) {
+        AppView.switchComponentDisplay(checkBtn, 'validity', { isValid: true });
+      } else {
+        AppView.switchComponentDisplay(checkBtn, 'validity', { isValid: false });
+      }
     }
+  }
+
+  private static isSentenceFilled(): boolean {
+    const allSentencePlaces = [
+      ...document.querySelectorAll('.playarea__sentence-place_active')
+    ] as HTMLDivElement[];
+    let result = true;
+    allSentencePlaces.forEach((place: HTMLDivElement): void => {
+      if (!place.children.length) result = false;
+    });
+    return result;
   }
 
   private isSentenceCorrect(): boolean {
@@ -218,8 +246,40 @@ export default class Model {
     const continueBtn: HTMLButtonElement | null = document.querySelector(
       '.playarea__continue-button'
     );
-    if (continueBtn) {
+    const checkBtn: HTMLButtonElement | null = document.querySelector('.playarea__check-button');
+    if (continueBtn && checkBtn) {
       AppView.switchComponentDisplay(continueBtn, 'validity', { isValid: false });
+      AppView.switchComponentDisplay(checkBtn, 'validity', { isValid: false });
+    }
+  }
+
+  public checkSentence(): void {
+    const sourcesInSentence = [
+      ...document.querySelectorAll('.playarea__sentence-place .playarea__source_active')
+    ] as HTMLDivElement[];
+
+    const realSentence: string[] = [];
+    sourcesInSentence.forEach((source: HTMLDivElement): void => {
+      if (source.textContent) {
+        realSentence.push(source.textContent);
+      }
+    });
+
+    if (
+      this.currentLevel !== undefined &&
+      this.roundIndex !== undefined &&
+      this.sentenceIndex !== undefined
+    ) {
+      const round: Round = this.currentLevel.rounds[this.roundIndex];
+      const exampleSentence: string[] = round.words[this.sentenceIndex].textExample.split(' ');
+
+      sourcesInSentence.forEach((source: HTMLDivElement, index): void => {
+        if (source.textContent === exampleSentence[index]) {
+          AppView.switchComponentDisplay(source, 'validity', { isValid: true });
+        } else {
+          AppView.switchComponentDisplay(source, 'validity', { isValid: false });
+        }
+      });
     }
   }
 

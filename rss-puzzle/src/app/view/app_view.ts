@@ -63,8 +63,10 @@ export default class AppView {
       case 'validity':
         if (options.isValid) {
           elem.classList.add('valid');
+          elem.classList.remove('not-valid');
         } else {
           elem.classList.remove('valid');
+          elem.classList.add('not-valid');
         }
         break;
       case 'disable':

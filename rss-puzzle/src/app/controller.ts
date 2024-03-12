@@ -5,12 +5,9 @@ export default class Controller {
 
   private isLogoutListener: boolean;
 
-  private isStartGameListener: boolean;
-
   constructor() {
     this.model = new Model();
     this.isLogoutListener = false;
-    this.isStartGameListener = false;
   }
 
   public start(): void {
@@ -18,45 +15,69 @@ export default class Controller {
   }
 
   public handleActionRequest(action: string): void {
-    const loginForm: HTMLFormElement | null = document.querySelector('.login-form');
-    const loginButton: HTMLButtonElement | null = document.querySelector('.login-form__button');
-    const logoutButton: HTMLButtonElement | null = document.querySelector('.logout');
-    const startButton: HTMLButtonElement | null = document.querySelector('.start-content__button');
-    const allPlayareaSources = [...document.querySelectorAll('.playarea__source')] as
-      | HTMLDivElement[]
-      | null;
-    const continueBtn: HTMLButtonElement | null = document.querySelector(
-      '.playarea__continue-button'
-    );
     switch (action) {
       case 'loginStart':
-        if (loginForm && loginButton) {
-          loginForm.addEventListener('input', Model.validate);
-          loginButton.addEventListener('click', this.model.tryLogin.bind(this.model));
-        }
+        this.handleLoginRequest('start');
         break;
       case 'loginEnd':
-        if (logoutButton && !this.isLogoutListener) {
-          logoutButton.addEventListener('click', this.model.logout.bind(this.model));
-          this.isLogoutListener = true;
-        }
-        if (startButton) {
-          startButton.addEventListener('click', this.model.startMainPage.bind(this.model));
-        }
+        this.handleLoginRequest('end');
         break;
       case 'startGame':
-        if (allPlayareaSources && continueBtn) {
-          allPlayareaSources.forEach((source: HTMLDivElement) => {
-            source.addEventListener('click', this.model.makeSourceReaction.bind(this.model));
-          });
-          if (!this.isStartGameListener) {
-            continueBtn.addEventListener('click', this.model.stepForward.bind(this.model));
-            this.isStartGameListener = true;
-          }
-        }
+        this.handleStartRequest();
+        break;
+      case 'sourcesAppear':
+        this.handleSourcesAppearRequest();
         break;
       default:
         break;
+    }
+  }
+
+  private handleLoginRequest(action: 'start' | 'end'): void {
+    if (action === 'start') {
+      const loginForm: HTMLFormElement | null = document.querySelector('.login-form');
+      const loginButton: HTMLButtonElement | null = document.querySelector('.login-form__button');
+
+      if (loginForm && loginButton) {
+        loginForm.addEventListener('input', Model.validate);
+        loginButton.addEventListener('click', this.model.tryLogin.bind(this.model));
+      }
+    } else {
+      const logoutButton: HTMLButtonElement | null = document.querySelector('.logout');
+      if (logoutButton && !this.isLogoutListener) {
+        logoutButton.addEventListener('click', this.model.logout.bind(this.model));
+        this.isLogoutListener = true;
+      }
+
+      const startButton: HTMLButtonElement | null =
+        document.querySelector('.start-content__button');
+      if (startButton) {
+        startButton.addEventListener('click', this.model.startMainPage.bind(this.model));
+      }
+    }
+  }
+
+  private handleStartRequest(): void {
+    const continueBtn: HTMLButtonElement | null = document.querySelector(
+      '.playarea__continue-button'
+    );
+    const checkBtn: HTMLButtonElement | null = document.querySelector('.playarea__check-button');
+
+    if (continueBtn && checkBtn) {
+      continueBtn.addEventListener('click', this.model.stepForward.bind(this.model));
+      checkBtn.addEventListener('click', this.model.checkSentence.bind(this.model));
+    }
+  }
+
+  private handleSourcesAppearRequest(): void {
+    const allPlayareaSources: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source')
+    );
+
+    if (allPlayareaSources.length) {
+      allPlayareaSources.forEach((source: HTMLDivElement) => {
+        source.addEventListener('click', this.model.makeSourceReaction.bind(this.model));
+      });
     }
   }
 }

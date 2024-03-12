@@ -16,6 +16,7 @@ export default class MainPageView {
   constructor() {
     const [playareaWrapper, puzzleWrapper, sourcesWrapper, buttonsWrapper]: HTMLDivElement[] =
       MainPageView.createMainPageWrappers();
+
     this.playareaWrapper = playareaWrapper;
     this.puzzleWrapper = puzzleWrapper;
     this.sourcesWrapper = sourcesWrapper;
@@ -25,6 +26,7 @@ export default class MainPageView {
   public draw() {
     this.drawWrappers();
     this.drawMainElems();
+    app.handleActionRequest('startGame');
   }
 
   private drawWrappers(): void {
@@ -41,6 +43,7 @@ export default class MainPageView {
 
   private drawMainElems(): void {
     const sentences: HTMLDivElement[] = [];
+
     for (let i = 0; i < 10; i += 1) {
       // 10 - count of sentences
       const sentence: HTMLDivElement = createElem<HTMLDivElement>('div', {
@@ -48,58 +51,60 @@ export default class MainPageView {
       });
       sentences.push(sentence);
     }
+
     appendElem(this.puzzleWrapper, sentences);
-    const continueBtn: HTMLDivElement = createElem<HTMLDivElement>('button', {
+
+    const checkBtn: HTMLDivElement = createElem<HTMLDivElement>('button', {
+      class: 'playarea__check-button'
+    });
+    checkBtn.textContent = 'Check';
+    const continueBtn: HTMLButtonElement = createElem<HTMLButtonElement>('button', {
       class: 'playarea__continue-button'
     });
     continueBtn.textContent = 'Continue';
-    appendElem(this.buttonsWrapper, [continueBtn]);
+
+    appendElem(this.buttonsWrapper, [checkBtn, continueBtn]);
   }
 
   private static createMainPageWrappers(): HTMLDivElement[] {
     const playareaWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
       class: 'playarea'
     });
+
     const puzzleWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
       class: 'playarea__puzzles'
     });
+
     const sourcesWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
       class: 'playarea__sources'
     });
+
     const buttonsWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
       class: 'playarea__buttons-wrapper'
     });
+
     return [playareaWrapper, puzzleWrapper, sourcesWrapper, buttonsWrapper];
   }
 
   public drawSources(words: string[]): void {
     const shuffledSentence: string[] = shuffleArr(words);
-    shuffledSentence.forEach((word: string) => {
-      const source: HTMLDivElement = createElem<HTMLDivElement>('div', {
-        class: 'playarea__source playarea__source_active',
-        style: 'transition: 0s; opacity: 0'
-      });
-      source.textContent = word;
-      const sourcePlace: HTMLDivElement = createElem<HTMLDivElement>('div', {
-        class: 'playarea__source-place'
-      });
-      appendElem(this.sourcesWrapper, [sourcePlace]);
-      appendElem(sourcePlace, [source]);
-    });
-    const allSources = [
-      ...document.querySelectorAll('.playarea__source_active')
-    ] as HTMLDivElement[];
-    allSources.forEach((source: HTMLDivElement): void => {
-      const sourceLink = source;
-      sourceLink.style.width = `${source.getBoundingClientRect().width}px`;
-    });
-    const allSourcePlaces = [
-      ...document.querySelectorAll('.playarea__source-place')
-    ] as HTMLDivElement[];
+    this.createSourcesPlaces(words.length);
+    MainPageView.createSources(shuffledSentence);
+
+    const allSources: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source_active')
+    );
+    MainPageView.setWidth(allSources);
+
+    const allSourcePlaces: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source-place')
+    );
+
     allSourcePlaces.forEach((place: HTMLDivElement): void => {
       const placeLink = place;
       placeLink.style.width = 'max-content';
       const source = place.firstElementChild as HTMLDivElement | null;
+
       if (source) {
         source.style.transform = 'scale(0)';
         source.style.removeProperty('opacity');
@@ -109,13 +114,46 @@ export default class MainPageView {
         }, 1);
       }
     });
-    app.handleActionRequest('startGame');
+
+    app.handleActionRequest('sourcesAppear');
+  }
+
+  private createSourcesPlaces(placesCount: number): void {
+    for (let i = 0; i < placesCount; i += 1) {
+      const sourcePlace: HTMLDivElement = createElem<HTMLDivElement>('div', {
+        class: 'playarea__source-place'
+      });
+      appendElem(this.sourcesWrapper, [sourcePlace]);
+    }
+  }
+
+  private static createSources(shuffledWords: string[]): void {
+    const allSourcesPlaces: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source-place')
+    );
+    shuffledWords.forEach((word: string, index: number) => {
+      const source: HTMLDivElement = createElem<HTMLDivElement>('div', {
+        class: 'playarea__source playarea__source_active',
+        style: 'transition: 0s; opacity: 0'
+      });
+      source.textContent = word;
+      appendElem(allSourcesPlaces[index], [source]);
+    });
+  }
+
+  private static setWidth<T extends HTMLElement>(elems: T[]): void {
+    elems.forEach((elem: HTMLElement): void => {
+      const sourceLink = elem;
+      sourceLink.style.width = `${elem.getBoundingClientRect().width}px`;
+    });
   }
 
   public static drawSourcesPlaceInSentence(placeCount: number, sentenceIndex: number): void {
-    const currentSentenceElem = [...document.querySelectorAll('.playarea__sentence')][
-      sentenceIndex
-    ] as HTMLDivElement;
+    const sentences: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__sentence')
+    );
+    const currentSentenceElem: HTMLDivElement = sentences[sentenceIndex];
+
     for (let i = 0; i < placeCount; i += 1) {
       const sourcePlace: HTMLDivElement = createElem<HTMLDivElement>('div', {
         class: 'playarea__sentence-place playarea__sentence-place_active'
@@ -128,24 +166,31 @@ export default class MainPageView {
     const sourceParent: HTMLElement | null = source.parentElement;
     if (sourceParent) {
       sourceParent.removeAttribute('style');
+
       if (sourceParent.classList.contains('playarea__source-place')) {
-        const allSentencePlaces = [
-          ...document.querySelectorAll('.playarea__sentence-place_active')
-        ] as HTMLDivElement[];
-        const vacantPlace = allSentencePlaces.find(
+        const allSentencePlaces: HTMLDivElement[] = Array.from(
+          document.querySelectorAll('.playarea__sentence-place_active')
+        );
+        const vacantPlace: HTMLDivElement | undefined = allSentencePlaces.find(
           (place: HTMLDivElement) => !place.children.length
-        ) as HTMLDivElement;
-        vacantPlace.style.width = 'max-content';
-        appendElem(vacantPlace, [source]);
+        );
+
+        if (vacantPlace) {
+          vacantPlace.style.width = 'max-content';
+          appendElem(vacantPlace, [source]);
+        }
       } else {
-        const allSourcePlaces = [
-          ...document.querySelectorAll('.playarea__source-place')
-        ] as HTMLDivElement[];
-        const vacantPlace = allSourcePlaces.find(
+        const allSourcePlaces: HTMLDivElement[] = Array.from(
+          document.querySelectorAll('.playarea__source-place')
+        );
+        const vacantPlace: HTMLDivElement | undefined = allSourcePlaces.find(
           (place: HTMLDivElement) => !place.children.length
-        ) as HTMLDivElement;
-        vacantPlace.style.width = 'max-content';
-        appendElem(vacantPlace, [source]);
+        );
+
+        if (vacantPlace) {
+          vacantPlace.style.width = 'max-content';
+          appendElem(vacantPlace, [source]);
+        }
       }
     }
   }

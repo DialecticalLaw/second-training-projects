@@ -25,6 +25,7 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
-    '@typescript-eslint/no-explicit-any': 2
+    '@typescript-eslint/no-explicit-any': 2,
+    'max-lines-per-function': ['error', 40]
   }
 };
