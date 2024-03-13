@@ -188,10 +188,10 @@ export default class Model {
 
     AppView.moveComponent(eventTarget, 'moveSource');
     Model.clearSourcesValidity();
-    this.updateActionBtnState();
+    this.updateButtonsState();
   }
 
-  private updateActionBtnState(): void {
+  private updateButtonsState(): void {
     const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
     const autoCompleteBtn: HTMLButtonElement | null = document.querySelector(
       '.playarea__auto-complete'
@@ -204,6 +204,7 @@ export default class Model {
         AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: true });
         AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: false });
       } else {
+        AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
         AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
         AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
       }
@@ -356,9 +357,9 @@ export default class Model {
     const round: Round = this.currentLevel.rounds[this.roundIndex];
     const exampleSentence: string[] = round.words[this.sentenceIndex].textExample.split(' ');
 
-    const allSentencePlaces = [
-      ...document.querySelectorAll('.playarea__sentence-place_active')
-    ] as HTMLDivElement[];
+    const allSentencePlaces: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__sentence-place_active')
+    );
 
     const allSources: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__source_active')
@@ -370,7 +371,7 @@ export default class Model {
       source.classList.add('marked');
       AppView.moveComponent(source, 'setSource', place);
       Model.clearSourcesValidity();
-      this.updateActionBtnState();
+      this.updateButtonsState();
     });
 
     allSources.forEach((source: HTMLDivElement) => {
@@ -388,5 +389,20 @@ export default class Model {
     );
     if (result) return result;
     throw new Error('Source not found');
+  }
+
+  public dropSource(target: HTMLDivElement, source: HTMLDivElement): void {
+    const targetChild: Element | null = target.firstElementChild;
+    const sourceParent: HTMLElement | null = source.parentElement;
+    if (targetChild instanceof HTMLElement && sourceParent) {
+      const copyTargetChild: HTMLElement = targetChild;
+      // swapping places
+      AppView.moveComponent(source, 'setSource', target);
+      AppView.moveComponent(copyTargetChild, 'setSource', sourceParent);
+    } else {
+      AppView.moveComponent(source, 'setSource', target);
+    }
+    Model.clearSourcesValidity();
+    this.updateButtonsState();
   }
 }

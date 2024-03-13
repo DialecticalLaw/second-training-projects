@@ -95,14 +95,93 @@ export default class Controller {
 
   private handleSourcesAppearRequest(): void {
     const allPlayareaSources: HTMLDivElement[] = Array.from(
-      document.querySelectorAll('.playarea__source')
+      document.querySelectorAll('.playarea__source_active')
     );
+
+    allPlayareaSources.forEach((source: HTMLDivElement) => {
+      source.addEventListener('dragstart', (event: DragEvent) => {
+        const targetSource = event.currentTarget as HTMLDivElement;
+        event.dataTransfer?.setData('id', targetSource.id);
+      });
+    });
+    this.listenSentencePlaces();
+    this.listenSourcePlaces();
 
     if (allPlayareaSources.length) {
       allPlayareaSources.forEach((source: HTMLDivElement) => {
         source.addEventListener('click', this.model.makeSourceReaction.bind(this.model));
       });
     }
+  }
+
+  private listenSentencePlaces(): void {
+    const allSentencePlaces: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__sentence-place_active')
+    );
+    allSentencePlaces.forEach((sentencePlace: HTMLDivElement) => {
+      sentencePlace.addEventListener('dragenter', (event: DragEvent) => {
+        event.preventDefault();
+        const targetPlace = event.currentTarget as HTMLDivElement;
+        if (targetPlace.classList.contains('playarea__sentence-place_active')) {
+          targetPlace.classList.add('ondrag');
+        }
+      });
+
+      sentencePlace.addEventListener('dragover', (event: DragEvent) => {
+        const targetPlace = event.currentTarget as HTMLDivElement;
+        if (targetPlace.classList.contains('playarea__sentence-place_active')) {
+          event.preventDefault();
+        }
+      });
+
+      sentencePlace.addEventListener('dragleave', (event: DragEvent) => {
+        const targetPlace = event.currentTarget as HTMLDivElement;
+        targetPlace.classList.remove('ondrag');
+      });
+
+      sentencePlace.addEventListener('drop', (event: DragEvent) => {
+        const targetPlace = event.currentTarget as HTMLDivElement;
+        const sourceId = event.dataTransfer?.getData('id') as string;
+        const source: HTMLDivElement | null = document.querySelector(`#${sourceId}`);
+        if (source) {
+          this.model.dropSource(targetPlace, source);
+        }
+        targetPlace.classList.remove('ondrag');
+      });
+    });
+  }
+
+  private listenSourcePlaces(): void {
+    const allSourcePlaces: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source-place')
+    );
+
+    allSourcePlaces.forEach((sourcePlace: HTMLDivElement) => {
+      sourcePlace.addEventListener('dragenter', (event: DragEvent) => {
+        event.preventDefault();
+        const targetPlace = event.currentTarget as HTMLDivElement;
+        targetPlace.classList.add('ondrag');
+      });
+
+      sourcePlace.addEventListener('dragover', (event: DragEvent) => {
+        event.preventDefault();
+      });
+
+      sourcePlace.addEventListener('dragleave', (event: DragEvent) => {
+        const targetPlace = event.currentTarget as HTMLDivElement;
+        targetPlace.classList.remove('ondrag');
+      });
+
+      sourcePlace.addEventListener('drop', (event: DragEvent) => {
+        const targetPlace = event.currentTarget as HTMLDivElement;
+        const sourceId = event.dataTransfer?.getData('id') as string;
+        const source: HTMLDivElement | null = document.querySelector(`#${sourceId}`);
+        if (source) {
+          this.model.dropSource(targetPlace, source);
+        }
+        targetPlace.classList.remove('ondrag');
+      });
+    });
   }
 
   private handleStartRequest(): void {

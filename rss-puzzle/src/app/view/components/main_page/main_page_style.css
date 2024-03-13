@@ -87,7 +87,13 @@
 .playarea__sentence-place {
   width: 100%;
   height: 100%;
-  background-color: #ffffffc8;
+  background-color: #ffffff85;
+  transition: 0.3s;
+}
+
+.playarea__sentence-place_active,
+.playarea__source-place {
+  background-color: #ffffffdf;
 }
 
 .playarea__buttons-wrapper {
@@ -148,4 +154,8 @@
 .playarea__action-button:active,
 .playarea__auto-complete:active {
   transform: scale(0.9);
+}
+
+.ondrag {
+  background-color: rgba(255, 217, 0, 0.363);
 }

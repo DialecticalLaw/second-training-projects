@@ -116,8 +116,6 @@ export default class MainPageView {
         }, 1);
       }
     });
-
-    app.handleActionRequest('sourcesAppear');
   }
 
   private createSourcesPlaces(placesCount: number): void {
@@ -136,7 +134,9 @@ export default class MainPageView {
     shuffledWords.forEach((word: string, index: number) => {
       const source: HTMLDivElement = createElem<HTMLDivElement>('div', {
         class: 'playarea__source playarea__source_active',
-        style: 'transition: 0s; opacity: 0'
+        id: `source${index}`,
+        style: 'transition: 0s; opacity: 0',
+        draggable: 'true'
       });
       source.textContent = word;
       appendElem(allSourcesPlaces[index], [source]);
@@ -162,9 +162,10 @@ export default class MainPageView {
       });
       appendElem(currentSentenceElem, [sourcePlace]);
     }
+    app.handleActionRequest('sourcesAppear');
   }
 
-  public static moveSourceOnClick(source: HTMLDivElement): void {
+  public static moveSource(source: HTMLDivElement): void {
     const sourceParent: HTMLElement | null = source.parentElement;
     if (sourceParent) {
       sourceParent.removeAttribute('style');
@@ -194,6 +195,16 @@ export default class MainPageView {
           appendElem(vacantPlace, [source]);
         }
       }
+    }
+  }
+
+  public static setSource<T extends HTMLElement>(target: T, source: T): void {
+    const sourceParent: HTMLElement | null = source.parentElement;
+    if (sourceParent) {
+      sourceParent.removeAttribute('style');
+      const targetLink = target;
+      targetLink.style.width = 'max-content';
+      appendElem(target, [source]);
     }
   }
 }

@@ -71,6 +71,7 @@ export default class AppView {
         if (options?.class) {
           elem.classList.remove(options?.class);
         }
+        elem.removeAttribute('id');
         break;
       default:
         break;
@@ -124,17 +125,17 @@ export default class AppView {
   public static moveComponent<T extends HTMLElement>(
     component: T,
     action: string,
-    target?: HTMLDivElement
+    target?: T
   ): void {
     switch (action) {
       case 'moveSource':
         if (component instanceof HTMLDivElement) {
-          MainPageView.moveSourceOnClick(component);
+          MainPageView.moveSource(component);
         }
         break;
       case 'setSource':
         if (component instanceof HTMLDivElement && target) {
-          appendElem(target, [component]);
+          MainPageView.setSource(target, component);
         }
         break;
       default:
