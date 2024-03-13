@@ -43,24 +43,36 @@
   transition: 0.3s;
 }
 
-.playarea__source.valid::after {
+.playarea__source::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
+  opacity: 0;
   width: 100%;
   height: 4px;
   background-color: #22bd22;
+  transform: scaleX(0);
+  transition: 0.3s;
 }
 
-.playarea__source.not-valid::before {
+.playarea__source::before {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
+  opacity: 0;
   width: 100%;
   height: 4px;
   background-color: var(--red-color);
+  transform: scaleX(0);
+  transition: 0.3s;
+}
+
+.playarea__source.valid::after,
+.playarea__source.not-valid::before {
+  opacity: 1;
+  transform: scaleX(1);
 }
 
 .playarea__source_active {
@@ -88,7 +100,7 @@
 }
 
 .playarea__continue-button,
-.playarea__check-button {
+.playarea__action-button {
   pointer-events: none;
   display: flex;
   justify-content: center;
@@ -106,16 +118,22 @@
   cursor: pointer;
 }
 
-.playarea__continue-button.valid,
-.playarea__check-button.valid {
+.playarea__action-button.valid {
   pointer-events: all;
   opacity: 1;
   box-shadow: 3px 3px 6px 1px var(--shadow-color);
-  background-color: var(--addition-color);
+  background-color: #d3d300;
+  color: #000000;
+}
+
+.playarea__action-button.continue {
+  pointer-events: all;
+  opacity: 1;
+  box-shadow: 3px 3px 6px 1px var(--shadow-color);
+  background-color: #009d00;
   color: #ffffff;
 }
 
-.playarea__continue-button:active,
-.playarea__check-button:active {
+.playarea__action-button:active {
   transform: scale(0.9);
 }

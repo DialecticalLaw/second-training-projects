@@ -26,7 +26,7 @@ export default class MainPageView {
   public draw() {
     this.drawWrappers();
     this.drawMainElems();
-    app.handleActionRequest('startGame');
+    app.handleActionRequest('check');
   }
 
   private drawWrappers(): void {
@@ -54,16 +54,12 @@ export default class MainPageView {
 
     appendElem(this.puzzleWrapper, sentences);
 
-    const checkBtn: HTMLDivElement = createElem<HTMLDivElement>('button', {
-      class: 'playarea__check-button'
+    const actionBtn: HTMLDivElement = createElem<HTMLDivElement>('button', {
+      class: 'playarea__action-button'
     });
-    checkBtn.textContent = 'Check';
-    const continueBtn: HTMLButtonElement = createElem<HTMLButtonElement>('button', {
-      class: 'playarea__continue-button'
-    });
-    continueBtn.textContent = 'Continue';
+    actionBtn.textContent = 'Check';
 
-    appendElem(this.buttonsWrapper, [checkBtn, continueBtn]);
+    appendElem(this.buttonsWrapper, [actionBtn]); // continueBtn
   }
 
   private static createMainPageWrappers(): HTMLDivElement[] {

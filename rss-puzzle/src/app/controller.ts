@@ -5,6 +5,14 @@ export default class Controller {
 
   private isLogoutListener: boolean;
 
+  private checkSentence?: () => void;
+
+  private isChecked?: boolean;
+
+  private stepForward?: () => void;
+
+  private isForwarded?: boolean;
+
   constructor() {
     this.model = new Model();
     this.isLogoutListener = false;
@@ -17,13 +25,16 @@ export default class Controller {
   public handleActionRequest(action: string): void {
     switch (action) {
       case 'loginStart':
-        this.handleLoginRequest('start');
+        this.handleLoginRequest(action);
         break;
       case 'loginEnd':
-        this.handleLoginRequest('end');
+        this.handleLoginRequest(action);
         break;
-      case 'startGame':
-        this.handleStartRequest();
+      case 'check':
+        this.handlePlayareaButtonRequest(action);
+        break;
+      case 'continue':
+        this.handlePlayareaButtonRequest(action);
         break;
       case 'sourcesAppear':
         this.handleSourcesAppearRequest();
@@ -33,8 +44,8 @@ export default class Controller {
     }
   }
 
-  private handleLoginRequest(action: 'start' | 'end'): void {
-    if (action === 'start') {
+  private handleLoginRequest(action: 'loginStart' | 'loginEnd'): void {
+    if (action === 'loginStart') {
       const loginForm: HTMLFormElement | null = document.querySelector('.login-form');
       const loginButton: HTMLButtonElement | null = document.querySelector('.login-form__button');
 
@@ -57,15 +68,25 @@ export default class Controller {
     }
   }
 
-  private handleStartRequest(): void {
-    const continueBtn: HTMLButtonElement | null = document.querySelector(
-      '.playarea__continue-button'
-    );
-    const checkBtn: HTMLButtonElement | null = document.querySelector('.playarea__check-button');
+  private handlePlayareaButtonRequest(action: 'check' | 'continue'): void {
+    const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
+    if (action === 'check' && actionBtn && !this.isChecked) {
+      this.isChecked = true;
+      this.isForwarded = false;
+      this.checkSentence = this.model.checkSentence.bind(this.model);
+      if (this.stepForward) {
+        actionBtn.removeEventListener('click', this.stepForward);
+      }
+      actionBtn.addEventListener('click', this.checkSentence);
+      return;
+    }
 
-    if (continueBtn && checkBtn) {
-      continueBtn.addEventListener('click', this.model.stepForward.bind(this.model));
-      checkBtn.addEventListener('click', this.model.checkSentence.bind(this.model));
+    if (action === 'continue' && this.checkSentence && actionBtn && !this.isForwarded) {
+      this.isChecked = false;
+      this.isForwarded = true;
+      this.stepForward = this.model.stepForward.bind(this.model);
+      actionBtn.removeEventListener('click', this.checkSentence);
+      actionBtn.addEventListener('click', this.stepForward);
     }
   }
 

@@ -30,6 +30,7 @@ export default class Model {
     const nameInput = document.querySelector('.login-form__input_name') as HTMLInputElement;
     const surnameInput = document.querySelector('.login-form__input_surname') as HTMLInputElement;
     const hints = [...document.querySelectorAll('.login-form__hint')] as HTMLLIElement[];
+
     if (Model.isLoginValidCharUsage(nameInput, surnameInput)) {
       AppView.switchComponentDisplay(hints[0], 'validity', { isValid: true });
     } else {
@@ -66,24 +67,29 @@ export default class Model {
     event.preventDefault();
     let isLoginInputsValid: boolean = true;
     const hints = [...document.querySelectorAll('.login-form__hint')] as HTMLLIElement[];
+
     hints.forEach((hint: HTMLLIElement) => {
       if (!hint.classList.contains('valid')) isLoginInputsValid = false;
     });
+
     if (isLoginInputsValid) {
       const nameInput: HTMLInputElement | null = document.querySelector('.login-form__input_name');
       const surnameInput: HTMLInputElement | null = document.querySelector(
         '.login-form__input_surname'
       );
+
       if (nameInput && surnameInput) {
         LocalStorageService.saveStringData('name', nameInput.value);
         LocalStorageService.saveStringData('surname', surnameInput.value);
         LocalStorageService.saveBooleanData('isLogin', true);
+
         const loginForm = document.querySelector('.login-form') as HTMLFormElement;
         const hintsWrapper = document.querySelector('.login-form__hints') as HTMLUListElement;
         const nameWrapper = document.querySelector('.login-form__name-wrapper') as HTMLDivElement;
         const surnameWrapper = document.querySelector(
           '.login-form__surname-wrapper'
         ) as HTMLDivElement;
+
         AppView.removeComponent([hintsWrapper, nameWrapper, surnameWrapper, loginForm]);
         this.appView.displayComponent('startPage');
       }
@@ -136,6 +142,7 @@ export default class Model {
     if (this.sentenceIndex === undefined) {
       this.sentenceIndex = 0;
     }
+
     if (this.currentLevel !== undefined && this.roundIndex !== undefined) {
       const round: Round = this.currentLevel.rounds[this.roundIndex];
       const sentence = round.words[this.sentenceIndex].textExample.split(' ');
@@ -149,19 +156,25 @@ export default class Model {
   public logout(): void {
     this.roundIndex = undefined;
     this.sentenceIndex = undefined;
+
     const title = document.querySelector('.title') as HTMLHeadingElement;
     const logoutButton = document.querySelector('.logout') as HTMLDivElement;
     const startContentWrapper: HTMLDivElement | null = document.querySelector('.start-content');
-    if (startContentWrapper) AppView.removeComponent([startContentWrapper]);
+    if (startContentWrapper) {
+      AppView.removeComponent([startContentWrapper]);
+    }
+
     const playarea: HTMLDivElement | null = document.querySelector('.playarea');
     const playareaPuzzles: HTMLDivElement | null = document.querySelector('.playarea__puzzles');
     const playareaSources: HTMLDivElement | null = document.querySelector('.playarea__sources');
     const buttonsWrapper: HTMLDivElement | null = document.querySelector(
       '.playarea__buttons-wrapper'
     );
+
     if (playarea && playareaPuzzles && playareaSources && buttonsWrapper) {
       AppView.removeComponent([playarea, playareaPuzzles, playareaSources, buttonsWrapper]);
     }
+
     AppView.removeComponent([title, logoutButton]);
     LocalStorageService.clearUserData();
     this.appView.displayComponent('loginPage');
@@ -169,23 +182,22 @@ export default class Model {
 
   public makeSourceReaction(event: MouseEvent): void {
     const eventTarget = event.target as HTMLDivElement | null;
-    const continueBtn: HTMLButtonElement | null = document.querySelector(
-      '.playarea__continue-button'
-    );
-    const checkBtn: HTMLButtonElement | null = document.querySelector('.playarea__check-button');
-    if (eventTarget && continueBtn && checkBtn) {
-      AppView.moveComponent(eventTarget, 'moveSource');
+    const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
+
+    if (!eventTarget || !actionBtn) return;
+
+    AppView.moveComponent(eventTarget, 'moveSource');
+    if (Model.isSentenceFilled()) {
       if (this.isSentenceCorrect()) {
-        AppView.switchComponentDisplay(continueBtn, 'validity', { isValid: true });
+        AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
+        AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: true });
       } else {
-        AppView.switchComponentDisplay(continueBtn, 'validity', { isValid: false });
+        AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
       }
-      if (Model.isSentenceFilled()) {
-        AppView.switchComponentDisplay(checkBtn, 'validity', { isValid: true });
-      } else {
-        AppView.switchComponentDisplay(checkBtn, 'validity', { isValid: false });
-      }
+      return;
     }
+    AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
+    AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: false });
   }
 
   private static isSentenceFilled(): boolean {
@@ -199,34 +211,19 @@ export default class Model {
     return result;
   }
 
-  private isSentenceCorrect(): boolean {
-    const sourcesInSentence = [
-      ...document.querySelectorAll('.playarea__sentence-place .playarea__source_active')
-    ] as HTMLDivElement[];
-    const currentSentence: string[] = [];
-    sourcesInSentence.forEach((source: HTMLDivElement) => {
-      const word: string | null = source.textContent;
-      if (word) {
-        currentSentence.push(word);
-      }
-    });
-    if (this.roundIndex !== undefined && this.sentenceIndex !== undefined) {
-      if (
-        currentSentence.join(' ') ===
-        this.currentLevel?.rounds[this.roundIndex].words[this.sentenceIndex].textExample
-      ) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   public stepForward(): void {
-    Model.disableActiveElems();
-    if (this.sentenceIndex !== undefined && this.roundIndex !== undefined) {
-      const allSourcePlaces = [
-        ...document.querySelectorAll('.playarea__source-place')
-      ] as HTMLDivElement[];
+    const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
+
+    if (actionBtn) {
+      Model.disableActiveElems();
+      if (this.sentenceIndex === undefined || this.roundIndex === undefined) {
+        throw new Error('sentenceIndex or roundIndex is undefined');
+      }
+
+      const allSourcePlaces: HTMLDivElement[] = Array.from(
+        document.querySelectorAll('.playarea__source-place')
+      );
+
       if (this.sentenceIndex < 9) {
         // next sentence
         this.sentenceIndex += 1;
@@ -234,29 +231,24 @@ export default class Model {
         this.nextSentence();
       } else {
         // next round
-        const allSentencePlaces = [
-          ...document.querySelectorAll('.playarea__sentence-place')
-        ] as HTMLDivElement[];
+        const allSentencePlaces: HTMLDivElement[] = Array.from(
+          document.querySelectorAll('.playarea__sentence-place')
+        );
         this.roundIndex += 1;
         this.sentenceIndex = 0;
         AppView.removeComponent([...allSentencePlaces, ...allSourcePlaces]);
         this.nextSentence();
       }
-    }
-    const continueBtn: HTMLButtonElement | null = document.querySelector(
-      '.playarea__continue-button'
-    );
-    const checkBtn: HTMLButtonElement | null = document.querySelector('.playarea__check-button');
-    if (continueBtn && checkBtn) {
-      AppView.switchComponentDisplay(continueBtn, 'validity', { isValid: false });
-      AppView.switchComponentDisplay(checkBtn, 'validity', { isValid: false });
+
+      AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
+      AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: false });
     }
   }
 
   public checkSentence(): void {
-    const sourcesInSentence = [
-      ...document.querySelectorAll('.playarea__sentence-place .playarea__source_active')
-    ] as HTMLDivElement[];
+    const sourcesInSentence: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__sentence-place .playarea__source_active')
+    );
 
     const realSentence: string[] = [];
     sourcesInSentence.forEach((source: HTMLDivElement): void => {
@@ -284,19 +276,43 @@ export default class Model {
   }
 
   private static disableActiveElems(): void {
-    const allSources = [
-      ...document.querySelectorAll('.playarea__source_active')
-    ] as HTMLDivElement[];
-    const allSentencePlaces = [
-      ...document.querySelectorAll('.playarea__sentence-place_active')
-    ] as HTMLDivElement[];
+    const allSources: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source_active')
+    );
+    const allSentencePlaces: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__sentence-place_active')
+    );
+
     allSources.forEach((source: HTMLDivElement) => {
       AppView.switchComponentDisplay(source, 'disable', { class: 'playarea__source_active' });
     });
+
     allSentencePlaces.forEach((place: HTMLDivElement) => {
       AppView.switchComponentDisplay(place, 'disable', {
         class: 'playarea__sentence-place_active'
       });
     });
+  }
+
+  private isSentenceCorrect(): boolean {
+    const sourcesInSentence: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__sentence-place .playarea__source_active')
+    );
+    const currentSentence: string[] = [];
+    sourcesInSentence.forEach((source: HTMLDivElement) => {
+      const word: string | null = source.textContent;
+      if (word) {
+        currentSentence.push(word);
+      }
+    });
+    if (this.roundIndex !== undefined && this.sentenceIndex !== undefined) {
+      if (
+        currentSentence.join(' ') ===
+        this.currentLevel?.rounds[this.roundIndex].words[this.sentenceIndex].textExample
+      ) {
+        return true;
+      }
+    }
+    return false;
   }
 }

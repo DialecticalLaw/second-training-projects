@@ -4,6 +4,7 @@ import createElem from '../utils/create_elem';
 import appendElem from '../utils/appendElem';
 import MainPageView from './components/main_page/main_page_view';
 import { DisplayOptions, SwitchOptions } from '../../interfaces';
+import { app } from '../..';
 
 export default class AppView {
   private loginPageView: LoginPageView;
@@ -69,9 +70,24 @@ export default class AppView {
           elem.classList.add('not-valid');
         }
         break;
+      case 'continue-active':
+        if (options.isValid) {
+          const elemLink: T = elem;
+          elem.classList.add('continue');
+          app.handleActionRequest('continue');
+          elem.classList.remove('valid');
+          elemLink.textContent = 'Continue';
+        } else {
+          const elemLink: T = elem;
+          app.handleActionRequest('check');
+          elem.classList.remove('continue');
+          elem.classList.remove('valid');
+          elemLink.textContent = 'Check';
+        }
+        break;
       case 'disable':
         if (options.class) {
-          elem.classList.remove(options?.class);
+          elem.classList.remove(options.class);
         }
         break;
       default:
