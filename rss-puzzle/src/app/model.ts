@@ -187,17 +187,42 @@ export default class Model {
     if (!eventTarget || !actionBtn) return;
 
     AppView.moveComponent(eventTarget, 'moveSource');
+    Model.clearSourcesValidity();
+    this.updateActionBtnState();
+  }
+
+  private updateActionBtnState(): void {
+    const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
+    const autoCompleteBtn: HTMLButtonElement | null = document.querySelector(
+      '.playarea__auto-complete'
+    );
+    if (!actionBtn || !autoCompleteBtn) return;
+
     if (Model.isSentenceFilled()) {
       if (this.isSentenceCorrect()) {
         AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
         AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: true });
+        AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: false });
       } else {
         AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
+        AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
       }
       return;
     }
+
     AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
     AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: false });
+    AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
+  }
+
+  private static clearSourcesValidity(): void {
+    const allSources: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source_active')
+    );
+
+    allSources.forEach((source: HTMLDivElement) => {
+      AppView.switchComponentDisplay(source, 'validity');
+    });
   }
 
   private static isSentenceFilled(): boolean {
@@ -213,8 +238,11 @@ export default class Model {
 
   public stepForward(): void {
     const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
+    const autoCompleteBtn: HTMLButtonElement | null = document.querySelector(
+      '.playarea__auto-complete'
+    );
 
-    if (actionBtn) {
+    if (actionBtn && autoCompleteBtn) {
       Model.disableActiveElems();
       if (this.sentenceIndex === undefined || this.roundIndex === undefined) {
         throw new Error('sentenceIndex or roundIndex is undefined');
@@ -242,6 +270,7 @@ export default class Model {
 
       AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
       AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: false });
+      AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
     }
   }
 
@@ -314,5 +343,50 @@ export default class Model {
       }
     }
     return false;
+  }
+
+  public completeSentenceAuto(): void {
+    if (
+      this.sentenceIndex === undefined ||
+      this.roundIndex === undefined ||
+      this.currentLevel === undefined
+    )
+      throw new Error('sentenceIndex or roundIndex is undefined');
+
+    const round: Round = this.currentLevel.rounds[this.roundIndex];
+    const exampleSentence: string[] = round.words[this.sentenceIndex].textExample.split(' ');
+
+    const allSentencePlaces = [
+      ...document.querySelectorAll('.playarea__sentence-place_active')
+    ] as HTMLDivElement[];
+
+    const allSources: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source_active')
+    );
+
+    allSentencePlaces.forEach((place: HTMLDivElement, index: number) => {
+      const exampleWord = exampleSentence[index];
+      const source: HTMLDivElement = Model.findSource(exampleWord);
+      source.classList.add('marked');
+      AppView.moveComponent(source, 'setSource', place);
+      Model.clearSourcesValidity();
+      this.updateActionBtnState();
+    });
+
+    allSources.forEach((source: HTMLDivElement) => {
+      source.classList.remove('marked');
+    });
+  }
+
+  private static findSource(word: string): HTMLDivElement {
+    const allSources: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source_active')
+    );
+    const result: HTMLDivElement | undefined = allSources.find(
+      (source: HTMLDivElement) =>
+        source.textContent === word && !source.classList.contains('marked')
+    );
+    if (result) return result;
+    throw new Error('Source not found');
   }
 }

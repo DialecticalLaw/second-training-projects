@@ -30,6 +30,9 @@ export default class Controller {
       case 'loginEnd':
         this.handleLoginRequest(action);
         break;
+      case 'startGame':
+        this.handleStartRequest();
+        break;
       case 'check':
         this.handlePlayareaButtonRequest(action);
         break;
@@ -99,6 +102,16 @@ export default class Controller {
       allPlayareaSources.forEach((source: HTMLDivElement) => {
         source.addEventListener('click', this.model.makeSourceReaction.bind(this.model));
       });
+    }
+  }
+
+  private handleStartRequest(): void {
+    const autoCompleteBtn: HTMLButtonElement | null = document.querySelector(
+      '.playarea__auto-complete'
+    );
+
+    if (autoCompleteBtn) {
+      autoCompleteBtn.addEventListener('click', this.model.completeSentenceAuto.bind(this.model));
     }
   }
 }

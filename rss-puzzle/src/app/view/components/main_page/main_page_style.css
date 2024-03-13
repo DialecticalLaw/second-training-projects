@@ -39,7 +39,6 @@
   font-family: Comfortaa;
   font-size: 1.2rem;
   outline: 2px solid rgb(191, 191, 0);
-  transform: scale(1);
   transition: 0.3s;
 }
 
@@ -81,7 +80,7 @@
 }
 
 .playarea__source_active:hover {
-  transform: scale(1.1);
+  box-shadow: 0 0 26px 6px gold;
 }
 
 .playarea__source-place,
@@ -93,14 +92,15 @@
 
 .playarea__buttons-wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 30px;
   width: 100%;
 }
 
-.playarea__continue-button,
-.playarea__action-button {
+.playarea__action-button,
+.playarea__auto-complete {
   pointer-events: none;
   display: flex;
   justify-content: center;
@@ -118,12 +118,23 @@
   cursor: pointer;
 }
 
-.playarea__action-button.valid {
+.playarea__auto-complete {
+  width: 30%;
+  font-size: 1.2rem;
+}
+
+.playarea__action-button.valid,
+.playarea__auto-complete.valid {
   pointer-events: all;
   opacity: 1;
   box-shadow: 3px 3px 6px 1px var(--shadow-color);
   background-color: #d3d300;
   color: #000000;
+}
+
+.playarea__auto-complete.valid {
+  background-color: #a82c2c;
+  color: #ffffff;
 }
 
 .playarea__action-button.continue {
@@ -134,6 +145,7 @@
   color: #ffffff;
 }
 
-.playarea__action-button:active {
+.playarea__action-button:active,
+.playarea__auto-complete:active {
   transform: scale(0.9);
 }

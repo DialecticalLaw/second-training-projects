@@ -58,40 +58,54 @@ export default class AppView {
   public static switchComponentDisplay<T extends HTMLElement>(
     elem: T,
     changeType: string,
-    options: SwitchOptions
+    options?: SwitchOptions
   ): void {
     switch (changeType) {
       case 'validity':
-        if (options.isValid) {
-          elem.classList.add('valid');
-          elem.classList.remove('not-valid');
-        } else {
-          elem.classList.remove('valid');
-          elem.classList.add('not-valid');
-        }
+        AppView.switchValidity(elem, options);
         break;
       case 'continue-active':
-        if (options.isValid) {
-          const elemLink: T = elem;
-          elem.classList.add('continue');
-          app.handleActionRequest('continue');
-          elem.classList.remove('valid');
-          elemLink.textContent = 'Continue';
-        } else {
-          const elemLink: T = elem;
-          app.handleActionRequest('check');
-          elem.classList.remove('continue');
-          elem.classList.remove('valid');
-          elemLink.textContent = 'Check';
-        }
+        AppView.switchContinueActive(elem, options);
         break;
       case 'disable':
-        if (options.class) {
-          elem.classList.remove(options.class);
+        if (options?.class) {
+          elem.classList.remove(options?.class);
         }
         break;
       default:
         break;
+    }
+  }
+
+  private static switchValidity<T extends HTMLElement>(elem: T, options?: SwitchOptions): void {
+    if (options?.isValid) {
+      elem.classList.add('valid');
+      elem.classList.remove('not-valid');
+    } else if (options?.isValid === false) {
+      elem.classList.remove('valid');
+      elem.classList.add('not-valid');
+    } else {
+      elem.classList.remove('valid');
+      elem.classList.remove('not-valid');
+    }
+  }
+
+  private static switchContinueActive<T extends HTMLElement>(
+    elem: T,
+    options?: SwitchOptions
+  ): void {
+    if (options?.isValid) {
+      const elemLink: T = elem;
+      elem.classList.add('continue');
+      app.handleActionRequest('continue');
+      elem.classList.remove('valid');
+      elemLink.textContent = 'Continue';
+    } else {
+      const elemLink: T = elem;
+      app.handleActionRequest('check');
+      elem.classList.remove('continue');
+      elem.classList.remove('valid');
+      elemLink.textContent = 'Check';
     }
   }
 
@@ -107,11 +121,20 @@ export default class AppView {
     appendElem(container, [header, main, footer]);
   }
 
-  public static moveComponent<T extends HTMLElement>(component: T, action: string): void {
+  public static moveComponent<T extends HTMLElement>(
+    component: T,
+    action: string,
+    target?: HTMLDivElement
+  ): void {
     switch (action) {
       case 'moveSource':
         if (component instanceof HTMLDivElement) {
           MainPageView.moveSourceOnClick(component);
+        }
+        break;
+      case 'setSource':
+        if (component instanceof HTMLDivElement && target) {
+          appendElem(target, [component]);
         }
         break;
       default:

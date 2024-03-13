@@ -26,6 +26,7 @@ export default class MainPageView {
   public draw() {
     this.drawWrappers();
     this.drawMainElems();
+    app.handleActionRequest('startGame');
     app.handleActionRequest('check');
   }
 
@@ -59,7 +60,12 @@ export default class MainPageView {
     });
     actionBtn.textContent = 'Check';
 
-    appendElem(this.buttonsWrapper, [actionBtn]); // continueBtn
+    const autoCompleteBtn: HTMLDivElement = createElem<HTMLDivElement>('button', {
+      class: 'playarea__auto-complete valid'
+    });
+    autoCompleteBtn.textContent = 'Auto-complete';
+
+    appendElem(this.buttonsWrapper, [actionBtn, autoCompleteBtn]);
   }
 
   private static createMainPageWrappers(): HTMLDivElement[] {
