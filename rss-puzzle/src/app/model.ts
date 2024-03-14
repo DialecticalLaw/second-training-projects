@@ -1,7 +1,7 @@
 import LocalStorageService from './services/local_storage_service';
 import AppView from './view/app_view';
 import wordCollectionLevel1 from './data/wordCollection/wordCollectionLevel1.json';
-import { Level, PuzzleInfo, Round } from '../interfaces';
+import { Level, PuzzleInfo, Round, Sentence } from '../interfaces';
 
 export default class Model {
   private appView: AppView;
@@ -11,6 +11,8 @@ export default class Model {
   private roundIndex?: number;
 
   private sentenceIndex?: number;
+
+  private translateHint?: string;
 
   constructor() {
     this.appView = new AppView();
@@ -132,8 +134,6 @@ export default class Model {
     this.currentLevel = wordCollectionLevel1;
     if (this.roundIndex === undefined) {
       this.roundIndex = 0;
-    } else {
-      this.roundIndex += 1;
     }
     this.nextSentence();
   }
@@ -145,7 +145,19 @@ export default class Model {
 
     if (this.currentLevel !== undefined && this.roundIndex !== undefined) {
       const round: Round = this.currentLevel.rounds[this.roundIndex];
-      const sentence: string[] = round.words[this.sentenceIndex].textExample.split(' ');
+      const currentSentenceInfo: Sentence = round.words[this.sentenceIndex];
+      this.translateHint = currentSentenceInfo.textExampleTranslate;
+
+      const translateHintWindow: HTMLDivElement | null = document.querySelector(
+        '.playarea__translate-window'
+      );
+      if (translateHintWindow) {
+        AppView.switchComponentDisplay(translateHintWindow, 'updateHint', {
+          hint: this.translateHint
+        });
+      }
+
+      const sentence: string[] = currentSentenceInfo.textExample.split(' ');
       const puzzlesInfo: PuzzleInfo[] = Model.definePuzzlesInfo(sentence);
       this.appView.displayComponent('sourceWords', {
         puzzlesInfo: puzzlesInfo,
@@ -195,14 +207,19 @@ export default class Model {
     }
 
     const playarea: HTMLDivElement | null = document.querySelector('.playarea');
+    const playareaHints: HTMLDivElement | null = document.querySelector('.playarea__hints');
     const playareaPuzzles: HTMLDivElement | null = document.querySelector('.playarea__puzzles');
     const playareaSources: HTMLDivElement | null = document.querySelector('.playarea__sources');
-    const buttonsWrapper: HTMLDivElement | null = document.querySelector(
-      '.playarea__buttons-wrapper'
-    );
+    const playareaButtons: HTMLDivElement | null = document.querySelector('.playarea__buttons');
 
-    if (playarea && playareaPuzzles && playareaSources && buttonsWrapper) {
-      AppView.removeComponent([playarea, playareaPuzzles, playareaSources, buttonsWrapper]);
+    if (playarea && playareaHints && playareaPuzzles && playareaSources && playareaButtons) {
+      AppView.removeComponent([
+        playarea,
+        playareaHints,
+        playareaPuzzles,
+        playareaSources,
+        playareaButtons
+      ]);
     }
 
     AppView.removeComponent([title, logoutButton]);

@@ -8,6 +8,8 @@ import { PuzzleInfo } from '../../../../interfaces';
 export default class MainPageView {
   private playareaWrapper: HTMLDivElement;
 
+  private hintsWrapper: HTMLDivElement;
+
   private puzzleWrapper: HTMLDivElement;
 
   private sourcesWrapper: HTMLDivElement;
@@ -15,10 +17,16 @@ export default class MainPageView {
   private buttonsWrapper: HTMLDivElement;
 
   constructor() {
-    const [playareaWrapper, puzzleWrapper, sourcesWrapper, buttonsWrapper]: HTMLDivElement[] =
-      MainPageView.createMainPageWrappers();
+    const [
+      playareaWrapper,
+      hintsWrapper,
+      puzzleWrapper,
+      sourcesWrapper,
+      buttonsWrapper
+    ]: HTMLDivElement[] = MainPageView.createMainPageWrappers();
 
     this.playareaWrapper = playareaWrapper;
+    this.hintsWrapper = hintsWrapper;
     this.puzzleWrapper = puzzleWrapper;
     this.sourcesWrapper = sourcesWrapper;
     this.buttonsWrapper = buttonsWrapper;
@@ -37,6 +45,7 @@ export default class MainPageView {
       appendElem(main, [this.playareaWrapper]);
     }
     appendElem(this.playareaWrapper, [
+      this.hintsWrapper,
       this.puzzleWrapper,
       this.sourcesWrapper,
       this.buttonsWrapper
@@ -44,6 +53,16 @@ export default class MainPageView {
   }
 
   private drawMainElems(): void {
+    const translateHint: HTMLDivElement = createElem<HTMLDivElement>('div', {
+      class: 'playarea__translate-hint'
+    });
+    const translateWindow: HTMLDivElement = createElem<HTMLDivElement>('div', {
+      class: 'playarea__translate-window'
+    });
+
+    appendElem(translateHint, [translateWindow]);
+    appendElem(this.hintsWrapper, [translateHint]);
+
     const sentences: HTMLDivElement[] = [];
 
     for (let i = 0; i < 10; i += 1) {
@@ -74,6 +93,10 @@ export default class MainPageView {
       class: 'playarea'
     });
 
+    const hintsWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
+      class: 'playarea__hints'
+    });
+
     const puzzleWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
       class: 'playarea__puzzles'
     });
@@ -83,10 +106,10 @@ export default class MainPageView {
     });
 
     const buttonsWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
-      class: 'playarea__buttons-wrapper'
+      class: 'playarea__buttons'
     });
 
-    return [playareaWrapper, puzzleWrapper, sourcesWrapper, buttonsWrapper];
+    return [playareaWrapper, hintsWrapper, puzzleWrapper, sourcesWrapper, buttonsWrapper];
   }
 
   public drawSources(words: PuzzleInfo[]): void {
@@ -227,6 +250,15 @@ export default class MainPageView {
       const targetLink = target;
       targetLink.style.width = 'max-content';
       appendElem(target, [source]);
+    }
+  }
+
+  public static updateTranslateWindow(hint: string): void {
+    const translateWindow: HTMLDivElement | null = document.querySelector(
+      '.playarea__translate-window'
+    );
+    if (translateWindow) {
+      translateWindow.textContent = hint;
     }
   }
 }

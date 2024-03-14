@@ -43,6 +43,7 @@ export interface Level {
 export interface SwitchOptions {
   isValid?: boolean;
   class?: string;
+  hint?: string;
 }
 
 export interface PuzzleInfo {

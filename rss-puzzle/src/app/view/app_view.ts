@@ -69,6 +69,11 @@ export default class AppView {
         }
         elem.removeAttribute('id');
         break;
+      case 'updateHint':
+        if (elem.classList.contains('playarea__translate-window') && options?.hint) {
+          MainPageView.updateTranslateWindow(options.hint);
+        }
+        break;
       default:
         break;
     }
