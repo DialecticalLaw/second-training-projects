@@ -1,7 +1,7 @@
 import LocalStorageService from './services/local_storage_service';
 import AppView from './view/app_view';
 import wordCollectionLevel1 from './data/wordCollection/wordCollectionLevel1.json';
-import { Level, Round } from '../interfaces';
+import { Level, PuzzleInfo, Round } from '../interfaces';
 
 export default class Model {
   private appView: AppView;
@@ -145,12 +145,42 @@ export default class Model {
 
     if (this.currentLevel !== undefined && this.roundIndex !== undefined) {
       const round: Round = this.currentLevel.rounds[this.roundIndex];
-      const sentence = round.words[this.sentenceIndex].textExample.split(' ');
+      const sentence: string[] = round.words[this.sentenceIndex].textExample.split(' ');
+      const puzzlesInfo: PuzzleInfo[] = Model.definePuzzlesInfo(sentence);
       this.appView.displayComponent('sourceWords', {
-        componentsText: sentence,
+        puzzlesInfo: puzzlesInfo,
         sentenceIndex: this.sentenceIndex
       });
     }
+  }
+
+  private static definePuzzlesInfo(words: string[]): PuzzleInfo[] {
+    const wordsDuplicate: string[] = words;
+    const result: PuzzleInfo[] = wordsDuplicate.map((word: string, index: number) => {
+      if (index === 0) {
+        const puzzleInfo: PuzzleInfo = {
+          word,
+          puzzleType: 'start',
+          index
+        };
+        return puzzleInfo;
+      }
+      if (index === words.length - 1) {
+        const puzzleInfo: PuzzleInfo = {
+          word,
+          puzzleType: 'end',
+          index
+        };
+        return puzzleInfo;
+      }
+      const puzzleInfo: PuzzleInfo = {
+        word,
+        puzzleType: 'middle',
+        index
+      };
+      return puzzleInfo;
+    });
+    return result;
   }
 
   public logout(): void {

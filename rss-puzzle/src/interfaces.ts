@@ -45,7 +45,13 @@ export interface SwitchOptions {
   class?: string;
 }
 
+export interface PuzzleInfo {
+  word: string;
+  puzzleType: 'start' | 'middle' | 'end';
+  index: number;
+}
+
 export interface DisplayOptions {
-  componentsText?: string[];
+  puzzlesInfo: PuzzleInfo[];
   sentenceIndex?: number;
 }

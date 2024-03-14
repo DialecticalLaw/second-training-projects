@@ -3,6 +3,7 @@ import createElem from '../../../utils/create_elem';
 import appendElem from '../../../utils/appendElem';
 import { app } from '../../../..';
 import shuffleArr from '../../../utils/shuffleArr';
+import { PuzzleInfo } from '../../../../interfaces';
 
 export default class MainPageView {
   private playareaWrapper: HTMLDivElement;
@@ -88,8 +89,8 @@ export default class MainPageView {
     return [playareaWrapper, puzzleWrapper, sourcesWrapper, buttonsWrapper];
   }
 
-  public drawSources(words: string[]): void {
-    const shuffledSentence: string[] = shuffleArr(words);
+  public drawSources(words: PuzzleInfo[]): void {
+    const shuffledSentence: PuzzleInfo[] = shuffleArr(words);
     this.createSourcesPlaces(words.length);
     MainPageView.createSources(shuffledSentence);
 
@@ -127,18 +128,39 @@ export default class MainPageView {
     }
   }
 
-  private static createSources(shuffledWords: string[]): void {
+  private static createSources(shuffledWords: PuzzleInfo[]): void {
     const allSourcesPlaces: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__source-place')
     );
-    shuffledWords.forEach((word: string, index: number) => {
+    shuffledWords.forEach((puzzleInfo: PuzzleInfo, index: number) => {
       const source: HTMLDivElement = createElem<HTMLDivElement>('div', {
-        class: 'playarea__source playarea__source_active',
+        class: `playarea__source playarea__source_active ${puzzleInfo.puzzleType}`,
         id: `source${index}`,
         style: 'transition: 0s; opacity: 0',
         draggable: 'true'
       });
-      source.textContent = word;
+      source.textContent = puzzleInfo.word;
+
+      if (puzzleInfo.puzzleType === 'start') {
+        const pegOuter: HTMLDivElement = createElem<HTMLDivElement>('div', {
+          class: 'playarea__peg_outer'
+        });
+        appendElem(source, [pegOuter]);
+      } else if (puzzleInfo.puzzleType === 'middle') {
+        const pegInner: HTMLDivElement = createElem<HTMLDivElement>('div', {
+          class: 'playarea__peg_inner'
+        });
+        const pegOuter: HTMLDivElement = createElem<HTMLDivElement>('div', {
+          class: 'playarea__peg_outer'
+        });
+        appendElem(source, [pegInner, pegOuter]);
+      } else {
+        const pegInner: HTMLDivElement = createElem<HTMLDivElement>('div', {
+          class: 'playarea__peg_inner'
+        });
+        appendElem(source, [pegInner]);
+      }
+
       appendElem(allSourcesPlaces[index], [source]);
     });
   }

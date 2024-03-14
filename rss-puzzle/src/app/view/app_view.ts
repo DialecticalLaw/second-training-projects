@@ -31,14 +31,10 @@ export default class AppView {
         this.mainPageView.draw();
         break;
       case 'sourceWords':
-        if (
-          options !== undefined &&
-          options.componentsText &&
-          options.sentenceIndex !== undefined
-        ) {
-          this.mainPageView.drawSources(options.componentsText);
+        if (options !== undefined && options.puzzlesInfo && options.sentenceIndex !== undefined) {
+          this.mainPageView.drawSources(options.puzzlesInfo);
           MainPageView.drawSourcesPlaceInSentence(
-            options.componentsText.length,
+            options.puzzlesInfo.length,
             options.sentenceIndex
           );
         }
