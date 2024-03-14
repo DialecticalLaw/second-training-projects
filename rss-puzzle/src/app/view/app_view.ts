@@ -63,15 +63,20 @@ export default class AppView {
       case 'continue-active':
         AppView.switchContinueActive(elem, options);
         break;
-      case 'disable':
+      case 'removeClass':
         if (options?.class) {
           elem.classList.remove(options?.class);
         }
-        elem.removeAttribute('id');
+        if (elem.classList.contains('playarea__source')) elem.removeAttribute('id');
+        break;
+      case 'addClass':
+        if (options?.class) {
+          elem.classList.add(options?.class);
+        }
         break;
       case 'updateHint':
-        if (elem.classList.contains('playarea__translate-window') && options?.hint) {
-          MainPageView.updateTranslateWindow(options.hint);
+        if (elem.classList.contains('playarea__translate-text') && options?.hint) {
+          MainPageView.updateTranslateText(options.hint);
         }
         break;
       default:

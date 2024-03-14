@@ -188,9 +188,13 @@ export default class Controller {
     const autoCompleteBtn: HTMLButtonElement | null = document.querySelector(
       '.playarea__auto-complete'
     );
+    const translateBtn: HTMLButtonElement | null = document.querySelector(
+      '.playarea__translate-hint'
+    );
 
-    if (autoCompleteBtn) {
+    if (autoCompleteBtn && translateBtn) {
       autoCompleteBtn.addEventListener('click', this.model.completeSentenceAuto.bind(this.model));
+      translateBtn.addEventListener('click', () => Model.toggleHint(translateBtn));
     }
   }
 }

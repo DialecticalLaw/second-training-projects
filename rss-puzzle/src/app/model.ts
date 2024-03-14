@@ -148,11 +148,11 @@ export default class Model {
       const currentSentenceInfo: Sentence = round.words[this.sentenceIndex];
       this.translateHint = currentSentenceInfo.textExampleTranslate;
 
-      const translateHintWindow: HTMLDivElement | null = document.querySelector(
-        '.playarea__translate-window'
+      const translateText: HTMLParagraphElement | null = document.querySelector(
+        '.playarea__translate-text'
       );
-      if (translateHintWindow) {
-        AppView.switchComponentDisplay(translateHintWindow, 'updateHint', {
+      if (translateText) {
+        AppView.switchComponentDisplay(translateText, 'updateHint', {
           hint: this.translateHint
         });
       }
@@ -228,7 +228,7 @@ export default class Model {
   }
 
   public makeSourceReaction(event: MouseEvent): void {
-    const eventTarget = event.target as HTMLDivElement | null;
+    const eventTarget = event.currentTarget as HTMLDivElement | null;
     const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
 
     if (!eventTarget || !actionBtn) return;
@@ -243,14 +243,19 @@ export default class Model {
     const autoCompleteBtn: HTMLButtonElement | null = document.querySelector(
       '.playarea__auto-complete'
     );
-    if (!actionBtn || !autoCompleteBtn) return;
+    const translateText: HTMLParagraphElement | null = document.querySelector(
+      '.playarea__translate-text'
+    );
+    if (!actionBtn || !autoCompleteBtn || !translateText) return;
 
     if (Model.isSentenceFilled()) {
       if (this.isSentenceCorrect()) {
+        AppView.switchComponentDisplay(translateText, 'addClass', { class: 'pseudo-valid' });
         AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
         AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: true });
         AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: false });
       } else {
+        AppView.switchComponentDisplay(translateText, 'removeClass', { class: 'pseudo-valid' });
         AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
         AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
         AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
@@ -258,6 +263,7 @@ export default class Model {
       return;
     }
 
+    AppView.switchComponentDisplay(translateText, 'removeClass', { class: 'pseudo-valid' });
     AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
     AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: false });
     AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
@@ -289,13 +295,15 @@ export default class Model {
     const autoCompleteBtn: HTMLButtonElement | null = document.querySelector(
       '.playarea__auto-complete'
     );
+    const translateText: HTMLParagraphElement | null = document.querySelector(
+      '.playarea__translate-text'
+    );
 
-    if (actionBtn && autoCompleteBtn) {
+    if (actionBtn && autoCompleteBtn && translateText) {
       Model.disableActiveElems();
       if (this.sentenceIndex === undefined || this.roundIndex === undefined) {
         throw new Error('sentenceIndex or roundIndex is undefined');
       }
-
       const allSourcePlaces: HTMLDivElement[] = Array.from(
         document.querySelectorAll('.playarea__source-place')
       );
@@ -316,6 +324,7 @@ export default class Model {
         this.nextSentence();
       }
 
+      AppView.switchComponentDisplay(translateText, 'removeClass', { class: 'pseudo-valid' });
       AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
       AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: false });
       AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
@@ -361,11 +370,11 @@ export default class Model {
     );
 
     allSources.forEach((source: HTMLDivElement) => {
-      AppView.switchComponentDisplay(source, 'disable', { class: 'playarea__source_active' });
+      AppView.switchComponentDisplay(source, 'removeClass', { class: 'playarea__source_active' });
     });
 
     allSentencePlaces.forEach((place: HTMLDivElement) => {
-      AppView.switchComponentDisplay(place, 'disable', {
+      AppView.switchComponentDisplay(place, 'removeClass', {
         class: 'playarea__sentence-place_active'
       });
     });
@@ -451,5 +460,20 @@ export default class Model {
     }
     Model.clearSourcesValidity();
     this.updateButtonsState();
+  }
+
+  public static toggleHint(hintElem: HTMLButtonElement): void {
+    if (hintElem.classList.contains('playarea__translate-hint')) {
+      const translateText: HTMLDivElement | null = document.querySelector(
+        '.playarea__translate-text'
+      );
+      if (hintElem.classList.contains('valid') && translateText) {
+        AppView.switchComponentDisplay(hintElem, 'validity', { isValid: false });
+        AppView.switchComponentDisplay(translateText, 'validity', { isValid: false });
+      } else if (translateText) {
+        AppView.switchComponentDisplay(hintElem, 'validity', { isValid: true });
+        AppView.switchComponentDisplay(translateText, 'validity', { isValid: true });
+      }
+    }
   }
 }
