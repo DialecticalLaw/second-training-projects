@@ -86,13 +86,16 @@ export default class MainPageView {
     const translateBtn: HTMLButtonElement = createElem<HTMLButtonElement>('button', {
       class: 'playarea__translate-hint valid'
     });
-    appendElem(this.hintsOptionsWrapper, [translateBtn]);
+    const audioBtn: HTMLButtonElement = createElem<HTMLButtonElement>('button', {
+      class: 'playarea__audio-hint valid'
+    });
+    appendElem(this.hintsOptionsWrapper, [translateBtn, audioBtn]);
 
     const translateText: HTMLParagraphElement = createElem<HTMLParagraphElement>('p', {
       class: 'playarea__translate-text valid'
     });
     const audioIcon: HTMLDivElement = createElem<HTMLDivElement>('div', {
-      class: 'playarea__audio-icon'
+      class: 'playarea__audio-icon valid'
     });
     const audio: HTMLAudioElement = createElem<HTMLAudioElement>('audio', {
       class: 'playarea__audio'

@@ -258,16 +258,19 @@ export default class Model {
     const translateText: HTMLParagraphElement | null = document.querySelector(
       '.playarea__translate-text'
     );
-    if (!actionBtn || !autoCompleteBtn || !translateText) return;
+    const audioIcon: HTMLButtonElement | null = document.querySelector('.playarea__audio-icon');
+    if (!actionBtn || !autoCompleteBtn || !translateText || !audioIcon) return;
 
     if (Model.isSentenceFilled()) {
       if (this.isSentenceCorrect()) {
         AppView.switchComponentDisplay(translateText, 'addClass', { class: 'pseudo-valid' });
+        AppView.switchComponentDisplay(audioIcon, 'addClass', { class: 'pseudo-valid' });
         AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
         AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: true });
         AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: false });
       } else {
         AppView.switchComponentDisplay(translateText, 'removeClass', { class: 'pseudo-valid' });
+        AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'pseudo-valid' });
         AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
         AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
         AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
@@ -276,6 +279,7 @@ export default class Model {
     }
 
     AppView.switchComponentDisplay(translateText, 'removeClass', { class: 'pseudo-valid' });
+    AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'pseudo-valid' });
     AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
     AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: false });
     AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
@@ -342,10 +346,11 @@ export default class Model {
 
     if (translateText && actionBtn && autoCompleteBtn && audioIcon) {
       AppView.switchComponentDisplay(translateText, 'removeClass', { class: 'pseudo-valid' });
+      AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'pseudo-valid' });
       AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
       AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: false });
       AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
-      AppView.switchComponentDisplay(audioIcon, 'validity', { isValid: false });
+      AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'active' });
     }
   }
 
@@ -482,15 +487,36 @@ export default class Model {
 
   public static toggleHint(hintElem: HTMLButtonElement): void {
     if (hintElem.classList.contains('playarea__translate-hint')) {
-      const translateText: HTMLDivElement | null = document.querySelector(
-        '.playarea__translate-text'
-      );
-      if (hintElem.classList.contains('valid') && translateText) {
+      Model.toggleTranslateHint(hintElem);
+    } else if (hintElem.classList.contains('playarea__audio-hint')) {
+      Model.toggleAudioHint(hintElem);
+    }
+  }
+
+  private static toggleTranslateHint(hintElem: HTMLButtonElement): void {
+    const translateText: HTMLDivElement | null = document.querySelector(
+      '.playarea__translate-text'
+    );
+    if (translateText) {
+      if (hintElem.classList.contains('valid')) {
         AppView.switchComponentDisplay(hintElem, 'validity', { isValid: false });
         AppView.switchComponentDisplay(translateText, 'validity', { isValid: false });
-      } else if (translateText) {
+      } else {
         AppView.switchComponentDisplay(hintElem, 'validity', { isValid: true });
         AppView.switchComponentDisplay(translateText, 'validity', { isValid: true });
+      }
+    }
+  }
+
+  private static toggleAudioHint(hintElem: HTMLButtonElement): void {
+    const audioIcon: HTMLDivElement | null = document.querySelector('.playarea__audio-icon');
+    if (audioIcon) {
+      if (hintElem.classList.contains('valid')) {
+        AppView.switchComponentDisplay(hintElem, 'validity', { isValid: false });
+        AppView.switchComponentDisplay(audioIcon, 'validity', { isValid: false });
+      } else {
+        AppView.switchComponentDisplay(hintElem, 'validity', { isValid: true });
+        AppView.switchComponentDisplay(audioIcon, 'validity', { isValid: true });
       }
     }
   }
@@ -498,7 +524,7 @@ export default class Model {
   public playAudioHint(isEnded: boolean): void {
     const audioIcon: HTMLDivElement | null = document.querySelector('.playarea__audio-icon');
     if (isEnded && audioIcon) {
-      AppView.switchComponentDisplay(audioIcon, 'validity', { isValid: false });
+      AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'active' });
       return;
     }
     if (
@@ -508,7 +534,7 @@ export default class Model {
     ) {
       const audioElem: HTMLAudioElement | null = document.querySelector('.playarea__audio');
       if (audioElem && audioIcon) {
-        AppView.switchComponentDisplay(audioIcon, 'validity', { isValid: true });
+        AppView.switchComponentDisplay(audioIcon, 'addClass', { class: 'active' });
         audioElem.play();
       }
     }

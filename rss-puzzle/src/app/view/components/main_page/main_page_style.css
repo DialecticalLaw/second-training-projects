@@ -22,15 +22,6 @@
   gap: 10px;
 }
 
-.playarea__translate-hint {
-  position: relative;
-  background-image: url('../../../../assets/img/translate.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: calc(100% - 10px);
-  cursor: pointer;
-}
-
 .playarea__options_hints button {
   width: 40px;
   height: 40px;
@@ -38,8 +29,20 @@
   border: none;
   border-radius: 5px;
   background-color: var(--red-color);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: calc(100% - 10px);
   box-shadow: 3px 3px 6px 1px var(--shadow-color);
   transition: 0.3s;
+  cursor: pointer;
+}
+
+.playarea__translate-hint {
+  background-image: url('../../../../assets/img/translate.svg');
+}
+
+.playarea__audio-hint {
+  background-image: url('../../../../assets/img/audio.svg');
 }
 
 .playarea__options_hints button:active {
@@ -47,10 +50,7 @@
 }
 
 .playarea__options_hints button.valid {
-  padding: 15px;
-  border-radius: 5px;
   background-color: var(--addition-color);
-  transition: 0.3s;
 }
 
 .playarea__hints-wrapper {
@@ -81,6 +81,17 @@
 }
 
 .playarea__audio-icon {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.playarea__hints-wrapper .valid,
+.playarea__hints-wrapper .pseudo-valid {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.playarea__audio-icon {
   width: 50px;
   height: 50px;
   background-image: url('../../../../assets/img/audioOff.svg');
@@ -96,17 +107,11 @@
   transform: rotate(-30deg);
 }
 
-.playarea__audio-icon.valid {
+.playarea__audio-icon.active {
   pointer-events: none;
   opacity: 0.8;
   animation: audio-active 0.5s infinite alternate;
   background-image: url('../../../../assets/img/audioOn.svg');
-}
-
-.playarea__translate-text.valid,
-.playarea__translate-text.pseudo-valid {
-  opacity: 1;
-  transform: scaleX(1);
 }
 
 .playarea__puzzles {
