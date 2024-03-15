@@ -87,6 +87,7 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  filter: drop-shadow(3px 3px 3px var(--shadow-color));
   transition: 0.3s;
   cursor: pointer;
 }
@@ -97,7 +98,8 @@
 
 .playarea__audio-icon.valid {
   pointer-events: none;
-  opacity: 0.7;
+  opacity: 0.8;
+  animation: audio-active 0.5s infinite alternate;
   background-image: url('../../../../assets/img/audioOn.svg');
 }
 
@@ -280,4 +282,15 @@
   background-color: #ffffff;
   left: -3px;
   z-index: 0;
+}
+
+@keyframes audio-active {
+  from {
+    filter: drop-shadow(0 0 0 #00ff00);
+    transform: scale(1);
+  }
+  to {
+    filter: drop-shadow(0 0 4px #00ff00);
+    transform: scale(1.15);
+  }
 }
