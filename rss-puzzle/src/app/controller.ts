@@ -191,10 +191,14 @@ export default class Controller {
     const translateBtn: HTMLButtonElement | null = document.querySelector(
       '.playarea__translate-hint'
     );
+    const audioIcon: HTMLDivElement | null = document.querySelector('.playarea__audio-icon');
+    const audioElem: HTMLAudioElement | null = document.querySelector('.playarea__audio');
 
-    if (autoCompleteBtn && translateBtn) {
+    if (autoCompleteBtn && translateBtn && audioIcon && audioElem) {
       autoCompleteBtn.addEventListener('click', this.model.completeSentenceAuto.bind(this.model));
       translateBtn.addEventListener('click', () => Model.toggleHint(translateBtn));
+      audioIcon.addEventListener('click', this.model.playAudioHint.bind(this.model, false));
+      audioElem.addEventListener('ended', this.model.playAudioHint.bind(this.model, true));
     }
   }
 }

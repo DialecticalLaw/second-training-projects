@@ -151,7 +151,10 @@ export default class Model {
       const translateText: HTMLParagraphElement | null = document.querySelector(
         '.playarea__translate-text'
       );
-      if (translateText) {
+      const audioElem: HTMLAudioElement | null = document.querySelector('.playarea__audio');
+      const audioLink: string = currentSentenceInfo.audioExample;
+      if (translateText && audioElem) {
+        audioElem.src = audioLink;
         AppView.switchComponentDisplay(translateText, 'updateHint', {
           hint: this.translateHint
         });
@@ -207,14 +210,23 @@ export default class Model {
     }
 
     const playarea: HTMLDivElement | null = document.querySelector('.playarea');
-    const playareaHints: HTMLDivElement | null = document.querySelector('.playarea__hints');
+    const playareaOptions: HTMLDivElement | null = document.querySelector('.playarea__options');
+    const playareaHints: HTMLDivElement | null = document.querySelector('.playarea__hints-wrapper');
     const playareaPuzzles: HTMLDivElement | null = document.querySelector('.playarea__puzzles');
     const playareaSources: HTMLDivElement | null = document.querySelector('.playarea__sources');
     const playareaButtons: HTMLDivElement | null = document.querySelector('.playarea__buttons');
 
-    if (playarea && playareaHints && playareaPuzzles && playareaSources && playareaButtons) {
+    if (
+      playarea &&
+      playareaOptions &&
+      playareaHints &&
+      playareaPuzzles &&
+      playareaSources &&
+      playareaButtons
+    ) {
       AppView.removeComponent([
         playarea,
+        playareaOptions,
         playareaHints,
         playareaPuzzles,
         playareaSources,
@@ -291,7 +303,36 @@ export default class Model {
   }
 
   public stepForward(): void {
+    Model.disableActiveElems();
+    if (this.sentenceIndex === undefined || this.roundIndex === undefined) {
+      throw new Error('sentenceIndex or roundIndex is undefined');
+    }
+    const allSourcePlaces: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source-place')
+    );
+
+    if (this.sentenceIndex < 9) {
+      // next sentence
+      this.sentenceIndex += 1;
+      AppView.removeComponent(allSourcePlaces);
+      this.nextSentence();
+    } else {
+      // next round
+      const allSentencePlaces: HTMLDivElement[] = Array.from(
+        document.querySelectorAll('.playarea__sentence-place')
+      );
+      this.roundIndex += 1;
+      this.sentenceIndex = 0;
+      AppView.removeComponent([...allSentencePlaces, ...allSourcePlaces]);
+      this.nextSentence();
+    }
+
+    Model.updateButtonsOnStepForward();
+  }
+
+  private static updateButtonsOnStepForward(): void {
     const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
+    const audioIcon: HTMLDivElement | null = document.querySelector('.playarea__audio-icon');
     const autoCompleteBtn: HTMLButtonElement | null = document.querySelector(
       '.playarea__auto-complete'
     );
@@ -299,35 +340,12 @@ export default class Model {
       '.playarea__translate-text'
     );
 
-    if (actionBtn && autoCompleteBtn && translateText) {
-      Model.disableActiveElems();
-      if (this.sentenceIndex === undefined || this.roundIndex === undefined) {
-        throw new Error('sentenceIndex or roundIndex is undefined');
-      }
-      const allSourcePlaces: HTMLDivElement[] = Array.from(
-        document.querySelectorAll('.playarea__source-place')
-      );
-
-      if (this.sentenceIndex < 9) {
-        // next sentence
-        this.sentenceIndex += 1;
-        AppView.removeComponent(allSourcePlaces);
-        this.nextSentence();
-      } else {
-        // next round
-        const allSentencePlaces: HTMLDivElement[] = Array.from(
-          document.querySelectorAll('.playarea__sentence-place')
-        );
-        this.roundIndex += 1;
-        this.sentenceIndex = 0;
-        AppView.removeComponent([...allSentencePlaces, ...allSourcePlaces]);
-        this.nextSentence();
-      }
-
+    if (translateText && actionBtn && autoCompleteBtn && audioIcon) {
       AppView.switchComponentDisplay(translateText, 'removeClass', { class: 'pseudo-valid' });
       AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
       AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: false });
       AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
+      AppView.switchComponentDisplay(audioIcon, 'validity', { isValid: false });
     }
   }
 
@@ -473,6 +491,25 @@ export default class Model {
       } else if (translateText) {
         AppView.switchComponentDisplay(hintElem, 'validity', { isValid: true });
         AppView.switchComponentDisplay(translateText, 'validity', { isValid: true });
+      }
+    }
+  }
+
+  public playAudioHint(isEnded: boolean): void {
+    const audioIcon: HTMLDivElement | null = document.querySelector('.playarea__audio-icon');
+    if (isEnded && audioIcon) {
+      AppView.switchComponentDisplay(audioIcon, 'validity', { isValid: false });
+      return;
+    }
+    if (
+      this.currentLevel !== undefined &&
+      this.roundIndex !== undefined &&
+      this.sentenceIndex !== undefined
+    ) {
+      const audioElem: HTMLAudioElement | null = document.querySelector('.playarea__audio');
+      if (audioElem && audioIcon) {
+        AppView.switchComponentDisplay(audioIcon, 'validity', { isValid: true });
+        audioElem.play();
       }
     }
   }

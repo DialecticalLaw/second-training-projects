@@ -10,7 +10,7 @@ export default class MainPageView {
 
   private optionsWrapper: HTMLDivElement;
 
-  private hintsWrapper: HTMLDivElement;
+  private hintsOptionsWrapper: HTMLDivElement;
 
   private puzzleWrapper: HTMLDivElement;
 
@@ -22,7 +22,7 @@ export default class MainPageView {
     const [
       playareaWrapper,
       optionsWrapper,
-      hintsWrapper,
+      hintsOptionsWrapper,
       puzzleWrapper,
       sourcesWrapper,
       buttonsWrapper
@@ -30,7 +30,7 @@ export default class MainPageView {
 
     this.playareaWrapper = playareaWrapper;
     this.optionsWrapper = optionsWrapper;
-    this.hintsWrapper = hintsWrapper;
+    this.hintsOptionsWrapper = hintsOptionsWrapper;
     this.puzzleWrapper = puzzleWrapper;
     this.sourcesWrapper = sourcesWrapper;
     this.buttonsWrapper = buttonsWrapper;
@@ -55,22 +55,13 @@ export default class MainPageView {
       this.sourcesWrapper,
       this.buttonsWrapper
     ]);
-    appendElem(this.optionsWrapper, [this.hintsWrapper]);
+    appendElem(this.optionsWrapper, [this.hintsOptionsWrapper]);
   }
 
   private drawMainElems(): void {
-    const translateBtn: HTMLButtonElement = createElem<HTMLButtonElement>('button', {
-      class: 'playarea__translate-hint valid'
-    });
-    appendElem(this.hintsWrapper, [translateBtn]);
-
-    const translateText: HTMLParagraphElement = createElem<HTMLParagraphElement>('p', {
-      class: 'playarea__translate-text valid'
-    });
-    this.optionsWrapper.insertAdjacentElement('afterend', translateText);
+    this.drawHints();
 
     const sentences: HTMLDivElement[] = [];
-
     for (let i = 0; i < 10; i += 1) {
       // 10 - count of sentences
       const sentence: HTMLDivElement = createElem<HTMLDivElement>('div', {
@@ -78,20 +69,40 @@ export default class MainPageView {
       });
       sentences.push(sentence);
     }
-
     appendElem(this.puzzleWrapper, sentences);
 
     const actionBtn: HTMLDivElement = createElem<HTMLDivElement>('button', {
       class: 'playarea__action-button'
     });
     actionBtn.textContent = 'Check';
-
     const autoCompleteBtn: HTMLDivElement = createElem<HTMLDivElement>('button', {
       class: 'playarea__auto-complete valid'
     });
     autoCompleteBtn.textContent = 'Auto-complete';
-
     appendElem(this.buttonsWrapper, [actionBtn, autoCompleteBtn]);
+  }
+
+  private drawHints(): void {
+    const translateBtn: HTMLButtonElement = createElem<HTMLButtonElement>('button', {
+      class: 'playarea__translate-hint valid'
+    });
+    appendElem(this.hintsOptionsWrapper, [translateBtn]);
+
+    const translateText: HTMLParagraphElement = createElem<HTMLParagraphElement>('p', {
+      class: 'playarea__translate-text valid'
+    });
+    const audioIcon: HTMLDivElement = createElem<HTMLDivElement>('div', {
+      class: 'playarea__audio-icon'
+    });
+    const audio: HTMLAudioElement = createElem<HTMLAudioElement>('audio', {
+      class: 'playarea__audio'
+    });
+
+    const hintsWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
+      class: 'playarea__hints-wrapper'
+    });
+    appendElem(hintsWrapper, [translateText, audioIcon, audio]);
+    this.optionsWrapper.insertAdjacentElement('afterend', hintsWrapper);
   }
 
   private static createMainPageWrappers(): HTMLDivElement[] {
@@ -103,7 +114,7 @@ export default class MainPageView {
       class: 'playarea__options'
     });
 
-    const hintsWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
+    const hintsOptionsWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
       class: 'playarea__options_hints'
     });
 
@@ -122,7 +133,7 @@ export default class MainPageView {
     return [
       playareaWrapper,
       optionsWrapper,
-      hintsWrapper,
+      hintsOptionsWrapper,
       puzzleWrapper,
       sourcesWrapper,
       buttonsWrapper
