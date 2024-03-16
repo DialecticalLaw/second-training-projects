@@ -12,7 +12,7 @@ export interface LocalStorageData {
 
 export type StartPageWrappers = [HTMLDivElement, HTMLDivElement];
 
-interface LevelData {
+interface RoundData {
   author: string;
   cutSrc: string;
   id: string;
@@ -31,7 +31,7 @@ export interface Sentence {
 }
 
 export interface Round {
-  levelData: LevelData;
+  levelData: RoundData;
   words: Sentence[];
 }
 
@@ -54,5 +54,11 @@ export interface PuzzleInfo {
 
 export interface DisplayOptions {
   puzzlesInfo: PuzzleInfo[];
-  sentenceIndex?: number;
+  imageSrc: string;
+  sentenceIndex: number;
+}
+
+export interface PlayboardSize {
+  width: number;
+  height: number;
 }

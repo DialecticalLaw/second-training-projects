@@ -31,8 +31,17 @@ export default class AppView {
         this.mainPageView.draw();
         break;
       case 'sourceWords':
-        if (options !== undefined && options.puzzlesInfo && options.sentenceIndex !== undefined) {
-          this.mainPageView.drawSources(options.puzzlesInfo);
+        if (
+          options !== undefined &&
+          options.puzzlesInfo &&
+          options.sentenceIndex !== undefined &&
+          options.imageSrc
+        ) {
+          this.mainPageView.drawSources(
+            options.puzzlesInfo,
+            options.imageSrc,
+            options.sentenceIndex
+          );
           MainPageView.drawSourcesPlaceInSentence(
             options.puzzlesInfo.length,
             options.sentenceIndex

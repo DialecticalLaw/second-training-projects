@@ -3,7 +3,7 @@ import createElem from '../../../utils/create_elem';
 import appendElem from '../../../utils/appendElem';
 import { app } from '../../../..';
 import shuffleArr from '../../../utils/shuffleArr';
-import { PuzzleInfo } from '../../../../interfaces';
+import { PlayboardSize, PuzzleInfo } from '../../../../interfaces';
 
 export default class MainPageView {
   private playareaWrapper: HTMLDivElement;
@@ -143,10 +143,11 @@ export default class MainPageView {
     ];
   }
 
-  public drawSources(words: PuzzleInfo[]): void {
+  public drawSources(words: PuzzleInfo[], imageSrc: string, row: number): void {
     const shuffledSentence: PuzzleInfo[] = shuffleArr(words);
     this.createSourcesPlaces(words.length);
     MainPageView.createSources(shuffledSentence);
+    MainPageView.drawSourcesBackground(words, imageSrc, row);
 
     const allSources: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__source_active')
@@ -173,6 +174,57 @@ export default class MainPageView {
     });
   }
 
+  private static drawSourcesBackground(words: PuzzleInfo[], imageSrc: string, row: number): void {
+    const allActiveSources: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source_active')
+    );
+
+    let positionX: number = 0;
+    words.forEach((word: PuzzleInfo) => {
+      const currentSource: HTMLDivElement | undefined = allActiveSources.find(
+        (source: HTMLDivElement) =>
+          source.textContent === word.word && !source.classList.contains('marked')
+      );
+      if (!currentSource) throw new Error('source not found');
+      const sourceImg = currentSource.firstElementChild as HTMLDivElement;
+      currentSource.classList.add('marked');
+      sourceImg.style.backgroundImage = `url('pictures/${imageSrc}')`;
+
+      const playareaPuzzles = document.querySelector('.playarea__puzzles') as HTMLDivElement;
+      const playboardSize: PlayboardSize = {
+        width: playareaPuzzles.getBoundingClientRect().width,
+        height: playareaPuzzles.getBoundingClientRect().height
+      };
+      sourceImg.style.backgroundSize = `${playboardSize.width}px ${playboardSize.height}px`;
+
+      const sourcesHeight: number = currentSource.getBoundingClientRect().height;
+      const positionY = row * sourcesHeight;
+      sourceImg.style.backgroundPosition = `-${positionX}px -${positionY}px`;
+      positionX += currentSource.getBoundingClientRect().width;
+
+      MainPageView.drawPegBackground(currentSource, imageSrc, positionX, positionY, playboardSize);
+    });
+    allActiveSources.forEach((source: HTMLDivElement) => source.classList.remove('marked'));
+  }
+
+  private static drawPegBackground(
+    source: HTMLDivElement,
+    imageSrc: string,
+    positionX: number,
+    positionY: number,
+    playboardSize: PlayboardSize
+  ): void {
+    const peg = source.lastElementChild as HTMLDivElement;
+    if (!peg.classList.contains('playarea__peg_outer')) return;
+
+    peg.style.backgroundImage = `url('pictures/${imageSrc}')`;
+    peg.style.backgroundSize = `${playboardSize.width}px ${playboardSize.height}px`;
+    const pegSize: number = peg.getBoundingClientRect().width;
+
+    const pegPositionY = positionY + (source.getBoundingClientRect().height - pegSize) / 2;
+    peg.style.backgroundPosition = `-${positionX - 2}px -${pegPositionY}px`;
+  }
+
   private createSourcesPlaces(placesCount: number): void {
     for (let i = 0; i < placesCount; i += 1) {
       const sourcePlace: HTMLDivElement = createElem<HTMLDivElement>('div', {
@@ -193,30 +245,41 @@ export default class MainPageView {
         style: 'transition: 0s; opacity: 0',
         draggable: 'true'
       });
-      source.textContent = puzzleInfo.word;
 
-      if (puzzleInfo.puzzleType === 'start') {
-        const pegOuter: HTMLDivElement = createElem<HTMLDivElement>('div', {
-          class: 'playarea__peg_outer'
-        });
-        appendElem(source, [pegOuter]);
-      } else if (puzzleInfo.puzzleType === 'middle') {
-        const pegInner: HTMLDivElement = createElem<HTMLDivElement>('div', {
-          class: 'playarea__peg_inner'
-        });
-        const pegOuter: HTMLDivElement = createElem<HTMLDivElement>('div', {
-          class: 'playarea__peg_outer'
-        });
-        appendElem(source, [pegInner, pegOuter]);
-      } else {
-        const pegInner: HTMLDivElement = createElem<HTMLDivElement>('div', {
-          class: 'playarea__peg_inner'
-        });
-        appendElem(source, [pegInner]);
-      }
+      const sourceImg: HTMLDivElement = createElem<HTMLDivElement>('div', {
+        class: 'playarea__source-img'
+      });
+      const sourceText: HTMLSpanElement = createElem<HTMLSpanElement>('span', {
+        class: 'playarea__source-text'
+      });
+      sourceText.textContent = puzzleInfo.word;
+      appendElem(source, [sourceImg, sourceText]);
 
+      MainPageView.drawSourcePeg(source, puzzleInfo);
       appendElem(allSourcesPlaces[index], [source]);
     });
+  }
+
+  private static drawSourcePeg(source: HTMLDivElement, puzzleInfo: PuzzleInfo): void {
+    if (puzzleInfo.puzzleType === 'start') {
+      const pegOuter: HTMLDivElement = createElem<HTMLDivElement>('div', {
+        class: 'playarea__peg_outer'
+      });
+      appendElem(source, [pegOuter]);
+    } else if (puzzleInfo.puzzleType === 'middle') {
+      const pegInner: HTMLDivElement = createElem<HTMLDivElement>('div', {
+        class: 'playarea__peg_inner'
+      });
+      const pegOuter: HTMLDivElement = createElem<HTMLDivElement>('div', {
+        class: 'playarea__peg_outer'
+      });
+      appendElem(source, [pegInner, pegOuter]);
+    } else {
+      const pegInner: HTMLDivElement = createElem<HTMLDivElement>('div', {
+        class: 'playarea__peg_inner'
+      });
+      appendElem(source, [pegInner]);
+    }
   }
 
   private static setWidth<T extends HTMLElement>(elems: T[]): void {

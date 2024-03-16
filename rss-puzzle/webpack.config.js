@@ -43,6 +43,10 @@ const baseConfig = {
         {
           from: path.resolve(__dirname, 'src/app/data/files'),
           to: path.resolve(__dirname, 'dist/files')
+        },
+        {
+          from: path.resolve(__dirname, 'src/app/data/pictures'),
+          to: path.resolve(__dirname, 'dist/pictures')
         }
       ]
     })

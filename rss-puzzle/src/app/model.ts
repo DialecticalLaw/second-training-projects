@@ -162,8 +162,11 @@ export default class Model {
 
       const sentence: string[] = currentSentenceInfo.textExample.split(' ');
       const puzzlesInfo: PuzzleInfo[] = Model.definePuzzlesInfo(sentence);
+      const imageSrc: string = round.levelData.imageSrc;
+
       this.appView.displayComponent('sourceWords', {
         puzzlesInfo: puzzlesInfo,
+        imageSrc,
         sentenceIndex: this.sentenceIndex
       });
     }
@@ -467,7 +470,7 @@ export default class Model {
         source.textContent === word && !source.classList.contains('marked')
     );
     if (result) return result;
-    throw new Error('Source not found');
+    throw new Error('Source not found at findSource (Model.ts)');
   }
 
   public dropSource(target: HTMLDivElement, source: HTMLDivElement): void {
