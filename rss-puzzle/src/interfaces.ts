@@ -8,6 +8,9 @@ export interface LocalStorageData {
   name?: string;
   surname?: string;
   isLogin: boolean;
+  translateHint: boolean;
+  audioHint: boolean;
+  backgroundHint: boolean;
 }
 
 export type StartPageWrappers = [HTMLDivElement, HTMLDivElement];
@@ -19,6 +22,12 @@ interface RoundData {
   imageSrc: string;
   name: string;
   year: string;
+}
+
+export interface HintsStatus {
+  translateHintStatus: boolean;
+  audioHintStatus: boolean;
+  backgroundHintStatus: boolean;
 }
 
 export interface Sentence {

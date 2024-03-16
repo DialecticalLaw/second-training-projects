@@ -1,7 +1,7 @@
 import { LocalStorageData } from '../../interfaces';
 
 export default class LocalStorageService {
-  public static saveStringData<T extends keyof Omit<LocalStorageData, 'isLogin'>>(
+  public static saveStringData<T extends keyof Pick<LocalStorageData, 'name' | 'surname'>>(
     key: T,
     data: string
   ): void {
@@ -36,6 +36,9 @@ export default class LocalStorageService {
 
   public static initLocalStorage(): void {
     localStorage.setItem('dialecticallaw-rss-puzzle', JSON.stringify({ isLogin: false }));
+    LocalStorageService.saveBooleanData('translateHint', true);
+    LocalStorageService.saveBooleanData('audioHint', true);
+    LocalStorageService.saveBooleanData('backgroundHint', true);
   }
 
   public static clearUserData(): void {

@@ -3,7 +3,7 @@ import StartPageView from './components/start_page/start_page_view';
 import createElem from '../utils/create_elem';
 import appendElem from '../utils/appendElem';
 import MainPageView from './components/main_page/main_page_view';
-import { DisplayOptions, SwitchOptions } from '../../interfaces';
+import { DisplayOptions, HintsStatus, SwitchOptions } from '../../interfaces';
 import { app } from '../..';
 
 export default class AppView {
@@ -124,6 +124,28 @@ export default class AppView {
       elem.classList.remove('continue');
       elem.classList.remove('valid');
       elemLink.textContent = 'Check';
+    }
+  }
+
+  public static initHints(hintsStatus: HintsStatus): void {
+    if (!hintsStatus.translateHintStatus) {
+      const translateBtn: HTMLButtonElement | null = document.querySelector(
+        '.playarea__translate-hint'
+      );
+      const clickEvent = new MouseEvent('click');
+      translateBtn?.dispatchEvent(clickEvent);
+    }
+    if (!hintsStatus.audioHintStatus) {
+      const audioBtn: HTMLButtonElement | null = document.querySelector('.playarea__audio-hint');
+      const clickEvent = new MouseEvent('click');
+      audioBtn?.dispatchEvent(clickEvent);
+    }
+    if (!hintsStatus.backgroundHintStatus) {
+      const backgroundHintBtn: HTMLButtonElement | null = document.querySelector(
+        '.playarea__background-hint'
+      );
+      const clickEvent = new MouseEvent('click');
+      backgroundHintBtn?.dispatchEvent(clickEvent);
     }
   }
 

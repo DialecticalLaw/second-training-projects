@@ -1,7 +1,7 @@
 import LocalStorageService from './services/local_storage_service';
 import AppView from './view/app_view';
 import wordCollectionLevel1 from './data/wordCollection/wordCollectionLevel1.json';
-import { Level, PuzzleInfo, Round, Sentence } from '../interfaces';
+import { HintsStatus, Level, PuzzleInfo, Round, Sentence } from '../interfaces';
 
 export default class Model {
   private appView: AppView;
@@ -137,10 +137,10 @@ export default class Model {
     if (this.roundIndex === undefined) {
       this.roundIndex = 0;
     }
-    this.nextSentence();
+    this.nextSentence(true);
   }
 
-  private nextSentence(): void {
+  private nextSentence(isInit?: boolean): void {
     if (this.sentenceIndex === undefined) {
       this.sentenceIndex = 0;
     }
@@ -172,6 +172,21 @@ export default class Model {
         sentenceIndex: this.sentenceIndex
       });
     }
+
+    if (isInit) Model.initHintsAccordingSavedData();
+  }
+
+  private static initHintsAccordingSavedData(): void {
+    const translateHintStatus = LocalStorageService.getData('translateHint');
+    const audioHintStatus = LocalStorageService.getData('audioHint');
+    const backgroundHintStatus = LocalStorageService.getData('backgroundHint');
+
+    const hintsStatus: HintsStatus = {
+      translateHintStatus,
+      audioHintStatus,
+      backgroundHintStatus
+    };
+    AppView.initHints(hintsStatus);
   }
 
   private static definePuzzlesInfo(words: string[]): PuzzleInfo[] {
@@ -571,9 +586,11 @@ export default class Model {
     );
     if (translateText) {
       if (hintElem.classList.contains('valid')) {
+        LocalStorageService.saveBooleanData('translateHint', false);
         AppView.switchComponentDisplay(hintElem, 'validity', { isValid: false });
         AppView.switchComponentDisplay(translateText, 'validity', { isValid: false });
       } else {
+        LocalStorageService.saveBooleanData('translateHint', true);
         AppView.switchComponentDisplay(hintElem, 'validity', { isValid: true });
         AppView.switchComponentDisplay(translateText, 'validity', { isValid: true });
       }
@@ -584,9 +601,11 @@ export default class Model {
     const audioIcon: HTMLDivElement | null = document.querySelector('.playarea__audio-icon');
     if (audioIcon) {
       if (hintElem.classList.contains('valid')) {
+        LocalStorageService.saveBooleanData('audioHint', false);
         AppView.switchComponentDisplay(hintElem, 'validity', { isValid: false });
         AppView.switchComponentDisplay(audioIcon, 'validity', { isValid: false });
       } else {
+        LocalStorageService.saveBooleanData('audioHint', true);
         AppView.switchComponentDisplay(hintElem, 'validity', { isValid: true });
         AppView.switchComponentDisplay(audioIcon, 'validity', { isValid: true });
       }
@@ -597,10 +616,12 @@ export default class Model {
     if (hintElem.classList.contains('valid')) {
       // disable button
       AppView.switchComponentDisplay(hintElem, 'validity', { isValid: false });
+      LocalStorageService.saveBooleanData('backgroundHint', false);
       this.toggleBackground(true);
     } else {
       // enable button
       AppView.switchComponentDisplay(hintElem, 'validity', { isValid: true });
+      LocalStorageService.saveBooleanData('backgroundHint', true);
       this.toggleBackground(false);
     }
   }
