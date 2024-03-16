@@ -4,7 +4,7 @@
   grid-template-rows: 1fr auto 10fr 1fr auto;
   gap: 20px;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px;
 }
 
 .playarea__options {
@@ -18,8 +18,16 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: 40%;
+  width: max-content;
   gap: 10px;
+}
+
+.playarea__options_select {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 35px;
+  width: max-content;
 }
 
 .playarea__options_hints button {
@@ -55,6 +63,28 @@
 
 .playarea__options_hints button.valid {
   background-color: var(--addition-color);
+}
+
+.playarea__level-select_form,
+.playarea__round-select_form {
+  display: flex;
+  gap: 20px;
+}
+
+.playarea__select-level_label,
+.playarea__select-round_label {
+  font-family: Comfortaa;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.playarea__select-level,
+.playarea__select-round {
+  background-color: gold;
+  box-shadow: 0 0 10px 8px gold;
+  border: none;
+  font-family: Comfortaa;
+  font-size: 1rem;
 }
 
 .playarea__hints-wrapper {
@@ -154,7 +184,7 @@
   background-color: transparent;
   color: #000000;
   font-family: Comfortaa;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bold;
   text-shadow:
     2px 2px 2px #ffffff,

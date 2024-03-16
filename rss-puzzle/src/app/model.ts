@@ -1,6 +1,11 @@
 import LocalStorageService from './services/local_storage_service';
 import AppView from './view/app_view';
 import wordCollectionLevel1 from './data/wordCollection/wordCollectionLevel1.json';
+import wordCollectionLevel2 from './data/wordCollection/wordCollectionLevel2.json';
+import wordCollectionLevel3 from './data/wordCollection/wordCollectionLevel3.json';
+import wordCollectionLevel4 from './data/wordCollection/wordCollectionLevel4.json';
+import wordCollectionLevel5 from './data/wordCollection/wordCollectionLevel5.json';
+import wordCollectionLevel6 from './data/wordCollection/wordCollectionLevel6.json';
 import { HintsStatus, Level, PuzzleInfo, Round, Sentence } from '../interfaces';
 
 export default class Model {
@@ -128,12 +133,12 @@ export default class Model {
   public startMainPage(): void {
     const startContent = document.querySelector('.start-content') as HTMLDivElement;
     AppView.removeComponent([startContent]);
-    this.appView.displayComponent('mainPage');
+    this.currentLevel = wordCollectionLevel1;
+    this.appView.displayComponent('mainPage', { roundsCount: this.currentLevel.roundsCount });
     this.startGame();
   }
 
   private startGame(): void {
-    this.currentLevel = wordCollectionLevel1;
     if (this.roundIndex === undefined) {
       this.roundIndex = 0;
     }
@@ -679,5 +684,59 @@ export default class Model {
         audioElem.play();
       }
     }
+  }
+
+  public changeLevel(event: Event): void {
+    if (!event.currentTarget || !this.currentLevel) return;
+    const eventTarget = event.currentTarget as HTMLSelectElement;
+    const selectedLevel: string = eventTarget.value;
+
+    switch (selectedLevel) {
+      case '1':
+        this.currentLevel = wordCollectionLevel1;
+        break;
+      case '2':
+        this.currentLevel = wordCollectionLevel2;
+        break;
+      case '3':
+        this.currentLevel = wordCollectionLevel3;
+        break;
+      case '4':
+        this.currentLevel = wordCollectionLevel4;
+        break;
+      case '5':
+        this.currentLevel = wordCollectionLevel5;
+        break;
+      case '6':
+        this.currentLevel = wordCollectionLevel6;
+        break;
+      default:
+        break;
+    }
+    AppView.updateRoundsList(this.currentLevel.roundsCount);
+    this.roundIndex = 0;
+    this.changeRound('not-event');
+  }
+
+  public changeRound(event: Event | 'not-event'): void {
+    const allSourcePlaces: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source-place')
+    );
+    const allSentencePlaces: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__sentence-place')
+    );
+
+    this.sentenceIndex = 0;
+
+    if (event instanceof Event && event.currentTarget) {
+      const eventTarget = event.currentTarget as HTMLSelectElement;
+      const selectedRound: string = eventTarget.value;
+      this.roundIndex = Number(selectedRound);
+    }
+
+    AppView.removeComponent([...allSourcePlaces, ...allSentencePlaces]);
+    this.nextSentence();
+    this.updateButtonsOnStepForward();
+    this.updateButtonsState();
   }
 }

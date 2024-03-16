@@ -63,9 +63,10 @@ export interface PuzzleInfo {
 }
 
 export interface DisplayOptions {
-  puzzlesInfo: PuzzleInfo[];
-  imageSrc: string;
-  sentenceIndex: number;
+  puzzlesInfo?: PuzzleInfo[];
+  imageSrc?: string;
+  sentenceIndex?: number;
+  roundsCount?: number;
 }
 
 export interface PlayboardSize {

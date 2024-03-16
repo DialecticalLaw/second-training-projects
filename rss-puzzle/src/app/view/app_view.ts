@@ -28,7 +28,7 @@ export default class AppView {
         this.startPageView.draw();
         break;
       case 'mainPage':
-        this.mainPageView.draw();
+        if (options && options?.roundsCount) this.mainPageView.draw(options.roundsCount);
         break;
       case 'sourceWords':
         if (
@@ -92,6 +92,24 @@ export default class AppView {
         break;
       default:
         break;
+    }
+  }
+
+  public static updateRoundsList(roundsCount: number): void {
+    const allRoundOptions: HTMLOptionElement[] = Array.from(
+      document.querySelectorAll('.playarea__select-round_option')
+    );
+    AppView.removeComponent(allRoundOptions);
+
+    const selectRound: HTMLSelectElement | null = document.querySelector('.playarea__select-round');
+    if (!selectRound) return;
+    for (let i = 1; i <= roundsCount; i += 1) {
+      const option: HTMLOptionElement = createElem<HTMLOptionElement>('option', {
+        class: 'playarea__select-round_option',
+        value: `${i - 1}` // round index
+      });
+      option.textContent = `Round ${i}`;
+      appendElem(selectRound, [option]);
     }
   }
 

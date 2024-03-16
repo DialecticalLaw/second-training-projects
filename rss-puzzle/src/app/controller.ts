@@ -197,6 +197,8 @@ export default class Controller {
     const backgroundHintBtn: HTMLButtonElement | null = document.querySelector(
       '.playarea__background-hint'
     );
+    const levelSelect: HTMLSelectElement | null = document.querySelector('.playarea__select-level');
+    const roundSelect: HTMLSelectElement | null = document.querySelector('.playarea__select-round');
 
     if (
       autoCompleteBtn &&
@@ -204,7 +206,9 @@ export default class Controller {
       audioIcon &&
       audioElem &&
       audioBtn &&
-      backgroundHintBtn
+      backgroundHintBtn &&
+      levelSelect &&
+      roundSelect
     ) {
       autoCompleteBtn.addEventListener('click', this.model.completeSentenceAuto.bind(this.model));
       translateBtn.addEventListener('click', this.model.toggleHint.bind(this.model, translateBtn));
@@ -215,6 +219,8 @@ export default class Controller {
         'click',
         this.model.toggleHint.bind(this.model, backgroundHintBtn)
       );
+      levelSelect.addEventListener('change', this.model.changeLevel.bind(this.model));
+      roundSelect.addEventListener('change', this.model.changeRound.bind(this.model));
     }
   }
 }

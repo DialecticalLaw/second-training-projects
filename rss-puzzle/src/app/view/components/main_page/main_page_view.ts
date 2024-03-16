@@ -12,6 +12,8 @@ export default class MainPageView {
 
   private hintsOptionsWrapper: HTMLDivElement;
 
+  private selectOptionsWrapper: HTMLDivElement;
+
   private puzzleWrapper: HTMLDivElement;
 
   private sourcesWrapper: HTMLDivElement;
@@ -23,6 +25,7 @@ export default class MainPageView {
       playareaWrapper,
       optionsWrapper,
       hintsOptionsWrapper,
+      selectOptionsWrapper,
       puzzleWrapper,
       sourcesWrapper,
       buttonsWrapper
@@ -31,14 +34,15 @@ export default class MainPageView {
     this.playareaWrapper = playareaWrapper;
     this.optionsWrapper = optionsWrapper;
     this.hintsOptionsWrapper = hintsOptionsWrapper;
+    this.selectOptionsWrapper = selectOptionsWrapper;
     this.puzzleWrapper = puzzleWrapper;
     this.sourcesWrapper = sourcesWrapper;
     this.buttonsWrapper = buttonsWrapper;
   }
 
-  public draw() {
+  public draw(roundsCount: number) {
     this.drawWrappers();
-    this.drawMainElems();
+    this.drawMainElems(roundsCount);
     app.handleActionRequest('startGame');
     app.handleActionRequest('check');
   }
@@ -55,12 +59,17 @@ export default class MainPageView {
       this.sourcesWrapper,
       this.buttonsWrapper
     ]);
-    appendElem(this.optionsWrapper, [this.hintsOptionsWrapper]);
+    appendElem(this.optionsWrapper, [this.hintsOptionsWrapper, this.selectOptionsWrapper]);
   }
 
-  private drawMainElems(): void {
-    this.drawHints();
+  private drawMainElems(roundsCount: number): void {
+    this.drawHintsOptions();
+    this.drawSelectOptions(roundsCount);
+    this.drawSentences();
+    this.drawButtons();
+  }
 
+  private drawSentences(): void {
     const sentences: HTMLDivElement[] = [];
     for (let i = 0; i < 10; i += 1) {
       // 10 - count of sentences
@@ -70,7 +79,9 @@ export default class MainPageView {
       sentences.push(sentence);
     }
     appendElem(this.puzzleWrapper, sentences);
+  }
 
+  private drawButtons(): void {
     const actionBtn: HTMLDivElement = createElem<HTMLDivElement>('button', {
       class: 'playarea__action-button'
     });
@@ -82,7 +93,7 @@ export default class MainPageView {
     appendElem(this.buttonsWrapper, [actionBtn, autoCompleteBtn]);
   }
 
-  private drawHints(): void {
+  private drawHintsOptions(): void {
     const translateBtn: HTMLButtonElement = createElem<HTMLButtonElement>('button', {
       class: 'playarea__translate-hint valid'
     });
@@ -111,6 +122,66 @@ export default class MainPageView {
     this.optionsWrapper.insertAdjacentElement('afterend', hintsWrapper);
   }
 
+  private drawSelectOptions(roundsCount: number): void {
+    this.drawLevelSelect();
+    this.drawRoundSelect(roundsCount);
+  }
+
+  private drawLevelSelect(): void {
+    const form: HTMLFormElement = createElem<HTMLFormElement>('form', {
+      class: 'playarea__level-select_form'
+    });
+    const label: HTMLLabelElement = createElem<HTMLLabelElement>('label', {
+      class: 'playarea__select-level_label',
+      for: 'level-select'
+    });
+    label.textContent = 'Level:';
+    const selectElem: HTMLSelectElement = createElem<HTMLSelectElement>('select', {
+      class: 'playarea__select-level',
+      id: 'level-select'
+    });
+    appendElem(form, [label, selectElem]);
+
+    const levelsCount: number = 6;
+    for (let i = 1; i <= levelsCount; i += 1) {
+      const option: HTMLOptionElement = createElem<HTMLOptionElement>('option', {
+        class: 'playarea__select-level_option',
+        value: `${i}`
+      });
+      option.textContent = `Level ${i}`;
+      appendElem(selectElem, [option]);
+    }
+
+    appendElem(this.selectOptionsWrapper, [form]);
+  }
+
+  private drawRoundSelect(roundsCount: number): void {
+    const form: HTMLFormElement = createElem<HTMLFormElement>('form', {
+      class: 'playarea__round-select_form'
+    });
+    const label: HTMLLabelElement = createElem<HTMLLabelElement>('label', {
+      class: 'playarea__select-round_label',
+      for: 'round-select'
+    });
+    label.textContent = 'Round:';
+    const selectElem: HTMLSelectElement = createElem<HTMLSelectElement>('select', {
+      class: 'playarea__select-round',
+      id: 'round-select'
+    });
+    appendElem(form, [label, selectElem]);
+
+    for (let i = 1; i <= roundsCount; i += 1) {
+      const option: HTMLOptionElement = createElem<HTMLOptionElement>('option', {
+        class: 'playarea__select-round_option',
+        value: `${i - 1}` // round index
+      });
+      option.textContent = `Round ${i}`;
+      appendElem(selectElem, [option]);
+    }
+
+    appendElem(this.selectOptionsWrapper, [form]);
+  }
+
   private static createMainPageWrappers(): HTMLDivElement[] {
     const playareaWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
       class: 'playarea'
@@ -122,6 +193,10 @@ export default class MainPageView {
 
     const hintsOptionsWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
       class: 'playarea__options_hints'
+    });
+
+    const selectOptionsWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
+      class: 'playarea__options_select'
     });
 
     const puzzleWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
@@ -140,6 +215,7 @@ export default class MainPageView {
       playareaWrapper,
       optionsWrapper,
       hintsOptionsWrapper,
+      selectOptionsWrapper,
       puzzleWrapper,
       sourcesWrapper,
       buttonsWrapper
