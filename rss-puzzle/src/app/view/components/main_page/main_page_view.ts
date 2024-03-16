@@ -89,7 +89,10 @@ export default class MainPageView {
     const audioBtn: HTMLButtonElement = createElem<HTMLButtonElement>('button', {
       class: 'playarea__audio-hint valid'
     });
-    appendElem(this.hintsOptionsWrapper, [translateBtn, audioBtn]);
+    const backgroundBtn: HTMLButtonElement = createElem<HTMLButtonElement>('button', {
+      class: 'playarea__background-hint valid'
+    });
+    appendElem(this.hintsOptionsWrapper, [translateBtn, audioBtn, backgroundBtn]);
 
     const translateText: HTMLParagraphElement = createElem<HTMLParagraphElement>('p', {
       class: 'playarea__translate-text valid'
@@ -353,6 +356,18 @@ export default class MainPageView {
     );
     if (translateText) {
       translateText.textContent = hint;
+    }
+  }
+
+  public static toggleSourcesBackground<T extends HTMLElement>(elem: T, imageSrc: string): void {
+    const elemLink = elem;
+
+    if (imageSrc === 'hide') {
+      elem.style.removeProperty('background-image');
+      elem.classList.add('invisible-background');
+    } else {
+      elemLink.style.backgroundImage = `url('pictures/${imageSrc}')`;
+      elem.classList.remove('invisible-background');
     }
   }
 }

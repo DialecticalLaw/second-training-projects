@@ -44,6 +44,7 @@ export interface SwitchOptions {
   isValid?: boolean;
   class?: string;
   hint?: string;
+  imageSrc?: string;
 }
 
 export interface PuzzleInfo {

@@ -194,13 +194,27 @@ export default class Controller {
     const audioBtn: HTMLButtonElement | null = document.querySelector('.playarea__audio-hint');
     const audioIcon: HTMLDivElement | null = document.querySelector('.playarea__audio-icon');
     const audioElem: HTMLAudioElement | null = document.querySelector('.playarea__audio');
+    const backgroundHintBtn: HTMLButtonElement | null = document.querySelector(
+      '.playarea__background-hint'
+    );
 
-    if (autoCompleteBtn && translateBtn && audioIcon && audioElem && audioBtn) {
+    if (
+      autoCompleteBtn &&
+      translateBtn &&
+      audioIcon &&
+      audioElem &&
+      audioBtn &&
+      backgroundHintBtn
+    ) {
       autoCompleteBtn.addEventListener('click', this.model.completeSentenceAuto.bind(this.model));
-      translateBtn.addEventListener('click', () => Model.toggleHint(translateBtn));
-      audioBtn.addEventListener('click', () => Model.toggleHint(audioBtn));
+      translateBtn.addEventListener('click', this.model.toggleHint.bind(this.model, translateBtn));
+      audioBtn.addEventListener('click', this.model.toggleHint.bind(this.model, audioBtn));
       audioIcon.addEventListener('click', this.model.playAudioHint.bind(this.model, false));
       audioElem.addEventListener('ended', this.model.playAudioHint.bind(this.model, true));
+      backgroundHintBtn.addEventListener(
+        'click',
+        this.model.toggleHint.bind(this.model, backgroundHintBtn)
+      );
     }
   }
 }

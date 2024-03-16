@@ -86,6 +86,8 @@ export default class AppView {
       case 'updateHint':
         if (elem.classList.contains('playarea__translate-text') && options?.hint) {
           MainPageView.updateTranslateText(options.hint);
+        } else if (options && options.imageSrc) {
+          MainPageView.toggleSourcesBackground(elem, options.imageSrc);
         }
         break;
       default:

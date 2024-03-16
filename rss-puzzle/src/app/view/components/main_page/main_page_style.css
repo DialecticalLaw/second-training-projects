@@ -45,6 +45,10 @@
   background-image: url('../../../../assets/img/audio.svg');
 }
 
+.playarea__background-hint {
+  background-image: url('../../../../assets/img/eye.svg');
+}
+
 .playarea__options_hints button:active {
   transform: scale(0.9);
 }
@@ -304,6 +308,7 @@
   height: 18px;
   border-radius: 50%;
   box-shadow: 1px 0 0 0 #ffffff;
+  background-color: #ffffff;
 }
 
 .playarea__peg_outer {
@@ -311,8 +316,21 @@
   z-index: 2;
 }
 
-.playarea__peg_inner {
+.playarea__source-img.invisible-background {
+  background-color: #d9d199;
+}
+
+.invisible-background {
+  background-color: #d9d199;
+  box-shadow: 1px 0 0 0 #000000;
+}
+
+.playarea__peg_inner.invisible-background {
   background-color: #ffffff;
+  box-shadow: 1px 0 0 0 #000000;
+}
+
+.playarea__peg_inner {
   left: -2px;
   z-index: 1;
 }

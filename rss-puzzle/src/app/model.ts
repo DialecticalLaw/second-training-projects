@@ -14,6 +14,8 @@ export default class Model {
 
   private translateHint?: string;
 
+  isBackgroundHidden?: boolean;
+
   constructor() {
     this.appView = new AppView();
   }
@@ -254,6 +256,35 @@ export default class Model {
   }
 
   private updateButtonsState(): void {
+    const backgroundHintBtn: HTMLButtonElement | null = document.querySelector(
+      '.playarea__background-hint'
+    );
+
+    if (!backgroundHintBtn) return;
+
+    if (Model.isSentenceFilled()) {
+      if (this.isSentenceCorrect()) {
+        Model.updateButtonsOnCorrectStatus();
+
+        if (!backgroundHintBtn.classList.contains('valid')) {
+          this.toggleBackground(false);
+        }
+      } else {
+        Model.updateButtonsOnWrongStatus();
+        if (!backgroundHintBtn.classList.contains('valid')) {
+          this.toggleBackground(true);
+        }
+      }
+      return;
+    }
+
+    Model.updateButtonsOnNeutralStatus();
+    if (!backgroundHintBtn.classList.contains('valid')) {
+      this.toggleBackground(true);
+    }
+  }
+
+  private static updateButtonsOnCorrectStatus(): void {
     const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
     const autoCompleteBtn: HTMLButtonElement | null = document.querySelector(
       '.playarea__auto-complete'
@@ -262,22 +293,50 @@ export default class Model {
       '.playarea__translate-text'
     );
     const audioIcon: HTMLButtonElement | null = document.querySelector('.playarea__audio-icon');
-    if (!actionBtn || !autoCompleteBtn || !translateText || !audioIcon) return;
 
-    if (Model.isSentenceFilled()) {
-      if (this.isSentenceCorrect()) {
-        AppView.switchComponentDisplay(translateText, 'addClass', { class: 'pseudo-valid' });
-        AppView.switchComponentDisplay(audioIcon, 'addClass', { class: 'pseudo-valid' });
-        AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
-        AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: true });
-        AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: false });
-      } else {
-        AppView.switchComponentDisplay(translateText, 'removeClass', { class: 'pseudo-valid' });
-        AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'pseudo-valid' });
-        AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
-        AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
-        AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
-      }
+    if (!actionBtn || !autoCompleteBtn || !translateText || !audioIcon) {
+      return;
+    }
+
+    AppView.switchComponentDisplay(translateText, 'addClass', { class: 'pseudo-valid' });
+    AppView.switchComponentDisplay(audioIcon, 'addClass', { class: 'pseudo-valid' });
+    AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
+    AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: true });
+    AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: false });
+  }
+
+  private static updateButtonsOnWrongStatus(): void {
+    const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
+    const autoCompleteBtn: HTMLButtonElement | null = document.querySelector(
+      '.playarea__auto-complete'
+    );
+    const translateText: HTMLParagraphElement | null = document.querySelector(
+      '.playarea__translate-text'
+    );
+    const audioIcon: HTMLButtonElement | null = document.querySelector('.playarea__audio-icon');
+
+    if (!actionBtn || !autoCompleteBtn || !translateText || !audioIcon) {
+      return;
+    }
+
+    AppView.switchComponentDisplay(translateText, 'removeClass', { class: 'pseudo-valid' });
+    AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'pseudo-valid' });
+    AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
+    AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
+    AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
+  }
+
+  private static updateButtonsOnNeutralStatus(): void {
+    const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
+    const autoCompleteBtn: HTMLButtonElement | null = document.querySelector(
+      '.playarea__auto-complete'
+    );
+    const translateText: HTMLParagraphElement | null = document.querySelector(
+      '.playarea__translate-text'
+    );
+    const audioIcon: HTMLButtonElement | null = document.querySelector('.playarea__audio-icon');
+
+    if (!actionBtn || !autoCompleteBtn || !translateText || !audioIcon) {
       return;
     }
 
@@ -334,10 +393,10 @@ export default class Model {
       this.nextSentence();
     }
 
-    Model.updateButtonsOnStepForward();
+    this.updateButtonsOnStepForward();
   }
 
-  private static updateButtonsOnStepForward(): void {
+  private updateButtonsOnStepForward(): void {
     const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
     const audioIcon: HTMLDivElement | null = document.querySelector('.playarea__audio-icon');
     const autoCompleteBtn: HTMLButtonElement | null = document.querySelector(
@@ -346,14 +405,22 @@ export default class Model {
     const translateText: HTMLParagraphElement | null = document.querySelector(
       '.playarea__translate-text'
     );
+    const backgroundHintBtn: HTMLButtonElement | null = document.querySelector(
+      '.playarea__background-hint'
+    );
 
-    if (translateText && actionBtn && autoCompleteBtn && audioIcon) {
+    if (translateText && actionBtn && autoCompleteBtn && audioIcon && backgroundHintBtn) {
       AppView.switchComponentDisplay(translateText, 'removeClass', { class: 'pseudo-valid' });
       AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'pseudo-valid' });
       AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
       AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: false });
       AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
       AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'active' });
+      if (backgroundHintBtn.classList.contains('valid')) {
+        this.toggleBackground(false);
+      } else {
+        this.toggleBackground(true);
+      }
     }
   }
 
@@ -488,11 +555,13 @@ export default class Model {
     this.updateButtonsState();
   }
 
-  public static toggleHint(hintElem: HTMLButtonElement): void {
+  public toggleHint(hintElem: HTMLButtonElement): void {
     if (hintElem.classList.contains('playarea__translate-hint')) {
       Model.toggleTranslateHint(hintElem);
     } else if (hintElem.classList.contains('playarea__audio-hint')) {
       Model.toggleAudioHint(hintElem);
+    } else if (hintElem.classList.contains('playarea__background-hint')) {
+      this.toggleBackgroundHint(hintElem);
     }
   }
 
@@ -521,6 +590,54 @@ export default class Model {
         AppView.switchComponentDisplay(hintElem, 'validity', { isValid: true });
         AppView.switchComponentDisplay(audioIcon, 'validity', { isValid: true });
       }
+    }
+  }
+
+  private toggleBackgroundHint(hintElem: HTMLButtonElement): void {
+    if (hintElem.classList.contains('valid')) {
+      // disable button
+      AppView.switchComponentDisplay(hintElem, 'validity', { isValid: false });
+      this.toggleBackground(true);
+    } else {
+      // enable button
+      AppView.switchComponentDisplay(hintElem, 'validity', { isValid: true });
+      this.toggleBackground(false);
+    }
+  }
+
+  private toggleBackground(isValid: boolean): void {
+    const allActiveSources: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source_active')
+    );
+
+    if (isValid) {
+      if (this.isSentenceCorrect()) return;
+      allActiveSources.forEach((source: HTMLDivElement): void => {
+        const sourceImg = source.firstElementChild as HTMLDivElement;
+        const sourceOuterPeg = source.lastElementChild as HTMLDivElement;
+
+        AppView.switchComponentDisplay(sourceImg, 'updateHint', { imageSrc: 'hide' });
+        if (sourceOuterPeg.classList.contains('playarea__peg_outer')) {
+          AppView.switchComponentDisplay(sourceOuterPeg, 'updateHint', { imageSrc: 'hide' });
+        }
+        this.isBackgroundHidden = true;
+      });
+    } else {
+      allActiveSources.forEach((source: HTMLDivElement): void => {
+        if (this.currentLevel === undefined || this.roundIndex === undefined) {
+          throw new Error('currentLevel or roundIndex is undefined at toggleBackground (model.ts)');
+        }
+        const sourceImg = source.firstElementChild as HTMLDivElement;
+        const sourceOuterPeg = source.lastElementChild as HTMLDivElement;
+        const round: Round = this.currentLevel.rounds[this.roundIndex];
+        const imageSrc: string = round.levelData.imageSrc;
+
+        AppView.switchComponentDisplay(sourceImg, 'updateHint', { imageSrc });
+        if (sourceOuterPeg.classList.contains('playarea__peg_outer')) {
+          AppView.switchComponentDisplay(sourceOuterPeg, 'updateHint', { imageSrc });
+        }
+        this.isBackgroundHidden = false;
+      });
     }
   }
 
