@@ -26,6 +26,8 @@ module.exports = {
   },
   rules: {
     '@typescript-eslint/no-explicit-any': 2,
-    'max-lines-per-function': ['error', 40]
+    'max-lines-per-function': ['error', 40],
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'error'
   }
 };

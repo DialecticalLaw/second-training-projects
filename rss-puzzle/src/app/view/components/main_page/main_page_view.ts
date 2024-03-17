@@ -3,7 +3,14 @@ import createElem from '../../../utils/create_elem';
 import appendElem from '../../../utils/appendElem';
 import { app } from '../../../..';
 import shuffleArr from '../../../utils/shuffleArr';
-import { PlayboardSize, PuzzleInfo } from '../../../../interfaces';
+import {
+  CompletedRounds,
+  Levels,
+  LevelsRoundsCount,
+  PlayboardSize,
+  PuzzleInfo
+} from '../../../../interfaces';
+import AppView from '../../app_view';
 
 export default class MainPageView {
   private playareaWrapper: HTMLDivElement;
@@ -67,6 +74,33 @@ export default class MainPageView {
     this.drawSelectOptions(roundsCount);
     this.drawSentences();
     this.drawButtons();
+  }
+
+  public static markCompletedLevels(
+    completedRounds: CompletedRounds,
+    levelsRoundsCount: LevelsRoundsCount
+  ): void {
+    const levelsCount = 6;
+    for (let i = 1; i <= levelsCount; i += 1) {
+      const level = `level${i}` as Levels;
+      const currentLevel: number[] = completedRounds[level];
+      if (currentLevel.length === levelsRoundsCount[level]) {
+        const levelOption: HTMLOptionElement | null = document.querySelector(
+          `.playarea__select-level_option[value="${i}"]`
+        );
+        if (levelOption) AppView.switchComponentDisplay(levelOption, 'validity', { isValid: true });
+      }
+    }
+  }
+
+  public static markCompletedRounds(completedRounds: CompletedRounds, currentLevel: Levels): void {
+    for (let i = 0; i < completedRounds[currentLevel].length; i += 1) {
+      const roundOption: HTMLOptionElement | null = document.querySelector(
+        `.playarea__select-round_option[value="${completedRounds[currentLevel][i]}"]`
+      );
+
+      if (roundOption) AppView.switchComponentDisplay(roundOption, 'validity', { isValid: true });
+    }
   }
 
   private drawSentences(): void {

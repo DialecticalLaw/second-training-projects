@@ -6,7 +6,17 @@ import wordCollectionLevel3 from './data/wordCollection/wordCollectionLevel3.jso
 import wordCollectionLevel4 from './data/wordCollection/wordCollectionLevel4.json';
 import wordCollectionLevel5 from './data/wordCollection/wordCollectionLevel5.json';
 import wordCollectionLevel6 from './data/wordCollection/wordCollectionLevel6.json';
-import { HintsStatus, Level, PuzzleInfo, Round, Sentence } from '../interfaces';
+import {
+  CompletedRound,
+  CompletedRounds,
+  HintsStatus,
+  Level,
+  Levels,
+  LevelsRoundsCount,
+  PuzzleInfo,
+  Round,
+  Sentence
+} from '../interfaces';
 
 export default class Model {
   private appView: AppView;
@@ -15,14 +25,26 @@ export default class Model {
 
   private roundIndex?: number;
 
+  private levelIndex?: number;
+
   private sentenceIndex?: number;
 
   private translateHint?: string;
 
   isBackgroundHidden?: boolean;
 
+  private levelsRoundsCount: LevelsRoundsCount;
+
   constructor() {
     this.appView = new AppView();
+    this.levelsRoundsCount = {
+      level1: wordCollectionLevel1.roundsCount,
+      level2: wordCollectionLevel2.roundsCount,
+      level3: wordCollectionLevel3.roundsCount,
+      level4: wordCollectionLevel4.roundsCount,
+      level5: wordCollectionLevel5.roundsCount,
+      level6: wordCollectionLevel6.roundsCount
+    };
   }
 
   public initiate(): void {
@@ -133,8 +155,20 @@ export default class Model {
   public startMainPage(): void {
     const startContent = document.querySelector('.start-content') as HTMLDivElement;
     AppView.removeComponent([startContent]);
+
     this.currentLevel = wordCollectionLevel1;
-    this.appView.displayComponent('mainPage', { roundsCount: this.currentLevel.roundsCount });
+    this.levelIndex = 1;
+    const completedRounds: CompletedRounds = LocalStorageService.getData('completedRounds');
+    const currentLevel = `level${this.levelIndex}` as Levels;
+
+    this.appView.displayComponent('mainPage', {
+      roundsCount: this.currentLevel.roundsCount,
+      infoForMark: {
+        completedRounds,
+        levelsRoundsCount: this.levelsRoundsCount,
+        currentLevel
+      }
+    });
     this.startGame();
   }
 
@@ -407,6 +441,11 @@ export default class Model {
       const allSentencePlaces: HTMLDivElement[] = Array.from(
         document.querySelectorAll('.playarea__sentence-place')
       );
+
+      this.saveCompletedRound();
+
+      this.updateRoundsMarked();
+
       this.roundIndex += 1;
       this.sentenceIndex = 0;
       AppView.removeComponent([...allSentencePlaces, ...allSourcePlaces]);
@@ -414,6 +453,18 @@ export default class Model {
     }
 
     this.updateButtonsOnStepForward();
+  }
+
+  private saveCompletedRound(): void {
+    if (this.roundIndex !== undefined && this.levelIndex !== undefined) {
+      const currectRoundIndex: number = this.roundIndex;
+      const currentLevel = `level${this.levelIndex.toString()}` as Levels;
+      const completedRound: CompletedRound = {
+        level: currentLevel,
+        round: currectRoundIndex
+      };
+      LocalStorageService.updateCompletedRounds(completedRound);
+    }
   }
 
   private updateButtonsOnStepForward(): void {
@@ -690,6 +741,7 @@ export default class Model {
     if (!event.currentTarget || !this.currentLevel) return;
     const eventTarget = event.currentTarget as HTMLSelectElement;
     const selectedLevel: string = eventTarget.value;
+    this.levelIndex = Number(selectedLevel);
 
     switch (selectedLevel) {
       case '1':
@@ -714,8 +766,19 @@ export default class Model {
         break;
     }
     AppView.updateRoundsList(this.currentLevel.roundsCount);
+    this.updateRoundsMarked();
     this.roundIndex = 0;
     this.changeRound('not-event');
+  }
+
+  private updateRoundsMarked(): void {
+    const completedRounds: CompletedRounds = LocalStorageService.getData('completedRounds');
+    const currentLevel = `level${this.levelIndex}` as Levels;
+    AppView.markCompleted({
+      completedRounds,
+      levelsRoundsCount: this.levelsRoundsCount,
+      currentLevel
+    });
   }
 
   public changeRound(event: Event | 'not-event'): void {

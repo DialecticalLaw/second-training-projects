@@ -3,7 +3,7 @@ import StartPageView from './components/start_page/start_page_view';
 import createElem from '../utils/create_elem';
 import appendElem from '../utils/appendElem';
 import MainPageView from './components/main_page/main_page_view';
-import { DisplayOptions, HintsStatus, SwitchOptions } from '../../interfaces';
+import { DisplayOptions, HintsStatus, InfoForMark, SwitchOptions } from '../../interfaces';
 import { app } from '../..';
 
 export default class AppView {
@@ -28,7 +28,10 @@ export default class AppView {
         this.startPageView.draw();
         break;
       case 'mainPage':
-        if (options && options?.roundsCount) this.mainPageView.draw(options.roundsCount);
+        if (options && options.infoForMark && options.roundsCount) {
+          this.mainPageView.draw(options.roundsCount);
+          AppView.markCompleted(options.infoForMark);
+        }
         break;
       case 'sourceWords':
         if (
@@ -51,6 +54,11 @@ export default class AppView {
       default:
         break;
     }
+  }
+
+  public static markCompleted(infoForMark: InfoForMark): void {
+    MainPageView.markCompletedLevels(infoForMark.completedRounds, infoForMark.levelsRoundsCount);
+    MainPageView.markCompletedRounds(infoForMark.completedRounds, infoForMark.currentLevel);
   }
 
   public static removeComponent<T extends HTMLElement>(components: T[]): void {

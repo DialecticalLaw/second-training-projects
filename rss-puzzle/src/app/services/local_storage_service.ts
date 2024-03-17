@@ -1,4 +1,4 @@
-import { LocalStorageData } from '../../interfaces';
+import { CompletedRound, CompletedRounds, LocalStorageData } from '../../interfaces';
 
 export default class LocalStorageService {
   public static saveStringData<T extends keyof Pick<LocalStorageData, 'name' | 'surname'>>(
@@ -11,10 +11,9 @@ export default class LocalStorageService {
     localStorage.setItem('dialecticallaw-rss-puzzle', JSON.stringify(parsedLocalStorage));
   }
 
-  public static saveBooleanData<T extends keyof Omit<LocalStorageData, 'name' | 'surname'>>(
-    key: T,
-    data: boolean
-  ): void {
+  public static saveBooleanData<
+    T extends keyof Omit<LocalStorageData, 'name' | 'surname' | 'completedRounds'>
+  >(key: T, data: boolean): void {
     const JsonLocalStorage = localStorage.getItem('dialecticallaw-rss-puzzle') as string;
     const parsedLocalStorage: LocalStorageData = JSON.parse(JsonLocalStorage);
     parsedLocalStorage[key] = data;
@@ -34,11 +33,37 @@ export default class LocalStorageService {
     return parsedLocalStorage.isLogin;
   }
 
+  public static updateCompletedRounds(completedRound: CompletedRound): void {
+    const JsonLocalStorage = localStorage.getItem('dialecticallaw-rss-puzzle') as string;
+    const parsedLocalStorage: LocalStorageData = JSON.parse(JsonLocalStorage);
+
+    const completedRounds: CompletedRounds = parsedLocalStorage.completedRounds;
+    const currentLevel: Set<number> = new Set(completedRounds[completedRound.level]);
+    currentLevel.add(completedRound.round);
+    completedRounds[completedRound.level] = Array.from(currentLevel);
+
+    localStorage.setItem('dialecticallaw-rss-puzzle', JSON.stringify(parsedLocalStorage));
+  }
+
   public static initLocalStorage(): void {
     localStorage.setItem('dialecticallaw-rss-puzzle', JSON.stringify({ isLogin: false }));
     LocalStorageService.saveBooleanData('translateHint', true);
     LocalStorageService.saveBooleanData('audioHint', true);
     LocalStorageService.saveBooleanData('backgroundHint', true);
+
+    const completedRounds: CompletedRounds = {
+      level1: [],
+      level2: [],
+      level3: [],
+      level4: [],
+      level5: [],
+      level6: []
+    };
+
+    const JsonLocalStorage = localStorage.getItem('dialecticallaw-rss-puzzle') as string;
+    const parsedLocalStorage: LocalStorageData = JSON.parse(JsonLocalStorage);
+    parsedLocalStorage.completedRounds = completedRounds;
+    localStorage.setItem('dialecticallaw-rss-puzzle', JSON.stringify(parsedLocalStorage));
   }
 
   public static clearUserData(): void {

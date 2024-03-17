@@ -4,6 +4,26 @@ export interface LooseStringObject {
 
 export type LoginWrappers = [HTMLFormElement, HTMLUListElement, HTMLDivElement, HTMLDivElement];
 
+export interface CompletedRounds {
+  level1: number[];
+  level2: number[];
+  level3: number[];
+  level4: number[];
+  level5: number[];
+  level6: number[];
+}
+
+export type Levels = `level${'1' | '2' | '3' | '4' | '5' | '6'}`;
+
+export interface CompletedRound {
+  level: Levels;
+  round: number;
+}
+
+export interface LevelsRoundsCount {
+  [key: string]: number;
+}
+
 export interface LocalStorageData {
   name?: string;
   surname?: string;
@@ -11,6 +31,7 @@ export interface LocalStorageData {
   translateHint: boolean;
   audioHint: boolean;
   backgroundHint: boolean;
+  completedRounds: CompletedRounds;
 }
 
 export type StartPageWrappers = [HTMLDivElement, HTMLDivElement];
@@ -62,11 +83,18 @@ export interface PuzzleInfo {
   index: number;
 }
 
+export interface InfoForMark {
+  completedRounds: CompletedRounds;
+  levelsRoundsCount: LevelsRoundsCount;
+  currentLevel: Levels;
+}
+
 export interface DisplayOptions {
   puzzlesInfo?: PuzzleInfo[];
   imageSrc?: string;
   sentenceIndex?: number;
   roundsCount?: number;
+  infoForMark?: InfoForMark;
 }
 
 export interface PlayboardSize {
