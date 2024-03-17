@@ -73,6 +73,12 @@ export default class MainPageView {
     this.drawHintsOptions();
     this.drawSelectOptions(roundsCount);
     this.drawSentences();
+
+    const imageDescription: HTMLParagraphElement = createElem<HTMLParagraphElement>('p', {
+      class: 'playarea__image-description'
+    });
+    appendElem(this.sourcesWrapper, [imageDescription]);
+
     this.drawButtons();
   }
 

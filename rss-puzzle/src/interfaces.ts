@@ -73,6 +73,7 @@ export interface Level {
 
 export interface SwitchOptions {
   isValid?: boolean;
+  isShowImage?: boolean;
   class?: string;
   hint?: string;
   imageSrc?: string;

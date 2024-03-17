@@ -35,6 +35,8 @@ export default class Model {
 
   private levelsRoundsCount: LevelsRoundsCount;
 
+  private isImageShowed?: boolean;
+
   constructor() {
     this.appView = new AppView();
     this.levelsRoundsCount = {
@@ -434,27 +436,57 @@ export default class Model {
 
     if (this.sentenceIndex < 9) {
       // next sentence
+      this.isImageShowed = false;
       this.sentenceIndex += 1;
       AppView.removeComponent(allSourcePlaces);
       this.nextSentence();
       this.updateButtonsOnStepForward();
     } else {
-      // next round
+      // show image or next round
+      if (!this.isImageShowed) {
+        this.showImage();
+        return;
+      }
+      this.isImageShowed = false;
+      Model.removeImageDescription();
+
       const allSentencePlaces: HTMLDivElement[] = Array.from(
         document.querySelectorAll('.playarea__sentence-place')
       );
-
-      this.saveCompletedRound();
-
-      this.updateRoundsMarked();
-
-      this.updateRoundIndex();
-      this.sentenceIndex = 0;
       AppView.removeComponent([...allSentencePlaces, ...allSourcePlaces]);
+      this.sentenceIndex = 0;
+
       setTimeout(() => {
         this.nextSentence();
         this.updateButtonsOnStepForward();
       }, 600);
+    }
+  }
+
+  public showImage(): void {
+    this.isImageShowed = true;
+    this.saveCompletedRound();
+    this.updateRoundsMarked();
+    this.updateRoundIndex();
+
+    AppView.showImage();
+    if (this.currentLevel && this.roundIndex !== undefined) {
+      const round: Round = this.currentLevel.rounds[this.roundIndex];
+      AppView.showImageDescription(
+        round.levelData.author,
+        round.levelData.name,
+        round.levelData.year
+      );
+    }
+    Model.updateButtonsOnShowImage();
+  }
+
+  private static removeImageDescription(): void {
+    const imageDescription: HTMLParagraphElement | null = document.querySelector(
+      '.playarea__image-description'
+    );
+    if (imageDescription) {
+      AppView.switchComponentDisplay(imageDescription, 'validity', { isValid: false });
     }
   }
 
@@ -541,6 +573,13 @@ export default class Model {
       } else {
         this.toggleBackground(true);
       }
+    }
+  }
+
+  private static updateButtonsOnShowImage(): void {
+    const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
+    if (actionBtn) {
+      AppView.switchComponentDisplay(actionBtn, 'continue-active', { isShowImage: true });
     }
   }
 
@@ -826,8 +865,10 @@ export default class Model {
     }
 
     AppView.removeComponent([...allSourcePlaces, ...allSentencePlaces]);
-    this.nextSentence();
-    this.updateButtonsOnStepForward();
-    this.updateButtonsState();
+    setTimeout(() => {
+      this.nextSentence();
+      Model.removeImageDescription();
+      this.updateButtonsOnStepForward();
+    }, 600);
   }
 }

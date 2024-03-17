@@ -71,9 +71,14 @@ export default class AppView {
     ) as HTMLFormElement;
     const logoutBtn = document.querySelector('.logout') as HTMLDivElement;
 
+    let isDisabled = false;
     components.forEach((component: T) => {
       if (component.classList.contains('playarea__sentence-place')) {
-        AppView.disableElemsOnTime([actionBtn, selectLevelForm, selectRoundForm, logoutBtn], 300);
+        if (!isDisabled) {
+          AppView.disableElemsOnTime([actionBtn, selectLevelForm, selectRoundForm, logoutBtn], 600);
+          isDisabled = true;
+        }
+
         const componentLink = component;
         const x = Math.floor(Math.random() * (250 - -250 + 1)) + -250;
         const y = Math.floor(Math.random() * (250 - -250 + 1)) + -250;
@@ -156,6 +161,26 @@ export default class AppView {
     }
   }
 
+  public static showImage(): void {
+    const allSources: HTMLDivElement[] = Array.from(document.querySelectorAll('.playarea__source'));
+    allSources.forEach((source: HTMLDivElement) => source.classList.add('solved'));
+
+    const allSourcePlaces: HTMLDivElement[] = Array.from(
+      document.querySelectorAll('.playarea__source-place')
+    );
+    allSourcePlaces.forEach((place: HTMLDivElement) => place.classList.add('solved'));
+  }
+
+  public static showImageDescription(author: string, name: string, year: string): void {
+    const imageDescription: HTMLParagraphElement | null = document.querySelector(
+      '.playarea__image-description'
+    );
+    if (imageDescription) {
+      imageDescription.textContent = `${author} | ${name} | ${year}`;
+      AppView.switchComponentDisplay(imageDescription, 'validity', { isValid: true });
+    }
+  }
+
   public static updateSelectedOptions(levelNumber: number, roundIndex: number): void {
     const levelOptions: HTMLOptionElement[] = Array.from(
       document.querySelectorAll('.playarea__select-level_option')
@@ -201,9 +226,14 @@ export default class AppView {
       app.handleActionRequest('continue');
       elem.classList.remove('valid');
       elemLink.textContent = 'Continue';
+    } else if (options?.isShowImage) {
+      const elemLink: T = elem;
+      elem.classList.add('show-image');
+      elemLink.textContent = 'Next round';
     } else {
       const elemLink: T = elem;
       app.handleActionRequest('check');
+      elem.classList.remove('show-image');
       elem.classList.remove('continue');
       elem.classList.remove('valid');
       elemLink.textContent = 'Check';
