@@ -32,6 +32,7 @@ export interface LocalStorageData {
   audioHint: boolean;
   backgroundHint: boolean;
   completedRounds: CompletedRounds;
+  lastRound: CompletedRound;
 }
 
 export type StartPageWrappers = [HTMLDivElement, HTMLDivElement];

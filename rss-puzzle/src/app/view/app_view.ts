@@ -61,11 +61,46 @@ export default class AppView {
     MainPageView.markCompletedRounds(infoForMark.completedRounds, infoForMark.currentLevel);
   }
 
-  public static removeComponent<T extends HTMLElement>(components: T[]): void {
+  public static async removeComponent<T extends HTMLElement>(components: T[]): Promise<void> {
+    const actionBtn = document.querySelector('.playarea__action-button') as HTMLButtonElement;
+    const selectLevelForm = document.querySelector(
+      '.playarea__level-select_form'
+    ) as HTMLFormElement;
+    const selectRoundForm = document.querySelector(
+      '.playarea__round-select_form'
+    ) as HTMLFormElement;
+    const logoutBtn = document.querySelector('.logout') as HTMLDivElement;
+
     components.forEach((component: T) => {
-      component.replaceChildren(); // === remove all children
-      component.remove();
+      if (component.classList.contains('playarea__sentence-place')) {
+        AppView.disableElemsOnTime([actionBtn, selectLevelForm, selectRoundForm, logoutBtn], 300);
+        const componentLink = component;
+        const x = Math.floor(Math.random() * (250 - -250 + 1)) + -250;
+        const y = Math.floor(Math.random() * (250 - -250 + 1)) + -250;
+        componentLink.style.transform = `translateX(${x}%) translateY(${y}%)`;
+        componentLink.style.opacity = '0';
+
+        setTimeout(() => {
+          component.replaceChildren(); // === remove all children
+          component.remove();
+        }, 600);
+      } else {
+        component.replaceChildren(); // === remove all children
+        component.remove();
+      }
     });
+  }
+
+  private static disableElemsOnTime<T extends HTMLElement>(elems: T[], time: number): void {
+    elems.forEach((elem: T) => {
+      elem.setAttribute('style', 'pointer-events: none; opacity: 0.5');
+    });
+
+    setTimeout(() => {
+      elems.forEach((elem: T) => {
+        elem.removeAttribute('style');
+      });
+    }, time);
   }
 
   public static switchComponentDisplay<T extends HTMLElement>(
@@ -119,6 +154,28 @@ export default class AppView {
       option.textContent = `Round ${i}`;
       appendElem(selectRound, [option]);
     }
+  }
+
+  public static updateSelectedOptions(levelNumber: number, roundIndex: number): void {
+    const levelOptions: HTMLOptionElement[] = Array.from(
+      document.querySelectorAll('.playarea__select-level_option')
+    );
+    levelOptions.forEach((option: HTMLOptionElement) => option.removeAttribute('selected'));
+
+    const currentLevelOption: HTMLOptionElement | undefined = levelOptions.find(
+      (option: HTMLOptionElement) => Number(option.value) === levelNumber
+    );
+    if (currentLevelOption) currentLevelOption.selected = true;
+
+    const roundOptions: HTMLOptionElement[] = Array.from(
+      document.querySelectorAll('.playarea__select-round_option')
+    );
+    roundOptions.forEach((option: HTMLOptionElement) => option.removeAttribute('selected'));
+
+    const currentRoundOption: HTMLOptionElement | undefined = roundOptions.find(
+      (option: HTMLOptionElement) => Number(option.value) === roundIndex
+    );
+    if (currentRoundOption) currentRoundOption.selected = true;
   }
 
   private static switchValidity<T extends HTMLElement>(elem: T, options?: SwitchOptions): void {

@@ -25,7 +25,7 @@ export default class Model {
 
   private roundIndex?: number;
 
-  private levelIndex?: number;
+  private levelNumber?: number;
 
   private sentenceIndex?: number;
 
@@ -155,11 +155,14 @@ export default class Model {
   public startMainPage(): void {
     const startContent = document.querySelector('.start-content') as HTMLDivElement;
     AppView.removeComponent([startContent]);
+    const lastCompletedRound: CompletedRound = LocalStorageService.getData('lastRound');
+    this.levelNumber = Number(lastCompletedRound.level.slice(-1));
+    this.roundIndex = lastCompletedRound.round;
+    this.updateCurrentLevel();
+    if (!this.currentLevel) return;
 
-    this.currentLevel = wordCollectionLevel1;
-    this.levelIndex = 1;
     const completedRounds: CompletedRounds = LocalStorageService.getData('completedRounds');
-    const currentLevel = `level${this.levelIndex}` as Levels;
+    const currentLevel = `level${this.levelNumber}` as Levels;
 
     this.appView.displayComponent('mainPage', {
       roundsCount: this.currentLevel.roundsCount,
@@ -169,13 +172,9 @@ export default class Model {
         currentLevel
       }
     });
-    this.startGame();
-  }
 
-  private startGame(): void {
-    if (this.roundIndex === undefined) {
-      this.roundIndex = 0;
-    }
+    AppView.updateSelectedOptions(this.levelNumber, this.roundIndex);
+    this.updateRoundIndex();
     this.nextSentence(true);
   }
 
@@ -266,8 +265,16 @@ export default class Model {
     const startContentWrapper: HTMLDivElement | null = document.querySelector('.start-content');
     if (startContentWrapper) {
       AppView.removeComponent([startContentWrapper]);
+    } else {
+      Model.logoutFromMainPage();
     }
 
+    AppView.removeComponent([title, logoutButton]);
+    LocalStorageService.clearUserData();
+    this.appView.displayComponent('loginPage');
+  }
+
+  private static logoutFromMainPage(): void {
     const playarea: HTMLDivElement | null = document.querySelector('.playarea');
     const playareaOptions: HTMLDivElement | null = document.querySelector('.playarea__options');
     const playareaHints: HTMLDivElement | null = document.querySelector('.playarea__hints-wrapper');
@@ -292,10 +299,6 @@ export default class Model {
         playareaButtons
       ]);
     }
-
-    AppView.removeComponent([title, logoutButton]);
-    LocalStorageService.clearUserData();
-    this.appView.displayComponent('loginPage');
   }
 
   public makeSourceReaction(event: MouseEvent): void {
@@ -424,9 +427,7 @@ export default class Model {
 
   public stepForward(): void {
     Model.disableActiveElems();
-    if (this.sentenceIndex === undefined || this.roundIndex === undefined) {
-      throw new Error('sentenceIndex or roundIndex is undefined');
-    }
+    if (this.sentenceIndex === undefined) throw new Error('sentenceIndex is undefined');
     const allSourcePlaces: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__source-place')
     );
@@ -436,6 +437,7 @@ export default class Model {
       this.sentenceIndex += 1;
       AppView.removeComponent(allSourcePlaces);
       this.nextSentence();
+      this.updateButtonsOnStepForward();
     } else {
       // next round
       const allSentencePlaces: HTMLDivElement[] = Array.from(
@@ -446,24 +448,71 @@ export default class Model {
 
       this.updateRoundsMarked();
 
-      this.roundIndex += 1;
+      this.updateRoundIndex();
       this.sentenceIndex = 0;
       AppView.removeComponent([...allSentencePlaces, ...allSourcePlaces]);
-      this.nextSentence();
+      setTimeout(() => {
+        this.nextSentence();
+        this.updateButtonsOnStepForward();
+      }, 600);
+    }
+  }
+
+  private updateRoundIndex(): void {
+    if (!this.levelNumber || !this.currentLevel || this.roundIndex === undefined) return;
+    if (this.roundIndex + 1 === this.currentLevel.roundsCount) {
+      if (this.levelNumber === 6) {
+        this.levelNumber = 1;
+        this.currentLevel = wordCollectionLevel1;
+      } else {
+        this.levelNumber += 1;
+      }
+      this.roundIndex = 0;
+      this.updateCurrentLevel();
+    } else {
+      this.roundIndex += 1;
     }
 
-    this.updateButtonsOnStepForward();
+    AppView.updateSelectedOptions(this.levelNumber, this.roundIndex);
+  }
+
+  private updateCurrentLevel(): void {
+    if (!this.levelNumber) return;
+    switch (this.levelNumber) {
+      case 1:
+        this.currentLevel = wordCollectionLevel1;
+        break;
+      case 2:
+        this.currentLevel = wordCollectionLevel2;
+        break;
+      case 3:
+        this.currentLevel = wordCollectionLevel3;
+        break;
+      case 4:
+        this.currentLevel = wordCollectionLevel4;
+        break;
+      case 5:
+        this.currentLevel = wordCollectionLevel5;
+        break;
+      case 6:
+        this.currentLevel = wordCollectionLevel6;
+        break;
+
+      default:
+        break;
+    }
   }
 
   private saveCompletedRound(): void {
-    if (this.roundIndex !== undefined && this.levelIndex !== undefined) {
+    if (this.roundIndex !== undefined && this.levelNumber !== undefined) {
       const currectRoundIndex: number = this.roundIndex;
-      const currentLevel = `level${this.levelIndex.toString()}` as Levels;
+      const currentLevel = `level${this.levelNumber.toString()}` as Levels;
       const completedRound: CompletedRound = {
         level: currentLevel,
         round: currectRoundIndex
       };
       LocalStorageService.updateCompletedRounds(completedRound);
+      LocalStorageService.saveLastRound(completedRound);
     }
   }
 
@@ -741,30 +790,9 @@ export default class Model {
     if (!event.currentTarget || !this.currentLevel) return;
     const eventTarget = event.currentTarget as HTMLSelectElement;
     const selectedLevel: string = eventTarget.value;
-    this.levelIndex = Number(selectedLevel);
+    this.levelNumber = Number(selectedLevel);
+    this.updateCurrentLevel();
 
-    switch (selectedLevel) {
-      case '1':
-        this.currentLevel = wordCollectionLevel1;
-        break;
-      case '2':
-        this.currentLevel = wordCollectionLevel2;
-        break;
-      case '3':
-        this.currentLevel = wordCollectionLevel3;
-        break;
-      case '4':
-        this.currentLevel = wordCollectionLevel4;
-        break;
-      case '5':
-        this.currentLevel = wordCollectionLevel5;
-        break;
-      case '6':
-        this.currentLevel = wordCollectionLevel6;
-        break;
-      default:
-        break;
-    }
     AppView.updateRoundsList(this.currentLevel.roundsCount);
     this.updateRoundsMarked();
     this.roundIndex = 0;
@@ -773,7 +801,7 @@ export default class Model {
 
   private updateRoundsMarked(): void {
     const completedRounds: CompletedRounds = LocalStorageService.getData('completedRounds');
-    const currentLevel = `level${this.levelIndex}` as Levels;
+    const currentLevel = `level${this.levelNumber}` as Levels;
     AppView.markCompleted({
       completedRounds,
       levelsRoundsCount: this.levelsRoundsCount,
