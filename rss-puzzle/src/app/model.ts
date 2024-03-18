@@ -282,6 +282,12 @@ export default class Model {
   private static logoutFromMainPage(): void {
     const playarea: HTMLDivElement | null = document.querySelector('.playarea');
     const playareaOptions: HTMLDivElement | null = document.querySelector('.playarea__options');
+    const playareaOptionsHints: HTMLDivElement | null = document.querySelector(
+      '.playarea__options_hints'
+    );
+    const playareaOptionsSelect: HTMLDivElement | null = document.querySelector(
+      '.playarea__options_select'
+    );
     const playareaHints: HTMLDivElement | null = document.querySelector('.playarea__hints-wrapper');
     const playareaPuzzles: HTMLDivElement | null = document.querySelector('.playarea__puzzles');
     const playareaSources: HTMLDivElement | null = document.querySelector('.playarea__sources');
@@ -291,6 +297,8 @@ export default class Model {
       playarea &&
       playareaOptions &&
       playareaHints &&
+      playareaOptionsHints &&
+      playareaOptionsSelect &&
       playareaPuzzles &&
       playareaSources &&
       playareaButtons
@@ -299,6 +307,8 @@ export default class Model {
         playarea,
         playareaOptions,
         playareaHints,
+        playareaOptionsHints,
+        playareaOptionsSelect,
         playareaPuzzles,
         playareaSources,
         playareaButtons
@@ -888,14 +898,15 @@ export default class Model {
 
     if (pageWidth < 1180 || isNeedRecalculate) {
       if (this.isWidthLarge && !isNeedRecalculate) this.isWidthLarge = false;
-      playareaSourcesWrapper.style.width = `${pageWidth - 30}px`;
-      playareaPuzzles.style.width = `${pageWidth - 30}px`;
+      if (!isNeedRecalculate) {
+        playareaSourcesWrapper.style.width = `${pageWidth - 30}px`;
+        playareaPuzzles.style.width = `${pageWidth - 30}px`;
+      }
 
       const playboardSize: PlayboardSize = {
         width: playareaPuzzles.getBoundingClientRect().width,
         height: playareaPuzzles.getBoundingClientRect().height
       };
-
       const sourceHeight: number = someSource.getBoundingClientRect().height;
 
       AppView.reassignSourcesWidth();

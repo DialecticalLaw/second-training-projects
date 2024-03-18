@@ -259,7 +259,6 @@ export default class AppView {
     }, 0);
   }
 
-  // eslint-disable-next-line max-lines-per-function
   public static updateSourcesSize(
     playboardSize: PlayboardSize,
     sourceHeight: number,
@@ -277,27 +276,42 @@ export default class AppView {
         let positionX = 0;
 
         textExample.forEach((word: string) => {
-          const currentSource = sourcesInRow.find((source: HTMLDivElement) => {
-            return source.textContent === word && !source.classList.contains('marked');
-          }) as HTMLDivElement;
-          currentSource.classList.add('marked');
-
-          const sourceImg = currentSource.firstElementChild as HTMLDivElement;
-          sourceImg.style.backgroundSize = `${playboardSize.width}px ${playboardSize.height}px`;
           const positionY = rowIndex * sourceHeight;
-          sourceImg.style.backgroundPosition = `-${positionX}px -${positionY}px`;
+
+          const currentSource = AppView.findSource(sourcesInRow, word);
+          AppView.updateSourceImg(currentSource, positionX, positionY, playboardSize);
           positionX += currentSource.getBoundingClientRect().width;
 
-          this.updatePegSize(currentSource, positionX, positionY, playboardSize, sourceHeight);
+          AppView.updatePegSize(currentSource, positionX, positionY, playboardSize, sourceHeight);
           sourcesInRow.forEach((source: HTMLDivElement) => source.classList.remove('marked'));
         });
       }
     }
+
     if (!isNeedRecalculate) {
       setTimeout(() => {
         app.handleActionRequest('resizeAgain');
       }, 200);
     }
+  }
+
+  private static findSource(sources: HTMLDivElement[], word: string): HTMLDivElement {
+    const result = sources.find((source: HTMLDivElement) => {
+      return source.textContent === word && !source.classList.contains('marked');
+    }) as HTMLDivElement;
+    result.classList.add('marked');
+    return result;
+  }
+
+  private static updateSourceImg(
+    source: HTMLDivElement,
+    x: number,
+    y: number,
+    playboardSize: PlayboardSize
+  ) {
+    const sourceImg = source.firstElementChild as HTMLDivElement;
+    sourceImg.style.backgroundSize = `${playboardSize.width}px ${playboardSize.height}px`;
+    sourceImg.style.backgroundPosition = `-${x}px -${y}px`;
   }
 
   private static updatePegSize(
