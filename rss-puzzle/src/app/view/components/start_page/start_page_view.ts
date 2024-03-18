@@ -1,18 +1,18 @@
 import './start_page_style.css';
-import { StartPageWrappers } from '../../../../interfaces';
+import { HandleAction, StartPageWrappers } from '../../../../interfaces';
 import appendElem from '../../../utils/appendElem';
 import createElem from '../../../utils/create_elem';
 import { app } from '../../../../index';
 import LocalStorageService from '../../../services/local_storage_service';
 export default class StartPageView {
-  private logoutWrapper: HTMLDivElement;
+  private logoutBtn: HTMLDivElement;
 
   private startContentWrapper: HTMLDivElement;
 
   constructor() {
-    const [logoutWrapper, startContentWrapper]: StartPageWrappers =
+    const [logoutBtn, startContentWrapper]: StartPageWrappers =
       StartPageView.createStartPageWrappers();
-    this.logoutWrapper = logoutWrapper;
+    this.logoutBtn = logoutBtn;
     this.startContentWrapper = startContentWrapper;
   }
 
@@ -21,13 +21,13 @@ export default class StartPageView {
     StartPageView.drawTitle();
     this.drawLogout();
     this.drawStartContent();
-    app.handleActionRequest('loginEnd');
+    app.handleActionRequest(HandleAction.LoginEnd);
   }
 
   private drawWrappers(): void {
     const header = document.querySelector('.header') as HTMLElement;
     const main = document.querySelector('.main') as HTMLElement;
-    appendElem(header, [this.logoutWrapper]);
+    appendElem(header, [this.logoutBtn]);
     appendElem(main, [this.startContentWrapper]);
   }
 
@@ -43,8 +43,8 @@ export default class StartPageView {
       class: 'logout__icon',
       src: 'assets/img/logout.svg'
     });
-    this.logoutWrapper.textContent = 'Logout';
-    appendElem(this.logoutWrapper, [logoutIcon]);
+    this.logoutBtn.textContent = 'Logout';
+    appendElem(this.logoutBtn, [logoutIcon]);
   }
 
   private drawStartContent(): void {
@@ -65,12 +65,12 @@ export default class StartPageView {
   }
 
   private static createStartPageWrappers(): StartPageWrappers {
-    const logoutWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
+    const logoutBtn: HTMLDivElement = createElem<HTMLDivElement>('button', {
       class: 'logout'
     });
     const startContentWrapper: HTMLDivElement = createElem<HTMLDivElement>('div', {
       class: 'start-content'
     });
-    return [logoutWrapper, startContentWrapper];
+    return [logoutBtn, startContentWrapper];
   }
 }

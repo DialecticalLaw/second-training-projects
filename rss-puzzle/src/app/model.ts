@@ -7,14 +7,18 @@ import wordCollectionLevel4 from './data/wordCollection/wordCollectionLevel4.jso
 import wordCollectionLevel5 from './data/wordCollection/wordCollectionLevel5.json';
 import wordCollectionLevel6 from './data/wordCollection/wordCollectionLevel6.json';
 import {
+  ChangeType,
   CompletedRound,
   CompletedRounds,
+  ComponentName,
   HintsStatus,
   Level,
   Levels,
   LevelsRoundsCount,
+  MoveAction,
   PlayboardSize,
   PuzzleInfo,
+  PuzzleType,
   Round,
   Sentence
 } from '../interfaces';
@@ -56,9 +60,9 @@ export default class Model {
     AppView.drawBasicMarkup();
     if (!LocalStorageService.isLocalStorageInit()) {
       LocalStorageService.initLocalStorage();
-      this.appView.displayComponent('loginPage');
+      this.appView.displayComponent(ComponentName.LoginPage);
     } else {
-      this.appView.displayComponent('startPage');
+      this.appView.displayComponent(ComponentName.StartPage);
     }
   }
 
@@ -68,34 +72,34 @@ export default class Model {
     const hints = [...document.querySelectorAll('.login-form__hint')] as HTMLLIElement[];
 
     if (Model.isLoginValidCharUsage(nameInput, surnameInput)) {
-      AppView.switchComponentDisplay(hints[0], 'validity', { isValid: true });
+      AppView.switchComponentDisplay(hints[0], ChangeType.Validity, { isValid: true });
     } else {
-      AppView.switchComponentDisplay(hints[0], 'validity', { isValid: false });
+      AppView.switchComponentDisplay(hints[0], ChangeType.Validity, { isValid: false });
     }
 
     if (Model.isLoginFirstCharCapitalized(nameInput, surnameInput)) {
-      AppView.switchComponentDisplay(hints[1], 'validity', { isValid: true });
+      AppView.switchComponentDisplay(hints[1], ChangeType.Validity, { isValid: true });
     } else {
-      AppView.switchComponentDisplay(hints[1], 'validity', { isValid: false });
+      AppView.switchComponentDisplay(hints[1], ChangeType.Validity, { isValid: false });
     }
 
     if (Model.isLoginValidLength(nameInput, surnameInput)) {
-      AppView.switchComponentDisplay(hints[2], 'validity', { isValid: true });
+      AppView.switchComponentDisplay(hints[2], ChangeType.Validity, { isValid: true });
     } else {
-      AppView.switchComponentDisplay(hints[2], 'validity', { isValid: false });
+      AppView.switchComponentDisplay(hints[2], ChangeType.Validity, { isValid: false });
     }
 
     if (Model.isLoginNotEmpty(nameInput, surnameInput)) {
-      AppView.switchComponentDisplay(hints[3], 'validity', { isValid: true });
+      AppView.switchComponentDisplay(hints[3], ChangeType.Validity, { isValid: true });
     } else {
-      AppView.switchComponentDisplay(hints[3], 'validity', { isValid: false });
+      AppView.switchComponentDisplay(hints[3], ChangeType.Validity, { isValid: false });
     }
 
     const loginButton = document.querySelector('.login-form__button') as HTMLButtonElement;
-    if (hints.every((hint: HTMLLIElement) => hint.classList.contains('valid'))) {
-      AppView.switchComponentDisplay(loginButton, 'validity', { isValid: true });
+    if (hints.every((hint: HTMLLIElement): boolean => hint.classList.contains('valid'))) {
+      AppView.switchComponentDisplay(loginButton, ChangeType.Validity, { isValid: true });
     } else {
-      AppView.switchComponentDisplay(loginButton, 'validity', { isValid: false });
+      AppView.switchComponentDisplay(loginButton, ChangeType.Validity, { isValid: false });
     }
   }
 
@@ -104,7 +108,7 @@ export default class Model {
     let isLoginInputsValid: boolean = true;
     const hints = [...document.querySelectorAll('.login-form__hint')] as HTMLLIElement[];
 
-    hints.forEach((hint: HTMLLIElement) => {
+    hints.forEach((hint: HTMLLIElement): void => {
       if (!hint.classList.contains('valid')) isLoginInputsValid = false;
     });
 
@@ -127,7 +131,7 @@ export default class Model {
         ) as HTMLDivElement;
 
         AppView.removeComponent([hintsWrapper, nameWrapper, surnameWrapper, loginForm]);
-        this.appView.displayComponent('startPage');
+        this.appView.displayComponent(ComponentName.StartPage);
       }
     }
   }
@@ -169,7 +173,7 @@ export default class Model {
     const completedRounds: CompletedRounds = LocalStorageService.getData('completedRounds');
     const currentLevel = `level${this.levelNumber}` as Levels;
 
-    this.appView.displayComponent('mainPage', {
+    this.appView.displayComponent(ComponentName.MainPage, {
       roundsCount: this.currentLevel.roundsCount,
       infoForMark: {
         completedRounds,
@@ -200,7 +204,7 @@ export default class Model {
       const audioLink: string = currentSentenceInfo.audioExample;
       if (translateText && audioElem) {
         audioElem.src = audioLink;
-        AppView.switchComponentDisplay(translateText, 'updateHint', {
+        AppView.switchComponentDisplay(translateText, ChangeType.UpdateHint, {
           hint: this.translateHint
         });
       }
@@ -209,7 +213,7 @@ export default class Model {
       const puzzlesInfo: PuzzleInfo[] = Model.definePuzzlesInfo(sentence);
       const imageSrc: string = round.levelData.imageSrc;
 
-      this.appView.displayComponent('sourceWords', {
+      this.appView.displayComponent(ComponentName.SourceWords, {
         puzzlesInfo: puzzlesInfo,
         imageSrc,
         sentenceIndex: this.sentenceIndex
@@ -234,11 +238,11 @@ export default class Model {
 
   private static definePuzzlesInfo(words: string[]): PuzzleInfo[] {
     const wordsDuplicate: string[] = words;
-    const result: PuzzleInfo[] = wordsDuplicate.map((word: string, index: number) => {
+    const result: PuzzleInfo[] = wordsDuplicate.map((word: string, index: number): PuzzleInfo => {
       if (index === 0) {
         const puzzleInfo: PuzzleInfo = {
           word,
-          puzzleType: 'start',
+          puzzleType: PuzzleType.Start,
           index
         };
         return puzzleInfo;
@@ -246,14 +250,14 @@ export default class Model {
       if (index === words.length - 1) {
         const puzzleInfo: PuzzleInfo = {
           word,
-          puzzleType: 'end',
+          puzzleType: PuzzleType.End,
           index
         };
         return puzzleInfo;
       }
       const puzzleInfo: PuzzleInfo = {
         word,
-        puzzleType: 'middle',
+        puzzleType: PuzzleType.Middle,
         index
       };
       return puzzleInfo;
@@ -276,7 +280,7 @@ export default class Model {
 
     AppView.removeComponent([title, logoutButton]);
     LocalStorageService.clearUserData();
-    this.appView.displayComponent('loginPage');
+    this.appView.displayComponent(ComponentName.LoginPage);
   }
 
   private static logoutFromMainPage(): void {
@@ -322,7 +326,7 @@ export default class Model {
 
     if (!eventTarget || !actionBtn) return;
 
-    AppView.moveComponent(eventTarget, 'moveSource');
+    AppView.moveComponent(eventTarget, MoveAction.MoveSource);
     Model.clearSourcesValidity();
     this.updateButtonsState();
     this.resizeSources();
@@ -370,11 +374,11 @@ export default class Model {
       return;
     }
 
-    AppView.switchComponentDisplay(translateText, 'addClass', { class: 'pseudo-valid' });
-    AppView.switchComponentDisplay(audioIcon, 'addClass', { class: 'pseudo-valid' });
-    AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
-    AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: true });
-    AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: false });
+    AppView.switchComponentDisplay(translateText, ChangeType.AddClass, { class: 'pseudo-valid' });
+    AppView.switchComponentDisplay(audioIcon, ChangeType.AddClass, { class: 'pseudo-valid' });
+    AppView.switchComponentDisplay(actionBtn, ChangeType.Validity, { isValid: true });
+    AppView.switchComponentDisplay(actionBtn, ChangeType.ContinueActive, { isValid: true });
+    AppView.switchComponentDisplay(autoCompleteBtn, ChangeType.Validity, { isValid: false });
   }
 
   private static updateButtonsOnWrongStatus(): void {
@@ -391,11 +395,13 @@ export default class Model {
       return;
     }
 
-    AppView.switchComponentDisplay(translateText, 'removeClass', { class: 'pseudo-valid' });
-    AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'pseudo-valid' });
-    AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
-    AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: true });
-    AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
+    AppView.switchComponentDisplay(translateText, ChangeType.RemoveClass, {
+      class: 'pseudo-valid'
+    });
+    AppView.switchComponentDisplay(audioIcon, ChangeType.RemoveClass, { class: 'pseudo-valid' });
+    AppView.switchComponentDisplay(actionBtn, ChangeType.ContinueActive, { isValid: false });
+    AppView.switchComponentDisplay(actionBtn, ChangeType.Validity, { isValid: true });
+    AppView.switchComponentDisplay(autoCompleteBtn, ChangeType.Validity, { isValid: true });
   }
 
   private static updateButtonsOnNeutralStatus(): void {
@@ -412,11 +418,13 @@ export default class Model {
       return;
     }
 
-    AppView.switchComponentDisplay(translateText, 'removeClass', { class: 'pseudo-valid' });
-    AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'pseudo-valid' });
-    AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
-    AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: false });
-    AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
+    AppView.switchComponentDisplay(translateText, ChangeType.RemoveClass, {
+      class: 'pseudo-valid'
+    });
+    AppView.switchComponentDisplay(audioIcon, ChangeType.RemoveClass, { class: 'pseudo-valid' });
+    AppView.switchComponentDisplay(actionBtn, ChangeType.ContinueActive, { isValid: false });
+    AppView.switchComponentDisplay(actionBtn, ChangeType.Validity, { isValid: false });
+    AppView.switchComponentDisplay(autoCompleteBtn, ChangeType.Validity, { isValid: true });
   }
 
   private static clearSourcesValidity(): void {
@@ -424,8 +432,8 @@ export default class Model {
       document.querySelectorAll('.playarea__source_active')
     );
 
-    allSources.forEach((source: HTMLDivElement) => {
-      AppView.switchComponentDisplay(source, 'validity');
+    allSources.forEach((source: HTMLDivElement): void => {
+      AppView.switchComponentDisplay(source, ChangeType.Validity);
     });
   }
 
@@ -472,7 +480,7 @@ export default class Model {
       AppView.removeComponent([...allSentencePlaces, ...allSourcePlaces]);
       this.sentenceIndex = 0;
 
-      setTimeout(() => {
+      setTimeout((): void => {
         this.nextSentence();
         this.updateButtonsOnStepForward();
       }, 600);
@@ -499,7 +507,7 @@ export default class Model {
       '.playarea__image-description'
     );
     if (imageDescription) {
-      AppView.switchComponentDisplay(imageDescription, 'validity', { isValid: false });
+      AppView.switchComponentDisplay(imageDescription, ChangeType.Validity, { isValid: false });
     }
   }
 
@@ -575,12 +583,14 @@ export default class Model {
     );
 
     if (translateText && actionBtn && autoCompleteBtn && audioIcon && backgroundHintBtn) {
-      AppView.switchComponentDisplay(translateText, 'removeClass', { class: 'pseudo-valid' });
-      AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'pseudo-valid' });
-      AppView.switchComponentDisplay(actionBtn, 'continue-active', { isValid: false });
-      AppView.switchComponentDisplay(actionBtn, 'validity', { isValid: false });
-      AppView.switchComponentDisplay(autoCompleteBtn, 'validity', { isValid: true });
-      AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'active' });
+      AppView.switchComponentDisplay(translateText, ChangeType.RemoveClass, {
+        class: 'pseudo-valid'
+      });
+      AppView.switchComponentDisplay(audioIcon, ChangeType.RemoveClass, { class: 'pseudo-valid' });
+      AppView.switchComponentDisplay(actionBtn, ChangeType.ContinueActive, { isValid: false });
+      AppView.switchComponentDisplay(actionBtn, ChangeType.Validity, { isValid: false });
+      AppView.switchComponentDisplay(autoCompleteBtn, ChangeType.Validity, { isValid: true });
+      AppView.switchComponentDisplay(audioIcon, ChangeType.RemoveClass, { class: 'active' });
       if (backgroundHintBtn.classList.contains('valid')) {
         this.toggleBackground(false);
       } else {
@@ -592,7 +602,7 @@ export default class Model {
   private static updateButtonsOnShowImage(): void {
     const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
     if (actionBtn) {
-      AppView.switchComponentDisplay(actionBtn, 'continue-active', { isShowImage: true });
+      AppView.switchComponentDisplay(actionBtn, ChangeType.ContinueActive, { isShowImage: true });
     }
   }
 
@@ -618,9 +628,9 @@ export default class Model {
 
       sourcesInSentence.forEach((source: HTMLDivElement, index): void => {
         if (source.textContent === exampleSentence[index]) {
-          AppView.switchComponentDisplay(source, 'validity', { isValid: true });
+          AppView.switchComponentDisplay(source, ChangeType.Validity, { isValid: true });
         } else {
-          AppView.switchComponentDisplay(source, 'validity', { isValid: false });
+          AppView.switchComponentDisplay(source, ChangeType.Validity, { isValid: false });
         }
       });
     }
@@ -636,12 +646,14 @@ export default class Model {
     const autoCompleteBtn = document.querySelector('.playarea__auto-complete') as HTMLButtonElement;
     AppView.disableElemsOnTime([autoCompleteBtn], 400);
 
-    allSources.forEach((source: HTMLDivElement) => {
-      AppView.switchComponentDisplay(source, 'removeClass', { class: 'playarea__source_active' });
+    allSources.forEach((source: HTMLDivElement): void => {
+      AppView.switchComponentDisplay(source, ChangeType.RemoveClass, {
+        class: 'playarea__source_active'
+      });
     });
 
-    allSentencePlaces.forEach((place: HTMLDivElement) => {
-      AppView.switchComponentDisplay(place, 'removeClass', {
+    allSentencePlaces.forEach((place: HTMLDivElement): void => {
+      AppView.switchComponentDisplay(place, ChangeType.RemoveClass, {
         class: 'playarea__sentence-place_active'
       });
     });
@@ -652,7 +664,7 @@ export default class Model {
       document.querySelectorAll('.playarea__sentence-place .playarea__source_active')
     );
     const currentSentence: string[] = [];
-    sourcesInSentence.forEach((source: HTMLDivElement) => {
+    sourcesInSentence.forEach((source: HTMLDivElement): void => {
       const word: string | null = source.textContent;
       if (word) {
         currentSentence.push(word);
@@ -690,16 +702,16 @@ export default class Model {
       document.querySelectorAll('.playarea__source_active')
     );
 
-    allSentencePlaces.forEach((place: HTMLDivElement, index: number) => {
+    allSentencePlaces.forEach((place: HTMLDivElement, index: number): void => {
       const exampleWord = exampleSentence[index];
       const source: HTMLDivElement = Model.findSource(exampleWord);
       source.classList.add('tagged');
-      AppView.moveComponent(source, 'setSource', place);
+      AppView.moveComponent(source, MoveAction.SetSource, place);
       Model.clearSourcesValidity();
       this.updateButtonsState();
     });
 
-    allSources.forEach((source: HTMLDivElement) => {
+    allSources.forEach((source: HTMLDivElement): void => {
       source.classList.remove('tagged');
     });
   }
@@ -709,7 +721,7 @@ export default class Model {
       document.querySelectorAll('.playarea__source_active')
     );
     const result: HTMLDivElement | undefined = allSources.find(
-      (source: HTMLDivElement) =>
+      (source: HTMLDivElement): boolean =>
         source.textContent === word && !source.classList.contains('tagged')
     );
     if (result) return result;
@@ -722,10 +734,10 @@ export default class Model {
     if (targetChild instanceof HTMLElement && sourceParent) {
       const copyTargetChild: HTMLElement = targetChild;
       // swapping places
-      AppView.moveComponent(source, 'setSource', target);
-      AppView.moveComponent(copyTargetChild, 'setSource', sourceParent);
+      AppView.moveComponent(source, MoveAction.SetSource, target);
+      AppView.moveComponent(copyTargetChild, MoveAction.SetSource, sourceParent);
     } else {
-      AppView.moveComponent(source, 'setSource', target);
+      AppView.moveComponent(source, MoveAction.SetSource, target);
     }
     Model.clearSourcesValidity();
     this.updateButtonsState();
@@ -748,12 +760,12 @@ export default class Model {
     if (translateText) {
       if (hintElem.classList.contains('valid')) {
         LocalStorageService.saveBooleanData('translateHint', false);
-        AppView.switchComponentDisplay(hintElem, 'validity', { isValid: false });
-        AppView.switchComponentDisplay(translateText, 'validity', { isValid: false });
+        AppView.switchComponentDisplay(hintElem, ChangeType.Validity, { isValid: false });
+        AppView.switchComponentDisplay(translateText, ChangeType.Validity, { isValid: false });
       } else {
         LocalStorageService.saveBooleanData('translateHint', true);
-        AppView.switchComponentDisplay(hintElem, 'validity', { isValid: true });
-        AppView.switchComponentDisplay(translateText, 'validity', { isValid: true });
+        AppView.switchComponentDisplay(hintElem, ChangeType.Validity, { isValid: true });
+        AppView.switchComponentDisplay(translateText, ChangeType.Validity, { isValid: true });
       }
     }
   }
@@ -763,12 +775,12 @@ export default class Model {
     if (audioIcon) {
       if (hintElem.classList.contains('valid')) {
         LocalStorageService.saveBooleanData('audioHint', false);
-        AppView.switchComponentDisplay(hintElem, 'validity', { isValid: false });
-        AppView.switchComponentDisplay(audioIcon, 'validity', { isValid: false });
+        AppView.switchComponentDisplay(hintElem, ChangeType.Validity, { isValid: false });
+        AppView.switchComponentDisplay(audioIcon, ChangeType.Validity, { isValid: false });
       } else {
         LocalStorageService.saveBooleanData('audioHint', true);
-        AppView.switchComponentDisplay(hintElem, 'validity', { isValid: true });
-        AppView.switchComponentDisplay(audioIcon, 'validity', { isValid: true });
+        AppView.switchComponentDisplay(hintElem, ChangeType.Validity, { isValid: true });
+        AppView.switchComponentDisplay(audioIcon, ChangeType.Validity, { isValid: true });
       }
     }
   }
@@ -776,12 +788,12 @@ export default class Model {
   private toggleBackgroundHint(hintElem: HTMLButtonElement): void {
     if (hintElem.classList.contains('valid')) {
       // disable button
-      AppView.switchComponentDisplay(hintElem, 'validity', { isValid: false });
+      AppView.switchComponentDisplay(hintElem, ChangeType.Validity, { isValid: false });
       LocalStorageService.saveBooleanData('backgroundHint', false);
       this.toggleBackground(true);
     } else {
       // enable button
-      AppView.switchComponentDisplay(hintElem, 'validity', { isValid: true });
+      AppView.switchComponentDisplay(hintElem, ChangeType.Validity, { isValid: true });
       LocalStorageService.saveBooleanData('backgroundHint', true);
       this.toggleBackground(false);
     }
@@ -798,9 +810,11 @@ export default class Model {
         const sourceImg = source.firstElementChild as HTMLDivElement;
         const sourceOuterPeg = source.lastElementChild as HTMLDivElement;
 
-        AppView.switchComponentDisplay(sourceImg, 'updateHint', { imageSrc: 'hide' });
+        AppView.switchComponentDisplay(sourceImg, ChangeType.UpdateHint, { imageSrc: 'hide' });
         if (sourceOuterPeg.classList.contains('playarea__peg_outer')) {
-          AppView.switchComponentDisplay(sourceOuterPeg, 'updateHint', { imageSrc: 'hide' });
+          AppView.switchComponentDisplay(sourceOuterPeg, ChangeType.UpdateHint, {
+            imageSrc: 'hide'
+          });
         }
         this.isBackgroundHidden = true;
       });
@@ -814,9 +828,9 @@ export default class Model {
         const round: Round = this.currentLevel.rounds[this.roundIndex];
         const imageSrc: string = round.levelData.imageSrc;
 
-        AppView.switchComponentDisplay(sourceImg, 'updateHint', { imageSrc });
+        AppView.switchComponentDisplay(sourceImg, ChangeType.UpdateHint, { imageSrc });
         if (sourceOuterPeg.classList.contains('playarea__peg_outer')) {
-          AppView.switchComponentDisplay(sourceOuterPeg, 'updateHint', { imageSrc });
+          AppView.switchComponentDisplay(sourceOuterPeg, ChangeType.UpdateHint, { imageSrc });
         }
         this.isBackgroundHidden = false;
       });
@@ -826,7 +840,7 @@ export default class Model {
   public playAudioHint(isEnded: boolean): void {
     const audioIcon: HTMLDivElement | null = document.querySelector('.playarea__audio-icon');
     if (isEnded && audioIcon) {
-      AppView.switchComponentDisplay(audioIcon, 'removeClass', { class: 'active' });
+      AppView.switchComponentDisplay(audioIcon, ChangeType.RemoveClass, { class: 'active' });
       return;
     }
     if (
@@ -836,7 +850,7 @@ export default class Model {
     ) {
       const audioElem: HTMLAudioElement | null = document.querySelector('.playarea__audio');
       if (audioElem && audioIcon) {
-        AppView.switchComponentDisplay(audioIcon, 'addClass', { class: 'active' });
+        AppView.switchComponentDisplay(audioIcon, ChangeType.AddClass, { class: 'active' });
         audioElem.play();
       }
     }
@@ -882,7 +896,7 @@ export default class Model {
     }
 
     AppView.removeComponent([...allSourcePlaces, ...allSentencePlaces]);
-    setTimeout(() => {
+    setTimeout((): void => {
       this.nextSentence();
       Model.removeImageDescription();
       this.updateButtonsOnStepForward();

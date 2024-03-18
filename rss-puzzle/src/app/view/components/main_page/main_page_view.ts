@@ -4,11 +4,14 @@ import appendElem from '../../../utils/appendElem';
 import { app } from '../../../..';
 import shuffleArr from '../../../utils/shuffleArr';
 import {
+  ChangeType,
   CompletedRounds,
+  HandleAction,
   Levels,
   LevelsRoundsCount,
   PlayboardSize,
-  PuzzleInfo
+  PuzzleInfo,
+  PuzzleType
 } from '../../../../interfaces';
 import AppView from '../../app_view';
 
@@ -50,8 +53,8 @@ export default class MainPageView {
   public draw(roundsCount: number) {
     this.drawWrappers();
     this.drawMainElems(roundsCount);
-    app.handleActionRequest('startGame');
-    app.handleActionRequest('check');
+    app.handleActionRequest(HandleAction.StartGame);
+    app.handleActionRequest(HandleAction.Check);
   }
 
   private drawWrappers(): void {
@@ -94,7 +97,8 @@ export default class MainPageView {
         const levelOption: HTMLOptionElement | null = document.querySelector(
           `.playarea__select-level_option[value="${i}"]`
         );
-        if (levelOption) AppView.switchComponentDisplay(levelOption, 'validity', { isValid: true });
+        if (levelOption)
+          AppView.switchComponentDisplay(levelOption, ChangeType.Validity, { isValid: true });
       }
     }
   }
@@ -105,7 +109,8 @@ export default class MainPageView {
         `.playarea__select-round_option[value="${completedRounds[currentLevel][i]}"]`
       );
 
-      if (roundOption) AppView.switchComponentDisplay(roundOption, 'validity', { isValid: true });
+      if (roundOption)
+        AppView.switchComponentDisplay(roundOption, ChangeType.Validity, { isValid: true });
     }
   }
 
@@ -303,7 +308,7 @@ export default class MainPageView {
     );
 
     let positionX: number = 0;
-    words.forEach((word: PuzzleInfo) => {
+    words.forEach((word: PuzzleInfo): void => {
       const currentSource: HTMLDivElement | undefined = allActiveSources.find(
         (source: HTMLDivElement) =>
           source.textContent === word.word && !source.classList.contains('marked')
@@ -327,7 +332,7 @@ export default class MainPageView {
 
       MainPageView.drawPegBackground(currentSource, imageSrc, positionX, positionY, playboardSize);
     });
-    allActiveSources.forEach((source: HTMLDivElement) => source.classList.remove('marked'));
+    allActiveSources.forEach((source: HTMLDivElement): void => source.classList.remove('marked'));
   }
 
   private static drawPegBackground(
@@ -361,7 +366,7 @@ export default class MainPageView {
     const allSourcesPlaces: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__source-place')
     );
-    shuffledWords.forEach((puzzleInfo: PuzzleInfo, index: number) => {
+    shuffledWords.forEach((puzzleInfo: PuzzleInfo, index: number): void => {
       const source: HTMLDivElement = createElem<HTMLDivElement>('div', {
         class: `playarea__source playarea__source_active ${puzzleInfo.puzzleType}`,
         id: `source${index}`,
@@ -385,12 +390,12 @@ export default class MainPageView {
   }
 
   private static drawSourcePeg(source: HTMLDivElement, puzzleInfo: PuzzleInfo): void {
-    if (puzzleInfo.puzzleType === 'start') {
+    if (puzzleInfo.puzzleType === PuzzleType.Start) {
       const pegOuter: HTMLDivElement = createElem<HTMLDivElement>('div', {
         class: 'playarea__peg_outer'
       });
       appendElem(source, [pegOuter]);
-    } else if (puzzleInfo.puzzleType === 'middle') {
+    } else if (puzzleInfo.puzzleType === PuzzleType.Middle) {
       const pegInner: HTMLDivElement = createElem<HTMLDivElement>('div', {
         class: 'playarea__peg_inner'
       });
@@ -425,7 +430,7 @@ export default class MainPageView {
       });
       appendElem(currentSentenceElem, [sourcePlace]);
     }
-    app.handleActionRequest('sourcesAppear');
+    app.handleActionRequest(HandleAction.SourcesAppear);
   }
 
   public static moveSource(source: HTMLDivElement): void {

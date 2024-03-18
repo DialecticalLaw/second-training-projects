@@ -19,10 +19,15 @@
   justify-content: center;
   align-items: center;
   gap: 15px;
+  padding: 10px;
+  background-color: #ffffffbe;
+  box-shadow: 0 0 16px 8px #ffffffe8;
   font-family: Comfortaa;
   font-size: 1.5rem;
   font-weight: bold;
   color: var(--red-color);
+  border: none;
+  border-radius: 30px;
   transform: scale(1);
   cursor: pointer;
   transition: 0.3s;
@@ -33,15 +38,17 @@
 }
 
 .logout:hover {
-  transform: scale(1.1);
+  background-color: #e4e4e4be;
+  box-shadow: 0 0 16px 8px #e7e7e7e8;
 }
 
 .logout:hover .logout__icon {
-  transform: translate(-10px);
+  opacity: 0;
+  transform: translate(100%);
 }
 
 .logout:active {
-  opacity: 0.4;
+  transform: scale(0.8);
 }
 
 .start-content {

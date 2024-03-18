@@ -2,7 +2,7 @@ export interface LooseStringObject {
   [key: string]: string;
 }
 
-export type LoginWrappers = [HTMLFormElement, HTMLUListElement, HTMLDivElement, HTMLDivElement];
+export type LoginPageWrappers = [HTMLFormElement, HTMLUListElement, HTMLDivElement, HTMLDivElement];
 
 export interface CompletedRounds {
   level1: number[];
@@ -79,9 +79,15 @@ export interface SwitchOptions {
   imageSrc?: string;
 }
 
+export enum PuzzleType {
+  Start = 'start',
+  Middle = 'middle',
+  End = 'end'
+}
+
 export interface PuzzleInfo {
   word: string;
-  puzzleType: 'start' | 'middle' | 'end';
+  puzzleType: PuzzleType;
   index: number;
 }
 
@@ -102,4 +108,34 @@ export interface DisplayOptions {
 export interface PlayboardSize {
   width: number;
   height: number;
+}
+
+export enum HandleAction {
+  LoginStart = 'loginStart',
+  LoginEnd = 'loginEnd',
+  StartGame = 'startGame',
+  Check = 'check',
+  Continue = 'continue',
+  SourcesAppear = 'sourcesAppear',
+  ResizeAgain = 'resizeAgain'
+}
+
+export enum ComponentName {
+  LoginPage = 'loginPage',
+  StartPage = 'startPage',
+  MainPage = 'mainPage',
+  SourceWords = 'sourceWords'
+}
+
+export enum ChangeType {
+  Validity,
+  ContinueActive,
+  RemoveClass,
+  AddClass,
+  UpdateHint
+}
+
+export enum MoveAction {
+  MoveSource,
+  SetSource
 }

@@ -1,7 +1,7 @@
 import './login_page_style.css';
 import appendElem from '../../../utils/appendElem';
 import createElem from '../../../utils/create_elem';
-import { LoginWrappers } from '../../../../interfaces';
+import { HandleAction, LoginPageWrappers } from '../../../../interfaces';
 import { app } from '../../../../index';
 export default class LoginPageView {
   loginForm: HTMLFormElement;
@@ -13,7 +13,7 @@ export default class LoginPageView {
   surnameWrapper: HTMLDivElement;
 
   constructor() {
-    const [loginForm, hintsWrapper, nameWrapper, surnameWrapper]: LoginWrappers =
+    const [loginForm, hintsWrapper, nameWrapper, surnameWrapper]: LoginPageWrappers =
       LoginPageView.createLoginWrappers();
     this.loginForm = loginForm;
     this.hintsWrapper = hintsWrapper;
@@ -24,7 +24,7 @@ export default class LoginPageView {
   public draw(): void {
     this.drawWrappers();
     this.drawFormElems();
-    app.handleActionRequest('loginStart');
+    app.handleActionRequest(HandleAction.LoginStart);
   }
 
   private drawWrappers(): void {
@@ -47,7 +47,7 @@ export default class LoginPageView {
     appendElem(this.loginForm, [formBtn]);
   }
 
-  private static createLoginWrappers(): LoginWrappers {
+  private static createLoginWrappers(): LoginPageWrappers {
     const loginForm: HTMLFormElement = createElem<HTMLFormElement>('form', {
       class: 'login-form',
       autocomplete: 'off'

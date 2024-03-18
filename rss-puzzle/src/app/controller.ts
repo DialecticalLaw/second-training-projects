@@ -1,3 +1,4 @@
+import { HandleAction } from '../interfaces';
 import Model from './model';
 
 export default class Controller {
@@ -22,27 +23,27 @@ export default class Controller {
     this.model.initiate();
   }
 
-  public handleActionRequest(action: string): void {
+  public handleActionRequest(action: HandleAction): void {
     switch (action) {
-      case 'loginStart':
+      case HandleAction.LoginStart:
         this.handleLoginRequest(action);
         break;
-      case 'loginEnd':
+      case HandleAction.LoginEnd:
         this.handleLoginRequest(action);
         break;
-      case 'startGame':
+      case HandleAction.StartGame:
         this.handleStartRequest();
         break;
-      case 'check':
+      case HandleAction.Check:
         this.handlePlayareaButtonRequest(action);
         break;
-      case 'continue':
+      case HandleAction.Continue:
         this.handlePlayareaButtonRequest(action);
         break;
-      case 'sourcesAppear':
+      case HandleAction.SourcesAppear:
         this.handleSourcesAppearRequest();
         break;
-      case 'resizeAgain':
+      case HandleAction.ResizeAgain:
         this.handleResizeSourcesAgain();
         break;
       default:
@@ -50,8 +51,8 @@ export default class Controller {
     }
   }
 
-  private handleLoginRequest(action: 'loginStart' | 'loginEnd'): void {
-    if (action === 'loginStart') {
+  private handleLoginRequest(action: HandleAction.LoginStart | HandleAction.LoginEnd): void {
+    if (action === HandleAction.LoginStart) {
       const loginForm: HTMLFormElement | null = document.querySelector('.login-form');
       const loginButton: HTMLButtonElement | null = document.querySelector('.login-form__button');
 
@@ -74,9 +75,9 @@ export default class Controller {
     }
   }
 
-  private handlePlayareaButtonRequest(action: 'check' | 'continue'): void {
+  private handlePlayareaButtonRequest(action: HandleAction.Check | HandleAction.Continue): void {
     const actionBtn: HTMLButtonElement | null = document.querySelector('.playarea__action-button');
-    if (action === 'check' && actionBtn && !this.isChecked) {
+    if (action === HandleAction.Check && actionBtn && !this.isChecked) {
       this.isChecked = true;
       this.isForwarded = false;
       this.checkSentence = this.model.checkSentence.bind(this.model);
@@ -87,7 +88,7 @@ export default class Controller {
       return;
     }
 
-    if (action === 'continue' && this.checkSentence && actionBtn && !this.isForwarded) {
+    if (action === HandleAction.Continue && this.checkSentence && actionBtn && !this.isForwarded) {
       this.isChecked = false;
       this.isForwarded = true;
       this.stepForward = this.model.stepForward.bind(this.model);
@@ -101,8 +102,8 @@ export default class Controller {
       document.querySelectorAll('.playarea__source_active')
     );
 
-    allPlayareaSources.forEach((source: HTMLDivElement) => {
-      source.addEventListener('dragstart', (event: DragEvent) => {
+    allPlayareaSources.forEach((source: HTMLDivElement): void => {
+      source.addEventListener('dragstart', (event: DragEvent): void => {
         const targetSource = event.currentTarget as HTMLDivElement;
         event.dataTransfer?.setData('id', targetSource.id);
       });
@@ -111,7 +112,7 @@ export default class Controller {
     this.listenSourcePlaces();
 
     if (allPlayareaSources.length) {
-      allPlayareaSources.forEach((source: HTMLDivElement) => {
+      allPlayareaSources.forEach((source: HTMLDivElement): void => {
         source.addEventListener('click', this.model.makeSourceReaction.bind(this.model));
       });
     }
@@ -121,8 +122,8 @@ export default class Controller {
     const allSentencePlaces: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__sentence-place_active')
     );
-    allSentencePlaces.forEach((sentencePlace: HTMLDivElement) => {
-      sentencePlace.addEventListener('dragenter', (event: DragEvent) => {
+    allSentencePlaces.forEach((sentencePlace: HTMLDivElement): void => {
+      sentencePlace.addEventListener('dragenter', (event: DragEvent): void => {
         event.preventDefault();
         const targetPlace = event.currentTarget as HTMLDivElement;
         if (targetPlace.classList.contains('playarea__sentence-place_active')) {
@@ -130,19 +131,19 @@ export default class Controller {
         }
       });
 
-      sentencePlace.addEventListener('dragover', (event: DragEvent) => {
+      sentencePlace.addEventListener('dragover', (event: DragEvent): void => {
         const targetPlace = event.currentTarget as HTMLDivElement;
         if (targetPlace.classList.contains('playarea__sentence-place_active')) {
           event.preventDefault();
         }
       });
 
-      sentencePlace.addEventListener('dragleave', (event: DragEvent) => {
+      sentencePlace.addEventListener('dragleave', (event: DragEvent): void => {
         const targetPlace = event.currentTarget as HTMLDivElement;
         targetPlace.classList.remove('ondrag');
       });
 
-      sentencePlace.addEventListener('drop', (event: DragEvent) => {
+      sentencePlace.addEventListener('drop', (event: DragEvent): void => {
         const targetPlace = event.currentTarget as HTMLDivElement;
         const sourceId = event.dataTransfer?.getData('id') as string;
         const source: HTMLDivElement | null = document.querySelector(`#${sourceId}`);
@@ -159,23 +160,23 @@ export default class Controller {
       document.querySelectorAll('.playarea__source-place')
     );
 
-    allSourcePlaces.forEach((sourcePlace: HTMLDivElement) => {
+    allSourcePlaces.forEach((sourcePlace: HTMLDivElement): void => {
       sourcePlace.addEventListener('dragenter', (event: DragEvent) => {
         event.preventDefault();
         const targetPlace = event.currentTarget as HTMLDivElement;
         targetPlace.classList.add('ondrag');
       });
 
-      sourcePlace.addEventListener('dragover', (event: DragEvent) => {
+      sourcePlace.addEventListener('dragover', (event: DragEvent): void => {
         event.preventDefault();
       });
 
-      sourcePlace.addEventListener('dragleave', (event: DragEvent) => {
+      sourcePlace.addEventListener('dragleave', (event: DragEvent): void => {
         const targetPlace = event.currentTarget as HTMLDivElement;
         targetPlace.classList.remove('ondrag');
       });
 
-      sourcePlace.addEventListener('drop', (event: DragEvent) => {
+      sourcePlace.addEventListener('drop', (event: DragEvent): void => {
         const targetPlace = event.currentTarget as HTMLDivElement;
         const sourceId = event.dataTransfer?.getData('id') as string;
         const source: HTMLDivElement | null = document.querySelector(`#${sourceId}`);

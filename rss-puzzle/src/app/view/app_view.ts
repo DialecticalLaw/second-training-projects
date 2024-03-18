@@ -4,9 +4,13 @@ import createElem from '../utils/create_elem';
 import appendElem from '../utils/appendElem';
 import MainPageView from './components/main_page/main_page_view';
 import {
+  ChangeType,
+  ComponentName,
   DisplayOptions,
+  HandleAction,
   HintsStatus,
   InfoForMark,
+  MoveAction,
   PlayboardSize,
   Round,
   SwitchOptions
@@ -26,21 +30,21 @@ export default class AppView {
     this.mainPageView = new MainPageView();
   }
 
-  public displayComponent(componentName: string, options?: DisplayOptions): void {
+  public displayComponent(componentName: ComponentName, options?: DisplayOptions): void {
     switch (componentName) {
-      case 'loginPage':
+      case ComponentName.LoginPage:
         this.loginPageView.draw();
         break;
-      case 'startPage':
+      case ComponentName.StartPage:
         this.startPageView.draw();
         break;
-      case 'mainPage':
+      case ComponentName.MainPage:
         if (options && options.infoForMark && options.roundsCount) {
           this.mainPageView.draw(options.roundsCount);
           AppView.markCompleted(options.infoForMark);
         }
         break;
-      case 'sourceWords':
+      case ComponentName.SourceWords:
         if (
           options !== undefined &&
           options.puzzlesInfo &&
@@ -79,7 +83,7 @@ export default class AppView {
     const logoutBtn = document.querySelector('.logout') as HTMLDivElement;
 
     let isDisabled = false;
-    components.forEach((component: T) => {
+    components.forEach((component: T): void => {
       if (component.classList.contains('playarea__sentence-place')) {
         if (!isDisabled) {
           AppView.disableElemsOnTime([actionBtn, selectLevelForm, selectRoundForm, logoutBtn], 600);
@@ -92,7 +96,7 @@ export default class AppView {
         componentLink.style.transform = `translateX(${x}%) translateY(${y}%)`;
         componentLink.style.opacity = '0';
 
-        setTimeout(() => {
+        setTimeout((): void => {
           component.replaceChildren(); // === remove all children
           component.remove();
         }, 600);
@@ -104,12 +108,12 @@ export default class AppView {
   }
 
   public static disableElemsOnTime<T extends HTMLElement>(elems: T[], time: number): void {
-    elems.forEach((elem: T) => {
+    elems.forEach((elem: T): void => {
       elem.setAttribute('style', 'pointer-events: none; opacity: 0.5');
     });
 
-    setTimeout(() => {
-      elems.forEach((elem: T) => {
+    setTimeout((): void => {
+      elems.forEach((elem: T): void => {
         elem.removeAttribute('style');
       });
     }, time);
@@ -117,28 +121,28 @@ export default class AppView {
 
   public static switchComponentDisplay<T extends HTMLElement>(
     elem: T,
-    changeType: string,
+    changeType: ChangeType,
     options?: SwitchOptions
   ): void {
     switch (changeType) {
-      case 'validity':
+      case ChangeType.Validity:
         AppView.switchValidity(elem, options);
         break;
-      case 'continue-active':
+      case ChangeType.ContinueActive:
         AppView.switchContinueActive(elem, options);
         break;
-      case 'removeClass':
+      case ChangeType.RemoveClass:
         if (options?.class) {
           elem.classList.remove(options?.class);
         }
         if (elem.classList.contains('playarea__source')) elem.removeAttribute('id');
         break;
-      case 'addClass':
+      case ChangeType.AddClass:
         if (options?.class) {
           elem.classList.add(options?.class);
         }
         break;
-      case 'updateHint':
+      case ChangeType.UpdateHint:
         if (elem.classList.contains('playarea__translate-text') && options?.hint) {
           MainPageView.updateTranslateText(options.hint);
         } else if (options && options.imageSrc) {
@@ -170,12 +174,12 @@ export default class AppView {
 
   public static showImage(): void {
     const allSources: HTMLDivElement[] = Array.from(document.querySelectorAll('.playarea__source'));
-    allSources.forEach((source: HTMLDivElement) => source.classList.add('solved'));
+    allSources.forEach((source: HTMLDivElement): void => source.classList.add('solved'));
 
     const allSourcePlaces: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__source-place')
     );
-    allSourcePlaces.forEach((place: HTMLDivElement) => place.classList.add('solved'));
+    allSourcePlaces.forEach((place: HTMLDivElement): void => place.classList.add('solved'));
   }
 
   public static showImageDescription(author: string, name: string, year: string): void {
@@ -184,7 +188,7 @@ export default class AppView {
     );
     if (imageDescription) {
       imageDescription.textContent = `${author} | ${name} | ${year}`;
-      AppView.switchComponentDisplay(imageDescription, 'validity', { isValid: true });
+      AppView.switchComponentDisplay(imageDescription, ChangeType.Validity, { isValid: true });
     }
   }
 
@@ -192,20 +196,20 @@ export default class AppView {
     const levelOptions: HTMLOptionElement[] = Array.from(
       document.querySelectorAll('.playarea__select-level_option')
     );
-    levelOptions.forEach((option: HTMLOptionElement) => option.removeAttribute('selected'));
+    levelOptions.forEach((option: HTMLOptionElement): void => option.removeAttribute('selected'));
 
     const currentLevelOption: HTMLOptionElement | undefined = levelOptions.find(
-      (option: HTMLOptionElement) => Number(option.value) === levelNumber
+      (option: HTMLOptionElement): boolean => Number(option.value) === levelNumber
     );
     if (currentLevelOption) currentLevelOption.selected = true;
 
     const roundOptions: HTMLOptionElement[] = Array.from(
       document.querySelectorAll('.playarea__select-round_option')
     );
-    roundOptions.forEach((option: HTMLOptionElement) => option.removeAttribute('selected'));
+    roundOptions.forEach((option: HTMLOptionElement): void => option.removeAttribute('selected'));
 
     const currentRoundOption: HTMLOptionElement | undefined = roundOptions.find(
-      (option: HTMLOptionElement) => Number(option.value) === roundIndex
+      (option: HTMLOptionElement): boolean => Number(option.value) === roundIndex
     );
     if (currentRoundOption) currentRoundOption.selected = true;
   }
@@ -222,11 +226,11 @@ export default class AppView {
 
     AppView.removeSourcesWidth(allSources, onlyFilledPlaces);
 
-    setTimeout(() => {
+    setTimeout((): void => {
       allSources.forEach((source: HTMLDivElement): void => {
         const sourceLink: HTMLDivElement = source;
         sourceLink.style.width = `${source.getBoundingClientRect().width}px`;
-        setTimeout(() => {
+        setTimeout((): void => {
           sourceLink.style.removeProperty('transition');
         }, 0);
       });
@@ -234,7 +238,7 @@ export default class AppView {
       onlyFilledPlaces.forEach((place: HTMLDivElement): void => {
         const placeLink: HTMLDivElement = place;
         placeLink.style.width = 'max-content';
-        setTimeout(() => {
+        setTimeout((): void => {
           placeLink.style.removeProperty('transition');
         }, 0);
       });
@@ -247,7 +251,7 @@ export default class AppView {
       elemLink.style.transition = '0s';
     });
 
-    setTimeout(() => {
+    setTimeout((): void => {
       places.forEach((place: HTMLDivElement): void => {
         place.style.removeProperty('width');
       });
@@ -275,7 +279,7 @@ export default class AppView {
         const textExample: string[] = round.words[rowIndex].textExample.split(' ');
         let positionX = 0;
 
-        textExample.forEach((word: string) => {
+        textExample.forEach((word: string): void => {
           const positionY = rowIndex * sourceHeight;
 
           const currentSource = AppView.findSource(sourcesInRow, word);
@@ -283,20 +287,20 @@ export default class AppView {
           positionX += currentSource.getBoundingClientRect().width;
 
           AppView.updatePegSize(currentSource, positionX, positionY, playboardSize, sourceHeight);
-          sourcesInRow.forEach((source: HTMLDivElement) => source.classList.remove('marked'));
+          sourcesInRow.forEach((source: HTMLDivElement): void => source.classList.remove('marked'));
         });
       }
     }
 
     if (!isNeedRecalculate) {
-      setTimeout(() => {
-        app.handleActionRequest('resizeAgain');
+      setTimeout((): void => {
+        app.handleActionRequest(HandleAction.ResizeAgain);
       }, 200);
     }
   }
 
   private static findSource(sources: HTMLDivElement[], word: string): HTMLDivElement {
-    const result = sources.find((source: HTMLDivElement) => {
+    const result = sources.find((source: HTMLDivElement): boolean => {
       return source.textContent === word && !source.classList.contains('marked');
     }) as HTMLDivElement;
     result.classList.add('marked');
@@ -351,7 +355,7 @@ export default class AppView {
     if (options?.isValid) {
       const elemLink: T = elem;
       elem.classList.add('continue');
-      app.handleActionRequest('continue');
+      app.handleActionRequest(HandleAction.Continue);
       elem.classList.remove('valid');
       elemLink.textContent = 'Continue';
     } else if (options?.isShowImage) {
@@ -360,7 +364,7 @@ export default class AppView {
       elemLink.textContent = 'Next round';
     } else {
       const elemLink: T = elem;
-      app.handleActionRequest('check');
+      app.handleActionRequest(HandleAction.Check);
       elem.classList.remove('show-image');
       elem.classList.remove('continue');
       elem.classList.remove('valid');
@@ -404,16 +408,16 @@ export default class AppView {
 
   public static moveComponent<T extends HTMLElement>(
     component: T,
-    action: string,
+    action: MoveAction,
     target?: T
   ): void {
     switch (action) {
-      case 'moveSource':
+      case MoveAction.MoveSource:
         if (component instanceof HTMLDivElement) {
           MainPageView.moveSource(component);
         }
         break;
-      case 'setSource':
+      case MoveAction.SetSource:
         if (component instanceof HTMLDivElement && target) {
           MainPageView.setSource(target, component);
         }
