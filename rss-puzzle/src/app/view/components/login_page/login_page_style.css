@@ -83,3 +83,10 @@
   background-color: var(--addition-color);
   opacity: 1;
 }
+
+@media screen and (max-width: 800px) {
+  .login-form__label_name,
+  .login-form__label_surname {
+    font-size: 1.2rem;
+  }
+}

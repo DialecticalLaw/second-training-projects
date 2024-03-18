@@ -3,7 +3,14 @@ import StartPageView from './components/start_page/start_page_view';
 import createElem from '../utils/create_elem';
 import appendElem from '../utils/appendElem';
 import MainPageView from './components/main_page/main_page_view';
-import { DisplayOptions, HintsStatus, InfoForMark, SwitchOptions } from '../../interfaces';
+import {
+  DisplayOptions,
+  HintsStatus,
+  InfoForMark,
+  PlayboardSize,
+  Round,
+  SwitchOptions
+} from '../../interfaces';
 import { app } from '../..';
 
 export default class AppView {
@@ -96,7 +103,7 @@ export default class AppView {
     });
   }
 
-  private static disableElemsOnTime<T extends HTMLElement>(elems: T[], time: number): void {
+  public static disableElemsOnTime<T extends HTMLElement>(elems: T[], time: number): void {
     elems.forEach((elem: T) => {
       elem.setAttribute('style', 'pointer-events: none; opacity: 0.5');
     });
@@ -201,6 +208,113 @@ export default class AppView {
       (option: HTMLOptionElement) => Number(option.value) === roundIndex
     );
     if (currentRoundOption) currentRoundOption.selected = true;
+  }
+
+  public static reassignSourcesWidth(): void {
+    const allSources: HTMLDivElement[] = Array.from(document.querySelectorAll('.playarea__source'));
+    const allPlaces = Array.from([
+      ...document.querySelectorAll('.playarea__source-place'),
+      ...document.querySelectorAll('.playarea__sentence-place')
+    ]) as HTMLDivElement[];
+    const onlyFilledPlaces = allPlaces.filter(
+      (place: HTMLDivElement): boolean => place.style.width === 'max-content'
+    ) as HTMLDivElement[];
+
+    AppView.removeSourcesWidth(allSources, onlyFilledPlaces);
+
+    setTimeout(() => {
+      allSources.forEach((source: HTMLDivElement): void => {
+        const sourceLink: HTMLDivElement = source;
+        sourceLink.style.width = `${source.getBoundingClientRect().width}px`;
+        setTimeout(() => {
+          sourceLink.style.removeProperty('transition');
+        }, 0);
+      });
+
+      onlyFilledPlaces.forEach((place: HTMLDivElement): void => {
+        const placeLink: HTMLDivElement = place;
+        placeLink.style.width = 'max-content';
+        setTimeout(() => {
+          placeLink.style.removeProperty('transition');
+        }, 0);
+      });
+    }, 0);
+  }
+
+  private static removeSourcesWidth(sources: HTMLDivElement[], places: HTMLDivElement[]): void {
+    [...sources, ...places].forEach((elem: HTMLDivElement): void => {
+      const elemLink: HTMLDivElement = elem;
+      elemLink.style.transition = '0s';
+    });
+
+    setTimeout(() => {
+      places.forEach((place: HTMLDivElement): void => {
+        place.style.removeProperty('width');
+      });
+
+      sources.forEach((source: HTMLDivElement): void => {
+        const sourceLink: HTMLDivElement = source;
+        sourceLink.style.width = '100%';
+      });
+    }, 0);
+  }
+
+  // eslint-disable-next-line max-lines-per-function
+  public static updateSourcesSize(
+    playboardSize: PlayboardSize,
+    sourceHeight: number,
+    round: Round,
+    isNeedRecalculate?: boolean
+  ): void {
+    const rowsCount = 10;
+    for (let rowIndex = 0; rowIndex < rowsCount; rowIndex += 1) {
+      const sourcesInRow = Array.from(
+        document.querySelectorAll(`.playarea__source[data-row="${rowIndex}"]`)
+      ) as HTMLDivElement[];
+
+      if (sourcesInRow.length) {
+        const textExample: string[] = round.words[rowIndex].textExample.split(' ');
+        let positionX = 0;
+
+        textExample.forEach((word: string) => {
+          const currentSource = sourcesInRow.find((source: HTMLDivElement) => {
+            return source.textContent === word && !source.classList.contains('marked');
+          }) as HTMLDivElement;
+          currentSource.classList.add('marked');
+
+          const sourceImg = currentSource.firstElementChild as HTMLDivElement;
+          sourceImg.style.backgroundSize = `${playboardSize.width}px ${playboardSize.height}px`;
+          const positionY = rowIndex * sourceHeight;
+          sourceImg.style.backgroundPosition = `-${positionX}px -${positionY}px`;
+          positionX += currentSource.getBoundingClientRect().width;
+
+          this.updatePegSize(currentSource, positionX, positionY, playboardSize, sourceHeight);
+          sourcesInRow.forEach((source: HTMLDivElement) => source.classList.remove('marked'));
+        });
+      }
+    }
+    if (!isNeedRecalculate) {
+      setTimeout(() => {
+        app.handleActionRequest('resizeAgain');
+      }, 200);
+    }
+  }
+
+  private static updatePegSize(
+    source: HTMLDivElement,
+    positionX: number,
+    positionY: number,
+    playboardSize: PlayboardSize,
+    sourceHeight: number
+  ) {
+    const peg = source.lastElementChild as HTMLDivElement;
+    if (!peg.classList.contains('playarea__peg_outer')) return;
+
+    peg.style.backgroundSize = `${playboardSize.width}px ${playboardSize.height}px`;
+    const pegSize: number = peg.getBoundingClientRect().width;
+
+    const pegPositionY = positionY + (sourceHeight - pegSize) / 2;
+    peg.style.backgroundPosition = `-${positionX - 2}px -${pegPositionY}px`;
   }
 
   private static switchValidity<T extends HTMLElement>(elem: T, options?: SwitchOptions): void {

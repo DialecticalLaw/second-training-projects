@@ -262,11 +262,11 @@ export default class MainPageView {
     ];
   }
 
-  public drawSources(words: PuzzleInfo[], imageSrc: string, row: number): void {
+  public drawSources(words: PuzzleInfo[], imageSrc: string, rowIndex: number): void {
     const shuffledSentence: PuzzleInfo[] = shuffleArr(words);
     this.createSourcesPlaces(words.length);
-    MainPageView.createSources(shuffledSentence);
-    MainPageView.drawSourcesBackground(words, imageSrc, row);
+    MainPageView.createSources(shuffledSentence, rowIndex);
+    MainPageView.drawSourcesBackground(words, imageSrc, rowIndex);
 
     const allSources: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__source_active')
@@ -293,7 +293,11 @@ export default class MainPageView {
     });
   }
 
-  private static drawSourcesBackground(words: PuzzleInfo[], imageSrc: string, row: number): void {
+  private static drawSourcesBackground(
+    words: PuzzleInfo[],
+    imageSrc: string,
+    rowIndex: number
+  ): void {
     const allActiveSources: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__source_active')
     );
@@ -316,8 +320,8 @@ export default class MainPageView {
       };
       sourceImg.style.backgroundSize = `${playboardSize.width}px ${playboardSize.height}px`;
 
-      const sourcesHeight: number = currentSource.getBoundingClientRect().height;
-      const positionY = row * sourcesHeight;
+      const sourceHeight: number = currentSource.getBoundingClientRect().height;
+      const positionY = rowIndex * sourceHeight;
       sourceImg.style.backgroundPosition = `-${positionX}px -${positionY}px`;
       positionX += currentSource.getBoundingClientRect().width;
 
@@ -353,7 +357,7 @@ export default class MainPageView {
     }
   }
 
-  private static createSources(shuffledWords: PuzzleInfo[]): void {
+  private static createSources(shuffledWords: PuzzleInfo[], rowIndex: number): void {
     const allSourcesPlaces: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__source-place')
     );
@@ -361,6 +365,7 @@ export default class MainPageView {
       const source: HTMLDivElement = createElem<HTMLDivElement>('div', {
         class: `playarea__source playarea__source_active ${puzzleInfo.puzzleType}`,
         id: `source${index}`,
+        ['data-row']: rowIndex.toString(),
         style: 'transition: 0s; opacity: 0',
         draggable: 'true'
       });

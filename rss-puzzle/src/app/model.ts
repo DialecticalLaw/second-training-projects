@@ -13,6 +13,7 @@ import {
   Level,
   Levels,
   LevelsRoundsCount,
+  PlayboardSize,
   PuzzleInfo,
   Round,
   Sentence
@@ -36,6 +37,8 @@ export default class Model {
   private levelsRoundsCount: LevelsRoundsCount;
 
   private isImageShowed?: boolean;
+
+  isWidthLarge?: boolean;
 
   constructor() {
     this.appView = new AppView();
@@ -312,6 +315,7 @@ export default class Model {
     AppView.moveComponent(eventTarget, 'moveSource');
     Model.clearSourcesValidity();
     this.updateButtonsState();
+    this.resizeSources();
   }
 
   private updateButtonsState(): void {
@@ -320,7 +324,6 @@ export default class Model {
     );
 
     if (!backgroundHintBtn) return;
-
     if (Model.isSentenceFilled()) {
       if (this.isSentenceCorrect()) {
         Model.updateButtonsOnCorrectStatus();
@@ -449,6 +452,9 @@ export default class Model {
       }
       this.isImageShowed = false;
       Model.removeImageDescription();
+      this.saveCompletedRound();
+      this.updateRoundsMarked();
+      this.updateRoundIndex();
 
       const allSentencePlaces: HTMLDivElement[] = Array.from(
         document.querySelectorAll('.playarea__sentence-place')
@@ -465,9 +471,6 @@ export default class Model {
 
   public showImage(): void {
     this.isImageShowed = true;
-    this.saveCompletedRound();
-    this.updateRoundsMarked();
-    this.updateRoundIndex();
 
     AppView.showImage();
     if (this.currentLevel && this.roundIndex !== undefined) {
@@ -620,6 +623,8 @@ export default class Model {
     const allSentencePlaces: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__sentence-place_active')
     );
+    const autoCompleteBtn = document.querySelector('.playarea__auto-complete') as HTMLButtonElement;
+    AppView.disableElemsOnTime([autoCompleteBtn], 400);
 
     allSources.forEach((source: HTMLDivElement) => {
       AppView.switchComponentDisplay(source, 'removeClass', { class: 'playarea__source_active' });
@@ -661,6 +666,8 @@ export default class Model {
       this.currentLevel === undefined
     )
       throw new Error('sentenceIndex or roundIndex is undefined');
+    const actionBtn = document.querySelector('.playarea__action-button') as HTMLButtonElement;
+    AppView.disableElemsOnTime([actionBtn], 400);
 
     const round: Round = this.currentLevel.rounds[this.roundIndex];
     const exampleSentence: string[] = round.words[this.sentenceIndex].textExample.split(' ');
@@ -676,14 +683,14 @@ export default class Model {
     allSentencePlaces.forEach((place: HTMLDivElement, index: number) => {
       const exampleWord = exampleSentence[index];
       const source: HTMLDivElement = Model.findSource(exampleWord);
-      source.classList.add('marked');
+      source.classList.add('tagged');
       AppView.moveComponent(source, 'setSource', place);
       Model.clearSourcesValidity();
       this.updateButtonsState();
     });
 
     allSources.forEach((source: HTMLDivElement) => {
-      source.classList.remove('marked');
+      source.classList.remove('tagged');
     });
   }
 
@@ -693,7 +700,7 @@ export default class Model {
     );
     const result: HTMLDivElement | undefined = allSources.find(
       (source: HTMLDivElement) =>
-        source.textContent === word && !source.classList.contains('marked')
+        source.textContent === word && !source.classList.contains('tagged')
     );
     if (result) return result;
     throw new Error('Source not found at findSource (Model.ts)');
@@ -870,5 +877,39 @@ export default class Model {
       Model.removeImageDescription();
       this.updateButtonsOnStepForward();
     }, 600);
+  }
+
+  public resizeSources(isNeedRecalculate?: boolean): void {
+    const someSource = document.querySelector('.playarea__source') as HTMLDivElement;
+    const body = document.querySelector('body') as HTMLBodyElement;
+    const pageWidth = body.clientWidth;
+    const playareaSourcesWrapper = document.querySelector('.playarea__sources') as HTMLDivElement;
+    const playareaPuzzles = document.querySelector('.playarea__puzzles') as HTMLDivElement;
+
+    if (pageWidth < 1180 || isNeedRecalculate) {
+      if (this.isWidthLarge && !isNeedRecalculate) this.isWidthLarge = false;
+      playareaSourcesWrapper.style.width = `${pageWidth - 30}px`;
+      playareaPuzzles.style.width = `${pageWidth - 30}px`;
+
+      const playboardSize: PlayboardSize = {
+        width: playareaPuzzles.getBoundingClientRect().width,
+        height: playareaPuzzles.getBoundingClientRect().height
+      };
+
+      const sourceHeight: number = someSource.getBoundingClientRect().height;
+
+      AppView.reassignSourcesWidth();
+      if (this.currentLevel && this.roundIndex !== undefined) {
+        const round: Round = this.currentLevel.rounds[this.roundIndex];
+        AppView.updateSourcesSize(playboardSize, sourceHeight, round, isNeedRecalculate);
+      }
+    } else if (playareaSourcesWrapper && playareaPuzzles) {
+      if (!this.isWidthLarge) {
+        this.resizeSources(true);
+        this.isWidthLarge = true;
+      }
+      playareaSourcesWrapper.removeAttribute('style');
+      playareaPuzzles.removeAttribute('style');
+    }
   }
 }

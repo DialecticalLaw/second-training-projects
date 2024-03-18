@@ -42,6 +42,9 @@ export default class Controller {
       case 'sourcesAppear':
         this.handleSourcesAppearRequest();
         break;
+      case 'resizeAgain':
+        this.handleResizeSourcesAgain();
+        break;
       default:
         break;
     }
@@ -185,42 +188,52 @@ export default class Controller {
   }
 
   private handleStartRequest(): void {
+    this.handleSelectOptionsRequest();
+    this.handleAudioHintRequest();
+
     const autoCompleteBtn: HTMLButtonElement | null = document.querySelector(
       '.playarea__auto-complete'
     );
     const translateBtn: HTMLButtonElement | null = document.querySelector(
       '.playarea__translate-hint'
     );
-    const audioBtn: HTMLButtonElement | null = document.querySelector('.playarea__audio-hint');
-    const audioIcon: HTMLDivElement | null = document.querySelector('.playarea__audio-icon');
-    const audioElem: HTMLAudioElement | null = document.querySelector('.playarea__audio');
     const backgroundHintBtn: HTMLButtonElement | null = document.querySelector(
       '.playarea__background-hint'
     );
-    const levelSelect: HTMLSelectElement | null = document.querySelector('.playarea__select-level');
-    const roundSelect: HTMLSelectElement | null = document.querySelector('.playarea__select-round');
 
-    if (
-      autoCompleteBtn &&
-      translateBtn &&
-      audioIcon &&
-      audioElem &&
-      audioBtn &&
-      backgroundHintBtn &&
-      levelSelect &&
-      roundSelect
-    ) {
+    if (autoCompleteBtn && translateBtn && backgroundHintBtn) {
       autoCompleteBtn.addEventListener('click', this.model.completeSentenceAuto.bind(this.model));
       translateBtn.addEventListener('click', this.model.toggleHint.bind(this.model, translateBtn));
-      audioBtn.addEventListener('click', this.model.toggleHint.bind(this.model, audioBtn));
-      audioIcon.addEventListener('click', this.model.playAudioHint.bind(this.model, false));
-      audioElem.addEventListener('ended', this.model.playAudioHint.bind(this.model, true));
       backgroundHintBtn.addEventListener(
         'click',
         this.model.toggleHint.bind(this.model, backgroundHintBtn)
       );
+      window.addEventListener('resize', this.model.resizeSources.bind(this.model, undefined));
+    }
+  }
+
+  private handleSelectOptionsRequest(): void {
+    const levelSelect: HTMLSelectElement | null = document.querySelector('.playarea__select-level');
+    const roundSelect: HTMLSelectElement | null = document.querySelector('.playarea__select-round');
+    if (levelSelect && roundSelect) {
       levelSelect.addEventListener('change', this.model.changeLevel.bind(this.model));
       roundSelect.addEventListener('change', this.model.changeRound.bind(this.model));
     }
+  }
+
+  private handleAudioHintRequest(): void {
+    const audioBtn: HTMLButtonElement | null = document.querySelector('.playarea__audio-hint');
+    const audioIcon: HTMLDivElement | null = document.querySelector('.playarea__audio-icon');
+    const audioElem: HTMLAudioElement | null = document.querySelector('.playarea__audio');
+
+    if (audioBtn && audioIcon && audioElem) {
+      audioBtn.addEventListener('click', this.model.toggleHint.bind(this.model, audioBtn));
+      audioIcon.addEventListener('click', this.model.playAudioHint.bind(this.model, false));
+      audioElem.addEventListener('ended', this.model.playAudioHint.bind(this.model, true));
+    }
+  }
+
+  private handleResizeSourcesAgain(): void {
+    this.model.resizeSources(true);
   }
 }
