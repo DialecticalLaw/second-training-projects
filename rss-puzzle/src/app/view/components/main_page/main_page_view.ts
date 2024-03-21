@@ -1,8 +1,8 @@
 import './main_page_style.css';
 import createElem from '../../../utils/create_elem';
-import appendElem from '../../../utils/appendElem';
+import appendElem from '../../../utils/append_elem';
 import { app } from '../../../..';
-import shuffleArr from '../../../utils/shuffleArr';
+import shuffleArr from '../../../utils/shuffle_arr';
 import {
   ChangeType,
   CompletedRounds,

@@ -1,15 +1,18 @@
 import './start_page_style.css';
 import { HandleAction, StartPageWrappers } from '../../../../interfaces';
-import appendElem from '../../../utils/appendElem';
+import appendElem from '../../../utils/append_elem';
 import createElem from '../../../utils/create_elem';
 import { app } from '../../../../index';
 import LocalStorageService from '../../../services/local_storage_service';
 export default class StartPageView {
+  private localStorageService: LocalStorageService;
+
   private logoutBtn: HTMLDivElement;
 
   private startContentWrapper: HTMLDivElement;
 
   constructor() {
+    this.localStorageService = new LocalStorageService();
     const [logoutBtn, startContentWrapper]: StartPageWrappers =
       StartPageView.createStartPageWrappers();
     this.logoutBtn = logoutBtn;
@@ -51,8 +54,8 @@ export default class StartPageView {
     const greeting: HTMLParagraphElement = createElem<HTMLParagraphElement>('p', {
       class: 'start-content__greeting'
     });
-    const userName = LocalStorageService.getData('name');
-    const userSurname = LocalStorageService.getData('surname');
+    const userName = this.localStorageService.getData('name');
+    const userSurname = this.localStorageService.getData('surname');
     greeting.innerHTML = `Hello, <span>${userName} ${userSurname}</span>! Get ready to learn something new!`;
     const startDescription: HTMLParagraphElement = createElem<HTMLParagraphElement>('p', {
       class: 'start-content__description'

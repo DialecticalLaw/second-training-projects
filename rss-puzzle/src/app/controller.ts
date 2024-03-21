@@ -1,8 +1,18 @@
 import { HandleAction } from '../interfaces';
-import Model from './model';
+import completeSentenceAuto from './model/complete_sentence_auto';
+import dropSource from './model/drop_source';
+import { playAudioHint, toggleHint } from './model/hints';
+import Login from './model/login';
+import Model from './model/model';
+import resizeSources from './model/resize_sources';
+import makeSourceReaction from './model/source_reaction';
+import startMainPage from './model/start_main_page';
+import Validate from './model/validate';
 
 export default class Controller {
-  private model: Model;
+  public model: Model;
+
+  private login: Login;
 
   private isLogoutListener: boolean;
 
@@ -16,6 +26,7 @@ export default class Controller {
 
   constructor() {
     this.model = new Model();
+    this.login = new Login();
     this.isLogoutListener = false;
   }
 
@@ -41,10 +52,10 @@ export default class Controller {
         this.handlePlayareaButtonRequest(action);
         break;
       case HandleAction.SourcesAppear:
-        this.handleSourcesAppearRequest();
+        Controller.handleSourcesAppearRequest();
         break;
       case HandleAction.ResizeAgain:
-        this.handleResizeSourcesAgain();
+        Controller.handleResizeSourcesAgain();
         break;
       default:
         break;
@@ -57,20 +68,20 @@ export default class Controller {
       const loginButton: HTMLButtonElement | null = document.querySelector('.login-form__button');
 
       if (loginForm && loginButton) {
-        loginForm.addEventListener('input', Model.validate);
-        loginButton.addEventListener('click', this.model.tryLogin.bind(this.model));
+        loginForm.addEventListener('input', Validate.validate);
+        loginButton.addEventListener('click', this.login.tryLogin.bind(this.login));
       }
     } else {
       const logoutButton: HTMLButtonElement | null = document.querySelector('.logout');
       if (logoutButton && !this.isLogoutListener) {
-        logoutButton.addEventListener('click', this.model.logout.bind(this.model));
+        logoutButton.addEventListener('click', this.login.logout.bind(this.login));
         this.isLogoutListener = true;
       }
 
       const startButton: HTMLButtonElement | null =
         document.querySelector('.start-content__button');
       if (startButton) {
-        startButton.addEventListener('click', this.model.startMainPage.bind(this.model));
+        startButton.addEventListener('click', startMainPage);
       }
     }
   }
@@ -97,7 +108,7 @@ export default class Controller {
     }
   }
 
-  private handleSourcesAppearRequest(): void {
+  private static handleSourcesAppearRequest(): void {
     const allPlayareaSources: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__source_active')
     );
@@ -108,17 +119,17 @@ export default class Controller {
         event.dataTransfer?.setData('id', targetSource.id);
       });
     });
-    this.listenSentencePlaces();
-    this.listenSourcePlaces();
+    Controller.listenSentencePlaces();
+    Controller.listenSourcePlaces();
 
     if (allPlayareaSources.length) {
       allPlayareaSources.forEach((source: HTMLDivElement): void => {
-        source.addEventListener('click', this.model.makeSourceReaction.bind(this.model));
+        source.addEventListener('click', makeSourceReaction);
       });
     }
   }
 
-  private listenSentencePlaces(): void {
+  private static listenSentencePlaces(): void {
     const allSentencePlaces: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__sentence-place_active')
     );
@@ -148,14 +159,14 @@ export default class Controller {
         const sourceId = event.dataTransfer?.getData('id') as string;
         const source: HTMLDivElement | null = document.querySelector(`#${sourceId}`);
         if (source) {
-          this.model.dropSource(targetPlace, source);
+          dropSource(targetPlace, source);
         }
         targetPlace.classList.remove('ondrag');
       });
     });
   }
 
-  private listenSourcePlaces(): void {
+  private static listenSourcePlaces(): void {
     const allSourcePlaces: HTMLDivElement[] = Array.from(
       document.querySelectorAll('.playarea__source-place')
     );
@@ -181,7 +192,7 @@ export default class Controller {
         const sourceId = event.dataTransfer?.getData('id') as string;
         const source: HTMLDivElement | null = document.querySelector(`#${sourceId}`);
         if (source) {
-          this.model.dropSource(targetPlace, source);
+          dropSource(targetPlace, source);
         }
         targetPlace.classList.remove('ondrag');
       });
@@ -203,13 +214,10 @@ export default class Controller {
     );
 
     if (autoCompleteBtn && translateBtn && backgroundHintBtn) {
-      autoCompleteBtn.addEventListener('click', this.model.completeSentenceAuto.bind(this.model));
-      translateBtn.addEventListener('click', this.model.toggleHint.bind(this.model, translateBtn));
-      backgroundHintBtn.addEventListener(
-        'click',
-        this.model.toggleHint.bind(this.model, backgroundHintBtn)
-      );
-      window.addEventListener('resize', this.model.resizeSources.bind(this.model, undefined));
+      autoCompleteBtn.addEventListener('click', completeSentenceAuto);
+      translateBtn.addEventListener('click', toggleHint.bind(null, translateBtn));
+      backgroundHintBtn.addEventListener('click', toggleHint.bind(null, backgroundHintBtn));
+      window.addEventListener('resize', resizeSources.bind(null, undefined));
     }
   }
 
@@ -228,13 +236,13 @@ export default class Controller {
     const audioElem: HTMLAudioElement | null = document.querySelector('.playarea__audio');
 
     if (audioBtn && audioIcon && audioElem) {
-      audioBtn.addEventListener('click', this.model.toggleHint.bind(this.model, audioBtn));
-      audioIcon.addEventListener('click', this.model.playAudioHint.bind(this.model, false));
-      audioElem.addEventListener('ended', this.model.playAudioHint.bind(this.model, true));
+      audioBtn.addEventListener('click', toggleHint.bind(this.model, audioBtn));
+      audioIcon.addEventListener('click', playAudioHint.bind(null, false));
+      audioElem.addEventListener('ended', playAudioHint.bind(null, true));
     }
   }
 
-  private handleResizeSourcesAgain(): void {
-    this.model.resizeSources(true);
+  private static handleResizeSourcesAgain(): void {
+    resizeSources.bind(null, true);
   }
 }

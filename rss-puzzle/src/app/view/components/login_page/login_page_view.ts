@@ -1,5 +1,5 @@
 import './login_page_style.css';
-import appendElem from '../../../utils/appendElem';
+import appendElem from '../../../utils/append_elem';
 import createElem from '../../../utils/create_elem';
 import { HandleAction, LoginPageWrappers } from '../../../../interfaces';
 import { app } from '../../../../index';

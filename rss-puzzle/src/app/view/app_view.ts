@@ -1,7 +1,7 @@
 import LoginPageView from './components/login_page/login_page_view';
 import StartPageView from './components/start_page/start_page_view';
 import createElem from '../utils/create_elem';
-import appendElem from '../utils/appendElem';
+import appendElem from '../utils/append_elem';
 import MainPageView from './components/main_page/main_page_view';
 import {
   ChangeType,
@@ -91,8 +91,11 @@ export default class AppView {
         }
 
         const componentLink = component;
-        const x = Math.floor(Math.random() * (250 - -250 + 1)) + -250;
-        const y = Math.floor(Math.random() * (250 - -250 + 1)) + -250;
+        const translateSpread: number = 250;
+        const x =
+          Math.floor(Math.random() * (translateSpread - -translateSpread + 1)) + -translateSpread;
+        const y =
+          Math.floor(Math.random() * (translateSpread - -translateSpread + 1)) + -translateSpread;
         componentLink.style.transform = `translateX(${x}%) translateY(${y}%)`;
         componentLink.style.opacity = '0';
 
