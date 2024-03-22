@@ -1,0 +1,27 @@
+.garage__options-block {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  gap: 20px;
+}
+
+.garage__create-options,
+.garage__update-options {
+  display: flex;
+  gap: 10px;
+}
+
+.garage__create_color,
+.garage__update_color {
+  cursor: pointer;
+}
+
+.garage__create_btn,
+.garage__update_btn {
+  cursor: pointer;
+}
+
+.garage__addition-options {
+  display: flex;
+  gap: 10px;
+}
