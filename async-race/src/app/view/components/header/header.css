@@ -1,0 +1,19 @@
+.header {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.switch-pages {
+  display: flex;
+  gap: 30px;
+}
+
+.switch-pages__btn_garage,
+.switch-pages__btn_winners {
+  height: auto;
+  padding: 10px 20px;
+  border: none;
+  font-family: Comfortaa;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
