@@ -1,7 +1,7 @@
-import createElem from '../../../utils/create_elem';
+import { createElem } from '../../../utils/create_elem';
 import './header.css';
 
-const header = createElem<HTMLElement>('header', { class: 'header' });
+export const header = createElem<HTMLElement>('header', { class: 'header' });
 const switchPages = <HTMLFormElement>createElem('form', { class: 'switch-pages' });
 
 const selectGarageBtn = <HTMLButtonElement>(
@@ -16,4 +16,3 @@ selectWinnersBtn.textContent = 'TO WINNERS';
 
 switchPages.append(selectGarageBtn, selectWinnersBtn);
 header.append(switchPages);
-export default header;

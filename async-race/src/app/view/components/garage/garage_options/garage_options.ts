@@ -1,4 +1,4 @@
-import createElem from '../../../../utils/create_elem';
+import { createElem } from '../../../../utils/create_elem';
 import './garage_options.css';
 
 const garageOptions = createElem<HTMLDivElement>('div', { class: 'garage__options-block' });

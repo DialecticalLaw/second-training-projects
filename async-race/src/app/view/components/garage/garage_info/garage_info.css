@@ -1,0 +1,25 @@
+.garage__info-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.garage__info-title {
+  font-family: Comfortaa;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.garage__page-number {
+  font-family: Comfortaa;
+  color: #ffffff;
+  font-size: 1.4rem;
+}
+
+.garage__cars-block {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

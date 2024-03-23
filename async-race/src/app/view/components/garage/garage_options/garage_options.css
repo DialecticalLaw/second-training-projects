@@ -1,7 +1,6 @@
 .garage__options-block {
   display: flex;
   flex-direction: column;
-  align-self: flex-start;
   gap: 20px;
 }
 
@@ -16,8 +15,14 @@
   cursor: pointer;
 }
 
-.garage__create_btn,
-.garage__update_btn {
+.garage__btn_create,
+.garage__btn_update {
+  cursor: pointer;
+}
+
+.garage__btn_race,
+.garage__btn_reset,
+.garage__btn_generate {
   cursor: pointer;
 }
 

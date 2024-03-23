@@ -1,7 +1,7 @@
-import Model from '../model/model';
-import AppView from '../view/app_view';
+import { Model } from '../model/model';
+import { AppView } from '../view/app_view';
 
-export default class Controller {
+export class Controller {
   private model: Model;
 
   private appView: AppView;
