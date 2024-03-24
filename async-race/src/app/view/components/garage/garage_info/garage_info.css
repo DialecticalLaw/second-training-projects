@@ -1,4 +1,5 @@
 .garage__info-block {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -12,7 +13,7 @@
   color: #ffffff;
 }
 
-.garage__page-number {
+.garage__page {
   font-family: Comfortaa;
   color: #ffffff;
   font-size: 1.4rem;

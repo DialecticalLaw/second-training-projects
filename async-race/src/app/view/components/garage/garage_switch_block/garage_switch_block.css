@@ -2,8 +2,3 @@
   display: flex;
   gap: 20px;
 }
-
-.garage__btn_prev,
-.garage__btn_next {
-  cursor: pointer;
-}

@@ -1,0 +1,46 @@
+.garage__car_card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  border-bottom: 3px dashed #ffffff;
+}
+
+.garage__car_options {
+  display: flex;
+  gap: 10px;
+}
+
+.garage__car_name {
+  font-family: Comfortaa;
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+.garage__car_actions {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+  min-height: 60px;
+}
+
+.garage__car_icon {
+  position: absolute;
+  left: 8%;
+  bottom: -20px;
+  width: 80px;
+}
+
+.garage__car_flag {
+  position: absolute;
+  right: 10%;
+  bottom: 0;
+  width: 40px;
+  height: 40px;
+  background-image: url('../../../../../../assets/img/flag.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

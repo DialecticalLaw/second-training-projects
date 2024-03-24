@@ -7,6 +7,10 @@ export class GarageView {
 
   private carsBlock?: HTMLDivElement | null;
 
+  private carsCountElem?: HTMLSpanElement;
+
+  private pageNumberElem?: HTMLSpanElement;
+
   constructor() {
     this.garage = garage;
   }
@@ -24,9 +28,28 @@ export class GarageView {
         this.carsBlock.append(carCard);
       } else {
         const carsBlock: HTMLDivElement | null = document.querySelector('.garage__cars-block');
-        this.carsBlock = carsBlock;
-        carsBlock?.append(carCard);
+        if (carsBlock) {
+          this.carsBlock = carsBlock;
+          carsBlock.append(carCard);
+        } else throw new Error('carsBlock is undefined');
       }
     });
+  }
+
+  public updateGarageInfo(totalCars: number, page: number): void {
+    if (this.carsCountElem && this.pageNumberElem) {
+      this.carsCountElem.textContent = totalCars.toString();
+      this.pageNumberElem.textContent = page.toString();
+    } else {
+      const carsCountElem: HTMLSpanElement | null = document.querySelector('.garage__cars-count');
+      const pageNumberElem: HTMLSpanElement | null = document.querySelector('.garage__page_number');
+
+      if (carsCountElem && pageNumberElem) {
+        this.carsCountElem = carsCountElem;
+        this.pageNumberElem = pageNumberElem;
+        carsCountElem.textContent = totalCars.toString();
+        pageNumberElem.textContent = page.toString();
+      } else throw new Error('carsCount or pageNumber element is undefined');
+    }
   }
 }

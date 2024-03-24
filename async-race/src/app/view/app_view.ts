@@ -23,5 +23,6 @@ export class AppView {
     drawMainMarkup();
     this.garageView.draw();
     this.garageView.drawCars(pageInfo);
+    this.garageView.updateGarageInfo(pageInfo.total, pageInfo.page);
   }
 }

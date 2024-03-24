@@ -12,7 +12,8 @@ export async function getCars(page: number): Promise<PageInfo | undefined> {
   if (total) {
     return {
       cars,
-      total: Number(total)
+      total: Number(total),
+      page
     };
   }
   throw new Error('total is undefined at getCars');

@@ -15,17 +15,6 @@
   cursor: pointer;
 }
 
-.garage__btn_create,
-.garage__btn_update {
-  cursor: pointer;
-}
-
-.garage__btn_race,
-.garage__btn_reset,
-.garage__btn_generate {
-  cursor: pointer;
-}
-
 .garage__addition-options {
   display: flex;
   gap: 10px;
