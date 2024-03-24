@@ -1,3 +1,4 @@
+import { PageInfo } from '../../interfaces';
 import { container } from './components/container/container';
 import { header } from './components/header/header';
 import { main } from './components/main/main';
@@ -18,8 +19,9 @@ export class AppView {
     this.garageView = new GarageView();
   }
 
-  public draw(): void {
+  public start(pageInfo: PageInfo): void {
     drawMainMarkup();
     this.garageView.draw();
+    this.garageView.drawCars(pageInfo);
   }
 }
