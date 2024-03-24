@@ -11,8 +11,6 @@ export class GarageView {
 
   private pageNumberElem?: HTMLSpanElement;
 
-  private updateBtn?: HTMLButtonElement;
-
   constructor() {
     this.garage = garage;
   }
@@ -41,6 +39,8 @@ export class GarageView {
   public clearCarsBlock(): void {
     if (this.carsBlock) {
       this.carsBlock?.replaceChildren();
+      const updateBtn: HTMLButtonElement | null = document.querySelector('.garage__btn_update');
+      if (updateBtn) updateBtn.classList.add('disabled');
     } else throw new Error('carsBlock is undefined');
   }
 

@@ -32,18 +32,18 @@ export class Controller {
 
   public handleActionRequest(action: HandleAction): void {
     switch (action) {
-      case HandleAction.Start:
-        this.handleStartRequest();
+      case HandleAction.Create:
+        this.handleCreateRequest();
         break;
-
+      case HandleAction.Select:
+        this.handleSelectRequest();
+        break;
+      case HandleAction.Update:
+        // this.handleUpdateRequest();
+        break;
       default:
         break;
     }
-  }
-
-  private handleStartRequest(): void {
-    this.handleCreateRequest();
-    this.handleSelectRequest();
   }
 
   private handleCreateRequest(): void {
@@ -81,4 +81,6 @@ export class Controller {
       });
     });
   }
+
+  // private handleUpdateRequest(): void {}
 }

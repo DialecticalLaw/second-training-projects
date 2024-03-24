@@ -30,7 +30,8 @@ export class AppView {
     this.garageView.draw();
     this.garageView.drawCars(pageInfo);
     this.garageView.updateGarageInfo(pageInfo.total, pageInfo.page);
-    app.handleActionRequest(HandleAction.Start);
+    app.handleActionRequest(HandleAction.Create);
+    app.handleActionRequest(HandleAction.Select);
   }
 
   public switchComponentDispay(action: SwitchDisplayAction, options: SwitchDisplayOptions): void {
@@ -39,6 +40,7 @@ export class AppView {
         if (options.pageInfo) {
           this.garageView.clearCarsBlock();
           this.garageView.drawCars(options.pageInfo);
+          app.handleActionRequest(HandleAction.Select);
         }
         break;
       case SwitchDisplayAction.SelectCar:

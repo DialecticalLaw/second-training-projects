@@ -19,7 +19,9 @@ export interface PageInfo {
 }
 
 export enum HandleAction {
-  Start
+  Create,
+  Select,
+  Update
 }
 
 export enum OptionsTypes {
