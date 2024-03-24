@@ -3,10 +3,12 @@ export interface LooseStringObject {
 }
 
 export interface Car {
-  color: string;
-  id: number;
-  name: string;
+  color?: string;
+  id?: number;
+  name?: string;
 }
+
+export type DataForCreate = Omit<Car, 'id'>;
 
 export type Cars = Car[];
 
@@ -15,3 +17,26 @@ export interface PageInfo {
   total: number;
   page: number;
 }
+
+export enum HandleAction {
+  Start
+}
+
+export enum OptionsTypes {
+  Create,
+  Update
+}
+
+export enum CRUD {
+  Create,
+  ReadPage,
+  ReadCar,
+  Update,
+  Delete
+}
+
+export interface CRUDOptions extends Car {
+  page?: number;
+}
+
+export type CRUDResult = PageInfo | Car | undefined;

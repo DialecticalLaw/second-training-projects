@@ -36,6 +36,12 @@ export class GarageView {
     });
   }
 
+  public clearCarsBlock(): void {
+    if (this.carsBlock) {
+      this.carsBlock?.replaceChildren();
+    } else throw new Error('carsBlock is undefined');
+  }
+
   public updateGarageInfo(totalCars: number, page: number): void {
     if (this.carsCountElem && this.pageNumberElem) {
       this.carsCountElem.textContent = totalCars.toString();

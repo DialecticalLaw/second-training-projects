@@ -1,4 +1,5 @@
-import { PageInfo } from '../../interfaces';
+import { app } from '../..';
+import { HandleAction, PageInfo } from '../../interfaces';
 import { container } from './components/container/container';
 import { header } from './components/header/header';
 import { main } from './components/main/main';
@@ -24,5 +25,11 @@ export class AppView {
     this.garageView.draw();
     this.garageView.drawCars(pageInfo);
     this.garageView.updateGarageInfo(pageInfo.total, pageInfo.page);
+    app.handleActionRequest(HandleAction.Start);
+  }
+
+  public updatePage(pageInfo: PageInfo): void {
+    this.garageView.clearCarsBlock();
+    this.garageView.drawCars(pageInfo);
   }
 }

@@ -7,6 +7,7 @@ const carSvgText: string = `<svg class="garage__car_icon" viewBox="0 0 512 512" 
 </svg>`;
 
 export function carCardCreator(options: Car): HTMLDivElement {
+  if (!options.id || !options.name || !options.color) throw new Error('options is undefined');
   const wrapper = createElem<HTMLDivElement>('div', {
     class: 'garage__car_card',
     id: options.id.toString()
