@@ -1,4 +1,4 @@
-import { Car, Cars, DataForCreate, PageInfo } from '../../interfaces';
+import { Car, Cars, InputsCarData, PageInfo } from '../../interfaces';
 
 export async function getCars(page: number): Promise<PageInfo | undefined> {
   const responseCars: Response = await fetch(
@@ -19,7 +19,7 @@ export async function getCars(page: number): Promise<PageInfo | undefined> {
   throw new Error('total is undefined at getCars');
 }
 
-export async function createCar(options: DataForCreate): Promise<Car | undefined> {
+export async function createCar(options: InputsCarData): Promise<Car | undefined> {
   const responseCreatedCar: Response = await fetch(`http://127.0.0.1:3000/garage`, {
     method: 'POST',
     headers: {
@@ -29,4 +29,16 @@ export async function createCar(options: DataForCreate): Promise<Car | undefined
   });
   const createdCar: Car = await responseCreatedCar.json();
   return createdCar;
+}
+
+export async function updateCar(id: string, options: InputsCarData): Promise<Car | undefined> {
+  const responseUpdatedCar: Response = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(options)
+  });
+  const updatedCar: Car = await responseUpdatedCar.json();
+  return updatedCar;
 }

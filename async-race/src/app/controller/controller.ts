@@ -1,13 +1,13 @@
 import {
   CRUD,
   CRUDResult,
-  DataForCreate,
+  InputsCarData,
   HandleAction,
   OptionsTypes,
   SwitchDisplayAction
 } from '../../interfaces';
 import { Model } from '../model/model';
-import { getCreateData } from '../services/get_form_data_service';
+import { getCreateData, getUpdateData } from '../services/get_form_data_service';
 import { AppView } from '../view/app_view';
 import { isValid } from './validity';
 
@@ -39,7 +39,7 @@ export class Controller {
         this.handleSelectRequest();
         break;
       case HandleAction.Update:
-        // this.handleUpdateRequest();
+        this.handleUpdateRequest();
         break;
       default:
         break;
@@ -52,21 +52,23 @@ export class Controller {
       createBtn.addEventListener('click', async (event: MouseEvent): Promise<void> => {
         event.preventDefault();
         if (isValid(OptionsTypes.Create)) {
-          const data: DataForCreate = getCreateData();
+          const data: InputsCarData = getCreateData();
           const createdCar: CRUDResult = await this.model.CRUDCars(CRUD.Create, data);
 
-          if (!createdCar || !('color' in createdCar))
-            throw new Error('createdCar is undefined at handleCreateRequest or wrong type');
-
-          const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
-            page: this.model.currentPage
-          });
-          if (!pageInfo || !('cars' in pageInfo))
-            throw new Error('pageInfo is undefined at init or wrong type');
-          this.appView.switchComponentDispay(SwitchDisplayAction.UpdatePage, { pageInfo });
+          if (!createdCar) throw new Error('createdCar is undefined at handleCreateRequest');
+          await this.updateCurrentPage();
         }
       });
     }
+  }
+
+  private async updateCurrentPage(): Promise<void> {
+    const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
+      page: this.model.currentPage
+    });
+    if (!pageInfo || !('cars' in pageInfo))
+      throw new Error('pageInfo is undefined at init or wrong type');
+    this.appView.switchComponentDisplay(SwitchDisplayAction.UpdatePage, { pageInfo });
   }
 
   private handleSelectRequest(): void {
@@ -77,10 +79,27 @@ export class Controller {
     allSelectButtons.forEach((button: HTMLButtonElement) => {
       button.addEventListener('click', (event: MouseEvent) => {
         event.preventDefault();
-        this.appView.switchComponentDispay(SwitchDisplayAction.SelectCar, { event });
+        this.appView.switchComponentDisplay(SwitchDisplayAction.SelectCar, { event });
       });
     });
   }
 
-  // private handleUpdateRequest(): void {}
+  private handleUpdateRequest(): void {
+    const updateBtn: HTMLButtonElement | null = document.querySelector('.garage__btn_update');
+    if (updateBtn) {
+      updateBtn.addEventListener('click', async (event: MouseEvent) => {
+        event.preventDefault();
+        if (isValid(OptionsTypes.Update)) {
+          const data: InputsCarData = getUpdateData();
+          const selectedCar: HTMLDivElement | null = document.querySelector('.selected');
+          if (!selectedCar) throw new Error('selectedCar is undefined');
+          const id: string = selectedCar.id;
+          const updatedCar: CRUDResult = await this.model.CRUDCars(CRUD.Update, { ...data, id });
+
+          if (!updatedCar) throw new Error('updatedCar is undefined at handleCreateRequest');
+          await this.updateCurrentPage();
+        }
+      });
+    }
+  }
 }

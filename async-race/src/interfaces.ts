@@ -4,11 +4,11 @@ export interface LooseStringObject {
 
 export interface Car {
   color?: string;
-  id?: number;
+  id?: string;
   name?: string;
 }
 
-export type DataForCreate = Omit<Car, 'id'>;
+export type InputsCarData = Omit<Car, 'id'>;
 
 export type Cars = Car[];
 

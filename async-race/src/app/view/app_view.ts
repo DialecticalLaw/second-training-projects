@@ -32,9 +32,10 @@ export class AppView {
     this.garageView.updateGarageInfo(pageInfo.total, pageInfo.page);
     app.handleActionRequest(HandleAction.Create);
     app.handleActionRequest(HandleAction.Select);
+    app.handleActionRequest(HandleAction.Update);
   }
 
-  public switchComponentDispay(action: SwitchDisplayAction, options: SwitchDisplayOptions): void {
+  public switchComponentDisplay(action: SwitchDisplayAction, options: SwitchDisplayOptions): void {
     switch (action) {
       case SwitchDisplayAction.UpdatePage:
         if (options.pageInfo) {
