@@ -11,6 +11,8 @@ export class GarageView {
 
   private pageNumberElem?: HTMLSpanElement;
 
+  private updateBtn?: HTMLButtonElement;
+
   constructor() {
     this.garage = garage;
   }
@@ -57,5 +59,26 @@ export class GarageView {
         pageNumberElem.textContent = page.toString();
       } else throw new Error('carsCount or pageNumber element is undefined');
     }
+  }
+}
+
+export function selectCar(event: MouseEvent): void {
+  const eventTarget: EventTarget | null = event.target;
+  if (eventTarget instanceof HTMLButtonElement) {
+    const allCars: HTMLDivElement[] = Array.from(document.querySelectorAll('.garage__car_card'));
+    allCars.forEach((card: HTMLDivElement) => card.classList.remove('selected'));
+
+    const allCarNames: HTMLParagraphElement[] = Array.from(
+      document.querySelectorAll('.garage__car_name')
+    );
+    allCarNames.forEach((carName: HTMLParagraphElement) => carName.classList.remove('selected'));
+
+    const carCard: HTMLElement | null | undefined = eventTarget.parentElement?.parentElement;
+    const carName: Element | null | undefined = eventTarget.parentElement?.lastElementChild;
+    if (carCard) carCard.classList.add('selected');
+    if (carName) carName.classList.add('selected');
+
+    const updateBtn: HTMLButtonElement | null = document.querySelector('.garage__btn_update');
+    if (updateBtn) updateBtn.classList.remove('disabled');
   }
 }

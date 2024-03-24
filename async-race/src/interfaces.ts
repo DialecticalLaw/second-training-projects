@@ -40,3 +40,13 @@ export interface CRUDOptions extends Car {
 }
 
 export type CRUDResult = PageInfo | Car | undefined;
+
+export enum SwitchDisplayAction {
+  UpdatePage,
+  SelectCar
+}
+
+export interface SwitchDisplayOptions {
+  pageInfo?: PageInfo;
+  event?: MouseEvent;
+}

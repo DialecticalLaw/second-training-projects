@@ -19,7 +19,7 @@ export class Model {
     throw new Error('PageInfo is undefined at getCarsOnPage');
   }
 
-  private async getCreatedCar(options: DataForCreate): Promise<Car> {
+  private static async getCreatedCar(options: DataForCreate): Promise<Car> {
     const createdCar: Car | undefined = await createCar(options);
     if (createdCar) return createdCar;
     throw new Error('createdCar is undefined');
@@ -33,7 +33,7 @@ export class Model {
         }
         break;
       case CRUD.Create:
-        return this.getCreatedCar(options);
+        return Model.getCreatedCar(options);
       default:
         break;
     }

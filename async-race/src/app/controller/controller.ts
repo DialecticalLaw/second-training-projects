@@ -1,4 +1,11 @@
-import { CRUD, CRUDResult, DataForCreate, HandleAction, OptionsTypes } from '../../interfaces';
+import {
+  CRUD,
+  CRUDResult,
+  DataForCreate,
+  HandleAction,
+  OptionsTypes,
+  SwitchDisplayAction
+} from '../../interfaces';
 import { Model } from '../model/model';
 import { getCreateData } from '../services/get_form_data_service';
 import { AppView } from '../view/app_view';
@@ -36,6 +43,7 @@ export class Controller {
 
   private handleStartRequest(): void {
     this.handleCreateRequest();
+    this.handleSelectRequest();
   }
 
   private handleCreateRequest(): void {
@@ -55,9 +63,22 @@ export class Controller {
           });
           if (!pageInfo || !('cars' in pageInfo))
             throw new Error('pageInfo is undefined at init or wrong type');
-          this.appView.updatePage(pageInfo);
+          this.appView.switchComponentDispay(SwitchDisplayAction.UpdatePage, { pageInfo });
         }
       });
     }
+  }
+
+  private handleSelectRequest(): void {
+    const allSelectButtons: HTMLButtonElement[] = Array.from(
+      document.querySelectorAll('.garage__car_select')
+    );
+
+    allSelectButtons.forEach((button: HTMLButtonElement) => {
+      button.addEventListener('click', (event: MouseEvent) => {
+        event.preventDefault();
+        this.appView.switchComponentDispay(SwitchDisplayAction.SelectCar, { event });
+      });
+    });
   }
 }

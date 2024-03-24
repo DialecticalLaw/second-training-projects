@@ -1,9 +1,14 @@
 import { app } from '../..';
-import { HandleAction, PageInfo } from '../../interfaces';
+import {
+  HandleAction,
+  PageInfo,
+  SwitchDisplayAction,
+  SwitchDisplayOptions
+} from '../../interfaces';
 import { container } from './components/container/container';
 import { header } from './components/header/header';
 import { main } from './components/main/main';
-import { GarageView } from './garage_view/garage_view';
+import { GarageView, selectCar } from './garage_view/garage_view';
 
 function drawMainMarkup(): void {
   const body = document.querySelector('body');
@@ -28,8 +33,19 @@ export class AppView {
     app.handleActionRequest(HandleAction.Start);
   }
 
-  public updatePage(pageInfo: PageInfo): void {
-    this.garageView.clearCarsBlock();
-    this.garageView.drawCars(pageInfo);
+  public switchComponentDispay(action: SwitchDisplayAction, options: SwitchDisplayOptions): void {
+    switch (action) {
+      case SwitchDisplayAction.UpdatePage:
+        if (options.pageInfo) {
+          this.garageView.clearCarsBlock();
+          this.garageView.drawCars(options.pageInfo);
+        }
+        break;
+      case SwitchDisplayAction.SelectCar:
+        if (options.event) selectCar(options.event);
+        break;
+      default:
+        break;
+    }
   }
 }

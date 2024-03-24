@@ -6,6 +6,10 @@
   border-bottom: 3px dashed #ffffff;
 }
 
+.garage__car_card.selected {
+  border-bottom: 3px dashed #04ff00;
+}
+
 .garage__car_options {
   display: flex;
   gap: 10px;
@@ -15,6 +19,10 @@
   font-family: Comfortaa;
   font-size: 1.2rem;
   color: #ffffff;
+}
+
+.garage__car_name.selected {
+  color: #04ff00;
 }
 
 .garage__car_actions {
