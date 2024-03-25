@@ -19,6 +19,11 @@ export class GarageView {
     const main = document.querySelector('.main');
     if (!main) throw new Error('main is undefined');
     main.append(this.garage);
+
+    const carsBlock: HTMLDivElement | null = document.querySelector('.garage__cars-block');
+    if (carsBlock) {
+      this.carsBlock = carsBlock;
+    } else throw new Error('carsBlock is undefined');
   }
 
   public drawCars(pageInfo: PageInfo): void {
@@ -26,13 +31,7 @@ export class GarageView {
       const carCard: HTMLDivElement = carCardCreator(car);
       if (this.carsBlock) {
         this.carsBlock.append(carCard);
-      } else {
-        const carsBlock: HTMLDivElement | null = document.querySelector('.garage__cars-block');
-        if (carsBlock) {
-          this.carsBlock = carsBlock;
-          carsBlock.append(carCard);
-        } else throw new Error('carsBlock is undefined');
-      }
+      } else throw new Error('carsBlock is undefined');
     });
   }
 

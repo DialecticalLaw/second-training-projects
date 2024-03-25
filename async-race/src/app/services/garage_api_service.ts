@@ -46,5 +46,7 @@ export async function updateCar(id: string, options: InputsCarData): Promise<Car
 export async function deleteCar(id: string): Promise<void> {
   await fetch(`http://127.0.0.1:3000/garage/${id}`, {
     method: 'DELETE'
-  }).then((response: Response) => console.log(response.ok));
+  }).then((response: Response) => {
+    if (!response.ok) throw new Error(`wrong response: ${response.status}`);
+  });
 }
