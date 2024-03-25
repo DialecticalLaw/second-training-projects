@@ -50,7 +50,7 @@ export class AppView {
         if (options.event) selectCar(options.event);
         break;
       case SwitchDisplayAction.RemoveCar:
-        if (options.carCard) removeCar(options.carCard);
+        if (options.elem) removeCar(options.elem);
         break;
       default:
         break;

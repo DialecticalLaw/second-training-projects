@@ -28,5 +28,6 @@ body {
 }
 
 button {
+  user-select: none;
   cursor: pointer;
 }

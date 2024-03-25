@@ -26,7 +26,7 @@ export class Model {
   }
 
   private static async getUpdatedCar(options: CRUDOptions): Promise<Car> {
-    if (options.id && options.color && options.name) {
+    if (options.id && options.color && options.name !== undefined) {
       const updatedCar: Car | undefined = await updateCar(options.id, {
         name: options.name,
         color: options.color

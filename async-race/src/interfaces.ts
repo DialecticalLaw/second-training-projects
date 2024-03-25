@@ -25,11 +25,6 @@ export enum HandleAction {
   Delete
 }
 
-export enum OptionsTypes {
-  Create,
-  Update
-}
-
 export enum CRUD {
   Create,
   ReadPage,
@@ -52,6 +47,6 @@ export enum SwitchDisplayAction {
 
 export interface SwitchDisplayOptions {
   pageInfo?: PageInfo;
-  carCard?: HTMLDivElement;
+  elem?: HTMLDivElement;
   event?: MouseEvent;
 }

@@ -6,7 +6,7 @@ const garageOptions = createElem<HTMLDivElement>('div', { class: 'garage__option
 const createOptions = createElem<HTMLFormElement>('form', { class: 'garage__create-options' });
 const createTextInput = createElem<HTMLInputElement>('input', {
   class: 'garage__create_text',
-  required: 'true',
+  placeholder: "Car's name",
   type: 'text'
 });
 const createColorInput = createElem<HTMLInputElement>('input', {
@@ -22,7 +22,7 @@ createOptions.append(createTextInput, createColorInput, createBtn);
 const updateOptions = createElem<HTMLFormElement>('form', { class: 'garage__update-options' });
 const updateTextInput = createElem<HTMLInputElement>('input', {
   class: 'garage__update_text',
-  required: 'true',
+  placeholder: "Car's name",
   type: 'text'
 });
 const updateColorInput = createElem<HTMLInputElement>('input', {
