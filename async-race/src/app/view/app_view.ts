@@ -42,6 +42,7 @@ export class AppView {
         if (options.pageInfo) {
           this.garageView.clearCarsBlock();
           this.garageView.drawCars(options.pageInfo);
+          this.garageView.updateGarageInfo(options.pageInfo.total, options.pageInfo.page);
           app.handleActionRequest(HandleAction.Select);
           app.handleActionRequest(HandleAction.Delete);
         }
