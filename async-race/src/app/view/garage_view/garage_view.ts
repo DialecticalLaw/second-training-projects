@@ -37,7 +37,7 @@ export class GarageView {
 
   public clearCarsBlock(): void {
     if (this.carsBlock) {
-      this.carsBlock?.replaceChildren();
+      this.carsBlock.innerHTML = '';
       const updateBtn: HTMLButtonElement | null = document.querySelector('.garage__btn_update');
       if (updateBtn) updateBtn.classList.add('disabled');
     } else throw new Error('carsBlock is undefined');
@@ -80,8 +80,4 @@ export function selectCar(event: MouseEvent): void {
     const updateBtn: HTMLButtonElement | null = document.querySelector('.garage__btn_update');
     if (updateBtn) updateBtn.classList.remove('disabled');
   }
-}
-
-export function removeCar(carCard: HTMLDivElement) {
-  carCard.remove();
 }

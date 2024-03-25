@@ -22,7 +22,8 @@ export enum HandleAction {
   Create,
   Select,
   Update,
-  Delete
+  Delete,
+  Pagination
 }
 
 export enum CRUD {

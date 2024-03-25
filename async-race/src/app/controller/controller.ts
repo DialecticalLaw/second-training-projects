@@ -116,8 +116,8 @@ export class Controller {
             throw new Error('carCard is undefined or wrong');
 
           const id = carCard.id;
-          this.model.CRUDCars(CRUD.Delete, { id });
-          this.appView.switchComponentDisplay(SwitchDisplayAction.RemoveCar, { elem: carCard });
+          await this.model.CRUDCars(CRUD.Delete, { id });
+          await this.updateCurrentPage();
         }
       });
     });

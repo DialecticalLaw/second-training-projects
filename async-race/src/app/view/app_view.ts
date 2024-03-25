@@ -8,7 +8,7 @@ import {
 import { container } from './components/container/container';
 import { header } from './components/header/header';
 import { main } from './components/main/main';
-import { GarageView, removeCar, selectCar } from './garage_view/garage_view';
+import { GarageView, selectCar } from './garage_view/garage_view';
 
 function drawMainMarkup(): void {
   const body = document.querySelector('body');
@@ -48,9 +48,6 @@ export class AppView {
         break;
       case SwitchDisplayAction.SelectCar:
         if (options.event) selectCar(options.event);
-        break;
-      case SwitchDisplayAction.RemoveCar:
-        if (options.elem) removeCar(options.elem);
         break;
       default:
         break;

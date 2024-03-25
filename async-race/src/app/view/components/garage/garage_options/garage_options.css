@@ -44,11 +44,6 @@
   cursor: default;
 }
 
-.garage__btn_update.disabled {
-  pointer-events: none;
-  opacity: 0.6;
-}
-
 .garage__addition-options {
   display: flex;
   gap: 10px;
