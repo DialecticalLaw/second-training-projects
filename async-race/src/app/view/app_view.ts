@@ -8,7 +8,7 @@ import {
 import { container } from './components/container/container';
 import { header } from './components/header/header';
 import { main } from './components/main/main';
-import { GarageView, selectCar } from './garage_view/garage_view';
+import { GarageView, removeCar, selectCar } from './garage_view/garage_view';
 
 function drawMainMarkup(): void {
   const body = document.querySelector('body');
@@ -33,6 +33,7 @@ export class AppView {
     app.handleActionRequest(HandleAction.Create);
     app.handleActionRequest(HandleAction.Select);
     app.handleActionRequest(HandleAction.Update);
+    app.handleActionRequest(HandleAction.Delete);
   }
 
   public switchComponentDisplay(action: SwitchDisplayAction, options: SwitchDisplayOptions): void {
@@ -42,10 +43,14 @@ export class AppView {
           this.garageView.clearCarsBlock();
           this.garageView.drawCars(options.pageInfo);
           app.handleActionRequest(HandleAction.Select);
+          app.handleActionRequest(HandleAction.Delete);
         }
         break;
       case SwitchDisplayAction.SelectCar:
         if (options.event) selectCar(options.event);
+        break;
+      case SwitchDisplayAction.RemoveCar:
+        if (options.carCard) removeCar(options.carCard);
         break;
       default:
         break;

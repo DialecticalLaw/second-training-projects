@@ -42,3 +42,9 @@ export async function updateCar(id: string, options: InputsCarData): Promise<Car
   const updatedCar: Car = await responseUpdatedCar.json();
   return updatedCar;
 }
+
+export async function deleteCar(id: string): Promise<void> {
+  await fetch(`http://127.0.0.1:3000/garage/${id}`, {
+    method: 'DELETE'
+  }).then((response: Response) => console.log(response.ok));
+}

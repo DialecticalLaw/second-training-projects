@@ -82,3 +82,7 @@ export function selectCar(event: MouseEvent): void {
     if (updateBtn) updateBtn.classList.remove('disabled');
   }
 }
+
+export function removeCar(carCard: HTMLDivElement) {
+  carCard.remove();
+}

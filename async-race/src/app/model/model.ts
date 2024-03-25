@@ -1,5 +1,5 @@
 import { CRUD, CRUDOptions, CRUDResult, Car, InputsCarData, PageInfo } from '../../interfaces';
-import { createCar, getCars, updateCar } from '../services/garage_api_service';
+import { createCar, deleteCar, getCars, updateCar } from '../services/garage_api_service';
 
 export class Model {
   private totalCars?: number;
@@ -47,6 +47,9 @@ export class Model {
         return Model.getCreatedCar(options);
       case CRUD.Update:
         return Model.getUpdatedCar(options);
+      case CRUD.Delete:
+        if (options.id) return deleteCar(options.id);
+        break;
       default:
         break;
     }

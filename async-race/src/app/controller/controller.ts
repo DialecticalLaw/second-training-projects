@@ -41,6 +41,9 @@ export class Controller {
       case HandleAction.Update:
         this.handleUpdateRequest();
         break;
+      case HandleAction.Delete:
+        this.handleDeleteRequest();
+        break;
       default:
         break;
     }
@@ -101,5 +104,27 @@ export class Controller {
         }
       });
     }
+  }
+
+  private handleDeleteRequest(): void {
+    const allRemoveButtons: HTMLButtonElement[] = Array.from(
+      document.querySelectorAll('.garage__car_remove')
+    );
+    allRemoveButtons.forEach((button: HTMLButtonElement) => {
+      button.addEventListener('click', async (event: MouseEvent) => {
+        event.preventDefault();
+        const eventTarget: EventTarget | null = event.target;
+
+        if (eventTarget instanceof HTMLButtonElement) {
+          const carCard: HTMLElement | null | undefined = eventTarget.parentElement?.parentElement;
+          if (!carCard || !(carCard instanceof HTMLDivElement))
+            throw new Error('carCard is undefined or wrong');
+
+          const id = carCard.id;
+          this.model.CRUDCars(CRUD.Delete, { id });
+          this.appView.switchComponentDisplay(SwitchDisplayAction.RemoveCar, { carCard });
+        }
+      });
+    });
   }
 }
