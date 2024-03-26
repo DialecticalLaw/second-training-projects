@@ -1,4 +1,3 @@
-import { app } from '../..';
 import {
   HandleAction,
   PageInfo,
@@ -9,6 +8,7 @@ import { container } from './components/container/container';
 import { header } from './components/header/header';
 import { main } from './components/main/main';
 import { GarageView, selectCar } from './garage_view/garage_view';
+import { handleActionRequest } from './handleRequestEvent';
 
 function drawMainMarkup(): void {
   const body = document.querySelector('body');
@@ -16,6 +16,13 @@ function drawMainMarkup(): void {
 
   body.append(container);
   container.append(header, main);
+}
+
+function dispatchInitEvents(): void {
+  handleActionRequest(HandleAction.Create);
+  handleActionRequest(HandleAction.Update);
+  handleActionRequest(HandleAction.Select);
+  handleActionRequest(HandleAction.Delete);
 }
 
 export class AppView {
@@ -30,10 +37,7 @@ export class AppView {
     this.garageView.draw();
     this.garageView.drawCars(pageInfo);
     this.garageView.updateGarageInfo(pageInfo.total, pageInfo.page);
-    app.handleActionRequest(HandleAction.Create);
-    app.handleActionRequest(HandleAction.Select);
-    app.handleActionRequest(HandleAction.Update);
-    app.handleActionRequest(HandleAction.Delete);
+    dispatchInitEvents();
   }
 
   public switchComponentDisplay(action: SwitchDisplayAction, options: SwitchDisplayOptions): void {
@@ -43,8 +47,8 @@ export class AppView {
           this.garageView.clearCarsBlock();
           this.garageView.drawCars(options.pageInfo);
           this.garageView.updateGarageInfo(options.pageInfo.total, options.pageInfo.page);
-          app.handleActionRequest(HandleAction.Select);
-          app.handleActionRequest(HandleAction.Delete);
+          handleActionRequest(HandleAction.Select);
+          handleActionRequest(HandleAction.Delete);
         }
         break;
       case SwitchDisplayAction.SelectCar:

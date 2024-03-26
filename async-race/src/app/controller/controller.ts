@@ -25,26 +25,15 @@ export class Controller {
     });
     if (!pageInfo || !('cars' in pageInfo))
       throw new Error('pageInfo is undefined at init or wrong type');
+    this.handleActionRequests();
     this.appView.start(pageInfo);
   }
 
-  public handleActionRequest(action: HandleAction): void {
-    switch (action) {
-      case HandleAction.Create:
-        this.handleCreateRequest();
-        break;
-      case HandleAction.Select:
-        this.handleSelectRequest();
-        break;
-      case HandleAction.Update:
-        this.handleUpdateRequest();
-        break;
-      case HandleAction.Delete:
-        this.handleDeleteRequest();
-        break;
-      default:
-        break;
-    }
+  private handleActionRequests(): void {
+    document.addEventListener(HandleAction.Create, this.handleCreateRequest.bind(this));
+    document.addEventListener(HandleAction.Update, this.handleUpdateRequest.bind(this));
+    document.addEventListener(HandleAction.Select, this.handleSelectRequest.bind(this));
+    document.addEventListener(HandleAction.Delete, this.handleDeleteRequest.bind(this));
   }
 
   private handleCreateRequest(): void {

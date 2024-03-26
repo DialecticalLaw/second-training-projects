@@ -19,11 +19,11 @@ export interface PageInfo {
 }
 
 export enum HandleAction {
-  Create,
-  Select,
-  Update,
-  Delete,
-  Pagination
+  Create = 'create',
+  Select = 'select',
+  Update = 'update',
+  Delete = 'delete',
+  Pagination = 'pagination'
 }
 
 export enum CRUD {
