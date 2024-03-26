@@ -2,18 +2,15 @@ import { CRUD, CRUDOptions, CRUDResult, Car, InputsCarData, PageInfo } from '../
 import { createCar, deleteCar, getCars, updateCar } from '../services/garage_api_service';
 
 export class Model {
-  private totalCars?: number;
-
-  public readonly currentPage: number;
+  public currentPage: number;
 
   constructor() {
     this.currentPage = 1;
   }
 
-  private async getCarsOnPage(page: number): Promise<PageInfo | undefined> {
+  private static async getCarsOnPage(page: number): Promise<PageInfo | undefined> {
     const result: PageInfo | undefined = await getCars(page);
     if (result) {
-      this.totalCars = result.total;
       return result;
     }
     throw new Error('PageInfo is undefined at getCarsOnPage');
@@ -36,11 +33,11 @@ export class Model {
     throw new Error('updatedCar or options is undefined');
   }
 
-  public async CRUDCars(action: CRUD, options: CRUDOptions): Promise<CRUDResult> {
+  public static async CRUDCars(action: CRUD, options: CRUDOptions): Promise<CRUDResult> {
     switch (action) {
       case CRUD.ReadPage:
         if (options.page !== undefined) {
-          return this.getCarsOnPage(options.page);
+          return Model.getCarsOnPage(options.page);
         }
         break;
       case CRUD.Create:

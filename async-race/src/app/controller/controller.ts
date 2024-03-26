@@ -2,6 +2,10 @@ import { CRUD, CRUDResult, InputsCarData, HandleAction } from '../../interfaces'
 import { Model } from '../model/model';
 import { getCreateData, getUpdateData } from '../services/get_form_data_service';
 import { drawMainMarkup } from '../view/app_view';
+import {
+  prevBtn,
+  nextBtn
+} from '../view/components/garage/garage_switch_block/garage_switch_block';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
 import { GarageOptionsView } from '../view/garage_view/garage_options_view';
 import { GaragePageSwitchView } from '../view/garage_view/garage_switch_page_view';
@@ -13,6 +17,7 @@ function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Update);
   handleActionRequest(HandleAction.Select);
   handleActionRequest(HandleAction.Delete);
+  handleActionRequest(HandleAction.Pagination);
 }
 
 export class Controller {
@@ -32,7 +37,7 @@ export class Controller {
   }
 
   public async init(): Promise<void> {
-    const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
+    const pageInfo: CRUDResult = await Model.CRUDCars(CRUD.ReadPage, {
       page: this.model.currentPage
     });
     if (!pageInfo || !('cars' in pageInfo))
@@ -52,6 +57,7 @@ export class Controller {
     document.addEventListener(HandleAction.Update, this.handleUpdateRequest.bind(this));
     document.addEventListener(HandleAction.Select, this.handleSelectRequest.bind(this));
     document.addEventListener(HandleAction.Delete, this.handleDeleteRequest.bind(this));
+    document.addEventListener(HandleAction.Pagination, this.handlePaginationRequest.bind(this));
   }
 
   private handleCreateRequest(): void {
@@ -60,7 +66,7 @@ export class Controller {
       createBtn.addEventListener('click', async (event: MouseEvent): Promise<void> => {
         event.preventDefault();
         const data: InputsCarData = getCreateData();
-        const createdCar: CRUDResult = await this.model.CRUDCars(CRUD.Create, data);
+        const createdCar: CRUDResult = await Model.CRUDCars(CRUD.Create, data);
 
         if (!createdCar) throw new Error('createdCar is undefined at handleCreateRequest');
         await this.updateCurrentPage();
@@ -69,7 +75,7 @@ export class Controller {
   }
 
   private async updateCurrentPage(): Promise<void> {
-    const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
+    const pageInfo: CRUDResult = await Model.CRUDCars(CRUD.ReadPage, {
       page: this.model.currentPage
     });
     if (!pageInfo || !('cars' in pageInfo))
@@ -103,7 +109,7 @@ export class Controller {
 
         if (!selectedCar) throw new Error('selectedCar is undefined');
         const id: string = selectedCar.id;
-        const updatedCar: CRUDResult = await this.model.CRUDCars(CRUD.Update, { ...data, id });
+        const updatedCar: CRUDResult = await Model.CRUDCars(CRUD.Update, { ...data, id });
 
         if (!updatedCar) throw new Error('updatedCar is undefined at handleCreateRequest');
         await this.updateCurrentPage();
@@ -126,7 +132,7 @@ export class Controller {
             throw new Error('carCard is undefined or wrong');
 
           const id = carCard.id;
-          await this.model.CRUDCars(CRUD.Delete, { id });
+          await Model.CRUDCars(CRUD.Delete, { id });
           await this.updateCurrentPage();
         }
       });
@@ -141,7 +147,7 @@ export class Controller {
     if (currentPage === 1) {
       prevBtnState = false;
     } else {
-      const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
+      const pageInfo: CRUDResult = await Model.CRUDCars(CRUD.ReadPage, {
         page: this.model.currentPage - 1
       });
       if (!pageInfo || !('cars' in pageInfo))
@@ -152,7 +158,7 @@ export class Controller {
       } else prevBtnState = false;
     }
 
-    const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
+    const pageInfo: CRUDResult = await Model.CRUDCars(CRUD.ReadPage, {
       page: this.model.currentPage + 1
     });
     if (!pageInfo || !('cars' in pageInfo))
@@ -163,5 +169,19 @@ export class Controller {
     } else nextBtnState = false;
 
     this.garagePageSwitchView.updateButtonsState(prevBtnState, nextBtnState);
+  }
+
+  private handlePaginationRequest(): void {
+    prevBtn.addEventListener('click', async (event: MouseEvent) => {
+      event.preventDefault();
+      this.model.currentPage -= 1;
+      await this.updateCurrentPage();
+    });
+
+    nextBtn.addEventListener('click', async (event: MouseEvent) => {
+      event.preventDefault();
+      this.model.currentPage += 1;
+      await this.updateCurrentPage();
+    });
   }
 }
