@@ -1,22 +1,26 @@
-import {
-  CRUD,
-  CRUDResult,
-  InputsCarData,
-  HandleAction,
-  SwitchDisplayAction
-} from '../../interfaces';
+import { CRUD, CRUDResult, InputsCarData, HandleAction } from '../../interfaces';
 import { Model } from '../model/model';
 import { getCreateData, getUpdateData } from '../services/get_form_data_service';
-import { AppView } from '../view/app_view';
+import { drawMainMarkup } from '../view/app_view';
+import { GarageInfoView } from '../view/garage_view/garage_info_view';
+import { drawGarage } from '../view/garage_view/garage_view';
+import { handleActionRequest } from '../view/handleRequestEvent';
+
+function dispatchInitEvents(): void {
+  handleActionRequest(HandleAction.Create);
+  handleActionRequest(HandleAction.Update);
+  handleActionRequest(HandleAction.Select);
+  handleActionRequest(HandleAction.Delete);
+}
 
 export class Controller {
   private model: Model;
 
-  private appView: AppView;
+  private garageInfoView: GarageInfoView;
 
   constructor() {
     this.model = new Model();
-    this.appView = new AppView();
+    this.garageInfoView = new GarageInfoView();
   }
 
   public async init(): Promise<void> {
@@ -25,8 +29,13 @@ export class Controller {
     });
     if (!pageInfo || !('cars' in pageInfo))
       throw new Error('pageInfo is undefined at init or wrong type');
+
     this.handleActionRequests();
-    this.appView.start(pageInfo);
+    drawMainMarkup();
+    drawGarage();
+    this.garageInfoView.drawCars(pageInfo);
+    this.garageInfoView.updateGarageInfo(pageInfo.total, pageInfo.page);
+    dispatchInitEvents();
   }
 
   private handleActionRequests(): void {
@@ -56,7 +65,7 @@ export class Controller {
     });
     if (!pageInfo || !('cars' in pageInfo))
       throw new Error('pageInfo is undefined at init or wrong type');
-    this.appView.switchComponentDisplay(SwitchDisplayAction.UpdatePage, { pageInfo });
+    this.garageInfoView.updatePage(pageInfo);
   }
 
   private handleSelectRequest(): void {
@@ -67,7 +76,7 @@ export class Controller {
     allSelectButtons.forEach((button: HTMLButtonElement) => {
       button.addEventListener('click', (event: MouseEvent) => {
         event.preventDefault();
-        this.appView.switchComponentDisplay(SwitchDisplayAction.SelectCar, { event });
+        this.garageInfoView.selectCar(event);
       });
     });
   }

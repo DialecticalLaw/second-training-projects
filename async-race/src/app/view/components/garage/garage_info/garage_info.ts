@@ -4,11 +4,16 @@ import './garage_info.css';
 export const garageInfo = createElem<HTMLDivElement>('div', { class: 'garage__info-block' });
 
 const garageTitle = createElem<HTMLParagraphElement>('p', { class: 'garage__info-title' });
-garageTitle.innerHTML = 'Garage (<span class="garage__cars-count"></span>)';
+export const carsCountElem = createElem<HTMLSpanElement>('span', { class: 'garage__cars-count' });
+garageTitle.insertAdjacentText('beforeend', 'Garage (');
+garageTitle.insertAdjacentElement('beforeend', carsCountElem);
+garageTitle.insertAdjacentText('beforeend', ')');
 
 const garagePage = createElem<HTMLParagraphElement>('p', { class: 'garage__page' });
-garagePage.innerHTML = 'Page #<span class="garage__page_number"></span>';
+export const pageNumberElem = createElem<HTMLSpanElement>('span', { class: 'garage__page_number' });
+garagePage.insertAdjacentText('beforeend', 'Page #');
+garagePage.insertAdjacentElement('beforeend', pageNumberElem);
 
-const garageCarsBlock = createElem<HTMLDivElement>('div', { class: 'garage__cars-block' });
+export const garageCarsBlock = createElem<HTMLDivElement>('div', { class: 'garage__cars-block' });
 
 garageInfo.append(garageTitle, garagePage, garageCarsBlock);

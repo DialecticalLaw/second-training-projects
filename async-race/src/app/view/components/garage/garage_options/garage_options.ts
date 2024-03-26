@@ -29,7 +29,9 @@ const updateColorInput = createElem<HTMLInputElement>('input', {
   class: 'garage__update_color',
   type: 'color'
 });
-const updateBtn = createElem<HTMLButtonElement>('button', { class: 'garage__btn_update disabled' });
+export const updateBtn = createElem<HTMLButtonElement>('button', {
+  class: 'garage__btn_update disabled'
+});
 updateBtn.textContent = 'UPDATE';
 updateOptions.append(updateTextInput, updateColorInput, updateBtn);
 
