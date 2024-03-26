@@ -10,6 +10,17 @@
   gap: 10px;
 }
 
+.garage__create_text,
+.garage__update_text {
+  font-family: Comfortaa;
+  font-size: 1.3rem;
+}
+
+.garage__create_text::placeholder,
+.garage__update_text::placeholder {
+  font-family: Comfortaa;
+}
+
 .garage__create_color,
 .garage__update_color {
   cursor: pointer;

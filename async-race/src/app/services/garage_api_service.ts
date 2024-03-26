@@ -8,7 +8,7 @@ export async function getCars(page: number): Promise<PageInfo | undefined> {
     }
   );
   const cars: Cars = await responseCars.json();
-  const total: string | null = await responseCars.headers.get('X-Total-Count');
+  const total: string | null = responseCars.headers.get('X-Total-Count');
   if (total) {
     return {
       cars,
