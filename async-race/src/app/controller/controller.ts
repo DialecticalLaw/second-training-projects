@@ -3,6 +3,7 @@ import { Model } from '../model/model';
 import { getCreateData, getUpdateData } from '../services/get_form_data_service';
 import { drawMainMarkup } from '../view/app_view';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
+import { GarageOptionsView } from '../view/garage_view/garage_options_view';
 import { drawGarage } from '../view/garage_view/garage_view';
 import { handleActionRequest } from '../view/handleRequestEvent';
 
@@ -18,9 +19,12 @@ export class Controller {
 
   private garageInfoView: GarageInfoView;
 
+  private garageOptionsView: GarageOptionsView;
+
   constructor() {
     this.model = new Model();
     this.garageInfoView = new GarageInfoView();
+    this.garageOptionsView = new GarageOptionsView();
   }
 
   public async init(): Promise<void> {
@@ -66,6 +70,7 @@ export class Controller {
     if (!pageInfo || !('cars' in pageInfo))
       throw new Error('pageInfo is undefined at init or wrong type');
     this.garageInfoView.updatePage(pageInfo);
+    this.garageOptionsView.toggleUpdateBtnValidity(false);
   }
 
   private handleSelectRequest(): void {
@@ -76,7 +81,8 @@ export class Controller {
     allSelectButtons.forEach((button: HTMLButtonElement) => {
       button.addEventListener('click', (event: MouseEvent) => {
         event.preventDefault();
-        this.garageInfoView.selectCar(event);
+        GarageInfoView.selectCar(event);
+        this.garageOptionsView.toggleUpdateBtnValidity(true);
       });
     });
   }

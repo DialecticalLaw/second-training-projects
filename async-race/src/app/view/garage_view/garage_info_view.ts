@@ -5,7 +5,6 @@ import {
   garageCarsBlock,
   pageNumberElem
 } from '../components/garage/garage_info/garage_info';
-import { updateBtn } from '../components/garage/garage_options/garage_options';
 import { handleActionRequest } from '../handleRequestEvent';
 
 export class GarageInfoView {
@@ -15,13 +14,10 @@ export class GarageInfoView {
 
   private pageNumberElem: HTMLSpanElement;
 
-  private updateBtn: HTMLButtonElement;
-
   constructor() {
     this.carsBlock = garageCarsBlock;
     this.carsCountElem = carsCountElem;
     this.pageNumberElem = pageNumberElem;
-    this.updateBtn = updateBtn;
   }
 
   public drawCars(pageInfo: PageInfo): void {
@@ -31,25 +27,20 @@ export class GarageInfoView {
     });
   }
 
-  public clearCarsBlock(): void {
-    this.carsBlock.innerHTML = '';
-    this.updateBtn.classList.add('disabled');
-  }
-
   public updateGarageInfo(totalCars: number, page: number): void {
     this.carsCountElem.textContent = totalCars.toString();
     this.pageNumberElem.textContent = page.toString();
   }
 
   public updatePage(pageInfo: PageInfo): void {
-    this.clearCarsBlock();
+    this.carsBlock.innerHTML = '';
     this.drawCars(pageInfo);
     this.updateGarageInfo(pageInfo.total, pageInfo.page);
     handleActionRequest(HandleAction.Select);
     handleActionRequest(HandleAction.Delete);
   }
 
-  public selectCar(event: MouseEvent): void {
+  public static selectCar(event: MouseEvent): void {
     const eventTarget: EventTarget | null = event.target;
     if (eventTarget instanceof HTMLButtonElement) {
       const allCars: HTMLDivElement[] = Array.from(document.querySelectorAll('.garage__car_card'));
@@ -66,7 +57,7 @@ export class GarageInfoView {
 
       carCard.classList.add('selected');
       carName.classList.add('selected');
-      this.updateBtn.classList.remove('disabled');
+      // this.updateBtn.classList.remove('disabled');
     }
   }
 }
