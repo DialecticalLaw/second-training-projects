@@ -4,6 +4,7 @@ import { getCreateData, getUpdateData } from '../services/get_form_data_service'
 import { drawMainMarkup } from '../view/app_view';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
 import { GarageOptionsView } from '../view/garage_view/garage_options_view';
+import { GaragePageSwitchView } from '../view/garage_view/garage_switch_page_view';
 import { drawGarage } from '../view/garage_view/garage_view';
 import { handleActionRequest } from '../view/handleRequestEvent';
 
@@ -21,15 +22,18 @@ export class Controller {
 
   private garageOptionsView: GarageOptionsView;
 
+  private garagePageSwitchView: GaragePageSwitchView;
+
   constructor() {
     this.model = new Model();
     this.garageInfoView = new GarageInfoView();
     this.garageOptionsView = new GarageOptionsView();
+    this.garagePageSwitchView = new GaragePageSwitchView();
   }
 
   public async init(): Promise<void> {
     const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
-      page: 1
+      page: this.model.currentPage
     });
     if (!pageInfo || !('cars' in pageInfo))
       throw new Error('pageInfo is undefined at init or wrong type');
@@ -39,6 +43,7 @@ export class Controller {
     drawGarage();
     this.garageInfoView.drawCars(pageInfo);
     this.garageInfoView.updateGarageInfo(pageInfo.total, pageInfo.page);
+    await this.updateSwitchButtonsState();
     dispatchInitEvents();
   }
 
@@ -71,6 +76,7 @@ export class Controller {
       throw new Error('pageInfo is undefined at init or wrong type');
     this.garageInfoView.updatePage(pageInfo);
     this.garageOptionsView.toggleUpdateBtnValidity(false);
+    await this.updateSwitchButtonsState();
   }
 
   private handleSelectRequest(): void {
@@ -125,5 +131,37 @@ export class Controller {
         }
       });
     });
+  }
+
+  private async updateSwitchButtonsState(): Promise<void> {
+    const currentPage = this.model.currentPage;
+    let prevBtnState: boolean;
+    let nextBtnState: boolean;
+
+    if (currentPage === 1) {
+      prevBtnState = false;
+    } else {
+      const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
+        page: this.model.currentPage - 1
+      });
+      if (!pageInfo || !('cars' in pageInfo))
+        throw new Error('pageInfo is undefined at init or wrong type');
+
+      if (pageInfo.cars.length) {
+        prevBtnState = true;
+      } else prevBtnState = false;
+    }
+
+    const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
+      page: this.model.currentPage + 1
+    });
+    if (!pageInfo || !('cars' in pageInfo))
+      throw new Error('pageInfo is undefined at init or wrong type');
+
+    if (pageInfo.cars.length) {
+      nextBtnState = true;
+    } else nextBtnState = false;
+
+    this.garagePageSwitchView.updateButtonsState(prevBtnState, nextBtnState);
   }
 }

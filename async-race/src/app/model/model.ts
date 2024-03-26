@@ -39,7 +39,7 @@ export class Model {
   public async CRUDCars(action: CRUD, options: CRUDOptions): Promise<CRUDResult> {
     switch (action) {
       case CRUD.ReadPage:
-        if (options.page) {
+        if (options.page !== undefined) {
           return this.getCarsOnPage(options.page);
         }
         break;
