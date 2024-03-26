@@ -29,7 +29,6 @@ export enum HandleAction {
 export enum CRUD {
   Create,
   ReadPage,
-  ReadCar,
   Update,
   Delete
 }
@@ -39,15 +38,3 @@ export interface CRUDOptions extends Car {
 }
 
 export type CRUDResult = PageInfo | Car | undefined | void;
-
-export enum SwitchDisplayAction {
-  UpdatePage,
-  SelectCar,
-  RemoveCar
-}
-
-export interface SwitchDisplayOptions {
-  pageInfo?: PageInfo;
-  elem?: HTMLDivElement;
-  event?: MouseEvent;
-}
