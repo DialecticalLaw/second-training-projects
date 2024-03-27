@@ -1,4 +1,15 @@
-import { CRUD, CRUDOptions, CRUDResult, Car, InputsCarData, PageInfo } from '../../interfaces';
+import {
+  CRUD,
+  CRUDOptions,
+  CRUDResult,
+  Car,
+  CarProps,
+  EngineStatus,
+  InputsCarData,
+  PageInfo,
+  SuccessResponse
+} from '../../interfaces';
+import { regulateEngine } from '../services/engine_api_service';
 import { createCar, deleteCar, getCars, updateCar } from '../services/garage_api_service';
 
 export class Model {
@@ -51,5 +62,13 @@ export class Model {
         break;
     }
     throw new Error('CRUD option is invalid');
+  }
+
+  public static async updateCarStatus(
+    id: string,
+    status: EngineStatus
+  ): Promise<CarProps | SuccessResponse | undefined> {
+    const response: CarProps | SuccessResponse | undefined = await regulateEngine(id, status);
+    return response;
   }
 }

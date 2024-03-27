@@ -1,4 +1,11 @@
-import { CRUD, CRUDResult, InputsCarData, UpdateCurrentPage } from '../../interfaces';
+import {
+  CRUD,
+  CRUDResult,
+  CarProps,
+  InputsCarData,
+  SuccessResponse,
+  UpdateCurrentPage
+} from '../../interfaces';
 import { Model } from '../model/model';
 import { getCreateData, getUpdateData } from '../services/get_form_data_service';
 import { toggleLoadingProcess } from '../view/app_view';
@@ -113,6 +120,33 @@ export class EventExecutor {
       await Promise.all(promises);
       await updateCurrentPage();
       toggleLoadingProcess(false);
+    });
+  }
+
+  public static handleGasRequest(): void {
+    const allGasButtons = Array.from(
+      document.querySelectorAll('.garage__car_gas')
+    ) as HTMLButtonElement[];
+
+    allGasButtons.forEach((button: HTMLButtonElement) => {
+      button.addEventListener('click', async (event: MouseEvent) => {
+        event.preventDefault();
+        const eventTarget: EventTarget | null = event.target;
+        if (!(eventTarget instanceof HTMLButtonElement)) throw new Error('wrong event target');
+        const carCard: HTMLElement | null | undefined = eventTarget.parentElement?.parentElement;
+        if (!carCard) throw new Error('carCard is undefined');
+
+        const id: string = carCard.id;
+        const startedResult: CarProps | SuccessResponse | undefined = await Model.updateCarStatus(
+          id,
+          'started'
+        );
+        if (typeof startedResult !== 'object' || !('distance' in startedResult))
+          throw new Error('wrong startedResult');
+
+        GarageInfoView.moveCar(id, startedResult);
+        await Model.updateCarStatus(id, 'drive');
+      });
     });
   }
 }

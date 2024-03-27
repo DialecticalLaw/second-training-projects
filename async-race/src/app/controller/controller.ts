@@ -15,6 +15,7 @@ function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Delete);
   handleActionRequest(HandleAction.Pagination);
   handleActionRequest(HandleAction.Generate);
+  handleActionRequest(HandleAction.Gas);
 }
 
 export class Controller {
@@ -56,19 +57,15 @@ export class Controller {
     document.addEventListener(HandleAction.Create, () => {
       EventExecutor.handleCreateRequest(this.updateCurrentPage.bind(this));
     });
-
     document.addEventListener(HandleAction.Select, () => {
       EventExecutor.handleSelectRequest(this.garageOptionsView);
     });
-
     document.addEventListener(HandleAction.Update, () => {
       EventExecutor.handleUpdateRequest(this.updateCurrentPage.bind(this));
     });
-
     document.addEventListener(HandleAction.Delete, () => {
       EventExecutor.handleDeleteRequest(this.updateCurrentPage.bind(this));
     });
-
     document.addEventListener(
       HandleAction.Pagination,
       this.eventExecutor.handlePaginationRequest.bind(
@@ -76,9 +73,11 @@ export class Controller {
         this.updateCurrentPage.bind(this)
       )
     );
-
     document.addEventListener(HandleAction.Generate, () => {
       EventExecutor.handleGenerateRequest(this.updateCurrentPage.bind(this));
+    });
+    document.addEventListener(HandleAction.Gas, () => {
+      EventExecutor.handleGasRequest();
     });
   }
 

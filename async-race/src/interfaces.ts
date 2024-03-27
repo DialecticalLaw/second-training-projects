@@ -24,7 +24,8 @@ export enum HandleAction {
   Update = 'update',
   Delete = 'delete',
   Pagination = 'pagination',
-  Generate = 'generate'
+  Generate = 'generate',
+  Gas = 'gas'
 }
 
 export enum CRUD {
@@ -45,3 +46,14 @@ export interface CarBrands {
 }
 
 export type UpdateCurrentPage = () => Promise<void>;
+
+export type EngineStatus = 'started' | 'stopped' | 'drive';
+
+export interface CarProps {
+  velocity: number;
+  distance: number;
+}
+
+export interface SuccessResponse {
+  success: true;
+}

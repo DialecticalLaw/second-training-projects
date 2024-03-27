@@ -1,4 +1,4 @@
-import { Car, HandleAction, PageInfo } from '../../../interfaces';
+import { Car, CarProps, HandleAction, PageInfo } from '../../../interfaces';
 import { carCardCreator } from '../components/garage/garage_info/car/car';
 import {
   carsCountElem,
@@ -38,6 +38,7 @@ export class GarageInfoView {
     this.updateGarageInfo(pageInfo.total, pageInfo.page);
     handleActionRequest(HandleAction.Select);
     handleActionRequest(HandleAction.Delete);
+    handleActionRequest(HandleAction.Gas);
   }
 
   public static selectCar(event: MouseEvent): void {
@@ -57,7 +58,26 @@ export class GarageInfoView {
 
       carCard.classList.add('selected');
       carName.classList.add('selected');
-      // this.updateBtn.classList.remove('disabled');
+    }
+  }
+
+  public static moveCar(id: string, carProps: CarProps | 'reset' | 'stop'): void {
+    const carIcon: HTMLElement | null = document.querySelector(`[id="${id}"] .garage__car_icon`);
+    if (!carIcon) throw new Error('carIcon is undefined');
+
+    if (carProps === 'reset') {
+      carIcon.removeAttribute('style');
+    } else if (carProps === 'stop') {
+      const carCard: HTMLDivElement | null = document.querySelector(`[id="${id}"]`);
+      if (!carCard) throw new Error('carCard is undefined');
+
+      const carCardLeft = carCard.getBoundingClientRect().left;
+      const currentLeft = carIcon.getBoundingClientRect().left - carCardLeft;
+      carIcon.style.left = `${currentLeft}px`;
+    } else {
+      const transition: number = carProps.distance / carProps.velocity / 1000;
+      carIcon.style.transition = `${transition}s linear`;
+      carIcon.style.left = 'calc(100% - 100px)';
     }
   }
 }

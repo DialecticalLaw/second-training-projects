@@ -26,7 +26,7 @@ export function carCardCreator(options: Car): HTMLDivElement {
   const carActions = createElem<HTMLFormElement>('form', { class: 'garage__car_actions' });
   const gasBtn = createElem<HTMLButtonElement>('button', { class: 'garage__car_gas' });
   gasBtn.textContent = 'A';
-  const brakeBtn = createElem<HTMLButtonElement>('button', { class: 'garage__car_brake' });
+  const brakeBtn = createElem<HTMLButtonElement>('button', { class: 'garage__car_brake disabled' });
   brakeBtn.textContent = 'B';
   carActions.append(gasBtn, brakeBtn);
   carActions.insertAdjacentHTML('beforeend', carSvgText);
