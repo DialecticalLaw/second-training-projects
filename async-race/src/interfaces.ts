@@ -43,3 +43,5 @@ export type CRUDResult = PageInfo | Car | undefined | void;
 export interface CarBrands {
   [key: string]: string[];
 }
+
+export type UpdateCurrentPage = () => Promise<void>;

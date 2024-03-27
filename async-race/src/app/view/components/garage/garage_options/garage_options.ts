@@ -39,7 +39,7 @@ const additionOptions = createElem<HTMLFormElement>('form', { class: 'garage__ad
 const raceBtn = createElem<HTMLButtonElement>('button', { class: 'garage__btn_race' });
 raceBtn.textContent = 'RACE';
 
-const resetBtn = createElem<HTMLButtonElement>('button', { class: 'garage__btn_reset' });
+const resetBtn = createElem<HTMLButtonElement>('button', { class: 'garage__btn_reset disabled' });
 resetBtn.textContent = 'RESET';
 
 export const generateBtn = createElem<HTMLButtonElement>('button', {
