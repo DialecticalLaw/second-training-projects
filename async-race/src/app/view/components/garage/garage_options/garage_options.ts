@@ -42,7 +42,9 @@ raceBtn.textContent = 'RACE';
 const resetBtn = createElem<HTMLButtonElement>('button', { class: 'garage__btn_reset' });
 resetBtn.textContent = 'RESET';
 
-const generateBtn = createElem<HTMLButtonElement>('button', { class: 'garage__btn_generate' });
+export const generateBtn = createElem<HTMLButtonElement>('button', {
+  class: 'garage__btn_generate'
+});
 generateBtn.textContent = 'GENERATE CARS';
 
 additionOptions.append(raceBtn, resetBtn, generateBtn);

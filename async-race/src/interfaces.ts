@@ -23,7 +23,8 @@ export enum HandleAction {
   Select = 'select',
   Update = 'update',
   Delete = 'delete',
-  Pagination = 'pagination'
+  Pagination = 'pagination',
+  Generate = 'generate'
 }
 
 export enum CRUD {
@@ -38,3 +39,7 @@ export interface CRUDOptions extends Car {
 }
 
 export type CRUDResult = PageInfo | Car | undefined | void;
+
+export interface CarBrands {
+  [key: string]: string[];
+}

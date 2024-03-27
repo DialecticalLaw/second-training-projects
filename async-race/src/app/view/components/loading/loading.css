@@ -1,0 +1,30 @@
+.loading {
+  position: absolute;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background-color: #000000b0;
+}
+
+.loading__text {
+  font-family: Comfortaa;
+  font-size: 2.5rem;
+  color: #ffffff;
+}
+
+.loading__gif {
+  width: 100px;
+  height: 100px;
+  background-image: url('../../../../assets/img/loading.gif');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.loading.active {
+  display: flex;
+}

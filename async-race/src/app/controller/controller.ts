@@ -1,7 +1,8 @@
 import { CRUD, CRUDResult, InputsCarData, HandleAction } from '../../interfaces';
 import { Model } from '../model/model';
 import { getCreateData, getUpdateData } from '../services/get_form_data_service';
-import { drawMainMarkup } from '../view/app_view';
+import { drawMainMarkup, toggleLoadingProcess } from '../view/app_view';
+import { generateBtn } from '../view/components/garage/garage_options/garage_options';
 import {
   prevBtn,
   nextBtn
@@ -18,6 +19,7 @@ function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Select);
   handleActionRequest(HandleAction.Delete);
   handleActionRequest(HandleAction.Pagination);
+  handleActionRequest(HandleAction.Generate);
 }
 
 export class Controller {
@@ -58,6 +60,7 @@ export class Controller {
     document.addEventListener(HandleAction.Select, this.handleSelectRequest.bind(this));
     document.addEventListener(HandleAction.Delete, this.handleDeleteRequest.bind(this));
     document.addEventListener(HandleAction.Pagination, this.handlePaginationRequest.bind(this));
+    document.addEventListener(HandleAction.Generate, this.handleGenerateRequest.bind(this));
   }
 
   private handleCreateRequest(): void {
@@ -182,6 +185,23 @@ export class Controller {
       event.preventDefault();
       this.model.currentPage += 1;
       await this.updateCurrentPage();
+    });
+  }
+
+  private handleGenerateRequest(): void {
+    generateBtn.addEventListener('click', async (event: MouseEvent) => {
+      event.preventDefault();
+      toggleLoadingProcess(true);
+      const promises: Promise<CRUDResult>[] = [];
+
+      for (let i = 0; i < 100; i += 1) {
+        const data: InputsCarData = getCreateData(true);
+        promises.push(Model.CRUDCars(CRUD.Create, data));
+      }
+
+      await Promise.all(promises);
+      await this.updateCurrentPage();
+      toggleLoadingProcess(false);
     });
   }
 }
