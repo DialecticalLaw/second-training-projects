@@ -1,4 +1,4 @@
-import { Car, CarProps, HandleAction, PageInfo } from '../../../interfaces';
+import { Car, CarBtnStatus, CarProps, HandleAction, PageInfo } from '../../../interfaces';
 import { carCardCreator } from '../components/garage/garage_info/car/car';
 import {
   carsCountElem,
@@ -39,6 +39,7 @@ export class GarageInfoView {
     handleActionRequest(HandleAction.Select);
     handleActionRequest(HandleAction.Delete);
     handleActionRequest(HandleAction.Gas);
+    handleActionRequest(HandleAction.Brake);
   }
 
   public static selectCar(event: MouseEvent): void {
@@ -79,5 +80,11 @@ export class GarageInfoView {
       carIcon.style.transition = `${transition}s linear`;
       carIcon.style.left = 'calc(100% - 100px)';
     }
+  }
+
+  public static updateButtonsState(btnStatus: CarBtnStatus): void {
+    if (btnStatus.status) {
+      btnStatus.btn.classList.remove('disabled');
+    } else btnStatus.btn.classList.add('disabled');
   }
 }

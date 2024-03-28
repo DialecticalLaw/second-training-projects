@@ -1,6 +1,7 @@
 import {
   CRUD,
   CRUDResult,
+  CarAbortControllers,
   CarProps,
   InputsCarData,
   SuccessResponse,
@@ -20,8 +21,11 @@ import { GarageOptionsView } from '../view/garage_view/garage_options_view';
 export class EventExecutor {
   private model: Model;
 
+  private aborts: CarAbortControllers;
+
   constructor(model: Model) {
     this.model = model;
+    this.aborts = {};
   }
 
   public static handleCreateRequest(updateCurrentPage: UpdateCurrentPage): void {
@@ -123,7 +127,7 @@ export class EventExecutor {
     });
   }
 
-  public static handleGasRequest(): void {
+  public handleGasRequest(): void {
     const allGasButtons = Array.from(
       document.querySelectorAll('.garage__car_gas')
     ) as HTMLButtonElement[];
@@ -134,7 +138,9 @@ export class EventExecutor {
         const eventTarget: EventTarget | null = event.target;
         if (!(eventTarget instanceof HTMLButtonElement)) throw new Error('wrong event target');
         const carCard: HTMLElement | null | undefined = eventTarget.parentElement?.parentElement;
-        if (!carCard) throw new Error('carCard is undefined');
+        const adjacentButton: Element | null = eventTarget.nextElementSibling;
+        if (!carCard || !adjacentButton || !(adjacentButton instanceof HTMLButtonElement))
+          throw new Error('wrong adjacentButton or carCard');
 
         const id: string = carCard.id;
         const startedResult: CarProps | SuccessResponse | undefined = await Model.updateCarStatus(
@@ -144,8 +150,37 @@ export class EventExecutor {
         if (typeof startedResult !== 'object' || !('distance' in startedResult))
           throw new Error('wrong startedResult');
 
+        const abortController: AbortController = new AbortController();
+        this.aborts[id] = abortController;
+
+        GarageInfoView.updateButtonsState({ btn: button, status: false });
+        GarageInfoView.updateButtonsState({ btn: adjacentButton, status: true });
         GarageInfoView.moveCar(id, startedResult);
-        await Model.updateCarStatus(id, 'drive');
+        await Model.updateCarStatus(id, 'drive', abortController);
+      });
+    });
+  }
+
+  public handleBrakeRequest(): void {
+    const allBrakeButtons = Array.from(
+      document.querySelectorAll('.garage__car_brake')
+    ) as HTMLButtonElement[];
+
+    allBrakeButtons.forEach((button: HTMLButtonElement) => {
+      button.addEventListener('click', async (event: MouseEvent) => {
+        event.preventDefault();
+        const eventTarget: EventTarget | null = event.target;
+        if (!(eventTarget instanceof HTMLButtonElement)) throw new Error('wrong event target');
+        const carCard: HTMLElement | null | undefined = eventTarget.parentElement?.parentElement;
+        const adjacentButton: Element | null = eventTarget.previousElementSibling;
+        if (!carCard || !adjacentButton || !(adjacentButton instanceof HTMLButtonElement))
+          throw new Error('wrong adjacentButton or carCard');
+
+        const id: string = carCard.id;
+        this.aborts[id].abort();
+        GarageInfoView.updateButtonsState({ btn: button, status: false });
+        GarageInfoView.updateButtonsState({ btn: adjacentButton, status: true });
+        GarageInfoView.moveCar(id, 'reset');
       });
     });
   }

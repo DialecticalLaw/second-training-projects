@@ -25,7 +25,8 @@ export enum HandleAction {
   Delete = 'delete',
   Pagination = 'pagination',
   Generate = 'generate',
-  Gas = 'gas'
+  Gas = 'gas',
+  Brake = 'brake'
 }
 
 export enum CRUD {
@@ -56,4 +57,13 @@ export interface CarProps {
 
 export interface SuccessResponse {
   success: true;
+}
+
+export interface CarAbortControllers {
+  [key: string]: AbortController;
+}
+
+export interface CarBtnStatus {
+  btn: HTMLButtonElement;
+  status: boolean;
 }

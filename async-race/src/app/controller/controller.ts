@@ -16,6 +16,7 @@ function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Pagination);
   handleActionRequest(HandleAction.Generate);
   handleActionRequest(HandleAction.Gas);
+  handleActionRequest(HandleAction.Brake);
 }
 
 export class Controller {
@@ -77,7 +78,10 @@ export class Controller {
       EventExecutor.handleGenerateRequest(this.updateCurrentPage.bind(this));
     });
     document.addEventListener(HandleAction.Gas, () => {
-      EventExecutor.handleGasRequest();
+      this.eventExecutor.handleGasRequest.bind(this.eventExecutor)();
+    });
+    document.addEventListener(HandleAction.Brake, () => {
+      this.eventExecutor.handleBrakeRequest.bind(this.eventExecutor)();
     });
   }
 

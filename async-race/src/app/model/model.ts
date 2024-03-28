@@ -66,9 +66,14 @@ export class Model {
 
   public static async updateCarStatus(
     id: string,
-    status: EngineStatus
+    status: EngineStatus,
+    abortController?: AbortController
   ): Promise<CarProps | SuccessResponse | undefined> {
-    const response: CarProps | SuccessResponse | undefined = await regulateEngine(id, status);
+    const response: CarProps | SuccessResponse | undefined = await regulateEngine(
+      id,
+      status,
+      abortController
+    );
     return response;
   }
 }
