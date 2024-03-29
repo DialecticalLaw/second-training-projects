@@ -36,10 +36,12 @@ updateBtn.textContent = 'UPDATE';
 updateOptions.append(updateTextInput, updateColorInput, updateBtn);
 
 const additionOptions = createElem<HTMLFormElement>('form', { class: 'garage__addition-options' });
-const raceBtn = createElem<HTMLButtonElement>('button', { class: 'garage__btn_race' });
+export const raceBtn = createElem<HTMLButtonElement>('button', { class: 'garage__btn_race' });
 raceBtn.textContent = 'RACE';
 
-const resetBtn = createElem<HTMLButtonElement>('button', { class: 'garage__btn_reset disabled' });
+export const resetBtn = createElem<HTMLButtonElement>('button', {
+  class: 'garage__btn_reset disabled'
+});
 resetBtn.textContent = 'RESET';
 
 export const generateBtn = createElem<HTMLButtonElement>('button', {

@@ -26,7 +26,9 @@ export enum HandleAction {
   Pagination = 'pagination',
   Generate = 'generate',
   Gas = 'gas',
-  Brake = 'brake'
+  Brake = 'brake',
+  Race = 'race',
+  Reset = 'reset'
 }
 
 export enum CRUD {

@@ -1,5 +1,11 @@
-import { CarAbortControllers, UpdateCarResponse, UpdateCurrentPage } from '../../interfaces';
+import {
+  CarAbortControllers,
+  CarProps,
+  UpdateCarResponse,
+  UpdateCurrentPage
+} from '../../interfaces';
 import { Model } from '../model/model';
+import { raceBtn, resetBtn } from '../view/components/garage/garage_options/garage_options';
 import {
   nextBtn,
   prevBtn
@@ -15,10 +21,19 @@ export class EventActionExecutor {
 
   private executedAborts: string[];
 
+  private readyCars: Promise<CarProps>[];
+
+  private stoppedCarsCount: number;
+
   constructor(model: Model) {
     this.model = model;
     this.aborts = {};
     this.executedAborts = [];
+    this.readyCars = [];
+    this.stoppedCarsCount = 0;
+    document.addEventListener('carstopped', () => {
+      this.stoppedCarsCount += 1;
+    });
   }
 
   public static handleSelectRequest(garageOptionsView: GarageOptionsView): void {
@@ -66,14 +81,14 @@ export class EventActionExecutor {
 
         const id: string = carCard.id;
         updateButtonState({ btn: button, status: false });
-        const startedResult: UpdateCarResponse = await Model.updateCarStatus(id, 'started');
-        if (typeof startedResult !== 'object' || !('distance' in startedResult))
-          throw new Error('wrong startedResult');
-
+        const startedResult = Model.updateCarStatus(id, 'started') as Promise<CarProps>;
+        this.readyCars.push(startedResult);
+        const startedResponse: CarProps = await startedResult;
         const abortController: AbortController = new AbortController();
         this.aborts[id] = abortController;
         updateButtonState({ btn: adjacentBtn, status: true });
-        GarageInfoView.moveCar(id, startedResult);
+
+        GarageInfoView.moveCar(id, startedResponse);
 
         const driveResponse: UpdateCarResponse = await Model.updateCarStatus(id, 'drive', {
           btn: eventTarget,
@@ -91,7 +106,7 @@ export class EventActionExecutor {
     ) as HTMLButtonElement[];
 
     allBrakeButtons.forEach((button: HTMLButtonElement) => {
-      button.addEventListener('click', async (event: MouseEvent) => {
+      button.addEventListener('click', (event: MouseEvent) => {
         event.preventDefault();
         const eventTarget: EventTarget | null = event.target;
         if (!(eventTarget instanceof HTMLButtonElement)) throw new Error('wrong event target');
@@ -108,8 +123,64 @@ export class EventActionExecutor {
           GarageInfoView.moveCar(id, 'reset');
           this.executedAborts = this.executedAborts.filter((arrId: string) => arrId !== id);
           this.executedAborts.includes(id);
-        } else this.aborts[id].abort();
+          this.stoppedCarsCount += 1;
+        } else {
+          this.aborts[id].abort();
+        }
       });
     });
+  }
+
+  public handleRaceRequest(): void {
+    raceBtn.addEventListener('click', async (event: MouseEvent) => {
+      event.preventDefault();
+
+      updateButtonState({ btn: raceBtn, status: false });
+      this.readyCars = [];
+      const allGasButtons: HTMLButtonElement[] = Array.from(
+        document.querySelectorAll('.garage__car_gas')
+      );
+
+      allGasButtons.forEach((button: HTMLButtonElement) => {
+        const clickEvent = new Event('click');
+        button.dispatchEvent(clickEvent);
+      });
+
+      await Promise.all(this.readyCars);
+      updateButtonState({ btn: resetBtn, status: true });
+      this.readyCars = [];
+    });
+  }
+
+  public handleResetRequest(): void {
+    resetBtn.addEventListener('click', async (event: MouseEvent) => {
+      event.preventDefault();
+      updateButtonState({ btn: resetBtn, status: false });
+      this.stoppedCarsCount = 0;
+
+      const carsCount: number = Array.from(document.querySelectorAll('.garage__car_card')).length;
+      const allBrakeButtons: HTMLButtonElement[] = Array.from(
+        document.querySelectorAll('.garage__car_brake')
+      );
+
+      allBrakeButtons.forEach((button: HTMLButtonElement) => {
+        const clickEvent = new Event('click');
+        button.dispatchEvent(clickEvent);
+      });
+      await this.waitForStoppedCars(carsCount);
+
+      updateButtonState({ btn: raceBtn, status: true });
+      this.stoppedCarsCount = 0;
+    });
+  }
+
+  private async waitForStoppedCars(count: number): Promise<void> {
+    await new Promise((resolve) => {
+      setTimeout(resolve, 1000);
+    });
+    if (this.stoppedCarsCount < count) {
+      return this.waitForStoppedCars(count);
+    }
+    return undefined;
   }
 }

@@ -15,6 +15,11 @@
   gap: 10px;
 }
 
+.garage__car_select,
+.garage__car_remove {
+  z-index: 1;
+}
+
 .garage__car_name {
   font-family: Comfortaa;
   font-size: 1.2rem;

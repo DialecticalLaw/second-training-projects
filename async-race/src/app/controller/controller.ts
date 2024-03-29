@@ -18,6 +18,8 @@ function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Generate);
   handleActionRequest(HandleAction.Gas);
   handleActionRequest(HandleAction.Brake);
+  handleActionRequest(HandleAction.Race);
+  handleActionRequest(HandleAction.Reset);
 }
 
 export class Controller {
@@ -75,6 +77,12 @@ export class Controller {
     });
     document.addEventListener(HandleAction.Brake, () => {
       this.eventActionExecutor.handleBrakeRequest.bind(this.eventActionExecutor)();
+    });
+    document.addEventListener(HandleAction.Race, () => {
+      this.eventActionExecutor.handleRaceRequest.bind(this.eventActionExecutor)();
+    });
+    document.addEventListener(HandleAction.Reset, () => {
+      this.eventActionExecutor.handleResetRequest.bind(this.eventActionExecutor)();
     });
   }
 
