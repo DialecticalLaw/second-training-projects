@@ -1,13 +1,13 @@
 import {
+  AbortCarData,
   CRUD,
   CRUDOptions,
   CRUDResult,
   Car,
-  CarProps,
   EngineStatus,
   InputsCarData,
   PageInfo,
-  SuccessResponse
+  UpdateCarResponse
 } from '../../interfaces';
 import { regulateEngine } from '../services/engine_api_service';
 import { createCar, deleteCar, getCars, updateCar } from '../services/garage_api_service';
@@ -67,13 +67,9 @@ export class Model {
   public static async updateCarStatus(
     id: string,
     status: EngineStatus,
-    abortController?: AbortController
-  ): Promise<CarProps | SuccessResponse | undefined> {
-    const response: CarProps | SuccessResponse | undefined = await regulateEngine(
-      id,
-      status,
-      abortController
-    );
+    abortData?: AbortCarData
+  ): Promise<UpdateCarResponse> {
+    const response: UpdateCarResponse = await regulateEngine(id, status, abortData);
     return response;
   }
 }

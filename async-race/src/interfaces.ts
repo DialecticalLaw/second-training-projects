@@ -56,7 +56,7 @@ export interface CarProps {
 }
 
 export interface SuccessResponse {
-  success: true;
+  success: boolean;
 }
 
 export interface CarAbortControllers {
@@ -67,3 +67,11 @@ export interface CarBtnStatus {
   btn: HTMLButtonElement;
   status: boolean;
 }
+
+export interface AbortCarData {
+  btn: HTMLButtonElement;
+  adjacentBtn: HTMLButtonElement;
+  abort: AbortController;
+}
+
+export type UpdateCarResponse = CarProps | SuccessResponse | undefined;
