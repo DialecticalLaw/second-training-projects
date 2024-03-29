@@ -6,6 +6,7 @@ import {
   UpdateCarResponse
 } from '../../interfaces';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
+import { updateButtonState } from '../view/garage_view/garage_view';
 
 export async function regulateEngine(
   id: string,
@@ -33,13 +34,12 @@ export async function regulateEngine(
     if (err instanceof Error && err.name === 'AbortError') {
       if (isEngineBroken) GarageInfoView.moveCar(id, 'stop');
       if (!abortData) throw new Error('abortData is undefined');
-      if (!isEngineBroken)
-        GarageInfoView.updateButtonsState({ btn: abortData.adjacentBtn, status: false });
+      if (!isEngineBroken) updateButtonState({ btn: abortData.adjacentBtn, status: false });
 
-      await regulateEngine(id, 'stopped');
       if (isEngineBroken) return { success: false };
+      await regulateEngine(id, 'stopped');
       if (!isEngineBroken) {
-        GarageInfoView.updateButtonsState({ btn: abortData.btn, status: true });
+        updateButtonState({ btn: abortData.btn, status: true });
         GarageInfoView.moveCar(id, 'reset');
       }
       return undefined;

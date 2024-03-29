@@ -6,6 +6,7 @@ import {
 } from '../view/components/garage/garage_switch_block/garage_switch_block';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
 import { GarageOptionsView } from '../view/garage_view/garage_options_view';
+import { updateButtonState } from '../view/garage_view/garage_view';
 
 export class EventActionExecutor {
   private model: Model;
@@ -64,14 +65,14 @@ export class EventActionExecutor {
           throw new Error('wrong adjacentButton or carCard');
 
         const id: string = carCard.id;
-        GarageInfoView.updateButtonsState({ btn: button, status: false });
+        updateButtonState({ btn: button, status: false });
         const startedResult: UpdateCarResponse = await Model.updateCarStatus(id, 'started');
         if (typeof startedResult !== 'object' || !('distance' in startedResult))
           throw new Error('wrong startedResult');
 
         const abortController: AbortController = new AbortController();
         this.aborts[id] = abortController;
-        GarageInfoView.updateButtonsState({ btn: adjacentBtn, status: true });
+        updateButtonState({ btn: adjacentBtn, status: true });
         GarageInfoView.moveCar(id, startedResult);
 
         const driveResponse: UpdateCarResponse = await Model.updateCarStatus(id, 'drive', {
@@ -102,8 +103,8 @@ export class EventActionExecutor {
         const id: string = carCard.id;
 
         if (this.executedAborts.includes(id)) {
-          GarageInfoView.updateButtonsState({ btn: eventTarget, status: false });
-          GarageInfoView.updateButtonsState({ btn: adjacentBtn, status: true });
+          updateButtonState({ btn: eventTarget, status: false });
+          updateButtonState({ btn: adjacentBtn, status: true });
           GarageInfoView.moveCar(id, 'reset');
           this.executedAborts = this.executedAborts.filter((arrId: string) => arrId !== id);
           this.executedAborts.includes(id);
