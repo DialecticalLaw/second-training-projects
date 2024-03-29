@@ -23,11 +23,10 @@ export async function regulateEngine(
       }
     );
 
-    if (response.status === 500 && abortData) {
+    if ((response.status === 500 || response.status === 404) && abortData) {
       isEngineBroken = true;
       abortData.abort.abort();
     }
-    if (response.status === 404) return undefined;
     const parsedResponse: CarProps | SuccessResponse = await response.json();
     return parsedResponse;
   } catch (err) {

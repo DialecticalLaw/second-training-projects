@@ -68,7 +68,9 @@ export class GarageInfoView {
 
     if (carProps === 'reset') {
       carIcon.removeAttribute('style');
+      carIcon.classList.remove('garage__car_broken');
     } else if (carProps === 'stop') {
+      carIcon.classList.add('garage__car_broken');
       const carCard: HTMLDivElement | null = document.querySelector(`[id="${id}"]`);
       if (!carCard) throw new Error('carCard is undefined');
 
@@ -77,7 +79,7 @@ export class GarageInfoView {
       carIcon.style.left = `${currentLeft}px`;
     } else {
       const transition: number = carProps.distance / carProps.velocity / 1000;
-      carIcon.style.transition = `${transition}s linear`;
+      carIcon.style.transition = `${transition}s ease-in-out`;
       carIcon.style.left = 'calc(100% - 100px)';
     }
   }

@@ -36,10 +36,17 @@
 
 .garage__car_icon {
   position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   left: 100px;
-  bottom: -20px;
+  bottom: -35px;
   width: 80px;
   filter: drop-shadow(0 0 0.5px #ffffff);
+}
+
+.garage__car_broken {
+  animation: brokenCar 0.6s ease infinite alternate;
 }
 
 .garage__car_flag {
@@ -52,4 +59,13 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+@keyframes brokenCar {
+  from {
+    filter: drop-shadow(0 0 4px rgb(255, 14, 14));
+  }
+  to {
+    filter: drop-shadow(0 0 12px rgb(255, 14, 14));
+  }
 }
