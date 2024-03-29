@@ -6,7 +6,8 @@ import { GarageOptionsView } from '../view/garage_view/garage_options_view';
 import { GaragePageSwitchView } from '../view/garage_view/garage_switch_page_view';
 import { drawGarage } from '../view/garage_view/garage_view';
 import { handleActionRequest } from '../view/handleRequestEvent';
-import { EventExecutor } from './event_executor';
+import { EventCRUDExecutor } from './event_CRUD_executor';
+import { EventActionExecutor } from './event_action_executor';
 
 function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Create);
@@ -22,7 +23,9 @@ function dispatchInitEvents(): void {
 export class Controller {
   protected model: Model;
 
-  private eventExecutor: EventExecutor;
+  private eventActionExecutor: EventActionExecutor;
+
+  private eventCRUDExecutor: EventCRUDExecutor;
 
   private garageInfoView: GarageInfoView;
 
@@ -35,17 +38,19 @@ export class Controller {
     this.garageInfoView = new GarageInfoView();
     this.garageOptionsView = new GarageOptionsView();
     this.garagePageSwitchView = new GaragePageSwitchView();
-    this.eventExecutor = new EventExecutor(this.model);
+    this.eventActionExecutor = new EventActionExecutor(this.model);
+    this.eventCRUDExecutor = new EventCRUDExecutor(this.model);
   }
 
   public async init(): Promise<void> {
-    const pageInfo: CRUDResult = await Model.CRUDCars(CRUD.ReadPage, {
+    const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
       page: this.model.currentPage
     });
     if (!pageInfo || !('cars' in pageInfo))
       throw new Error('pageInfo is undefined at init or wrong type');
 
     this.handleActionRequests();
+    this.handleCRUDRequests();
     drawMainMarkup();
     drawGarage();
     this.garageInfoView.drawCars(pageInfo);
@@ -55,38 +60,57 @@ export class Controller {
   }
 
   private handleActionRequests(): void {
-    document.addEventListener(HandleAction.Create, () => {
-      EventExecutor.handleCreateRequest(this.updateCurrentPage.bind(this));
-    });
     document.addEventListener(HandleAction.Select, () => {
-      EventExecutor.handleSelectRequest(this.garageOptionsView);
-    });
-    document.addEventListener(HandleAction.Update, () => {
-      EventExecutor.handleUpdateRequest(this.updateCurrentPage.bind(this));
-    });
-    document.addEventListener(HandleAction.Delete, () => {
-      EventExecutor.handleDeleteRequest(this.updateCurrentPage.bind(this));
+      EventActionExecutor.handleSelectRequest(this.garageOptionsView);
     });
     document.addEventListener(
       HandleAction.Pagination,
-      this.eventExecutor.handlePaginationRequest.bind(
-        this.eventExecutor,
+      this.eventActionExecutor.handlePaginationRequest.bind(
+        this.eventActionExecutor,
         this.updateCurrentPage.bind(this)
       )
     );
-    document.addEventListener(HandleAction.Generate, () => {
-      EventExecutor.handleGenerateRequest(this.updateCurrentPage.bind(this));
-    });
     document.addEventListener(HandleAction.Gas, () => {
-      this.eventExecutor.handleGasRequest.bind(this.eventExecutor)();
+      this.eventActionExecutor.handleGasRequest.bind(this.eventActionExecutor)();
     });
     document.addEventListener(HandleAction.Brake, () => {
-      this.eventExecutor.handleBrakeRequest.bind(this.eventExecutor)();
+      this.eventActionExecutor.handleBrakeRequest.bind(this.eventActionExecutor)();
     });
   }
 
+  private handleCRUDRequests(): void {
+    document.addEventListener(
+      HandleAction.Create,
+      this.eventCRUDExecutor.handleCreateRequest.bind(
+        this.eventCRUDExecutor,
+        this.updateCurrentPage.bind(this)
+      )
+    );
+    document.addEventListener(
+      HandleAction.Update,
+      this.eventCRUDExecutor.handleUpdateRequest.bind(
+        this.eventCRUDExecutor,
+        this.updateCurrentPage.bind(this)
+      )
+    );
+    document.addEventListener(
+      HandleAction.Delete,
+      this.eventCRUDExecutor.handleDeleteRequest.bind(
+        this.eventCRUDExecutor,
+        this.updateCurrentPage.bind(this)
+      )
+    );
+    document.addEventListener(
+      HandleAction.Generate,
+      this.eventCRUDExecutor.handleGenerateRequest.bind(
+        this.eventCRUDExecutor,
+        this.updateCurrentPage.bind(this)
+      )
+    );
+  }
+
   private async updateCurrentPage(): Promise<void> {
-    const pageInfo: CRUDResult = await Model.CRUDCars(CRUD.ReadPage, {
+    const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
       page: this.model.currentPage
     });
     if (!pageInfo || !('cars' in pageInfo))
@@ -104,7 +128,7 @@ export class Controller {
     if (currentPage === 1) {
       prevBtnState = false;
     } else {
-      const pageInfo: CRUDResult = await Model.CRUDCars(CRUD.ReadPage, {
+      const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
         page: this.model.currentPage - 1
       });
       if (!pageInfo || !('cars' in pageInfo))
@@ -115,7 +139,7 @@ export class Controller {
       } else prevBtnState = false;
     }
 
-    const pageInfo: CRUDResult = await Model.CRUDCars(CRUD.ReadPage, {
+    const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
       page: this.model.currentPage + 1
     });
     if (!pageInfo || !('cars' in pageInfo))
