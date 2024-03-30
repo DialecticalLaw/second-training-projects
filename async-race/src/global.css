@@ -114,7 +114,8 @@ button:not(.disabled) {
   animation: enabling 1s;
 }
 
-button.disabled {
+button.disabled,
+button.on-race {
   pointer-events: none;
   opacity: 0.5;
 }
@@ -122,6 +123,11 @@ button.disabled {
 button.disabled::after,
 button.disabled::before {
   background-color: rgb(255, 55, 55);
+}
+
+button.on-race::after,
+button.on-race::before {
+  background-color: rgb(255, 122, 55);
 }
 
 @keyframes enabling {

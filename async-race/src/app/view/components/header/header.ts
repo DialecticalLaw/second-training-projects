@@ -4,12 +4,12 @@ import './header.css';
 export const header = createElem<HTMLElement>('header', { class: 'header' });
 const switchPages = <HTMLFormElement>createElem('form', { class: 'switch-pages' });
 
-const selectGarageBtn = <HTMLButtonElement>(
-  createElem('button', { class: 'switch-pages__btn_garage' })
+export const selectGarageBtn = <HTMLButtonElement>(
+  createElem('button', { class: 'switch-pages__btn_garage disabled' })
 );
 selectGarageBtn.innerHTML = '<span>TO GARAGE</span>';
 
-const selectWinnersBtn = <HTMLButtonElement>(
+export const selectWinnersBtn = <HTMLButtonElement>(
   createElem('button', { class: 'switch-pages__btn_winners' })
 );
 selectWinnersBtn.innerHTML = '<span>TO WINNERS</span>';

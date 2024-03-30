@@ -13,7 +13,7 @@ const createColorInput = createElem<HTMLInputElement>('input', {
   class: 'garage__create_color',
   type: 'color'
 });
-const createBtn = createElem<HTMLButtonElement>('button', {
+export const createBtn = createElem<HTMLButtonElement>('button', {
   class: 'garage__btn_create'
 });
 createBtn.innerHTML = '<span>CREATE</span>';

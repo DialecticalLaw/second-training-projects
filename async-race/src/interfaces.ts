@@ -77,3 +77,8 @@ export interface AbortCarData {
 }
 
 export type UpdateCarResponse = CarProps | SuccessResponse | undefined;
+
+export enum PageMode {
+  Race,
+  Default
+}

@@ -1,10 +1,12 @@
 import {
   CarAbortControllers,
   CarProps,
+  PageMode,
   UpdateCarResponse,
   UpdateCurrentPage
 } from '../../interfaces';
 import { Model } from '../model/model';
+import { switchPageMode } from '../view/app_view';
 import { raceBtn, resetBtn } from '../view/components/garage/garage_options/garage_options';
 import {
   nextBtn,
@@ -90,7 +92,6 @@ export class EventActionExecutor {
         const abortController: AbortController = new AbortController();
         this.aborts[id] = abortController;
         updateButtonState({ btn: adjacentBtn, status: true });
-
         GarageInfoView.moveCar(id, startedResponse);
 
         const driveResponse: UpdateCarResponse = await Model.updateCarStatus(id, 'drive', {
@@ -143,14 +144,15 @@ export class EventActionExecutor {
       event.preventDefault();
       this.stoppedCarsCount = 0;
       this.arrivedCars = [];
-
-      updateButtonState({ btn: raceBtn, status: false });
       this.readyCars = [];
-      const allGasButtons: HTMLButtonElement[] = Array.from(
-        document.querySelectorAll('.garage__car_gas')
+
+      switchPageMode(PageMode.Race);
+      updateButtonState({ btn: raceBtn, status: false });
+      const allActiveGasButtons: HTMLButtonElement[] = Array.from(
+        document.querySelectorAll('.garage__car_gas:not(.disabled)')
       );
 
-      allGasButtons.forEach((button: HTMLButtonElement) => {
+      allActiveGasButtons.forEach((button: HTMLButtonElement) => {
         const clickEvent = new Event('click');
         button.dispatchEvent(clickEvent);
       });
@@ -177,7 +179,6 @@ export class EventActionExecutor {
       event.preventDefault();
       garageInfoView.hideWinner();
       updateButtonState({ btn: resetBtn, status: false });
-      this.stoppedCarsCount = 0;
 
       const carsCount: number = Array.from(document.querySelectorAll('.garage__car_card')).length;
       const allBrakeButtons: HTMLButtonElement[] = Array.from(
@@ -190,6 +191,7 @@ export class EventActionExecutor {
       });
       await this.waitForStoppedCars(carsCount);
 
+      switchPageMode(PageMode.Default);
       updateButtonState({ btn: raceBtn, status: true });
       this.stoppedCarsCount = 0;
     });
@@ -199,6 +201,7 @@ export class EventActionExecutor {
     await new Promise((resolve) => {
       setTimeout(resolve, 1000);
     });
+
     if (this.stoppedCarsCount < count) {
       return this.waitForStoppedCars(count);
     }
@@ -209,6 +212,7 @@ export class EventActionExecutor {
     await new Promise((resolve) => {
       setTimeout(resolve, 300);
     });
+
     if (this.arrivedCars.length) return true;
     if (this.stoppedCarsCount === count) return false;
     return this.waitForFirstCars(count);
