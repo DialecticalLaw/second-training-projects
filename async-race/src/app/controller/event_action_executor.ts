@@ -100,7 +100,7 @@ export class EventActionExecutor {
         });
         if (driveResponse && 'success' in driveResponse) {
           this.executedAborts.push(id);
-          this.stoppedCarsCount += 1;
+          if (driveResponse.success) this.stoppedCarsCount += 1;
           if (driveResponse.success === true) this.arrivedCars.push(id);
         }
       });
@@ -141,6 +141,7 @@ export class EventActionExecutor {
   public handleRaceRequest(garageInfoView: GarageInfoView): void {
     raceBtn.addEventListener('click', async (event: MouseEvent) => {
       event.preventDefault();
+      this.stoppedCarsCount = 0;
       this.arrivedCars = [];
 
       updateButtonState({ btn: raceBtn, status: false });
@@ -158,9 +159,13 @@ export class EventActionExecutor {
       updateButtonState({ btn: resetBtn, status: true });
 
       const carsCount: number = Array.from(document.querySelectorAll('.garage__car_card')).length;
-      await this.waitForFirstCars(carsCount);
-      const winnerId: string = this.arrivedCars[0];
-      garageInfoView.showWinner(winnerId);
+      const raceResult: boolean = await this.waitForFirstCars(carsCount);
+      if (raceResult === true) {
+        const winnerId: string = this.arrivedCars[0];
+        garageInfoView.showWinner(winnerId);
+      } else {
+        garageInfoView.showWinner(false);
+      }
 
       this.readyCars = [];
       this.arrivedCars = [];
@@ -200,13 +205,12 @@ export class EventActionExecutor {
     return undefined;
   }
 
-  private async waitForFirstCars(count: number): Promise<void> {
+  private async waitForFirstCars(count: number): Promise<boolean> {
     await new Promise((resolve) => {
       setTimeout(resolve, 300);
     });
-    if (!this.arrivedCars.length) {
-      return this.waitForFirstCars(count);
-    }
-    return undefined;
+    if (this.arrivedCars.length) return true;
+    if (this.stoppedCarsCount === count) return false;
+    return this.waitForFirstCars(count);
   }
 }

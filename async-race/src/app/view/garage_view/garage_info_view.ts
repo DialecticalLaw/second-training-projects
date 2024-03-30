@@ -91,19 +91,26 @@ export class GarageInfoView {
     }
   }
 
-  public showWinner(id: string): void {
-    const carCard: HTMLDivElement | null = document.querySelector(`[id="${id}"]`);
-    const carIcon: HTMLDivElement | null = document.querySelector(`[id="${id}"] .garage__car_icon`);
-    if (!carIcon || !carCard) throw new Error('carIcon or carCard is undefined');
+  public showWinner(id: string | false): void {
+    if (id === false) {
+      this.winnerDescription.innerHTML = 'There are no winners &#128549;';
+      this.winnerWrapper.classList.add('winner-active');
+    } else {
+      const carCard: HTMLDivElement | null = document.querySelector(`[id="${id}"]`);
+      const carIcon: HTMLDivElement | null = document.querySelector(
+        `[id="${id}"] .garage__car_icon`
+      );
+      if (!carIcon || !carCard) throw new Error('carIcon or carCard is undefined');
 
-    let carName: string | null | undefined =
-      carCard.firstElementChild?.lastElementChild?.textContent;
-    if (!carName) carName = 'untitled';
-    const transition: string = carIcon.style.transitionDuration;
-    const time: string = Number(transition.slice(0, transition.length - 1)).toFixed(2);
+      let carName: string | null | undefined =
+        carCard.firstElementChild?.lastElementChild?.textContent;
+      if (!carName) carName = 'untitled';
+      const transition: string = carIcon.style.transitionDuration;
+      const time: string = Number(transition.slice(0, transition.length - 1)).toFixed(2);
 
-    this.winnerDescription.innerHTML = `<span class="winner__name">${carName}</span> won in <span class="winner__time">${time}</span> seconds!`;
-    this.winnerWrapper.classList.add('winner-active');
+      this.winnerDescription.innerHTML = `<span class="winner__name">${carName}</span> won in <span class="winner__time">${time}</span> seconds!`;
+      this.winnerWrapper.classList.add('winner-active');
+    }
   }
 
   public hideWinner(): void {
