@@ -6,4 +6,6 @@ export const winnerWrapper = createElem<HTMLDivElement>('div', { class: 'winner'
 export const winnerDescription = createElem<HTMLParagraphElement>('p', {
   class: 'winner__description'
 });
-winnerWrapper.append(winnerDescription);
+const winnerNote = createElem<HTMLParagraphElement>('p', { class: 'winner__note' });
+winnerNote.textContent = 'Press "RESET" button';
+winnerWrapper.append(winnerDescription, winnerNote);
