@@ -5,6 +5,7 @@ import {
   garageCarsBlock,
   pageNumberElem
 } from '../components/garage/garage_info/garage_info';
+import { winnerDescription, winnerWrapper } from '../components/garage/winner/winner';
 import { handleActionRequest } from '../handleRequestEvent';
 
 export class GarageInfoView {
@@ -14,10 +15,16 @@ export class GarageInfoView {
 
   private pageNumberElem: HTMLSpanElement;
 
+  private winnerDescription: HTMLDivElement;
+
+  private winnerWrapper: HTMLDivElement;
+
   constructor() {
     this.carsBlock = garageCarsBlock;
     this.carsCountElem = carsCountElem;
     this.pageNumberElem = pageNumberElem;
+    this.winnerWrapper = winnerWrapper;
+    this.winnerDescription = winnerDescription;
   }
 
   public drawCars(pageInfo: PageInfo): void {
@@ -63,7 +70,7 @@ export class GarageInfoView {
   }
 
   public static moveCar(id: string, carProps: CarProps | 'reset' | 'stop'): void {
-    const carIcon: HTMLElement | null = document.querySelector(`[id="${id}"] .garage__car_icon`);
+    const carIcon: HTMLDivElement | null = document.querySelector(`[id="${id}"] .garage__car_icon`);
     if (!carIcon) throw new Error('carIcon is undefined');
 
     if (carProps === 'reset') {
@@ -82,5 +89,29 @@ export class GarageInfoView {
       carIcon.style.transition = `${transition}s ease-in-out`;
       carIcon.style.left = 'calc(100% - 100px)';
     }
+  }
+
+  public showWinner(id: string): void {
+    const carCard: HTMLDivElement | null = document.querySelector(`[id="${id}"]`);
+    const carIcon: HTMLDivElement | null = document.querySelector(`[id="${id}"] .garage__car_icon`);
+    if (!carIcon || !carCard) throw new Error('carIcon or carCard is undefined');
+
+    let carName: string | null | undefined =
+      carCard.firstElementChild?.lastElementChild?.textContent;
+    if (!carName) carName = 'untitled';
+    const transition: string = carIcon.style.transitionDuration;
+    const time: string = Number(transition.slice(0, transition.length - 1)).toFixed(2);
+
+    this.winnerDescription.innerHTML = `<span class="winner__name">${carName}</span> won in <span class="winner__time">${time}</span> seconds!`;
+    this.winnerWrapper.classList.add('winner-active');
+  }
+
+  public hideWinner(): void {
+    this.winnerWrapper.classList.remove('winner-active');
+    const winnerWrapperClosingTime: number = 400;
+
+    setTimeout(() => {
+      this.winnerDescription.innerHTML = '';
+    }, winnerWrapperClosingTime);
   }
 }

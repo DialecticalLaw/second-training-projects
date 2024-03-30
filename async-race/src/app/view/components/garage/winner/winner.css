@@ -1,0 +1,31 @@
+.winner {
+  z-index: 3;
+  position: fixed;
+  top: 48%;
+  opacity: 0;
+  align-self: center;
+  margin: 0 30px;
+  padding: 15px;
+  transform: scale(2) translateX(100%);
+  border-radius: 15px;
+  background-color: rgba(32, 32, 32, 0.78);
+  box-shadow: 0 0 16px 9px rgba(32, 32, 32, 0.92);
+  transition: 0.4s;
+}
+
+.winner__description {
+  font-family: Comfortaa;
+  font-size: 2rem;
+  font-weight: bold;
+  color: gold;
+}
+
+.winner-active {
+  opacity: 1;
+  transform: scale(1) translateX(0);
+}
+
+.winner__name,
+.winner__time {
+  color: rgb(255, 123, 0);
+}

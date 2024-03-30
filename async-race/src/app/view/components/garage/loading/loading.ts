@@ -1,5 +1,5 @@
 import './loading.css';
-import { createElem } from '../../../utils/create_elem';
+import { createElem } from '../../../../utils/create_elem';
 
 export const loadingWrapper = createElem<HTMLDivElement>('div', { class: 'loading' });
 

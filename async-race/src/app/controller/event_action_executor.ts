@@ -25,12 +25,15 @@ export class EventActionExecutor {
 
   private stoppedCarsCount: number;
 
+  private arrivedCars: string[];
+
   constructor(model: Model) {
     this.model = model;
     this.aborts = {};
     this.executedAborts = [];
     this.readyCars = [];
     this.stoppedCarsCount = 0;
+    this.arrivedCars = [];
     document.addEventListener('carstopped', () => {
       this.stoppedCarsCount += 1;
     });
@@ -95,7 +98,11 @@ export class EventActionExecutor {
           adjacentBtn,
           abort: abortController
         });
-        if (driveResponse && 'success' in driveResponse) this.executedAborts.push(id);
+        if (driveResponse && 'success' in driveResponse) {
+          this.executedAborts.push(id);
+          this.stoppedCarsCount += 1;
+          if (driveResponse.success === true) this.arrivedCars.push(id);
+        }
       });
     });
   }
@@ -131,9 +138,10 @@ export class EventActionExecutor {
     });
   }
 
-  public handleRaceRequest(): void {
+  public handleRaceRequest(garageInfoView: GarageInfoView): void {
     raceBtn.addEventListener('click', async (event: MouseEvent) => {
       event.preventDefault();
+      this.arrivedCars = [];
 
       updateButtonState({ btn: raceBtn, status: false });
       this.readyCars = [];
@@ -148,13 +156,21 @@ export class EventActionExecutor {
 
       await Promise.all(this.readyCars);
       updateButtonState({ btn: resetBtn, status: true });
+
+      const carsCount: number = Array.from(document.querySelectorAll('.garage__car_card')).length;
+      await this.waitForFirstCars(carsCount);
+      const winnerId: string = this.arrivedCars[0];
+      garageInfoView.showWinner(winnerId);
+
       this.readyCars = [];
+      this.arrivedCars = [];
     });
   }
 
-  public handleResetRequest(): void {
+  public handleResetRequest(garageInfoView: GarageInfoView): void {
     resetBtn.addEventListener('click', async (event: MouseEvent) => {
       event.preventDefault();
+      garageInfoView.hideWinner();
       updateButtonState({ btn: resetBtn, status: false });
       this.stoppedCarsCount = 0;
 
@@ -180,6 +196,16 @@ export class EventActionExecutor {
     });
     if (this.stoppedCarsCount < count) {
       return this.waitForStoppedCars(count);
+    }
+    return undefined;
+  }
+
+  private async waitForFirstCars(count: number): Promise<void> {
+    await new Promise((resolve) => {
+      setTimeout(resolve, 300);
+    });
+    if (!this.arrivedCars.length) {
+      return this.waitForFirstCars(count);
     }
     return undefined;
   }

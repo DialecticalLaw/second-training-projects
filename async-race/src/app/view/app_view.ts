@@ -1,6 +1,6 @@
 import { container } from './components/container/container';
 import { header } from './components/header/header';
-import { loadingWrapper } from './components/loading/loading';
+import { loadingWrapper } from './components/garage/loading/loading';
 import { main } from './components/main/main';
 
 export function drawMainMarkup(): void {
