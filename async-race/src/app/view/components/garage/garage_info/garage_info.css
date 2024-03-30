@@ -7,14 +7,18 @@
 }
 
 .garage__info-title {
-  font-family: Comfortaa;
+  font-family: Race-font;
   font-size: 1.8rem;
   font-weight: bold;
   color: #ffffff;
 }
 
+.garage__cars-count {
+  letter-spacing: 2px;
+}
+
 .garage__page {
-  font-family: Comfortaa;
+  font-family: Race-font;
   color: #ffffff;
   font-size: 1.4rem;
 }

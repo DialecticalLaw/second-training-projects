@@ -14,8 +14,9 @@
 }
 
 .winner__description {
-  font-family: Comfortaa;
-  font-size: 2rem;
+  font-family: Race-font;
+  font-size: 1.8rem;
+  letter-spacing: 2.5px;
   font-weight: bold;
   color: gold;
 }

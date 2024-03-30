@@ -5,7 +5,7 @@ export const garagePageSwitchBlock = createElem<HTMLFormElement>('form', {
   class: 'garage__page-switch-block'
 });
 export const prevBtn = createElem<HTMLButtonElement>('button', { class: 'garage__btn_prev' });
-prevBtn.textContent = 'PREV';
+prevBtn.innerHTML = '<span>PREV</span>';
 export const nextBtn = createElem<HTMLButtonElement>('button', { class: 'garage__btn_next' });
-nextBtn.textContent = 'NEXT';
+nextBtn.innerHTML = '<span>NEXT</span>';
 garagePageSwitchBlock.append(prevBtn, nextBtn);

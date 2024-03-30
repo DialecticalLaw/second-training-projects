@@ -7,18 +7,19 @@
 .garage__create-options,
 .garage__update-options {
   display: flex;
+  align-items: center;
   gap: 10px;
 }
 
 .garage__create_text,
 .garage__update_text {
-  font-family: Comfortaa;
+  font-family: Race-font;
   font-size: 1.3rem;
 }
 
 .garage__create_text::placeholder,
 .garage__update_text::placeholder {
-  font-family: Comfortaa;
+  font-family: Race-font;
 }
 
 .garage__create_color,
@@ -29,18 +30,6 @@
 .garage__btn_create,
 .garage__btn_update {
   position: relative;
-}
-
-.garage__btn_create::after,
-.garage__btn_update::after {
-  content: 'Type something';
-  opacity: 0;
-  position: absolute;
-  right: -190%;
-  color: #ff0000;
-  transform: translateX(-50%);
-  transform-origin: left;
-  transition: 0.3s;
 }
 
 .garage__btn_create.highlight::after,

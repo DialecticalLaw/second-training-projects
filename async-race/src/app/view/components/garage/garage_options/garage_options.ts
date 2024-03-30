@@ -16,7 +16,7 @@ const createColorInput = createElem<HTMLInputElement>('input', {
 const createBtn = createElem<HTMLButtonElement>('button', {
   class: 'garage__btn_create'
 });
-createBtn.textContent = 'CREATE';
+createBtn.innerHTML = '<span>CREATE</span>';
 createOptions.append(createTextInput, createColorInput, createBtn);
 
 const updateOptions = createElem<HTMLFormElement>('form', { class: 'garage__update-options' });
@@ -32,22 +32,22 @@ const updateColorInput = createElem<HTMLInputElement>('input', {
 export const updateBtn = createElem<HTMLButtonElement>('button', {
   class: 'garage__btn_update disabled'
 });
-updateBtn.textContent = 'UPDATE';
+updateBtn.innerHTML = '<span>UPDATE</span>';
 updateOptions.append(updateTextInput, updateColorInput, updateBtn);
 
 const additionOptions = createElem<HTMLFormElement>('form', { class: 'garage__addition-options' });
 export const raceBtn = createElem<HTMLButtonElement>('button', { class: 'garage__btn_race' });
-raceBtn.textContent = 'RACE';
+raceBtn.innerHTML = '<span>RACE</span>';
 
 export const resetBtn = createElem<HTMLButtonElement>('button', {
   class: 'garage__btn_reset disabled'
 });
-resetBtn.textContent = 'RESET';
+resetBtn.innerHTML = '<span>RESET</span>';
 
 export const generateBtn = createElem<HTMLButtonElement>('button', {
   class: 'garage__btn_generate'
 });
-generateBtn.textContent = 'GENERATE CARS';
+generateBtn.innerHTML = '<span>GENERATE CARS</span>';
 
 additionOptions.append(raceBtn, resetBtn, generateBtn);
 

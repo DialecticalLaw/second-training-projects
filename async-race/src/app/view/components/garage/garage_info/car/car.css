@@ -21,8 +21,9 @@
 }
 
 .garage__car_name {
-  font-family: Comfortaa;
+  font-family: Race-font;
   font-size: 1.2rem;
+  letter-spacing: 2px;
   color: #ffffff;
 }
 
@@ -35,7 +36,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 5px;
+  gap: 15px;
   min-height: 60px;
 }
 
@@ -50,13 +51,18 @@
   filter: drop-shadow(0 0 0.5px #ffffff);
 }
 
+.garage__car_gas,
+.garage__car_brake {
+  font-size: 1rem;
+}
+
 .garage__car_broken {
   animation: brokenCar 0.6s ease infinite alternate;
 }
 
 .garage__car_flag {
   position: absolute;
-  right: 130px;
+  right: 120px;
   bottom: 0;
   width: 40px;
   height: 40px;

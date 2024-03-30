@@ -7,12 +7,12 @@ const switchPages = <HTMLFormElement>createElem('form', { class: 'switch-pages' 
 const selectGarageBtn = <HTMLButtonElement>(
   createElem('button', { class: 'switch-pages__btn_garage' })
 );
-selectGarageBtn.textContent = 'TO GARAGE';
+selectGarageBtn.innerHTML = '<span>TO GARAGE</span>';
 
 const selectWinnersBtn = <HTMLButtonElement>(
   createElem('button', { class: 'switch-pages__btn_winners' })
 );
-selectWinnersBtn.textContent = 'TO WINNERS';
+selectWinnersBtn.innerHTML = '<span>TO WINNERS</span>';
 
 switchPages.append(selectGarageBtn, selectWinnersBtn);
 header.append(switchPages);
