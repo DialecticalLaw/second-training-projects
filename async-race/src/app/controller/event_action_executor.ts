@@ -16,6 +16,16 @@ import { GarageInfoView } from '../view/garage_view/garage_info_view';
 import { GarageOptionsView } from '../view/garage_view/garage_options_view';
 import { updateButtonState } from '../view/garage_view/garage_view';
 
+function getCardInfo(eventTarget: HTMLButtonElement): [string, HTMLButtonElement] {
+  const carCard: HTMLElement | null | undefined = eventTarget.parentElement?.parentElement;
+  const adjacentBtn: Element | null = eventTarget.nextElementSibling;
+  if (!carCard || !adjacentBtn || !(adjacentBtn instanceof HTMLButtonElement))
+    throw new Error('wrong adjacentButton or carCard');
+
+  const id: string = carCard.id;
+  return [id, adjacentBtn];
+}
+
 export class EventActionExecutor {
   private model: Model;
 
@@ -79,12 +89,8 @@ export class EventActionExecutor {
         event.preventDefault();
         const eventTarget: EventTarget | null = event.target;
         if (!(eventTarget instanceof HTMLButtonElement)) throw new Error('wrong event target');
-        const carCard: HTMLElement | null | undefined = eventTarget.parentElement?.parentElement;
-        const adjacentBtn: Element | null = eventTarget.nextElementSibling;
-        if (!carCard || !adjacentBtn || !(adjacentBtn instanceof HTMLButtonElement))
-          throw new Error('wrong adjacentButton or carCard');
+        const [id, adjacentBtn]: [string, HTMLButtonElement] = getCardInfo(eventTarget);
 
-        const id: string = carCard.id;
         updateButtonState({ btn: button, status: false });
         const startedResult = Model.updateCarStatus(id, 'started') as Promise<CarProps>;
         this.readyCars.push(startedResult);
