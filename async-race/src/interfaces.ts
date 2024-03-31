@@ -82,3 +82,8 @@ export enum PageMode {
   Race,
   Default
 }
+
+export enum UpdateBtnValidityClass {
+  Disabled = 'disabled',
+  Ondrive = 'on-drive'
+}

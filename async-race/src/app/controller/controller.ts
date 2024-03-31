@@ -1,4 +1,4 @@
-import { CRUD, CRUDResult, HandleAction } from '../../interfaces';
+import { CRUD, CRUDResult, HandleAction, UpdateBtnValidityClass } from '../../interfaces';
 import { Model } from '../model/model';
 import { drawMainMarkup } from '../view/app_view';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
@@ -31,14 +31,11 @@ export class Controller {
 
   private garageInfoView: GarageInfoView;
 
-  private garageOptionsView: GarageOptionsView;
-
   private garagePageSwitchView: GaragePageSwitchView;
 
   constructor() {
     this.model = new Model();
     this.garageInfoView = new GarageInfoView();
-    this.garageOptionsView = new GarageOptionsView();
     this.garagePageSwitchView = new GaragePageSwitchView();
     this.eventActionExecutor = new EventActionExecutor(this.model);
     this.eventCRUDExecutor = new EventCRUDExecutor(this.model);
@@ -63,7 +60,7 @@ export class Controller {
 
   private handleActionRequests(): void {
     document.addEventListener(HandleAction.Select, () => {
-      EventActionExecutor.handleSelectRequest(this.garageOptionsView);
+      EventActionExecutor.handleSelectRequest();
     });
     document.addEventListener(
       HandleAction.Pagination,
@@ -130,7 +127,7 @@ export class Controller {
     if (!pageInfo || !('cars' in pageInfo))
       throw new Error('pageInfo is undefined at init or wrong type');
     this.garageInfoView.updatePage(pageInfo);
-    this.garageOptionsView.toggleUpdateBtnValidity(false);
+    GarageOptionsView.toggleUpdateBtnValidity(false, UpdateBtnValidityClass.Disabled);
     await this.updateSwitchButtonsState();
   }
 

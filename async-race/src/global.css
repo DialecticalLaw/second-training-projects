@@ -115,13 +115,16 @@ button:not(.disabled) {
 }
 
 button.disabled,
-button.on-race {
+button.on-race,
+button.on-drive {
   pointer-events: none;
   opacity: 0.5;
 }
 
 button.disabled::after,
-button.disabled::before {
+button.on-drive::after,
+button.disabled::before,
+button.on-drive::before {
   background-color: rgb(255, 55, 55);
 }
 

@@ -2,6 +2,7 @@ import {
   CarAbortControllers,
   CarProps,
   PageMode,
+  UpdateBtnValidityClass,
   UpdateCarResponse,
   UpdateCurrentPage
 } from '../../interfaces';
@@ -66,7 +67,7 @@ export class EventActionExecutor {
     });
   }
 
-  public static handleSelectRequest(garageOptionsView: GarageOptionsView): void {
+  public static handleSelectRequest(): void {
     const allSelectButtons: HTMLButtonElement[] = Array.from(
       document.querySelectorAll('.garage__car_select')
     );
@@ -75,7 +76,7 @@ export class EventActionExecutor {
       button.addEventListener('click', (event: MouseEvent) => {
         event.preventDefault();
         GarageInfoView.selectCar(event);
-        garageOptionsView.toggleUpdateBtnValidity(true);
+        GarageOptionsView.toggleUpdateBtnValidity(true, UpdateBtnValidityClass.Disabled);
       });
     });
   }
@@ -108,6 +109,7 @@ export class EventActionExecutor {
 
         updateButtonState({ btn: button, status: false });
         updateButtonState({ btn: raceBtn, status: false });
+        GarageOptionsView.toggleUpdateBtnValidity(false, UpdateBtnValidityClass.Ondrive);
         const startedResult = Model.updateCarStatus(id, 'started') as Promise<CarProps>;
         this.readyCars.push(startedResult);
 
@@ -151,7 +153,10 @@ export class EventActionExecutor {
         if (this.executedAborts.includes(id)) {
           updateButtonState({ btn: eventTarget, status: false });
           updateButtonState({ btn: adjacentBtn, status: true });
-          if (isCarsResets()) updateButtonState({ btn: raceBtn, status: true });
+          if (isCarsResets()) {
+            updateButtonState({ btn: raceBtn, status: true });
+            GarageOptionsView.toggleUpdateBtnValidity(true, UpdateBtnValidityClass.Ondrive);
+          }
 
           GarageInfoView.moveCar(id, 'reset');
           this.executedAborts = this.executedAborts.filter((arrId: string) => arrId !== id);
@@ -202,7 +207,6 @@ export class EventActionExecutor {
   public handleResetRequest(garageInfoView: GarageInfoView): void {
     resetBtn.addEventListener('click', async (event: MouseEvent) => {
       event.preventDefault();
-      garageInfoView.hideWinner();
       updateButtonState({ btn: resetBtn, status: false });
 
       const carsCount: number = Array.from(document.querySelectorAll('.garage__car_card')).length;
@@ -218,6 +222,10 @@ export class EventActionExecutor {
 
       switchPageMode(PageMode.Default);
       updateButtonState({ btn: raceBtn, status: true });
+      garageInfoView.hideWinner();
+      setTimeout(() => {
+        garageInfoView.hideWinner(); // as a precaution :)
+      }, 500);
       this.stoppedCarsCount = 0;
     });
   }
