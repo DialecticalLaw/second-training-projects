@@ -2,7 +2,7 @@ import { Car } from '../../../../../../interfaces';
 import { createElem } from '../../../../../utils/create_elem';
 import './car.css';
 
-const carSvgString: string = `<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" class="garage__car_icon">
+const carSvgString: string = `<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
   <defs>
   <filter height="200%" width="200%" x="-50%" y="-50%">
     <feGaussianBlur in="SourceGraphic" stdDeviation="2.3"/>
@@ -26,10 +26,11 @@ const carSvgString: string = `<svg viewBox="0 0 512 512" xmlns="http://www.w3.or
     </g>
 </svg>`;
 
-export function carIconCreator(color: string): HTMLElement {
+export function carIconCreator(color: string, className: string): HTMLElement {
   const parser: DOMParser = new DOMParser();
   const carIcon = parser.parseFromString(carSvgString, 'image/svg+xml').documentElement;
   carIcon.setAttribute('fill', color);
+  carIcon.classList.add(className);
   return carIcon;
 }
 
@@ -57,7 +58,7 @@ export function carCardCreator(options: Car): HTMLDivElement {
   brakeBtn.innerHTML = '<span>B</span>';
   carActions.append(gasBtn, brakeBtn);
 
-  const carIcon: HTMLElement = carIconCreator(options.color);
+  const carIcon: HTMLElement = carIconCreator(options.color, 'garage__car_icon');
   carActions.append(carIcon);
   const flag = createElem<HTMLDivElement>('div', {
     class: 'garage__car_flag'

@@ -86,13 +86,13 @@ export class EventActionExecutor {
   public handlePaginationGarageRequest(updateCurrentPage: UpdateCurrentPage): void {
     prevBtn.addEventListener('click', async (event: MouseEvent) => {
       event.preventDefault();
-      this.model.currentPage -= 1;
+      this.model.currentGaragePage -= 1;
       await updateCurrentPage(ViewType.Garage);
     });
 
     nextBtn.addEventListener('click', async (event: MouseEvent) => {
       event.preventDefault();
-      this.model.currentPage += 1;
+      this.model.currentGaragePage += 1;
       await updateCurrentPage(ViewType.Garage);
     });
   }

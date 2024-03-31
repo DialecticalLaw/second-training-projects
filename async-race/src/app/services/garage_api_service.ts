@@ -1,4 +1,4 @@
-import { Car, Cars, InputsCarData, PageInfo } from '../../interfaces';
+import { Car, Cars, InputsCarData, GaragePageInfo } from '../../interfaces';
 
 export class GarageApiService {
   private url: string;
@@ -7,7 +7,14 @@ export class GarageApiService {
     this.url = 'http://127.0.0.1:3000/garage';
   }
 
-  public async getCars(page: number): Promise<PageInfo | undefined> {
+  public async getCar(id: string): Promise<Car> {
+    const responseCar: Response = await fetch(`${this.url}/${id}`, { method: 'GET' });
+    if (responseCar.status === 404) throw new Error(`car is not found: ${id} - id`);
+    const parsedResponse: Car = await responseCar.json();
+    return parsedResponse;
+  }
+
+  public async getCars(page: number): Promise<GaragePageInfo | undefined> {
     const responseCars: Response = await fetch(`${this.url}?_page=${page}&_limit=7`, {
       method: 'GET'
     });

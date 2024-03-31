@@ -12,7 +12,7 @@ export type InputsCarData = Omit<Car, 'id'>;
 
 export type Cars = Car[];
 
-export interface PageInfo {
+export interface GaragePageInfo {
   cars: Cars;
   total: number;
   page: number;
@@ -35,16 +35,17 @@ export enum HandleAction {
 
 export enum CRUD {
   Create,
+  Read,
   ReadPage,
   Update,
   Delete
 }
 
-export interface CRUDOptions extends Car {
+export interface CRUDGarageOptions extends Car {
   page?: number;
 }
 
-export type CRUDResult = PageInfo | Car | undefined | void;
+export type CRUDGarageResult = GaragePageInfo | Car | undefined | void;
 
 export interface CarBrands {
   [key: string]: string[];
@@ -102,12 +103,30 @@ export enum SortType {
 }
 
 export interface WinnerInfo {
-  id: number;
-  wins: number;
-  time: number;
+  id?: number;
+  wins?: number;
+  time?: number;
+  color?: string;
+  name?: string;
 }
 
 export interface Winners {
   winners: WinnerInfo[];
   total: number;
+  page: number;
+}
+
+export type CRUDWinnersResult = Winners | WinnerInfo | undefined | void;
+
+export interface CRUDWinnersOptions extends WinnerInfo {
+  page?: number;
+  limit?: number;
+  sort?: SortType;
+  order?: 'ASC' | 'DESC';
+}
+
+export interface WinnersPageOptions {
+  limit: number;
+  sort: SortType;
+  order: 'ASC' | 'DESC';
 }

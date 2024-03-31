@@ -1,4 +1,4 @@
-import { Car, CarProps, HandleAction, PageInfo } from '../../../interfaces';
+import { Car, CarProps, HandleAction, GaragePageInfo } from '../../../interfaces';
 import { carCardCreator } from '../components/garage/garage_info/car/car';
 import {
   carsCountElem,
@@ -27,22 +27,18 @@ export class GarageInfoView {
     this.winnerDescription = winnerDescription;
   }
 
-  public drawCars(pageInfo: PageInfo): void {
+  private drawCars(pageInfo: GaragePageInfo): void {
     pageInfo.cars.forEach((car: Car) => {
       const carCard: HTMLDivElement = carCardCreator(car);
       this.carsBlock.append(carCard);
     });
   }
 
-  public updateGarageInfo(totalCars: number, page: number): void {
-    this.carsCountElem.textContent = totalCars.toString();
-    this.pageNumberElem.textContent = page.toString();
-  }
-
-  public updatePage(pageInfo: PageInfo): void {
+  public updatePage(pageInfo: GaragePageInfo): void {
     this.carsBlock.innerHTML = '';
     this.drawCars(pageInfo);
-    this.updateGarageInfo(pageInfo.total, pageInfo.page);
+    this.carsCountElem.textContent = pageInfo.total.toString();
+    this.pageNumberElem.textContent = pageInfo.page.toString();
     handleActionRequest(HandleAction.Select);
     handleActionRequest(HandleAction.Delete);
     handleActionRequest(HandleAction.Gas);

@@ -20,6 +20,8 @@ timeTh.textContent = 'Best time (seconds)';
 headTr.append(numberTh, carTh, nameTh, winsTh, timeTh);
 tableHead.append(headTr);
 
-const tableBody = createElem<HTMLTableSectionElement>('tbody', { class: 'winners__table_body' });
+export const tableBody = createElem<HTMLTableSectionElement>('tbody', {
+  class: 'winners__table_body'
+});
 
 winnersTable.append(tableHead, tableBody);

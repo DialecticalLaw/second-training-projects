@@ -2,4 +2,23 @@
   color: #ffffff;
   font-family: Race-font;
   border: 1px solid #ffffff;
+  letter-spacing: 2px;
+  border-spacing: 40px 20px;
+}
+
+td,
+th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+td {
+  position: relative;
+}
+
+.winners__car-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 }

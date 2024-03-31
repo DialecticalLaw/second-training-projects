@@ -1,4 +1,10 @@
-import { CRUD, CRUDResult, InputsCarData, UpdateCurrentPage, ViewType } from '../../interfaces';
+import {
+  CRUD,
+  CRUDGarageResult,
+  InputsCarData,
+  UpdateCurrentPage,
+  ViewType
+} from '../../interfaces';
 import { Model } from '../model/model';
 import { getCreateData, getUpdateData } from '../services/get_form_data_service';
 import { toggleLoadingProcess } from '../view/app_view';
@@ -17,7 +23,7 @@ export class EventCRUDExecutor {
       createBtn.addEventListener('click', async (event: MouseEvent): Promise<void> => {
         event.preventDefault();
         const data: InputsCarData = getCreateData();
-        const createdCar: CRUDResult = await this.model.CRUDCars(CRUD.Create, data);
+        const createdCar: CRUDGarageResult = await this.model.CRUDCarsGarage(CRUD.Create, data);
 
         if (!createdCar) throw new Error('createdCar is undefined at handleCreateRequest');
         await updateCurrentPage(ViewType.Garage);
@@ -35,7 +41,10 @@ export class EventCRUDExecutor {
 
         if (!selectedCar) throw new Error('selectedCar is undefined');
         const id: string = selectedCar.id;
-        const updatedCar: CRUDResult = await this.model.CRUDCars(CRUD.Update, { ...data, id });
+        const updatedCar: CRUDGarageResult = await this.model.CRUDCarsGarage(CRUD.Update, {
+          ...data,
+          id
+        });
 
         if (!updatedCar) throw new Error('updatedCar is undefined at handleCreateRequest');
         await updateCurrentPage(ViewType.Garage);
@@ -58,7 +67,7 @@ export class EventCRUDExecutor {
             throw new Error('carCard is undefined or wrong');
 
           const id = carCard.id;
-          await this.model.CRUDCars(CRUD.Delete, { id });
+          await this.model.CRUDCarsGarage(CRUD.Delete, { id });
           await updateCurrentPage(ViewType.Garage);
         }
       });
@@ -69,11 +78,11 @@ export class EventCRUDExecutor {
     generateBtn.addEventListener('click', async (event: MouseEvent) => {
       event.preventDefault();
       toggleLoadingProcess(true);
-      const promises: Promise<CRUDResult>[] = [];
+      const promises: Promise<CRUDGarageResult>[] = [];
 
       for (let i = 0; i < 100; i += 1) {
         const data: InputsCarData = getCreateData(true);
-        promises.push(this.model.CRUDCars(CRUD.Create, data));
+        promises.push(this.model.CRUDCarsGarage(CRUD.Create, data));
       }
 
       await Promise.all(promises);

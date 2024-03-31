@@ -1,4 +1,15 @@
-import { CRUD, CRUDResult, HandleAction, UpdateBtnValidityClass, ViewType } from '../../interfaces';
+import {
+  CRUD,
+  CRUDGarageResult,
+  HandleAction,
+  UpdateBtnValidityClass,
+  WinnersPageOptions,
+  ViewType,
+  CRUDWinnersResult,
+  WinnerInfo,
+  SortType,
+  Winners
+} from '../../interfaces';
 import { Model } from '../model/model';
 import { drawMainMarkup } from '../view/app_view';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
@@ -6,8 +17,7 @@ import { GarageOptionsView } from '../view/garage_view/garage_options_view';
 import { GaragePageSwitchView } from '../view/garage_view/garage_switch_page_view';
 import { drawGarage } from '../view/garage_view/garage_view';
 import { handleActionRequest } from '../view/handleRequestEvent';
-import { WinnersTableView } from '../view/winners_view/winners_table_view';
-import { drawWinners } from '../view/winners_view/winners_view';
+import { WinnersView, drawWinners } from '../view/winners_view/winners_view';
 import { EventCRUDExecutor } from './event_CRUD_executor';
 import { EventActionExecutor, switchView } from './event_action_executor';
 
@@ -37,7 +47,7 @@ export class Controller {
 
   private garagePageSwitchView: GaragePageSwitchView;
 
-  private winnersTableView: WinnersTableView;
+  private winnersView: WinnersView;
 
   constructor() {
     this.model = new Model();
@@ -45,23 +55,23 @@ export class Controller {
     this.garagePageSwitchView = new GaragePageSwitchView();
     this.eventActionExecutor = new EventActionExecutor(this.model);
     this.eventCRUDExecutor = new EventCRUDExecutor(this.model);
-    this.winnersTableView = new WinnersTableView();
+    this.winnersView = new WinnersView();
   }
 
   public async init(): Promise<void> {
-    const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
-      page: this.model.currentPage
+    const garagePageInfo: CRUDGarageResult = await this.model.CRUDCarsGarage(CRUD.ReadPage, {
+      page: this.model.currentGaragePage
     });
-    if (!pageInfo || !('cars' in pageInfo))
-      throw new Error('pageInfo is undefined at init or wrong type');
+    if (!garagePageInfo || !('cars' in garagePageInfo))
+      throw new Error('garagePageInfo is undefined at init or wrong type');
 
     this.handleActionRequests();
     this.handleCRUDRequests();
     drawMainMarkup();
     drawGarage();
     drawWinners();
-    this.garageInfoView.drawCars(pageInfo);
-    this.garageInfoView.updateGarageInfo(pageInfo.total, pageInfo.page);
+    this.updateCurrentPage(ViewType.Garage);
+    this.updateCurrentPage(ViewType.Winners, { limit: 10, sort: SortType.Wins, order: 'ASC' });
     await this.updateSwitchButtonsState();
     dispatchInitEvents();
   }
@@ -135,46 +145,83 @@ export class Controller {
     );
   }
 
-  private async updateCurrentPage(viewType: ViewType): Promise<void> {
+  private async updateCurrentPage(viewType: ViewType, options?: WinnersPageOptions): Promise<void> {
     if (viewType === ViewType.Garage) {
-      const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
-        page: this.model.currentPage
+      const garagePageInfo: CRUDGarageResult = await this.model.CRUDCarsGarage(CRUD.ReadPage, {
+        page: this.model.currentGaragePage
       });
-      if (!pageInfo || !('cars' in pageInfo))
-        throw new Error('pageInfo is undefined at init or wrong type');
-      this.garageInfoView.updatePage(pageInfo);
+      if (!garagePageInfo || !('cars' in garagePageInfo))
+        throw new Error('garagePageInfo is undefined or wrong type');
+
+      this.garageInfoView.updatePage(garagePageInfo);
       GarageOptionsView.toggleUpdateBtnValidity(false, UpdateBtnValidityClass.Disabled);
       await this.updateSwitchButtonsState();
     } else {
+      if (!options) throw new Error('options is undefined');
+      const winners: CRUDWinnersResult = await this.model.CRUDCarsWinners(CRUD.ReadPage, {
+        page: this.model.currentWinnersPage,
+        limit: options.limit,
+        sort: options.sort,
+        order: options.order
+      });
+      if (!winners || !('winners' in winners)) throw new Error('winnersPageInfo is wrong');
+
+      const expandedWinners = await this.expandWinnerInfo(winners);
+      this.winnersView.updatePage(expandedWinners);
     }
   }
 
+  private async expandWinnerInfo(winners: Winners): Promise<Winners> {
+    const promises: Promise<CRUDGarageResult>[] = [];
+    const winnersCopy: Winners = { ...winners };
+
+    winnersCopy.winners.forEach((winner: WinnerInfo): void => {
+      if (!winner.id) throw new Error('id is undefined');
+      const car: Promise<CRUDGarageResult> = this.model.CRUDCarsGarage(CRUD.Read, {
+        id: winner.id.toString()
+      });
+      promises.push(car);
+    });
+    const resolvedPromises: CRUDGarageResult[] = await Promise.all(promises);
+
+    winnersCopy.winners.forEach((winner: WinnerInfo): void => {
+      const car: CRUDGarageResult = resolvedPromises.find((promiseResult: CRUDGarageResult) => {
+        return promiseResult;
+      });
+      if (!car || !('color' in car)) throw new Error('car is wrong');
+      const winnerLink = winner;
+      winnerLink.color = car.color;
+      winnerLink.name = car.name;
+    });
+    return winnersCopy;
+  }
+
   private async updateSwitchButtonsState(): Promise<void> {
-    const currentPage = this.model.currentPage;
+    const currentGaragePage = this.model.currentGaragePage;
     let prevBtnState: boolean;
     let nextBtnState: boolean;
 
-    if (currentPage === 1) {
+    if (currentGaragePage === 1) {
       prevBtnState = false;
     } else {
-      const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
-        page: this.model.currentPage - 1
+      const garagePageInfo: CRUDGarageResult = await this.model.CRUDCarsGarage(CRUD.ReadPage, {
+        page: this.model.currentGaragePage - 1
       });
-      if (!pageInfo || !('cars' in pageInfo))
-        throw new Error('pageInfo is undefined at init or wrong type');
+      if (!garagePageInfo || !('cars' in garagePageInfo))
+        throw new Error('garagePageInfo is undefined at init or wrong type');
 
-      if (pageInfo.cars.length) {
+      if (garagePageInfo.cars.length) {
         prevBtnState = true;
       } else prevBtnState = false;
     }
 
-    const pageInfo: CRUDResult = await this.model.CRUDCars(CRUD.ReadPage, {
-      page: this.model.currentPage + 1
+    const garagePageInfo: CRUDGarageResult = await this.model.CRUDCarsGarage(CRUD.ReadPage, {
+      page: this.model.currentGaragePage + 1
     });
-    if (!pageInfo || !('cars' in pageInfo))
-      throw new Error('pageInfo is undefined at init or wrong type');
+    if (!garagePageInfo || !('cars' in garagePageInfo))
+      throw new Error('garagePageInfo is undefined at init or wrong type');
 
-    if (pageInfo.cars.length) {
+    if (garagePageInfo.cars.length) {
       nextBtnState = true;
     } else nextBtnState = false;
 
