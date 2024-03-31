@@ -4,14 +4,17 @@ import {
   PageMode,
   UpdateBtnValidityClass,
   UpdateCarResponse,
-  UpdateCurrentPage
+  UpdateCurrentPage,
+  ViewType
 } from '../../interfaces';
 import { Model } from '../model/model';
+import { switchPageView } from '../view/app_view';
 import { raceBtn, resetBtn } from '../view/components/garage/garage_options/garage_options';
 import {
   nextBtn,
   prevBtn
 } from '../view/components/garage/garage_switch_block/garage_switch_block';
+import { selectGarageBtn, selectWinnersBtn } from '../view/components/header/header';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
 import { GarageOptionsView } from '../view/garage_view/garage_options_view';
 import { switchGarageMode, updateButtonState } from '../view/garage_view/garage_view';
@@ -249,4 +252,16 @@ export class EventActionExecutor {
     if (this.stoppedCarsCount === count) return false;
     return this.waitForFirstCars(count);
   }
+}
+
+export function switchView(): void {
+  selectGarageBtn.addEventListener('click', (event: MouseEvent) => {
+    event.preventDefault();
+    switchPageView(ViewType.Garage);
+  });
+
+  selectWinnersBtn.addEventListener('click', (event: MouseEvent) => {
+    event.preventDefault();
+    switchPageView(ViewType.Winners);
+  });
 }

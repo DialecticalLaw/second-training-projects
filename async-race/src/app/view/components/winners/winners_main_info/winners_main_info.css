@@ -1,12 +1,12 @@
-.garage__info-block {
-  width: 100%;
+.winners__info_block {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
-.garage__info-title {
+.winners__info_title {
   font-family: Race-font;
   font-size: 1.8rem;
   font-weight: bold;
@@ -14,14 +14,8 @@
   letter-spacing: 2px;
 }
 
-.garage__page {
+.winners__info_page {
   font-family: Race-font;
   color: #ffffff;
   font-size: 1.4rem;
-}
-
-.garage__cars-block {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 }

@@ -1,21 +1,14 @@
 import { CarBtnStatus, PageMode } from '../../../interfaces';
 import { garage } from '../components/garage/garage';
-import { garageInfo } from '../components/garage/garage_info/garage_info';
-import garageOptions, {
+import {
   createBtn,
   generateBtn,
   updateBtn
 } from '../components/garage/garage_options/garage_options';
-import {
-  garagePageSwitchBlock,
-  nextBtn,
-  prevBtn
-} from '../components/garage/garage_switch_block/garage_switch_block';
+import { nextBtn, prevBtn } from '../components/garage/garage_switch_block/garage_switch_block';
 import { selectWinnersBtn } from '../components/header/header';
 
 export function drawGarage(): void {
-  garage.append(garageOptions, garageInfo, garagePageSwitchBlock);
-
   const main = document.querySelector('.main');
   if (!main) throw new Error('main is undefined');
   main.append(garage);

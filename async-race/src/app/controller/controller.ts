@@ -6,8 +6,9 @@ import { GarageOptionsView } from '../view/garage_view/garage_options_view';
 import { GaragePageSwitchView } from '../view/garage_view/garage_switch_page_view';
 import { drawGarage } from '../view/garage_view/garage_view';
 import { handleActionRequest } from '../view/handleRequestEvent';
+import { drawWinners } from '../view/winners_view/winners_view';
 import { EventCRUDExecutor } from './event_CRUD_executor';
-import { EventActionExecutor } from './event_action_executor';
+import { EventActionExecutor, switchView } from './event_action_executor';
 
 function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Create);
@@ -20,6 +21,7 @@ function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Brake);
   handleActionRequest(HandleAction.Race);
   handleActionRequest(HandleAction.Reset);
+  handleActionRequest(HandleAction.SwitchPage);
 }
 
 export class Controller {
@@ -52,6 +54,7 @@ export class Controller {
     this.handleCRUDRequests();
     drawMainMarkup();
     drawGarage();
+    drawWinners();
     this.garageInfoView.drawCars(pageInfo);
     this.garageInfoView.updateGarageInfo(pageInfo.total, pageInfo.page);
     await this.updateSwitchButtonsState();
@@ -75,18 +78,18 @@ export class Controller {
     document.addEventListener(HandleAction.Brake, () => {
       this.eventActionExecutor.handleBrakeRequest.bind(this.eventActionExecutor)();
     });
-    document.addEventListener(HandleAction.Race, () => {
-      this.eventActionExecutor.handleRaceRequest.bind(
-        this.eventActionExecutor,
-        this.garageInfoView
-      )();
-    });
-    document.addEventListener(HandleAction.Reset, () => {
+    document.addEventListener(
+      HandleAction.Race,
+      this.eventActionExecutor.handleRaceRequest.bind(this.eventActionExecutor, this.garageInfoView)
+    );
+    document.addEventListener(
+      HandleAction.Reset,
       this.eventActionExecutor.handleResetRequest.bind(
         this.eventActionExecutor,
         this.garageInfoView
-      )();
-    });
+      )
+    );
+    document.addEventListener(HandleAction.SwitchPage, switchView);
   }
 
   private handleCRUDRequests(): void {

@@ -28,7 +28,8 @@ export enum HandleAction {
   Gas = 'gas',
   Brake = 'brake',
   Race = 'race',
-  Reset = 'reset'
+  Reset = 'reset',
+  SwitchPage = 'switchPage'
 }
 
 export enum CRUD {
@@ -86,4 +87,9 @@ export enum PageMode {
 export enum UpdateBtnValidityClass {
   Disabled = 'disabled',
   Ondrive = 'on-drive'
+}
+
+export enum ViewType {
+  Garage,
+  Winners
 }
