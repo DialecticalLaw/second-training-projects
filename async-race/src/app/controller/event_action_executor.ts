@@ -7,7 +7,6 @@ import {
   UpdateCurrentPage
 } from '../../interfaces';
 import { Model } from '../model/model';
-import { switchPageMode } from '../view/app_view';
 import { raceBtn, resetBtn } from '../view/components/garage/garage_options/garage_options';
 import {
   nextBtn,
@@ -15,7 +14,7 @@ import {
 } from '../view/components/garage/garage_switch_block/garage_switch_block';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
 import { GarageOptionsView } from '../view/garage_view/garage_options_view';
-import { updateButtonState } from '../view/garage_view/garage_view';
+import { switchGarageMode, updateButtonState } from '../view/garage_view/garage_view';
 
 function getCardInfo(eventTarget: HTMLButtonElement): [string, HTMLButtonElement] {
   const carCard: HTMLElement | null | undefined = eventTarget.parentElement?.parentElement;
@@ -176,7 +175,7 @@ export class EventActionExecutor {
       this.arrivedCars = [];
       this.readyCars = [];
 
-      switchPageMode(PageMode.Race);
+      switchGarageMode(PageMode.Race);
       updateButtonState({ btn: raceBtn, status: false });
       const allActiveGasButtons: HTMLButtonElement[] = Array.from(
         document.querySelectorAll('.garage__car_gas:not(.disabled)')
@@ -220,7 +219,7 @@ export class EventActionExecutor {
       });
       await this.waitForStoppedCars(carsCount);
 
-      switchPageMode(PageMode.Default);
+      switchGarageMode(PageMode.Default);
       updateButtonState({ btn: raceBtn, status: true });
       garageInfoView.hideWinner();
       setTimeout(() => {
