@@ -26,6 +26,21 @@ function getCardInfo(eventTarget: HTMLButtonElement): [string, HTMLButtonElement
   return [id, adjacentBtn];
 }
 
+export function isCarsResets(): boolean {
+  const allBrakeButtons = Array.from(
+    document.querySelectorAll('.garage__car_brake')
+  ) as HTMLButtonElement[];
+
+  const activeBrakeButton = allBrakeButtons.find(
+    (button: HTMLButtonElement) => !button.classList.contains('disabled')
+  );
+
+  if (activeBrakeButton) {
+    return false;
+  }
+  return true;
+}
+
 export class EventActionExecutor {
   private model: Model;
 
@@ -92,8 +107,10 @@ export class EventActionExecutor {
         const [id, adjacentBtn]: [string, HTMLButtonElement] = getCardInfo(eventTarget);
 
         updateButtonState({ btn: button, status: false });
+        updateButtonState({ btn: raceBtn, status: false });
         const startedResult = Model.updateCarStatus(id, 'started') as Promise<CarProps>;
         this.readyCars.push(startedResult);
+
         const startedResponse: CarProps = await startedResult;
         const abortController: AbortController = new AbortController();
         this.aborts[id] = abortController;
@@ -134,6 +151,8 @@ export class EventActionExecutor {
         if (this.executedAborts.includes(id)) {
           updateButtonState({ btn: eventTarget, status: false });
           updateButtonState({ btn: adjacentBtn, status: true });
+          if (isCarsResets()) updateButtonState({ btn: raceBtn, status: true });
+
           GarageInfoView.moveCar(id, 'reset');
           this.executedAborts = this.executedAborts.filter((arrId: string) => arrId !== id);
           this.executedAborts.includes(id);

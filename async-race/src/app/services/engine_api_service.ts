@@ -1,4 +1,6 @@
 import { AbortCarData, EngineStatus, UpdateCarResponse } from '../../interfaces';
+import { isCarsResets } from '../controller/event_action_executor';
+import { raceBtn } from '../view/components/garage/garage_options/garage_options';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
 import { updateButtonState } from '../view/garage_view/garage_view';
 
@@ -45,6 +47,7 @@ export async function regulateEngine(
       await regulateEngine(id, 'stopped');
       document.dispatchEvent(stoppedCarEvent);
       if (!isEngineBroken) {
+        if (isCarsResets()) updateButtonState({ btn: raceBtn, status: true });
         updateButtonState({ btn: abortData.btn, status: true });
         GarageInfoView.moveCar(id, 'reset');
       }
