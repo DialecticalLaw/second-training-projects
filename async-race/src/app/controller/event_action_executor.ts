@@ -83,19 +83,21 @@ export class EventActionExecutor {
     });
   }
 
-  public handlePaginationRequest(updateCurrentPage: UpdateCurrentPage): void {
+  public handlePaginationGarageRequest(updateCurrentPage: UpdateCurrentPage): void {
     prevBtn.addEventListener('click', async (event: MouseEvent) => {
       event.preventDefault();
       this.model.currentPage -= 1;
-      await updateCurrentPage();
+      await updateCurrentPage(ViewType.Garage);
     });
 
     nextBtn.addEventListener('click', async (event: MouseEvent) => {
       event.preventDefault();
       this.model.currentPage += 1;
-      await updateCurrentPage();
+      await updateCurrentPage(ViewType.Garage);
     });
   }
+
+  public handlePaginationWinnersRequest(updateCurrentPage: UpdateCurrentPage): void {}
 
   public handleGasRequest(): void {
     const allGasButtons = Array.from(
@@ -196,6 +198,7 @@ export class EventActionExecutor {
       const raceResult: boolean = await this.waitForFirstCars(carsCount);
       if (raceResult === true) {
         const winnerId: string = this.arrivedCars[0];
+        this.saveWinner(winnerId);
         garageInfoView.showWinner(winnerId);
       } else {
         garageInfoView.showWinner(false);
@@ -205,6 +208,8 @@ export class EventActionExecutor {
       this.arrivedCars = [];
     });
   }
+
+  private async saveWinner(id: string): Promise<void> {}
 
   public handleResetRequest(garageInfoView: GarageInfoView): void {
     resetBtn.addEventListener('click', async (event: MouseEvent) => {

@@ -23,7 +23,8 @@ export enum HandleAction {
   Select = 'select',
   Update = 'update',
   Delete = 'delete',
-  Pagination = 'pagination',
+  PaginationGarage = 'paginationGarage',
+  PaginationWinners = 'paginationWinners',
   Generate = 'generate',
   Gas = 'gas',
   Brake = 'brake',
@@ -49,7 +50,12 @@ export interface CarBrands {
   [key: string]: string[];
 }
 
-export type UpdateCurrentPage = () => Promise<void>;
+export enum ViewType {
+  Garage,
+  Winners
+}
+
+export type UpdateCurrentPage = (viewType: ViewType) => Promise<void>;
 
 export type EngineStatus = 'started' | 'stopped' | 'drive';
 
@@ -89,7 +95,19 @@ export enum UpdateBtnValidityClass {
   Ondrive = 'on-drive'
 }
 
-export enum ViewType {
-  Garage,
-  Winners
+export enum SortType {
+  Id = 'id',
+  Wins = 'wins',
+  Time = 'time'
+}
+
+export interface WinnerInfo {
+  id: number;
+  wins: number;
+  time: number;
+}
+
+export interface Winners {
+  winners: WinnerInfo[];
+  total: number;
 }

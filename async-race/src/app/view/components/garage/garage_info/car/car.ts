@@ -2,7 +2,7 @@ import { Car } from '../../../../../../interfaces';
 import { createElem } from '../../../../../utils/create_elem';
 import './car.css';
 
-const carSvgText: string = `<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" class="garage__car_icon">
+const carSvgString: string = `<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" class="garage__car_icon">
   <defs>
   <filter height="200%" width="200%" x="-50%" y="-50%">
     <feGaussianBlur in="SourceGraphic" stdDeviation="2.3"/>
@@ -25,6 +25,13 @@ const carSvgText: string = `<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/
     </g>
     </g>
 </svg>`;
+
+export function carIconCreator(color: string): HTMLElement {
+  const parser: DOMParser = new DOMParser();
+  const carIcon = parser.parseFromString(carSvgString, 'image/svg+xml').documentElement;
+  carIcon.setAttribute('fill', color);
+  return carIcon;
+}
 
 export function carCardCreator(options: Car): HTMLDivElement {
   if (!options.id || options.name === undefined || !options.color)
@@ -49,9 +56,9 @@ export function carCardCreator(options: Car): HTMLDivElement {
   const brakeBtn = createElem<HTMLButtonElement>('button', { class: 'garage__car_brake disabled' });
   brakeBtn.innerHTML = '<span>B</span>';
   carActions.append(gasBtn, brakeBtn);
-  carActions.insertAdjacentHTML('beforeend', carSvgText);
-  const carIcon = carActions.lastElementChild as Element;
-  carIcon.setAttribute('fill', options.color);
+
+  const carIcon: HTMLElement = carIconCreator(options.color);
+  carActions.append(carIcon);
   const flag = createElem<HTMLDivElement>('div', {
     class: 'garage__car_flag'
   });

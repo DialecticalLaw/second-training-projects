@@ -1,4 +1,4 @@
-import { CRUD, CRUDResult, InputsCarData, UpdateCurrentPage } from '../../interfaces';
+import { CRUD, CRUDResult, InputsCarData, UpdateCurrentPage, ViewType } from '../../interfaces';
 import { Model } from '../model/model';
 import { getCreateData, getUpdateData } from '../services/get_form_data_service';
 import { toggleLoadingProcess } from '../view/app_view';
@@ -20,7 +20,7 @@ export class EventCRUDExecutor {
         const createdCar: CRUDResult = await this.model.CRUDCars(CRUD.Create, data);
 
         if (!createdCar) throw new Error('createdCar is undefined at handleCreateRequest');
-        await updateCurrentPage();
+        await updateCurrentPage(ViewType.Garage);
       });
     }
   }
@@ -38,7 +38,7 @@ export class EventCRUDExecutor {
         const updatedCar: CRUDResult = await this.model.CRUDCars(CRUD.Update, { ...data, id });
 
         if (!updatedCar) throw new Error('updatedCar is undefined at handleCreateRequest');
-        await updateCurrentPage();
+        await updateCurrentPage(ViewType.Garage);
       });
     }
   }
@@ -59,7 +59,7 @@ export class EventCRUDExecutor {
 
           const id = carCard.id;
           await this.model.CRUDCars(CRUD.Delete, { id });
-          await updateCurrentPage();
+          await updateCurrentPage(ViewType.Garage);
         }
       });
     });
@@ -77,7 +77,7 @@ export class EventCRUDExecutor {
       }
 
       await Promise.all(promises);
-      await updateCurrentPage();
+      await updateCurrentPage(ViewType.Garage);
       toggleLoadingProcess(false);
     });
   }
