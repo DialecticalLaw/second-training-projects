@@ -103,11 +103,6 @@ export enum PageMode {
   Default
 }
 
-export enum UpdateBtnValidityClass {
-  Disabled = 'disabled',
-  Ondrive = 'on-drive'
-}
-
 export interface WinnerInfo {
   id?: string;
   wins?: number;

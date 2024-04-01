@@ -5,7 +5,6 @@ import {
   CarProps,
   PageMode,
   SortType,
-  UpdateBtnValidityClass,
   UpdateCarResponse,
   UpdateCurrentPage,
   ViewType
@@ -13,8 +12,11 @@ import {
 import { Model } from '../model/model';
 import { raceBtn, resetBtn } from '../view/components/garage/garage_options/garage_options';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
-import { GarageOptionsView } from '../view/garage_view/garage_options_view';
-import { switchGarageMode, updateButtonState } from '../view/garage_view/garage_view';
+import {
+  switchGarageMode,
+  toggleBtnDriveValidity,
+  updateButtonState
+} from '../view/garage_view/garage_view';
 import { isCarsResets } from './addition_actions_controller';
 
 function getCardInfo(eventTarget: HTMLButtonElement): [string, HTMLButtonElement] {
@@ -66,7 +68,7 @@ export class CarsController {
 
         updateButtonState({ btn: button, status: false });
         updateButtonState({ btn: raceBtn, status: false });
-        GarageOptionsView.toggleUpdateBtnValidity(false, UpdateBtnValidityClass.Ondrive);
+        toggleBtnDriveValidity(false);
         const startedResult = Model.updateCarStatus(id, 'started') as Promise<CarProps>;
         this.readyCars.push(startedResult);
 
@@ -112,7 +114,7 @@ export class CarsController {
           updateButtonState({ btn: adjacentBtn, status: true });
           if (isCarsResets()) {
             updateButtonState({ btn: raceBtn, status: true });
-            GarageOptionsView.toggleUpdateBtnValidity(true, UpdateBtnValidityClass.Ondrive);
+            toggleBtnDriveValidity(true);
           }
 
           GarageInfoView.moveCar(id, 'reset');

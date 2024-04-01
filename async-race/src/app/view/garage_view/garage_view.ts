@@ -51,3 +51,24 @@ export function switchGarageMode(mode: PageMode): void {
     nextBtn.classList.remove('on-race');
   }
 }
+
+export function toggleBtnDriveValidity(isNeedValid: boolean): void {
+  const allRemoveButtons: HTMLButtonElement[] = Array.from(
+    document.querySelectorAll('.garage__car_remove')
+  );
+  if (isNeedValid) {
+    updateBtn.classList.remove('on-drive');
+    prevBtn.classList.remove('on-drive');
+    nextBtn.classList.remove('on-drive');
+    allRemoveButtons.forEach((button: HTMLButtonElement) => {
+      button.classList.remove('on-drive');
+    });
+  } else {
+    updateBtn.classList.add('on-drive');
+    prevBtn.classList.add('on-drive');
+    nextBtn.classList.add('on-drive');
+    allRemoveButtons.forEach((button: HTMLButtonElement) => {
+      button.classList.add('on-drive');
+    });
+  }
+}

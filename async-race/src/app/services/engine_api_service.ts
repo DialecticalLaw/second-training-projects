@@ -1,13 +1,8 @@
-import {
-  AbortCarData,
-  EngineStatus,
-  UpdateBtnValidityClass,
-  UpdateCarResponse
-} from '../../interfaces';
+import { AbortCarData, EngineStatus, UpdateCarResponse } from '../../interfaces';
 import { isCarsResets } from '../controller/addition_actions_controller';
+import { toggleBtnDriveValidity } from '../view/garage_view/garage_view';
 import { raceBtn } from '../view/components/garage/garage_options/garage_options';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
-import { GarageOptionsView } from '../view/garage_view/garage_options_view';
 import { updateButtonState } from '../view/garage_view/garage_view';
 
 async function getEngineResponse(
@@ -55,7 +50,7 @@ export async function regulateEngine(
       if (!isEngineBroken) {
         if (isCarsResets()) {
           updateButtonState({ btn: raceBtn, status: true });
-          GarageOptionsView.toggleUpdateBtnValidity(true, UpdateBtnValidityClass.Ondrive);
+          toggleBtnDriveValidity(true);
         }
         updateButtonState({ btn: abortData.btn, status: true });
         GarageInfoView.moveCar(id, 'reset');

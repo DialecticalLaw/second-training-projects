@@ -2,7 +2,6 @@ import {
   CRUD,
   CRUDGarageResult,
   HandleAction,
-  UpdateBtnValidityClass,
   WinnersPageOptions,
   ViewType,
   CRUDWinnersResult,
@@ -13,14 +12,14 @@ import {
 import { Model } from '../model/model';
 import { drawMainMarkup } from '../view/app_view';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
-import { GarageOptionsView } from '../view/garage_view/garage_options_view';
 import { GaragePageSwitchView } from '../view/garage_view/garage_switch_page_view';
-import { drawGarage } from '../view/garage_view/garage_view';
+import { drawGarage, updateButtonState } from '../view/garage_view/garage_view';
 import { handleActionRequest } from '../view/handleRequestEvent';
 import { WinnersView, drawWinners } from '../view/winners_view/winners_view';
 import { GarageCRUDController } from './garage_CRUD_controller';
 import { AdditionController, switchView } from './addition_actions_controller';
 import { CarsController } from './cars_controller';
+import { updateBtn } from '../view/components/garage/garage_options/garage_options';
 
 function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Create);
@@ -152,7 +151,7 @@ export class Controller {
         throw new Error('garagePageInfo is undefined or wrong type');
 
       this.garageInfoView.updatePage(garagePageInfo);
-      GarageOptionsView.toggleUpdateBtnValidity(false, UpdateBtnValidityClass.Disabled);
+      updateButtonState({ btn: updateBtn, status: false });
       await this.updateSwitchButtonsState();
     } else {
       if (!options) throw new Error('options is undefined');
