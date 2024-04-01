@@ -24,13 +24,9 @@ import { EventActionExecutor, switchView } from './event_action_executor';
 function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Create);
   handleActionRequest(HandleAction.Update);
-  handleActionRequest(HandleAction.Select);
-  handleActionRequest(HandleAction.Delete);
   handleActionRequest(HandleAction.PaginationGarage);
   handleActionRequest(HandleAction.PaginationWinners);
   handleActionRequest(HandleAction.Generate);
-  handleActionRequest(HandleAction.Gas);
-  handleActionRequest(HandleAction.Brake);
   handleActionRequest(HandleAction.Race);
   handleActionRequest(HandleAction.Reset);
   handleActionRequest(HandleAction.SwitchPage);
@@ -71,7 +67,7 @@ export class Controller {
     drawGarage();
     drawWinners();
     this.updateCurrentPage(ViewType.Garage);
-    this.updateCurrentPage(ViewType.Winners, { limit: 10, sort: SortType.Wins, order: 'ASC' });
+    this.updateCurrentPage(ViewType.Winners, { limit: 10, sort: SortType.Wins, order: 'DESC' });
     await this.updateSwitchButtonsState();
     dispatchInitEvents();
   }
@@ -87,13 +83,6 @@ export class Controller {
         this.updateCurrentPage.bind(this)
       )
     );
-    document.addEventListener(
-      HandleAction.PaginationWinners,
-      this.eventActionExecutor.handlePaginationWinnersRequest.bind(
-        this.eventActionExecutor,
-        this.updateCurrentPage.bind(this)
-      )
-    );
     document.addEventListener(HandleAction.Gas, () => {
       this.eventActionExecutor.handleGasRequest.bind(this.eventActionExecutor)();
     });
@@ -102,7 +91,11 @@ export class Controller {
     });
     document.addEventListener(
       HandleAction.Race,
-      this.eventActionExecutor.handleRaceRequest.bind(this.eventActionExecutor, this.garageInfoView)
+      this.eventActionExecutor.handleRaceRequest.bind(
+        this.eventActionExecutor,
+        this.garageInfoView,
+        this.updateCurrentPage.bind(this)
+      )
     );
     document.addEventListener(
       HandleAction.Reset,
@@ -166,7 +159,7 @@ export class Controller {
       });
       if (!winners || !('winners' in winners)) throw new Error('winnersPageInfo is wrong');
 
-      const expandedWinners = await this.expandWinnerInfo(winners);
+      const expandedWinners: Winners = await this.expandWinnerInfo(winners);
       this.winnersView.updatePage(expandedWinners);
     }
   }
@@ -178,16 +171,19 @@ export class Controller {
     winnersCopy.winners.forEach((winner: WinnerInfo): void => {
       if (!winner.id) throw new Error('id is undefined');
       const car: Promise<CRUDGarageResult> = this.model.CRUDCarsGarage(CRUD.Read, {
-        id: winner.id.toString()
+        id: winner.id
       });
       promises.push(car);
     });
     const resolvedPromises: CRUDGarageResult[] = await Promise.all(promises);
-
     winnersCopy.winners.forEach((winner: WinnerInfo): void => {
-      const car: CRUDGarageResult = resolvedPromises.find((promiseResult: CRUDGarageResult) => {
-        return promiseResult;
-      });
+      const car: CRUDGarageResult = resolvedPromises.find(
+        (promiseResult: CRUDGarageResult): boolean => {
+          if (!promiseResult || !('color' in promiseResult)) throw new Error('car is wrong');
+          if (Number(promiseResult.id) === Number(winner.id)) return true;
+          return false;
+        }
+      );
       if (!car || !('color' in car)) throw new Error('car is wrong');
       const winnerLink = winner;
       winnerLink.color = car.color;

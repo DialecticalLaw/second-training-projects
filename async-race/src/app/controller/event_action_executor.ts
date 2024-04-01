@@ -1,7 +1,10 @@
 import {
+  CRUD,
+  CRUDWinnersResult,
   CarAbortControllers,
   CarProps,
   PageMode,
+  SortType,
   UpdateBtnValidityClass,
   UpdateCarResponse,
   UpdateCurrentPage,
@@ -97,8 +100,6 @@ export class EventActionExecutor {
     });
   }
 
-  public handlePaginationWinnersRequest(updateCurrentPage: UpdateCurrentPage): void {}
-
   public handleGasRequest(): void {
     const allGasButtons = Array.from(
       document.querySelectorAll('.garage__car_gas')
@@ -173,13 +174,15 @@ export class EventActionExecutor {
     });
   }
 
-  public handleRaceRequest(garageInfoView: GarageInfoView): void {
+  public handleRaceRequest(
+    garageInfoView: GarageInfoView,
+    updateCurrentPage: UpdateCurrentPage
+  ): void {
     raceBtn.addEventListener('click', async (event: MouseEvent) => {
       event.preventDefault();
       this.stoppedCarsCount = 0;
       this.arrivedCars = [];
       this.readyCars = [];
-
       switchGarageMode(PageMode.Race);
       updateButtonState({ btn: raceBtn, status: false });
       const allActiveGasButtons: HTMLButtonElement[] = Array.from(
@@ -193,23 +196,59 @@ export class EventActionExecutor {
 
       await Promise.all(this.readyCars);
       updateButtonState({ btn: resetBtn, status: true });
-
       const carsCount: number = Array.from(document.querySelectorAll('.garage__car_card')).length;
       const raceResult: boolean = await this.waitForFirstCars(carsCount);
       if (raceResult === true) {
         const winnerId: string = this.arrivedCars[0];
-        this.saveWinner(winnerId);
+        await this.saveWinner(winnerId);
         garageInfoView.showWinner(winnerId);
+        await updateCurrentPage(ViewType.Winners, {
+          limit: 10,
+          sort: SortType.Wins,
+          order: 'DESC'
+        });
       } else {
         garageInfoView.showWinner(false);
       }
-
       this.readyCars = [];
       this.arrivedCars = [];
     });
   }
 
-  private async saveWinner(id: string): Promise<void> {}
+  private async saveWinner(id: string): Promise<void> {
+    const receivedWinner: CRUDWinnersResult = await this.model.CRUDCarsWinners(CRUD.Read, {
+      id
+    });
+
+    const winnerCarIcon: HTMLElement | null = document.querySelector(
+      `[id="${id}"] .garage__car_icon`
+    );
+    if (!winnerCarIcon) throw new Error('car icon is undefined');
+    const carIconTransition: string = winnerCarIcon.style.transitionDuration;
+    const time: string = Number(carIconTransition.slice(0, carIconTransition.length - 1)).toFixed(
+      2
+    );
+    if (receivedWinner !== undefined) {
+      if (!('wins' in receivedWinner) || !receivedWinner.wins)
+        throw new Error('receivedWinner is wrong');
+
+      if (receivedWinner.time && receivedWinner.time > Number(time)) {
+        await this.model.CRUDCarsWinners(CRUD.Update, {
+          id,
+          time: Number(time),
+          wins: receivedWinner.wins + 1
+        });
+      } else {
+        await this.model.CRUDCarsWinners(CRUD.Update, {
+          id,
+          time: receivedWinner.time,
+          wins: receivedWinner.wins + 1
+        });
+      }
+    } else {
+      await this.model.CRUDCarsWinners(CRUD.Create, { id, time: Number(time), wins: 1 });
+    }
+  }
 
   public handleResetRequest(garageInfoView: GarageInfoView): void {
     resetBtn.addEventListener('click', async (event: MouseEvent) => {

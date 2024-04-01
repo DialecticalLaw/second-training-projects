@@ -101,7 +101,7 @@ export class Model {
       default:
         break;
     }
-    throw new Error('CRUD action is invalid');
+    return undefined;
   }
 
   public static async updateCarStatus(

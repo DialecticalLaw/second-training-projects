@@ -56,7 +56,19 @@ export enum ViewType {
   Winners
 }
 
-export type UpdateCurrentPage = (viewType: ViewType) => Promise<void>;
+export enum SortType {
+  Id = 'id',
+  Wins = 'wins',
+  Time = 'time'
+}
+
+export interface WinnersPageOptions {
+  limit: number;
+  sort: SortType;
+  order: 'ASC' | 'DESC';
+}
+
+export type UpdateCurrentPage = (viewType: ViewType, options?: WinnersPageOptions) => Promise<void>;
 
 export type EngineStatus = 'started' | 'stopped' | 'drive';
 
@@ -96,14 +108,8 @@ export enum UpdateBtnValidityClass {
   Ondrive = 'on-drive'
 }
 
-export enum SortType {
-  Id = 'id',
-  Wins = 'wins',
-  Time = 'time'
-}
-
 export interface WinnerInfo {
-  id?: number;
+  id?: string;
   wins?: number;
   time?: number;
   color?: string;
@@ -123,10 +129,4 @@ export interface CRUDWinnersOptions extends WinnerInfo {
   limit?: number;
   sort?: SortType;
   order?: 'ASC' | 'DESC';
-}
-
-export interface WinnersPageOptions {
-  limit: number;
-  sort: SortType;
-  order: 'ASC' | 'DESC';
 }

@@ -23,14 +23,16 @@ export class WinnersApiService {
     return result;
   }
 
-  public async getWinner(id: number): Promise<WinnerInfo> {
+  public async getWinner(
+    id: string
+  ): Promise<Pick<WinnerInfo, 'id' & 'wins' & 'time'> | undefined> {
     const response: Response = await fetch(`${this.url}/${id}`, { method: 'GET' });
-    if (response.status === 404) throw new Error(`id not found: ${id}`);
+    if (response.status === 404) return undefined;
     const parsedResponse: WinnerInfo = await response.json();
     return parsedResponse;
   }
 
-  public async createWinner(options: WinnerInfo): Promise<void> {
+  public async createWinner(options: Pick<WinnerInfo, 'id' | 'wins' | 'time'>): Promise<void> {
     const response: Response = await fetch(this.url, {
       method: 'POST',
       headers: {
@@ -41,12 +43,14 @@ export class WinnersApiService {
     if (response.status === 500) throw new Error(`duplicate id: ${options.id}`);
   }
 
-  public async deleteWinner(id: number): Promise<void> {
+  public async deleteWinner(id: string): Promise<void> {
     const response: Response = await fetch(`${this.url}/${id}`, { method: 'DELETE' });
     if (response.status === 404) throw new Error(`id not found: ${id}`);
   }
 
-  public async updateWinner(options: CRUDWinnersOptions): Promise<void> {
+  public async updateWinner(
+    options: Pick<CRUDWinnersOptions, 'id' | 'wins' | 'time'>
+  ): Promise<void> {
     const response: Response = await fetch(`${this.url}/${options.id}`, {
       method: 'PUT',
       headers: {
