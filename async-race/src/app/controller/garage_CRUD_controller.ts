@@ -2,7 +2,6 @@ import {
   CRUD,
   CRUDGarageResult,
   InputsCarData,
-  SortType,
   UpdateCurrentPage,
   ViewType
 } from '../../interfaces';
@@ -72,11 +71,7 @@ export class GarageCRUDController {
           const id = carCard.id;
           await this.model.CRUDCarsGarage(CRUD.Delete, { id });
           await this.model.CRUDCarsWinners(CRUD.Delete, { id });
-          await updateCurrentPage(ViewType.Winners, {
-            limit: 10,
-            sort: SortType.Wins,
-            order: 'DESC'
-          });
+          await updateCurrentPage(ViewType.WinnersCurrent);
           await updateCurrentPage(ViewType.Garage);
         }
       });

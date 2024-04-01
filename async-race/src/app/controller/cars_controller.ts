@@ -4,7 +4,6 @@ import {
   CarAbortControllers,
   CarProps,
   PageMode,
-  SortType,
   UpdateCarResponse,
   UpdateCurrentPage,
   ViewType
@@ -156,11 +155,7 @@ export class CarsController {
         const winnerId: string = this.arrivedCars[0];
         await this.saveWinner(winnerId);
         garageInfoView.showWinner(winnerId);
-        await updateCurrentPage(ViewType.Winners, {
-          limit: 10,
-          sort: SortType.Wins,
-          order: 'DESC'
-        });
+        await updateCurrentPage(ViewType.WinnersCurrent);
       } else {
         garageInfoView.showWinner(false);
       }
