@@ -30,7 +30,8 @@ export enum HandleAction {
   Brake = 'brake',
   Race = 'race',
   Reset = 'reset',
-  SwitchPage = 'switchPage'
+  SwitchPage = 'switchPage',
+  Sort = 'sort'
 }
 
 export enum CRUD {

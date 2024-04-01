@@ -12,6 +12,41 @@ th {
   vertical-align: middle;
 }
 
+.winners__th_wins,
+.winners__th_time {
+  user-select: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.selected-sort {
+  color: rgb(0, 255, 0);
+}
+
+.reverse-sort {
+  color: rgb(255, 0, 0);
+}
+
+.winners__table_sort-icon {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  margin-bottom: -7px;
+  margin-left: 5px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transition: 0.3s;
+}
+
+.selected-sort .winners__table_sort-icon {
+  background-image: url('../../../../../assets/img/sort_down.svg');
+}
+
+.reverse-sort .winners__table_sort-icon {
+  background-image: url('../../../../../assets/img/sort_up.svg');
+}
+
 td {
   position: relative;
 }

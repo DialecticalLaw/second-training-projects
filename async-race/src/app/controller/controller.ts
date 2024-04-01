@@ -21,6 +21,8 @@ import { AdditionController, switchView } from './addition_actions_controller';
 import { CarsController } from './cars_controller';
 import { updateBtn } from '../view/components/garage/garage_options/garage_options';
 import { WinnersPageSwitchView } from '../view/winners_view/winners_switch_page_view';
+import { WinnersSortController } from './winners_sort_controller';
+import { toggleThState } from '../view/winners_view/winners_th_view';
 
 function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Create);
@@ -31,6 +33,7 @@ function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Race);
   handleActionRequest(HandleAction.Reset);
   handleActionRequest(HandleAction.SwitchPage);
+  handleActionRequest(HandleAction.Sort);
 }
 
 function getCurrentTableOptions(): [SortType, 'ASC' | 'DESC'] {
@@ -50,6 +53,8 @@ export class Controller {
 
   private garagePageSwitchView: GaragePageSwitchView;
 
+  private winnersSortController: WinnersSortController;
+
   private winnersPageSwitchView: WinnersPageSwitchView;
 
   private winnersView: WinnersView;
@@ -61,6 +66,7 @@ export class Controller {
     this.winnersPageSwitchView = new WinnersPageSwitchView();
     this.additionController = new AdditionController(this.model);
     this.garageCRUDController = new GarageCRUDController(this.model);
+    this.winnersSortController = new WinnersSortController();
     this.carsController = new CarsController(this.model);
     this.winnersView = new WinnersView();
   }
@@ -79,7 +85,7 @@ export class Controller {
     drawGarage();
     drawWinners();
     this.updateCurrentPage(ViewType.Garage);
-    this.updateCurrentPage(ViewType.Winners, { limit: 10, sort: SortType.Wins, order: 'DESC' });
+    this.updateCurrentPage(ViewType.Winners, { limit: 10, sort: SortType.Time, order: 'DESC' });
     await this.additionController.updateGarageSwitchButtons(this.garagePageSwitchView);
     await this.additionController.updateWinnersSwitchButtons(this.winnersPageSwitchView);
     dispatchInitEvents();
@@ -87,6 +93,7 @@ export class Controller {
 
   private handleAdditionRequests(): void {
     document.addEventListener(HandleAction.Select, AdditionController.handleSelectRequest);
+
     document.addEventListener(
       HandleAction.PaginationGarage,
       this.additionController.handlePaginationGarageRequest.bind(
@@ -104,6 +111,14 @@ export class Controller {
     );
 
     document.addEventListener(HandleAction.SwitchPage, switchView);
+
+    document.addEventListener(
+      HandleAction.Sort,
+      this.winnersSortController.handleSortRequest.bind(
+        this.winnersSortController,
+        this.updateCurrentPage.bind(this)
+      )
+    );
   }
 
   private handleCarsRequests(): void {
@@ -181,9 +196,9 @@ export class Controller {
         order: options.order
       });
       if (!winners || !('winners' in winners)) throw new Error('winnersPageInfo is wrong');
-
       const expandedWinners: Winners = await this.expandWinnerInfo(winners);
       this.winnersView.updatePage(expandedWinners);
+      toggleThState(options.sort, options.order);
     } else {
       const [sort, order] = getCurrentTableOptions();
       this.winnersPageSwitchView.updateButtonsState(false, false);
@@ -194,9 +209,9 @@ export class Controller {
         order
       });
       if (!winners || !('winners' in winners)) throw new Error('winnersPageInfo is wrong');
-
       const expandedWinners: Winners = await this.expandWinnerInfo(winners);
       this.winnersView.updatePage(expandedWinners);
+      if (options) toggleThState(options.sort, options.order);
       await this.additionController.updateWinnersSwitchButtons(this.winnersPageSwitchView);
     }
   }

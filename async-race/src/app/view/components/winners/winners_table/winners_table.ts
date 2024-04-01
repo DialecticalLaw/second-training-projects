@@ -12,10 +12,16 @@ const carTh = createElem<HTMLTableCellElement>('th');
 carTh.textContent = 'Car';
 const nameTh = createElem<HTMLTableCellElement>('th');
 nameTh.textContent = 'Name';
-const winsTh = createElem<HTMLTableCellElement>('th');
+
+export const winsTh = createElem<HTMLTableCellElement>('th', { class: 'winners__th_wins' });
 winsTh.textContent = 'Wins';
-const timeTh = createElem<HTMLTableCellElement>('th');
+const winsSortIcon = createElem<HTMLDivElement>('div', { class: 'winners__table_sort-icon' });
+winsTh.append(winsSortIcon);
+
+export const timeTh = createElem<HTMLTableCellElement>('th', { class: 'winners__th_time' });
 timeTh.textContent = 'Best time (seconds)';
+const timeSortIcon = createElem<HTMLDivElement>('div', { class: 'winners__table_sort-icon' });
+timeTh.append(timeSortIcon);
 
 headTr.append(numberTh, carTh, nameTh, winsTh, timeTh);
 tableHead.append(headTr);
