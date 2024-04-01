@@ -57,8 +57,6 @@ export class GarageApiService {
   public async deleteCar(id: string): Promise<void> {
     await fetch(`${this.url}/${id}`, {
       method: 'DELETE'
-    }).then((response: Response) => {
-      if (!response.ok) throw new Error(`wrong response: ${response.status}`);
     });
   }
 }

@@ -12,7 +12,7 @@ import { toggleLoadingProcess } from '../view/app_view';
 import { generateBtn } from '../view/components/garage/garage_options/garage_options';
 import { updateButtonState } from '../view/garage_view/garage_view';
 
-export class EventCRUDExecutor {
+export class GarageCRUDController {
   private model: Model;
 
   constructor(model: Model) {

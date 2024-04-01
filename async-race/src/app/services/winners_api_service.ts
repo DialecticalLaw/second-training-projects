@@ -50,13 +50,12 @@ export class WinnersApiService {
   public async updateWinner(
     options: Pick<CRUDWinnersOptions, 'id' | 'wins' | 'time'>
   ): Promise<void> {
-    const response: Response = await fetch(`${this.url}/${options.id}`, {
+    await fetch(`${this.url}/${options.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(options)
     });
-    if (response.status === 404) throw new Error(`id not found: ${options.id}`);
   }
 }

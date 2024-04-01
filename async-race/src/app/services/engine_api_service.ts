@@ -4,7 +4,7 @@ import {
   UpdateBtnValidityClass,
   UpdateCarResponse
 } from '../../interfaces';
-import { isCarsResets } from '../controller/event_action_executor';
+import { isCarsResets } from '../controller/addition_actions_controller';
 import { raceBtn } from '../view/components/garage/garage_options/garage_options';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
 import { GarageOptionsView } from '../view/garage_view/garage_options_view';

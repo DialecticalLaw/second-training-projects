@@ -18,8 +18,9 @@ import { GaragePageSwitchView } from '../view/garage_view/garage_switch_page_vie
 import { drawGarage } from '../view/garage_view/garage_view';
 import { handleActionRequest } from '../view/handleRequestEvent';
 import { WinnersView, drawWinners } from '../view/winners_view/winners_view';
-import { EventCRUDExecutor } from './event_CRUD_executor';
-import { EventActionExecutor, switchView } from './event_action_executor';
+import { GarageCRUDController } from './garage_CRUD_controller';
+import { AdditionController, switchView } from './addition_actions_controller';
+import { CarsController } from './cars_controller';
 
 function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Create);
@@ -35,9 +36,11 @@ function dispatchInitEvents(): void {
 export class Controller {
   protected model: Model;
 
-  private eventActionExecutor: EventActionExecutor;
+  private additionController: AdditionController;
 
-  private eventCRUDExecutor: EventCRUDExecutor;
+  private garageCRUDController: GarageCRUDController;
+
+  private carsController: CarsController;
 
   private garageInfoView: GarageInfoView;
 
@@ -49,8 +52,9 @@ export class Controller {
     this.model = new Model();
     this.garageInfoView = new GarageInfoView();
     this.garagePageSwitchView = new GaragePageSwitchView();
-    this.eventActionExecutor = new EventActionExecutor(this.model);
-    this.eventCRUDExecutor = new EventCRUDExecutor(this.model);
+    this.additionController = new AdditionController(this.model);
+    this.garageCRUDController = new GarageCRUDController(this.model);
+    this.carsController = new CarsController(this.model);
     this.winnersView = new WinnersView();
   }
 
@@ -61,8 +65,9 @@ export class Controller {
     if (!garagePageInfo || !('cars' in garagePageInfo))
       throw new Error('garagePageInfo is undefined at init or wrong type');
 
-    this.handleActionRequests();
-    this.handleCRUDRequests();
+    this.handleAdditionRequests();
+    this.handleCarsRequests();
+    this.handleGarageCRUDRequests();
     drawMainMarkup();
     drawGarage();
     drawWinners();
@@ -72,67 +77,67 @@ export class Controller {
     dispatchInitEvents();
   }
 
-  private handleActionRequests(): void {
-    document.addEventListener(HandleAction.Select, () => {
-      EventActionExecutor.handleSelectRequest();
-    });
+  private handleAdditionRequests(): void {
+    document.addEventListener(HandleAction.Select, AdditionController.handleSelectRequest);
     document.addEventListener(
       HandleAction.PaginationGarage,
-      this.eventActionExecutor.handlePaginationGarageRequest.bind(
-        this.eventActionExecutor,
+      this.additionController.handlePaginationGarageRequest.bind(
+        this.additionController,
         this.updateCurrentPage.bind(this)
       )
     );
-    document.addEventListener(HandleAction.Gas, () => {
-      this.eventActionExecutor.handleGasRequest.bind(this.eventActionExecutor)();
-    });
-    document.addEventListener(HandleAction.Brake, () => {
-      this.eventActionExecutor.handleBrakeRequest.bind(this.eventActionExecutor)();
-    });
+    document.addEventListener(HandleAction.SwitchPage, switchView);
+  }
+
+  private handleCarsRequests(): void {
+    document.addEventListener(
+      HandleAction.Gas,
+      this.carsController.handleGasRequest.bind(this.carsController)
+    );
+    document.addEventListener(
+      HandleAction.Brake,
+      this.carsController.handleBrakeRequest.bind(this.carsController)
+    );
     document.addEventListener(
       HandleAction.Race,
-      this.eventActionExecutor.handleRaceRequest.bind(
-        this.eventActionExecutor,
+      this.carsController.handleRaceRequest.bind(
+        this.carsController,
         this.garageInfoView,
         this.updateCurrentPage.bind(this)
       )
     );
     document.addEventListener(
       HandleAction.Reset,
-      this.eventActionExecutor.handleResetRequest.bind(
-        this.eventActionExecutor,
-        this.garageInfoView
-      )
+      this.carsController.handleResetRequest.bind(this.carsController, this.garageInfoView)
     );
-    document.addEventListener(HandleAction.SwitchPage, switchView);
   }
 
-  private handleCRUDRequests(): void {
+  private handleGarageCRUDRequests(): void {
     document.addEventListener(
       HandleAction.Create,
-      this.eventCRUDExecutor.handleCreateRequest.bind(
-        this.eventCRUDExecutor,
+      this.garageCRUDController.handleCreateRequest.bind(
+        this.garageCRUDController,
         this.updateCurrentPage.bind(this)
       )
     );
     document.addEventListener(
       HandleAction.Update,
-      this.eventCRUDExecutor.handleUpdateRequest.bind(
-        this.eventCRUDExecutor,
+      this.garageCRUDController.handleUpdateRequest.bind(
+        this.garageCRUDController,
         this.updateCurrentPage.bind(this)
       )
     );
     document.addEventListener(
       HandleAction.Delete,
-      this.eventCRUDExecutor.handleDeleteRequest.bind(
-        this.eventCRUDExecutor,
+      this.garageCRUDController.handleDeleteRequest.bind(
+        this.garageCRUDController,
         this.updateCurrentPage.bind(this)
       )
     );
     document.addEventListener(
       HandleAction.Generate,
-      this.eventCRUDExecutor.handleGenerateRequest.bind(
-        this.eventCRUDExecutor,
+      this.garageCRUDController.handleGenerateRequest.bind(
+        this.garageCRUDController,
         this.updateCurrentPage.bind(this)
       )
     );
