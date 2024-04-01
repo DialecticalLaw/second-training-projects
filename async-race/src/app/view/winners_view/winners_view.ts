@@ -44,8 +44,8 @@ export class WinnersView {
 
   public updatePage(pageInfo: Winners): void {
     this.winnersTableBody.innerHTML = '';
-    this.drawWinners(pageInfo.winners);
     this.winnersCount.textContent = pageInfo.total.toString();
     this.winnersPageNumber.textContent = pageInfo.page.toString();
+    this.drawWinners(pageInfo.winners);
   }
 }

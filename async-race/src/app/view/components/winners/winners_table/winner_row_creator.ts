@@ -1,5 +1,23 @@
 import { createElem } from '../../../../utils/create_elem';
 import { carIconCreator } from '../../garage/garage_info/car/car';
+import { winnersPageNumber } from '../winners_main_info/winners_main_info';
+
+function getTdNumber(): number {
+  let pastPagesCount: number = Number(winnersPageNumber.textContent) - 1;
+  if (pastPagesCount < 0) pastPagesCount = 0;
+  const winnersPerPage: number = 10;
+
+  const allTableBodyTr: HTMLTableRowElement[] = Array.from(
+    document.querySelectorAll('.winners__table_body tr')
+  );
+
+  let serialNumber: number;
+  if (allTableBodyTr.length) {
+    serialNumber = allTableBodyTr.length + 1;
+  } else serialNumber = 1;
+
+  return pastPagesCount * winnersPerPage + serialNumber;
+}
 
 export function winnerRowCreator(
   color: string,
@@ -10,12 +28,7 @@ export function winnerRowCreator(
   const winnerRow = createElem<HTMLTableRowElement>('tr');
 
   const numberTd = createElem<HTMLTableCellElement>('td');
-  const allTableBodyTr: HTMLTableRowElement[] = Array.from(
-    document.querySelectorAll('.winners__table_body tr')
-  );
-  if (allTableBodyTr.length) {
-    numberTd.textContent = `${allTableBodyTr.length + 1}`;
-  } else numberTd.textContent = '1';
+  numberTd.textContent = getTdNumber().toString();
 
   const carIconTd = createElem<HTMLTableCellElement>('td');
   const carIcon: HTMLElement = carIconCreator(color, 'winners__car-icon');
