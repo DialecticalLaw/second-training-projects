@@ -44,8 +44,7 @@ export class WinnersApiService {
   }
 
   public async deleteWinner(id: string): Promise<void> {
-    const response: Response = await fetch(`${this.url}/${id}`, { method: 'DELETE' });
-    if (response.status === 404) throw new Error(`id not found: ${id}`);
+    await fetch(`${this.url}/${id}`, { method: 'DELETE' });
   }
 
   public async updateWinner(

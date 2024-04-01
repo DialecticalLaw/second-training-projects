@@ -2,6 +2,7 @@ import {
   CRUD,
   CRUDGarageResult,
   InputsCarData,
+  SortType,
   UpdateCurrentPage,
   ViewType
 } from '../../interfaces';
@@ -9,6 +10,7 @@ import { Model } from '../model/model';
 import { getCreateData, getUpdateData } from '../services/get_form_data_service';
 import { toggleLoadingProcess } from '../view/app_view';
 import { generateBtn } from '../view/components/garage/garage_options/garage_options';
+import { updateButtonState } from '../view/garage_view/garage_view';
 
 export class EventCRUDExecutor {
   private model: Model;
@@ -62,12 +64,19 @@ export class EventCRUDExecutor {
         const eventTarget: EventTarget | null = event.target;
 
         if (eventTarget instanceof HTMLButtonElement) {
+          updateButtonState({ btn: eventTarget, status: false });
           const carCard: HTMLElement | null | undefined = eventTarget.parentElement?.parentElement;
           if (!carCard || !(carCard instanceof HTMLDivElement))
             throw new Error('carCard is undefined or wrong');
 
           const id = carCard.id;
           await this.model.CRUDCarsGarage(CRUD.Delete, { id });
+          await this.model.CRUDCarsWinners(CRUD.Delete, { id });
+          await updateCurrentPage(ViewType.Winners, {
+            limit: 10,
+            sort: SortType.Wins,
+            order: 'DESC'
+          });
           await updateCurrentPage(ViewType.Garage);
         }
       });
