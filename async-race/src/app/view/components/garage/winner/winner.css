@@ -18,6 +18,7 @@
 }
 
 .winner__description {
+  text-align: center;
   font-family: Race-font;
   font-size: 1.8rem;
   letter-spacing: 2.5px;

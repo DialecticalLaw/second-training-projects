@@ -1,6 +1,7 @@
 .winners__table {
   color: #ffffff;
   font-family: Race-font;
+  font-size: 1rem;
   border: 1px solid #ffffff;
   letter-spacing: 2px;
   border-spacing: 40px 20px;
@@ -56,4 +57,18 @@ td {
   top: 0;
   left: 0;
   width: 100%;
+}
+
+@media screen and (max-width: 670px) {
+  .winners__table {
+    font-size: 0.9rem;
+    border-spacing: 20px 10px;
+  }
+}
+
+@media screen and (max-width: 570px) {
+  .winners__table {
+    font-size: 0.8rem;
+    border-spacing: 10px 10px;
+  }
 }
