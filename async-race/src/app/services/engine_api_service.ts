@@ -47,14 +47,12 @@ export async function regulateEngine(
 
       await regulateEngine(id, 'stopped');
       document.dispatchEvent(stoppedCarEvent);
-      if (!isEngineBroken) {
-        if (isCarsResets()) {
-          updateButtonState({ btn: raceBtn, status: true });
-          toggleBtnDriveValidity(true);
-        }
-        updateButtonState({ btn: abortData.btn, status: true });
-        GarageInfoView.moveCar(id, 'reset');
+      if (isCarsResets()) {
+        updateButtonState({ btn: raceBtn, status: true });
+        toggleBtnDriveValidity(true);
       }
+      updateButtonState({ btn: abortData.btn, status: true });
+      GarageInfoView.moveCar(id, 'reset');
       return undefined;
     }
     throw err;

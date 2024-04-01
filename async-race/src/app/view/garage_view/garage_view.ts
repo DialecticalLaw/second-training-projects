@@ -3,6 +3,7 @@ import { garage } from '../components/garage/garage';
 import {
   createBtn,
   generateBtn,
+  raceBtn,
   updateBtn
 } from '../components/garage/garage_options/garage_options';
 import { nextBtn, prevBtn } from '../components/garage/garage_switch_block/garage_switch_block';
@@ -26,6 +27,7 @@ export function switchGarageMode(mode: PageMode): void {
   );
 
   if (mode === PageMode.Race) {
+    raceBtn.classList.add('on-race');
     selectWinnersBtn.classList.add('on-race');
     createBtn.classList.add('on-race');
     updateBtn.classList.add('on-race');
@@ -38,6 +40,7 @@ export function switchGarageMode(mode: PageMode): void {
     prevBtn.classList.add('on-race');
     nextBtn.classList.add('on-race');
   } else {
+    raceBtn.classList.remove('on-race');
     selectWinnersBtn.classList.remove('on-race');
     createBtn.classList.remove('on-race');
     updateBtn.classList.remove('on-race');

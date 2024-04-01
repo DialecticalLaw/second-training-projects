@@ -137,7 +137,6 @@ export class CarsController {
       this.arrivedCars = [];
       this.readyCars = [];
       switchGarageMode(PageMode.Race);
-      updateButtonState({ btn: raceBtn, status: false });
       const allActiveGasButtons: HTMLButtonElement[] = Array.from(
         document.querySelectorAll('.garage__car_gas:not(.disabled)')
       );
@@ -216,18 +215,15 @@ export class CarsController {
       await this.waitForStoppedCars(carsCount);
 
       switchGarageMode(PageMode.Default);
-      updateButtonState({ btn: raceBtn, status: true });
+
       garageInfoView.hideWinner();
-      setTimeout(() => {
-        garageInfoView.hideWinner(); // as a precaution :)
-      }, 500);
       this.stoppedCarsCount = 0;
     });
   }
 
   private async waitForStoppedCars(count: number): Promise<void> {
     await new Promise((resolve) => {
-      setTimeout(resolve, 1000);
+      setTimeout(resolve, 2000);
     });
 
     if (this.stoppedCarsCount < count) {
