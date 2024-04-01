@@ -46,6 +46,10 @@ body {
   padding: 15px;
 }
 
+.main {
+  min-height: 900px;
+}
+
 button {
   position: relative;
   overflow: hidden;
