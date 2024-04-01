@@ -20,6 +20,7 @@ import { GarageCRUDController } from './garage_CRUD_controller';
 import { AdditionController, switchView } from './addition_actions_controller';
 import { CarsController } from './cars_controller';
 import { updateBtn } from '../view/components/garage/garage_options/garage_options';
+import { WinnersPageSwitchView } from '../view/winners_view/winners_switch_page_view';
 
 function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Create);
@@ -30,6 +31,10 @@ function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Race);
   handleActionRequest(HandleAction.Reset);
   handleActionRequest(HandleAction.SwitchPage);
+}
+
+function getCurrentTableOptions(): [SortType, 'ASC' | 'DESC'] {
+  return [SortType.Wins, 'DESC'];
 }
 
 export class Controller {
@@ -45,12 +50,15 @@ export class Controller {
 
   private garagePageSwitchView: GaragePageSwitchView;
 
+  private winnersPageSwitchView: WinnersPageSwitchView;
+
   private winnersView: WinnersView;
 
   constructor() {
     this.model = new Model();
     this.garageInfoView = new GarageInfoView();
     this.garagePageSwitchView = new GaragePageSwitchView();
+    this.winnersPageSwitchView = new WinnersPageSwitchView();
     this.additionController = new AdditionController(this.model);
     this.garageCRUDController = new GarageCRUDController(this.model);
     this.carsController = new CarsController(this.model);
@@ -72,7 +80,8 @@ export class Controller {
     drawWinners();
     this.updateCurrentPage(ViewType.Garage);
     this.updateCurrentPage(ViewType.Winners, { limit: 10, sort: SortType.Wins, order: 'DESC' });
-    await this.updateSwitchButtonsState();
+    await this.additionController.updateGarageSwitchButtons(this.garagePageSwitchView);
+    await this.additionController.updateWinnersSwitchButtons(this.winnersPageSwitchView);
     dispatchInitEvents();
   }
 
@@ -85,6 +94,15 @@ export class Controller {
         this.updateCurrentPage.bind(this)
       )
     );
+
+    document.addEventListener(
+      HandleAction.PaginationWinners,
+      this.additionController.handlePaginationWinnersRequest.bind(
+        this.additionController,
+        this.updateCurrentPage.bind(this)
+      )
+    );
+
     document.addEventListener(HandleAction.SwitchPage, switchView);
   }
 
@@ -144,6 +162,7 @@ export class Controller {
 
   private async updateCurrentPage(viewType: ViewType, options?: WinnersPageOptions): Promise<void> {
     if (viewType === ViewType.Garage) {
+      this.garagePageSwitchView.updateButtonsState(false, false);
       const garagePageInfo: CRUDGarageResult = await this.model.CRUDCarsGarage(CRUD.ReadPage, {
         page: this.model.currentGaragePage
       });
@@ -152,8 +171,8 @@ export class Controller {
 
       this.garageInfoView.updatePage(garagePageInfo);
       updateButtonState({ btn: updateBtn, status: false });
-      await this.updateSwitchButtonsState();
-    } else {
+      await this.additionController.updateGarageSwitchButtons(this.garagePageSwitchView);
+    } else if (viewType === ViewType.Winners) {
       if (!options) throw new Error('options is undefined');
       const winners: CRUDWinnersResult = await this.model.CRUDCarsWinners(CRUD.ReadPage, {
         page: this.model.currentWinnersPage,
@@ -165,6 +184,20 @@ export class Controller {
 
       const expandedWinners: Winners = await this.expandWinnerInfo(winners);
       this.winnersView.updatePage(expandedWinners);
+    } else {
+      const [sort, order] = getCurrentTableOptions();
+      this.winnersPageSwitchView.updateButtonsState(false, false);
+      const winners: CRUDWinnersResult = await this.model.CRUDCarsWinners(CRUD.ReadPage, {
+        page: this.model.currentWinnersPage,
+        limit: 10,
+        sort,
+        order
+      });
+      if (!winners || !('winners' in winners)) throw new Error('winnersPageInfo is wrong');
+
+      const expandedWinners: Winners = await this.expandWinnerInfo(winners);
+      this.winnersView.updatePage(expandedWinners);
+      await this.additionController.updateWinnersSwitchButtons(this.winnersPageSwitchView);
     }
   }
 
@@ -194,37 +227,5 @@ export class Controller {
       winnerLink.name = car.name;
     });
     return winnersCopy;
-  }
-
-  private async updateSwitchButtonsState(): Promise<void> {
-    const currentGaragePage = this.model.currentGaragePage;
-    let prevBtnState: boolean;
-    let nextBtnState: boolean;
-
-    if (currentGaragePage === 1) {
-      prevBtnState = false;
-    } else {
-      const garagePageInfo: CRUDGarageResult = await this.model.CRUDCarsGarage(CRUD.ReadPage, {
-        page: this.model.currentGaragePage - 1
-      });
-      if (!garagePageInfo || !('cars' in garagePageInfo))
-        throw new Error('garagePageInfo is undefined at init or wrong type');
-
-      if (garagePageInfo.cars.length) {
-        prevBtnState = true;
-      } else prevBtnState = false;
-    }
-
-    const garagePageInfo: CRUDGarageResult = await this.model.CRUDCarsGarage(CRUD.ReadPage, {
-      page: this.model.currentGaragePage + 1
-    });
-    if (!garagePageInfo || !('cars' in garagePageInfo))
-      throw new Error('garagePageInfo is undefined at init or wrong type');
-
-    if (garagePageInfo.cars.length) {
-      nextBtnState = true;
-    } else nextBtnState = false;
-
-    this.garagePageSwitchView.updateButtonsState(prevBtnState, nextBtnState);
   }
 }

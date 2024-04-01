@@ -53,7 +53,8 @@ export interface CarBrands {
 
 export enum ViewType {
   Garage,
-  Winners
+  Winners,
+  WinnersCurrent
 }
 
 export enum SortType {

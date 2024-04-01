@@ -1,4 +1,11 @@
-import { UpdateCurrentPage, ViewType } from '../../interfaces';
+import {
+  CRUD,
+  CRUDGarageResult,
+  CRUDWinnersResult,
+  SortType,
+  UpdateCurrentPage,
+  ViewType
+} from '../../interfaces';
 import { Model } from '../model/model';
 import { switchPageView } from '../view/app_view';
 import { updateBtn } from '../view/components/garage/garage_options/garage_options';
@@ -7,8 +14,14 @@ import {
   prevBtn
 } from '../view/components/garage/garage_switch_block/garage_switch_block';
 import { selectGarageBtn, selectWinnersBtn } from '../view/components/header/header';
+import {
+  nextWinnersBtn,
+  prevWinnersBtn
+} from '../view/components/winners/winners_switch_page/winners_switch_block';
 import { GarageInfoView } from '../view/garage_view/garage_info_view';
+import { GaragePageSwitchView } from '../view/garage_view/garage_switch_page_view';
 import { updateButtonState } from '../view/garage_view/garage_view';
+import { WinnersPageSwitchView } from '../view/winners_view/winners_switch_page_view';
 
 export function isCarsResets(): boolean {
   const allBrakeButtons = Array.from(
@@ -58,6 +71,94 @@ export class AdditionController {
       this.model.currentGaragePage += 1;
       await updateCurrentPage(ViewType.Garage);
     });
+  }
+
+  public handlePaginationWinnersRequest(updateCurrentPage: UpdateCurrentPage): void {
+    prevWinnersBtn.addEventListener('click', async (event: MouseEvent) => {
+      event.preventDefault();
+      this.model.currentWinnersPage -= 1;
+      await updateCurrentPage(ViewType.WinnersCurrent);
+    });
+
+    nextWinnersBtn.addEventListener('click', async (event: MouseEvent) => {
+      event.preventDefault();
+      this.model.currentWinnersPage += 1;
+      await updateCurrentPage(ViewType.WinnersCurrent);
+    });
+  }
+
+  public async updateGarageSwitchButtons(
+    garagePageSwitchView: GaragePageSwitchView
+  ): Promise<void> {
+    const currentGaragePage = this.model.currentGaragePage;
+    let prevBtnState: boolean;
+    let nextBtnState: boolean;
+
+    if (currentGaragePage === 1) {
+      prevBtnState = false;
+    } else {
+      const garagePageInfo: CRUDGarageResult = await this.model.CRUDCarsGarage(CRUD.ReadPage, {
+        page: currentGaragePage - 1
+      });
+      if (!garagePageInfo || !('cars' in garagePageInfo))
+        throw new Error('garagePageInfo is undefined at init or wrong type');
+
+      if (garagePageInfo.cars.length) {
+        prevBtnState = true;
+      } else prevBtnState = false;
+    }
+
+    const garagePageInfo: CRUDGarageResult = await this.model.CRUDCarsGarage(CRUD.ReadPage, {
+      page: currentGaragePage + 1
+    });
+    if (!garagePageInfo || !('cars' in garagePageInfo))
+      throw new Error('garagePageInfo is undefined at init or wrong type');
+
+    if (garagePageInfo.cars.length) {
+      nextBtnState = true;
+    } else nextBtnState = false;
+
+    garagePageSwitchView.updateButtonsState(prevBtnState, nextBtnState);
+  }
+
+  public async updateWinnersSwitchButtons(
+    winnersPageSwitchView: WinnersPageSwitchView
+  ): Promise<void> {
+    const currentWinnersPage = this.model.currentWinnersPage;
+    let prevBtnState: boolean;
+    let nextBtnState: boolean;
+
+    if (currentWinnersPage === 1) {
+      prevBtnState = false;
+    } else {
+      const winnersPageInfo: CRUDWinnersResult = await this.model.CRUDCarsWinners(CRUD.ReadPage, {
+        page: currentWinnersPage - 1,
+        limit: 10,
+        sort: SortType.Wins, // it can be anything
+        order: 'DESC' // it can be anything
+      });
+      if (!winnersPageInfo || !('winners' in winnersPageInfo))
+        throw new Error('winnersPageInfo is undefined at init or wrong type');
+
+      if (winnersPageInfo.winners.length) {
+        prevBtnState = true;
+      } else prevBtnState = false;
+    }
+
+    const winnersPageInfo: CRUDWinnersResult = await this.model.CRUDCarsWinners(CRUD.ReadPage, {
+      page: currentWinnersPage + 1,
+      limit: 10,
+      sort: SortType.Wins, // it can be anything
+      order: 'DESC' // it can be anything
+    });
+    if (!winnersPageInfo || !('winners' in winnersPageInfo))
+      throw new Error('winnersPageInfo is undefined at init or wrong type');
+
+    if (winnersPageInfo.winners.length) {
+      nextBtnState = true;
+    } else nextBtnState = false;
+
+    winnersPageSwitchView.updateButtonsState(prevBtnState, nextBtnState);
   }
 }
 

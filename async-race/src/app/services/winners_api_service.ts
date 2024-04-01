@@ -13,7 +13,6 @@ export class WinnersApiService {
       { method: 'GET' }
     );
     const parsedResponse: WinnerInfo[] = await response.json();
-
     if (!options.page) throw new Error('page is undefined');
     const result: Winners = {
       winners: parsedResponse,
