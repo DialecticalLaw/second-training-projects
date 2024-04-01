@@ -127,3 +127,5 @@ export interface CRUDWinnersOptions extends WinnerInfo {
   sort?: SortType;
   order?: 'ASC' | 'DESC';
 }
+
+export type CurrentSortOptions = [SortType, 'ASC' | 'DESC'];

@@ -7,7 +7,8 @@ import {
   CRUDWinnersResult,
   WinnerInfo,
   SortType,
-  Winners
+  Winners,
+  CurrentSortOptions
 } from '../../interfaces';
 import { Model } from '../model/model';
 import { drawMainMarkup } from '../view/app_view';
@@ -23,6 +24,7 @@ import { updateBtn } from '../view/components/garage/garage_options/garage_optio
 import { WinnersPageSwitchView } from '../view/winners_view/winners_switch_page_view';
 import { WinnersSortController } from './winners_sort_controller';
 import { toggleThState } from '../view/winners_view/winners_th_view';
+import { timeTh, winsTh } from '../view/components/winners/winners_table/winners_table';
 
 function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Create);
@@ -36,8 +38,28 @@ function dispatchInitEvents(): void {
   handleActionRequest(HandleAction.Sort);
 }
 
-function getCurrentTableOptions(): [SortType, 'ASC' | 'DESC'] {
-  return [SortType.Wins, 'DESC'];
+function getCurrentTableOptions(): CurrentSortOptions {
+  let sortType: SortType;
+  let order: 'ASC' | 'DESC';
+
+  if (winsTh.classList.contains('selected-sort') || winsTh.classList.contains('reverse-sort')) {
+    sortType = SortType.Wins;
+
+    if (winsTh.classList.contains('selected-sort')) {
+      order = 'DESC';
+    } else order = 'ASC';
+  } else if (
+    timeTh.classList.contains('selected-sort') ||
+    timeTh.classList.contains('reverse-sort')
+  ) {
+    sortType = SortType.Time;
+
+    if (timeTh.classList.contains('selected-sort')) {
+      order = 'DESC';
+    } else order = 'ASC';
+  } else throw new Error('wrong sort conditions');
+
+  return [sortType, order];
 }
 
 export class Controller {
@@ -183,7 +205,6 @@ export class Controller {
       });
       if (!garagePageInfo || !('cars' in garagePageInfo))
         throw new Error('garagePageInfo is undefined or wrong type');
-
       this.garageInfoView.updatePage(garagePageInfo);
       updateButtonState({ btn: updateBtn, status: false });
       await this.additionController.updateGarageSwitchButtons(this.garagePageSwitchView);
@@ -199,8 +220,9 @@ export class Controller {
       const expandedWinners: Winners = await this.expandWinnerInfo(winners);
       this.winnersView.updatePage(expandedWinners);
       toggleThState(options.sort, options.order);
+      await this.additionController.updateWinnersSwitchButtons(this.winnersPageSwitchView);
     } else {
-      const [sort, order] = getCurrentTableOptions();
+      const [sort, order]: CurrentSortOptions = getCurrentTableOptions();
       this.winnersPageSwitchView.updateButtonsState(false, false);
       const winners: CRUDWinnersResult = await this.model.CRUDCarsWinners(CRUD.ReadPage, {
         page: this.model.currentWinnersPage,
