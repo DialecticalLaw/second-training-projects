@@ -33,8 +33,7 @@ const baseConfig = {
       filename: 'index.html'
     }),
     new CleanWebpackPlugin(),
-    new EslintPlugin({ extensions: 'ts' }),
-    new CopyWebpackPlugin()
+    new EslintPlugin({ extensions: 'ts' })
   ]
 };
 
