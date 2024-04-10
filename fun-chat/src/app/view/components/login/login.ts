@@ -15,7 +15,12 @@ export const hintCase: HTMLLIElement = createElem('li', {
 });
 hintCase.textContent = 'The name must begin with an uppercase letter';
 
-validateHints.append(hintRequired, hintCase);
+export const hintChars: HTMLLIElement = createElem('li', {
+  class: 'login__validate-hint chars-hint'
+});
+hintChars.textContent = 'The name consists only of letters';
+
+validateHints.append(hintRequired, hintCase, hintChars);
 
 const nameLabel: HTMLLabelElement = createElem('label', { class: 'login__label_name' });
 nameLabel.textContent = 'Name';
@@ -35,7 +40,9 @@ export const passwordInput: HTMLInputElement = createElem('input', {
 });
 passwordLabel.append(passwordInput);
 
-const loginBtn: HTMLButtonElement = createElem('button', { class: 'login__btn_login' });
+export const loginBtn: HTMLButtonElement = createElem('button', {
+  class: 'login__btn_login'
+});
 loginBtn.textContent = 'Login';
 
 loginWrapper.append(validateHints, nameLabel, passwordLabel, loginBtn);

@@ -7,3 +7,8 @@ export enum Page {
   Main,
   Info
 }
+
+export enum HandleAction {
+  Info = 'info',
+  Login = 'login'
+}

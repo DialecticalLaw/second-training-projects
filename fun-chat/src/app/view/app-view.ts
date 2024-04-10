@@ -6,3 +6,9 @@ export function drawMainMarkup() {
 
   body.append(container);
 }
+
+export function updateElemValidity<T extends HTMLElement>(elem: T, isNeedValid: boolean): void {
+  if (isNeedValid) {
+    elem.classList.add('valid');
+  } else elem.classList.remove('valid');
+}
