@@ -17,3 +17,16 @@ body {
   padding: 0;
   max-width: 100%;
 }
+
+button,
+label,
+input,
+li,
+p,
+span {
+  font-family: Comfortaa;
+}
+
+button {
+  cursor: pointer;
+}

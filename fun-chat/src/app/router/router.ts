@@ -1,17 +1,19 @@
 import { Page } from '../../interfaces';
+import { drawLogin } from '../view/login-view/login-view';
 
 export class Router {
   public static moveToPage(page: Page) {
-    let pageName: string;
+    let pageName: string = '';
     switch (page) {
       case Page.Login:
-        pageName = '/login';
+        // pageName = '/login';
+        drawLogin();
         break;
       case Page.Main:
-        pageName = '/main';
+        // pageName = '/main';
         break;
       case Page.Info:
-        pageName = '/info';
+        // pageName = '/info';
         break;
       default:
         pageName = '404';
@@ -23,6 +25,7 @@ export class Router {
 window.addEventListener('popstate', (event: PopStateEvent) => {
   switch (event.state) {
     case Page.Login:
+      drawLogin();
       break;
     case Page.Main:
       break;
