@@ -21,7 +21,7 @@ export function hideCurrentView() {
 
       if (!elem.classList.contains('info-btn')) {
         elemLink.hidden = true;
-        const animationDuration: number = 500;
+        const animationDuration: number = 300;
         setTimeout(() => {
           elem.remove();
         }, animationDuration);

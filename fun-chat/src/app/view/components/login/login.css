@@ -13,11 +13,11 @@
 }
 
 .login:not([hidden]) {
-  animation: appear 0.5s 0.5s forwards;
+  animation: appear 0.3s 0.3s forwards;
 }
 
 .login[hidden] {
-  animation: hide 0.5s forwards;
+  animation: hide 0.3s forwards;
 }
 
 .login__validate-hint {

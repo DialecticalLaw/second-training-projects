@@ -1,0 +1,68 @@
+.main {
+  opacity: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  max-width: 1440px;
+  height: 65dvh;
+  padding: 15px;
+  background-color: rgba(134, 99, 77, 0.883);
+  box-shadow:
+    0 0 10px 6px rgb(212, 195, 184),
+    inset 0 0 8px 4px rgb(212, 195, 184);
+  border-radius: 15px;
+}
+
+.main:not([hidden]) {
+  animation: appear 0.3s 0.3s forwards;
+}
+
+.main[hidden] {
+  animation: hide 0.3s forwards;
+}
+
+.main__user-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 25%;
+  height: 100%;
+  padding: 10px;
+  outline: 1px solid #000000;
+  border-radius: 15px;
+}
+
+.main__dialogue {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 75%;
+  height: 100%;
+  padding: 10px;
+  outline: 1px solid #000000;
+  border-radius: 15px;
+}
+
+.main__interlocutor_info {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.main__dialogue_content {
+  width: 100%;
+}
+
+.main__dialogue_tools {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  width: 100%;
+}
+
+.main__dialogue_input {
+  width: 100%;
+}
