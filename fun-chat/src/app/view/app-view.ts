@@ -1,3 +1,4 @@
+import { SWITCH_VIEW_ANIMATION_DURATION } from '../..';
 import { container } from './components/container/container';
 
 export function drawMainMarkup() {
@@ -21,10 +22,9 @@ export function hideCurrentView() {
 
       if (!elem.classList.contains('info-btn')) {
         elemLink.hidden = true;
-        const animationDuration: number = 300;
         setTimeout(() => {
           elem.remove();
-        }, animationDuration);
+        }, SWITCH_VIEW_ANIMATION_DURATION);
       }
     }
   });

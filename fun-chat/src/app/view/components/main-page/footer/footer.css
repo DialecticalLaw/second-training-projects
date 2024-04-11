@@ -1,0 +1,49 @@
+.footer {
+  position: absolute;
+  opacity: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1440px;
+  padding: 15px;
+  background-color: rgba(134, 99, 77, 0.883);
+  box-shadow:
+    0 0 10px 6px rgb(212, 195, 184),
+    inset 0 0 8px 4px rgb(212, 195, 184);
+  border-radius: 15px;
+}
+
+.footer:not([hidden]) {
+  animation: appear 0.5s 0.5s forwards;
+}
+
+.footer[hidden] {
+  animation: hide 0.5s ease-in forwards;
+}
+
+.footer__github_icon {
+  width: 30px;
+  height: 30px;
+}
+
+.footer__github_link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+}
+
+.footer__github_link,
+.footer__year {
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.footer__rss_logo {
+  width: 96px;
+  height: 36px;
+  background-image: url('../../../../../assets/img/rs-logo-js-inverse.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
