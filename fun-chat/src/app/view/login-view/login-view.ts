@@ -3,4 +3,5 @@ import { loginWrapper } from '../components/login/login';
 
 export function drawLogin() {
   container.append(loginWrapper);
+  loginWrapper.hidden = false;
 }

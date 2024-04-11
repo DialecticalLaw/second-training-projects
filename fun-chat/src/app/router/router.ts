@@ -1,4 +1,5 @@
 import { Page } from '../../interfaces';
+import { hideCurrentView } from '../view/app-view';
 import { drawLogin } from '../view/login-view/login-view';
 
 export class Router {
@@ -7,9 +8,11 @@ export class Router {
     switch (page) {
       case Page.Login:
         // pageName = '/login';
+        hideCurrentView();
         drawLogin();
         break;
       case Page.Main:
+        hideCurrentView();
         // pageName = '/main';
         break;
       case Page.Info:

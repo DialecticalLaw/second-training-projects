@@ -27,6 +27,8 @@ export class LoginController {
   private login(event: MouseEvent): void {
     event.preventDefault();
     if (!this.isFormValid) return;
+    nameInput.value = '';
+    passwordInput.value = '';
     Router.moveToPage(Page.Main);
   }
 

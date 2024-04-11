@@ -1,7 +1,9 @@
 import './login.css';
 import { createElem } from '../../../utils/create-elem';
 
-export const loginWrapper: HTMLFormElement = createElem('form', { class: 'login' });
+export const loginWrapper: HTMLFormElement = createElem('form', {
+  class: 'login'
+});
 
 const validateHints: HTMLUListElement = createElem('ul', { class: 'login__validate-hints' });
 

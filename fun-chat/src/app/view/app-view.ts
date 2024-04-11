@@ -12,3 +12,20 @@ export function updateElemValidity<T extends HTMLElement>(elem: T, isNeedValid: 
     elem.classList.add('valid');
   } else elem.classList.remove('valid');
 }
+
+export function hideCurrentView() {
+  const containerChildren: Element[] = Array.from(container.children);
+  containerChildren.forEach((elem: Element) => {
+    if (elem instanceof HTMLElement) {
+      const elemLink: HTMLElement = elem;
+
+      if (elem.classList.contains('login')) {
+        elemLink.hidden = true;
+        const animationDuration: number = 500;
+        setTimeout(() => {
+          elem.remove();
+        }, animationDuration);
+      }
+    }
+  });
+}
