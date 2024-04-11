@@ -19,7 +19,7 @@ export function hideCurrentView() {
     if (elem instanceof HTMLElement) {
       const elemLink: HTMLElement = elem;
 
-      if (elem.classList.contains('login')) {
+      if (!elem.classList.contains('info-btn')) {
         elemLink.hidden = true;
         const animationDuration: number = 500;
         setTimeout(() => {

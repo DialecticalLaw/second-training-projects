@@ -1,6 +1,7 @@
 import { Page } from '../../interfaces';
 import { hideCurrentView } from '../view/app-view';
 import { drawLogin } from '../view/login-view/login-view';
+import { drawMain } from '../view/main-view/main-view';
 
 export class Router {
   public static moveToPage(page: Page) {
@@ -13,6 +14,7 @@ export class Router {
         break;
       case Page.Main:
         hideCurrentView();
+        drawMain();
         // pageName = '/main';
         break;
       case Page.Info:

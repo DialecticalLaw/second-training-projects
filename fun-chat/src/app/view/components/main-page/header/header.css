@@ -1,0 +1,34 @@
+.header {
+  opacity: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  max-width: 1440px;
+  padding: 15px;
+  background-color: rgba(134, 99, 77, 0.883);
+  box-shadow:
+    0 0 10px 6px rgb(212, 195, 184),
+    inset 0 0 8px 4px rgb(212, 195, 184);
+  border-radius: 15px;
+}
+
+.header:not([hidden]) {
+  animation: appear 0.5s 0.5s forwards;
+}
+
+.header[hidden] {
+  animation: hide 0.5s forwards;
+}
+
+.header__user-name,
+.header__app-name {
+  color: #ffffff;
+  font-size: 1.5rem;
+}
+
+.header__logout {
+  color: #ffffff;
+  font-size: 1.7rem;
+  background-color: transparent;
+}
