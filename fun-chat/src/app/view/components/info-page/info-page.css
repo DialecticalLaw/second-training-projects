@@ -1,0 +1,58 @@
+.info {
+  position: absolute;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 15px;
+  background-color: var(--main-color);
+  box-shadow:
+    0 0 10px 6px var(--addition-color),
+    inset 0 0 8px 4px var(--addition-color);
+  border-radius: 15px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.info:not([hidden]) {
+  animation: appear 0.5s 0.5s forwards;
+}
+
+.info[hidden] {
+  animation: hide 0.5s ease-in forwards;
+}
+
+.info__title {
+  font-weight: bold;
+  font-size: 2rem;
+  color: lime;
+}
+
+.info__content {
+  font-size: 1.5rem;
+}
+
+.info__author {
+  color: lime;
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+
+.info__back-btn {
+  font-size: 1.4rem;
+}
+
+.info-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.info-btn:has(+ .info),
+.info-btn:has(+ [hidden]) {
+  opacity: 0.7;
+  pointer-events: none;
+}

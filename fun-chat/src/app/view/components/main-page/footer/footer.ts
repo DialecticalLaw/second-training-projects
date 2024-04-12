@@ -7,7 +7,8 @@ export const footer: HTMLElement = createElem('footer', { class: 'footer' });
 
 const githubLink: HTMLAnchorElement = createElem('a', {
   class: 'footer__github_link',
-  href: 'https://github.com/DialecticalLaw'
+  href: 'https://github.com/DialecticalLaw',
+  target: '_blank'
 });
 githubLink.textContent = 'DialecticalLaw';
 const parser: DOMParser = new DOMParser();
@@ -20,7 +21,8 @@ year.textContent = '2024';
 
 const rssLink: HTMLElement = createElem('a', {
   class: 'footer__rss_link',
-  href: 'https://rs.school/'
+  href: 'https://rs.school/',
+  target: '_blank'
 });
 const rssLogo: HTMLDivElement = createElem('div', { class: 'footer__rss_logo' });
 rssLink.append(rssLogo);
