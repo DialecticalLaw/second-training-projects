@@ -12,3 +12,7 @@ export enum HandleAction {
   Info = 'info',
   Login = 'login'
 }
+
+export enum Events {
+  Disconnection = 'disconnection'
+}

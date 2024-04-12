@@ -1,7 +1,8 @@
-import { HandleAction, Page } from '../../interfaces';
-import { handleActionRequest } from '../handleActionRequest';
+import { Events, HandleAction, Page } from '../../interfaces';
+import { handleActionRequest } from '../services/events-service';
+import { Model } from '../model/model';
 import { Router } from '../router/router';
-import { drawMainMarkup } from '../view/app-view';
+import { drawMainMarkup, toggleWaitingConnectWindow } from '../view/app-view';
 import { LoginController } from './login-controller';
 
 function handleInitActions(): void {
@@ -15,13 +16,24 @@ function handleInitActions(): void {
 export class Controller {
   private loginController: LoginController;
 
+  private model: Model;
+
   constructor() {
-    this.loginController = new LoginController();
+    this.model = new Model();
+    this.loginController = new LoginController(this.model);
+    document.addEventListener(Events.Disconnection, async () => {
+      toggleWaitingConnectWindow(true);
+      await this.model.connect();
+      toggleWaitingConnectWindow(false);
+    });
   }
 
-  public init(): void {
+  public async init(): Promise<void> {
     drawMainMarkup();
     Router.moveToPage(Page.Login);
+    toggleWaitingConnectWindow(true);
+    await this.model.connect();
+    toggleWaitingConnectWindow(false);
     this.handleActions();
     handleInitActions();
   }

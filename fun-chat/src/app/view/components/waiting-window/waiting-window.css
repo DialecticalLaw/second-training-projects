@@ -1,0 +1,27 @@
+.waiting-window {
+  z-index: 1;
+  user-select: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  font-family: Comfortaa;
+  font-size: 1.8rem;
+  font-weight: bold;
+  background-color: #ffffff5c;
+}
+
+.waiting-window__gif {
+  width: 80px;
+  height: 80px;
+  background-image: url('../../../../assets/img/loading.gif');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}

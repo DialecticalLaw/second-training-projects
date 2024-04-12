@@ -1,4 +1,5 @@
 import { Page } from '../../interfaces';
+import { Model } from '../model/model';
 import { Router } from '../router/router';
 import { updateElemValidity } from '../view/app-view';
 import {
@@ -14,8 +15,11 @@ import {
 export class LoginController {
   private isFormValid: boolean;
 
-  constructor() {
+  private model: Model;
+
+  constructor(model: Model) {
     this.isFormValid = false;
+    this.model = model;
   }
 
   public handleLoginActions(): void {
