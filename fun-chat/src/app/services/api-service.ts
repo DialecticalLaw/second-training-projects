@@ -13,15 +13,16 @@ export class WebSocketApiService {
   public async connectWithServer(): Promise<void> {
     this.socket = new WebSocket(this.url);
     this.socket.onclose = () => {
-      dispatch(Events.Disconnection);
+      dispatch(Events.CloseConnect);
     };
     this.socket.onerror = () => {
-      dispatch(Events.Disconnection);
+      dispatch(Events.ErrorConnect);
     };
 
     await new Promise<void>((resolve): void => {
       if (!this.socket) throw new Error('socket is undefined');
       this.socket.onopen = () => {
+        dispatch(Events.Connect);
         resolve();
       };
     });

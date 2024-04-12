@@ -21,9 +21,17 @@ export class Controller {
   constructor() {
     this.model = new Model();
     this.loginController = new LoginController(this.model);
-    document.addEventListener(Events.Disconnection, async () => {
+
+    document.addEventListener(Events.CloseConnect, async () => {
       toggleWaitingConnectWindow(true);
       await this.model.connect();
+    });
+
+    document.addEventListener(Events.ErrorConnect, async () => {
+      toggleWaitingConnectWindow(true);
+    });
+
+    document.addEventListener(Events.Connect, async () => {
       toggleWaitingConnectWindow(false);
     });
   }
@@ -33,7 +41,6 @@ export class Controller {
     Router.moveToPage(Page.Login);
     toggleWaitingConnectWindow(true);
     await this.model.connect();
-    toggleWaitingConnectWindow(false);
     this.handleActions();
     handleInitActions();
   }
