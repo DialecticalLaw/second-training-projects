@@ -7,10 +7,10 @@
   gap: 15px;
   padding: 25px;
   border-radius: 20px;
-  background-color: rgba(134, 99, 77, 0.883);
+  background-color: var(--main-color);
   box-shadow:
-    0 0 15px 10px rgb(212, 195, 184),
-    inset 0 0 12px 10px rgb(212, 195, 184);
+    0 0 15px 10px var(--addition-color),
+    inset 0 0 12px 10px var(--addition-color);
 }
 
 .login:not([hidden]) {

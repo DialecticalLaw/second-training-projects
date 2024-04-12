@@ -4,12 +4,11 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 1440px;
   padding: 15px;
-  background-color: rgba(134, 99, 77, 0.883);
+  background-color: var(--main-color);
   box-shadow:
-    0 0 10px 6px rgb(212, 195, 184),
-    inset 0 0 8px 4px rgb(212, 195, 184);
+    0 0 10px 6px var(--addition-color),
+    inset 0 0 8px 4px var(--addition-color);
   border-radius: 15px;
 }
 
