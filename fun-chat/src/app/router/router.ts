@@ -29,13 +29,16 @@ export class Router {
 }
 
 window.addEventListener('popstate', (event: PopStateEvent) => {
-  switch (event.state) {
+  hideCurrentView();
+  switch (event.state.page) {
     case Page.Login:
       drawLogin();
       break;
     case Page.Main:
+      drawMainPage();
       break;
     case Page.Info:
+      drawInfoPage();
       break;
     default:
       break;

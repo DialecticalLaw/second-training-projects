@@ -33,7 +33,7 @@ interface Users {
   users: ServerUserData[];
 }
 
-interface UserData {
+export interface UserData {
   user: ClientUserData | ServerUserData;
 }
 
@@ -68,7 +68,7 @@ interface Messages {
   messages: ServerMsgSend[];
 }
 
-export interface Request {
+export interface APIRequest {
   id: string | null;
   type: string;
   payload: MessageData | UserData | Users | Messages | null;

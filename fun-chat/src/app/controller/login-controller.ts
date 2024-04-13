@@ -11,6 +11,7 @@ import {
   nameInput,
   passwordInput
 } from '../view/components/login/login';
+import { clearLogin } from '../view/login-view/login-view';
 
 export class LoginController {
   private isFormValid: boolean;
@@ -31,8 +32,8 @@ export class LoginController {
   private login(event: MouseEvent): void {
     event.preventDefault();
     if (!this.isFormValid) return;
-    nameInput.value = '';
-    passwordInput.value = '';
+    this.model.login(nameInput.value, passwordInput.value);
+    clearLogin();
     Router.moveToPage(Page.Main);
   }
 

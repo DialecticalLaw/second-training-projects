@@ -37,13 +37,13 @@ export class Controller {
     });
   }
 
-  public async init(): Promise<void> {
+  public init(): void {
     drawMainMarkup();
     Router.moveToPage(Page.Login);
     toggleWaitingConnectWindow(true);
-    await this.model.connect();
     this.handleActions();
     handleInitActions();
+    this.model.connect();
   }
 
   private handleActions(): void {
