@@ -24,7 +24,7 @@ hintChars.textContent = 'The name consists only of letters';
 
 validateHints.append(hintRequired, hintCase, hintChars);
 
-const nameLabel: HTMLLabelElement = createElem('label', { class: 'login__label_name' });
+export const nameLabel: HTMLLabelElement = createElem('label', { class: 'login__label_name' });
 nameLabel.textContent = 'Name';
 export const nameInput: HTMLInputElement = createElem('input', {
   class: 'login__input_name',

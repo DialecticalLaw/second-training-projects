@@ -1,4 +1,4 @@
-import { Page } from '../../interfaces';
+import { Events, Page } from '../../interfaces';
 import { Model } from '../model/model';
 import { Router } from '../router/router';
 import { updateElemValidity } from '../view/app-view';
@@ -21,6 +21,13 @@ export class LoginController {
   constructor(model: Model) {
     this.isFormValid = false;
     this.model = model;
+
+    document.addEventListener(Events.Logined, (event: Event): void => {
+      if (event instanceof CustomEvent && event.detail?.login === nameInput.value) {
+        clearLogin();
+        Router.moveToPage(Page.Main);
+      }
+    });
   }
 
   public handleLoginActions(): void {
@@ -33,8 +40,6 @@ export class LoginController {
     event.preventDefault();
     if (!this.isFormValid) return;
     this.model.login(nameInput.value, passwordInput.value);
-    clearLogin();
-    Router.moveToPage(Page.Main);
   }
 
   private updateValidityStatus(): void {

@@ -3,7 +3,7 @@ import { WebSocketApiService } from '../services/api-service';
 export class Model {
   private webSocketApiService: WebSocketApiService;
 
-  private id: string;
+  public id: string;
 
   constructor() {
     this.webSocketApiService = new WebSocketApiService();

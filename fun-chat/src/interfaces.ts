@@ -8,16 +8,13 @@ export enum Page {
   Info
 }
 
-export enum HandleAction {
-  Info = 'info',
-  Login = 'login',
-  Back = 'back'
-}
-
 export enum Events {
   CloseConnect = 'closeconnect',
   ErrorConnect = 'errorconnect',
-  Connect = 'connect'
+  Connect = 'connect',
+  IncorrectPassword = 'incorrectpassword',
+  AlreadyAuth = 'alreadyauth',
+  Logined = 'logined'
 }
 
 interface ClientUserData {
@@ -72,5 +69,5 @@ interface Messages {
 export interface APIRequest {
   id: string | null;
   type: string;
-  payload: MessageData | UserData | Users | Messages | null;
+  payload: MessageData | UserData | Users | Messages | null | { error: string };
 }
