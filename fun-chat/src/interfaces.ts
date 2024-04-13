@@ -10,7 +10,8 @@ export enum Page {
 
 export enum HandleAction {
   Info = 'info',
-  Login = 'login'
+  Login = 'login',
+  Back = 'back'
 }
 
 export enum Events {

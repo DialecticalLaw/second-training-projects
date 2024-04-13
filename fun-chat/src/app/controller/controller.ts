@@ -5,6 +5,7 @@ import { Router } from '../router/router';
 import { drawMainMarkup, toggleWaitingConnectWindow } from '../view/app-view';
 import { LoginController } from './login-controller';
 import { infoBtn } from '../view/components/container/container';
+import { backBtn } from '../view/components/info-page/info-page';
 
 function handleInitActions(): void {
   const initHandleActionsKeys: HandleAction[] = [HandleAction.Login, HandleAction.Info];
@@ -51,9 +52,13 @@ export class Controller {
       HandleAction.Login,
       this.loginController.handleLoginActions.bind(this.loginController)
     );
+
     document.addEventListener(HandleAction.Info, () => {
       infoBtn.addEventListener('click', () => {
         Router.moveToPage(Page.Info);
+      });
+      backBtn.addEventListener('click', () => {
+        window.history.back();
       });
     });
   }
