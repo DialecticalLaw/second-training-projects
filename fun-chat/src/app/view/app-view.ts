@@ -33,6 +33,7 @@ export function hideCurrentView(): void {
 
 export function toggleWaitingConnectWindow(isNeedShow: boolean): void {
   if (isNeedShow) {
-    container.prepend(waitingWindow);
+    const isNotAppended: boolean = document.querySelector('.waiting-window') === null;
+    if (isNotAppended) container.prepend(waitingWindow);
   } else waitingWindow.remove();
 }
