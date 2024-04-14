@@ -5,7 +5,11 @@ function dispatchUserRequest(data: APIRequest): void {
   if (!(data.payload && 'user' in data.payload)) throw new Error('user not found in payload');
 
   if ('isLogined' in data.payload.user) {
-    dispatch(Events.Logined, { login: data.payload.user.login });
+    if (data.payload.user.isLogined) {
+      dispatch(Events.Logined, { id: data.id, login: data.payload.user.login });
+    } else {
+      dispatch(Events.Logout, { id: data.id, login: data.payload.user.login });
+    }
   }
 }
 

@@ -11,7 +11,9 @@ import {
   nameInput,
   passwordInput
 } from '../view/components/login/login';
+import { logoutBtn, username } from '../view/components/main-page/header/header';
 import { clearLogin } from '../view/login-view/login-view';
+import { updateMainPageData } from '../view/main-view/main-view';
 
 export class LoginController {
   private isFormValid: boolean;
@@ -23,9 +25,16 @@ export class LoginController {
     this.model = model;
 
     document.addEventListener(Events.Logined, (event: Event): void => {
-      if (event instanceof CustomEvent && event.detail?.login === nameInput.value) {
+      if (event instanceof CustomEvent && event.detail.login === nameInput.value) {
         clearLogin();
+        updateMainPageData(event.detail.login);
         Router.moveToPage(Page.Main);
+      }
+    });
+
+    document.addEventListener(Events.Logout, (event: Event): void => {
+      if (event instanceof CustomEvent && event.detail.login === username.textContent) {
+        Router.moveToPage(Page.Login);
       }
     });
   }
@@ -33,13 +42,16 @@ export class LoginController {
   public handleLoginActions(): void {
     loginWrapper.addEventListener('input', this.updateValidityStatus.bind(this));
 
-    loginBtn.addEventListener('click', this.login.bind(this));
+    loginBtn.addEventListener('click', this.doLogin.bind(this));
+
+    logoutBtn.addEventListener('click', this.doLogout.bind(this));
   }
 
-  private login(event: MouseEvent): void {
+  private doLogin(event: MouseEvent): void {
     event.preventDefault();
     if (!this.isFormValid) return;
-    this.model.login(nameInput.value, passwordInput.value);
+
+    this.model.sendLogin(nameInput.value, passwordInput.value);
   }
 
   private updateValidityStatus(): void {
@@ -70,5 +82,9 @@ export class LoginController {
       this.isFormValid = false;
       updateElemValidity(loginBtn, false);
     }
+  }
+
+  private doLogout(): void {
+    this.model.sendLogout();
   }
 }

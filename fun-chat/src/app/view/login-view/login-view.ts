@@ -4,6 +4,7 @@ import { loginWrapper, nameInput, nameLabel, passwordInput } from '../components
 
 export function drawLogin() {
   container.append(loginWrapper);
+  // console.log(loginWrapper);
   loginWrapper.hidden = false;
 }
 

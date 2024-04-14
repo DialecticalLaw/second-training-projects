@@ -24,7 +24,7 @@ export function hideCurrentView(): void {
       if (!elem.classList.contains('info-btn') && !elem.classList.contains('waiting-window')) {
         elemLink.hidden = true;
         setTimeout(() => {
-          elem.remove();
+          elemLink.remove();
         }, SWITCH_VIEW_ANIMATION_DURATION);
       }
     }

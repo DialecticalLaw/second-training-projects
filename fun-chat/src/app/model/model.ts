@@ -5,6 +5,10 @@ export class Model {
 
   public id: string;
 
+  private login?: string;
+
+  private password?: string;
+
   constructor() {
     this.webSocketApiService = new WebSocketApiService();
     this.id = crypto.randomUUID();
@@ -14,7 +18,10 @@ export class Model {
     this.webSocketApiService.connectWithServer();
   }
 
-  public async login(login: string, password: string): Promise<void> {
+  public sendLogin(login: string, password: string): void {
+    this.login = login;
+    this.password = password;
+
     this.webSocketApiService.sendUserData({
       id: this.id,
       type: 'USER_LOGIN',
@@ -22,6 +29,20 @@ export class Model {
         user: {
           login,
           password
+        }
+      }
+    });
+  }
+
+  public sendLogout(): void {
+    if (!this.login || !this.password) throw new Error('login or password is undefined');
+    this.webSocketApiService.sendUserData({
+      id: this.id,
+      type: 'USER_LOGOUT',
+      payload: {
+        user: {
+          login: this.login,
+          password: this.password
         }
       }
     });

@@ -14,7 +14,7 @@
 }
 
 .login:not([hidden]) {
-  animation: appear 0.5s 0.5s forwards;
+  animation: appear 0.5s forwards;
 }
 
 .login[hidden] {
@@ -30,7 +30,7 @@
 }
 
 .login__validate-hint.valid {
-  color: rgb(0, 255, 0);
+  color: var(--highlighted-color);
 }
 
 .login__label_name,

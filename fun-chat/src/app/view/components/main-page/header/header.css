@@ -14,7 +14,7 @@
 }
 
 .header:not([hidden]) {
-  animation: appear 0.5s 0.5s forwards;
+  animation: appear 0.5s forwards;
 }
 
 .header[hidden] {
@@ -25,6 +25,11 @@
 .header__app-name {
   color: #ffffff;
   font-size: 1.5rem;
+}
+
+.header__user-name_value {
+  font-size: 1.6rem;
+  color: var(--highlighted-color);
 }
 
 .header__logout {

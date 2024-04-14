@@ -14,7 +14,8 @@ export enum Events {
   Connect = 'connect',
   IncorrectPassword = 'incorrectpassword',
   AlreadyAuth = 'alreadyauth',
-  Logined = 'logined'
+  Logined = 'logined',
+  Logout = 'logout'
 }
 
 interface ClientUserData {
