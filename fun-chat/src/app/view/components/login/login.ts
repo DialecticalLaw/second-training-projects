@@ -22,7 +22,12 @@ export const hintChars: HTMLLIElement = createElem('li', {
 });
 hintChars.textContent = 'The name consists only of letters';
 
-validateHints.append(hintRequired, hintCase, hintChars);
+export const hintMaxLength: HTMLLIElement = createElem('li', {
+  class: 'login__validate-hint max-length-hint valid'
+});
+hintMaxLength.textContent = 'The name should not exceed 20 characters';
+
+validateHints.append(hintRequired, hintCase, hintChars, hintMaxLength);
 
 export const nameLabel: HTMLLabelElement = createElem('label', { class: 'login__label_name' });
 nameLabel.textContent = 'Name';

@@ -5,6 +5,7 @@ import { updateElemValidity } from '../view/app-view';
 import {
   hintCase,
   hintChars,
+  hintMaxLength,
   hintRequired,
   loginBtn,
   loginWrapper,
@@ -100,6 +101,10 @@ export class LoginController {
       this.isFormValid = false;
       updateElemValidity(loginBtn, false);
     }
+
+    if (nameInput.value.length > 20) {
+      updateElemValidity(hintMaxLength, false);
+    } else updateElemValidity(hintMaxLength, true);
   }
 
   private doLogout(): void {
