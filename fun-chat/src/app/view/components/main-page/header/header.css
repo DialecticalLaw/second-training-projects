@@ -30,10 +30,21 @@
 .header__user-name_value {
   font-size: 1.6rem;
   color: var(--highlighted-color);
+  font-weight: bold;
 }
 
-.header__logout {
-  color: #ffffff;
+.button-hover.header__logout {
+  color: #ff2424;
+  outline: 1px solid #ff2424;
   font-size: 1.7rem;
+  padding: 5px 15px;
   background-color: transparent;
+}
+
+.button-hover.header__logout:hover {
+  background-color: #ff2424;
+  color: #ffffff;
+  outline: 1px solid #ff2424;
+  box-shadow: 0 0 12px 2px #ff2424;
+  border-radius: 0 0 15px 0;
 }

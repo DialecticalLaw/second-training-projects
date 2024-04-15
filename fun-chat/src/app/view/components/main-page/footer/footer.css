@@ -3,6 +3,7 @@
   opacity: 0;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   padding: 15px;
   background-color: var(--main-color);
@@ -34,7 +35,7 @@
 
 .footer__github_link,
 .footer__year {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: #ffffff;
 }
 

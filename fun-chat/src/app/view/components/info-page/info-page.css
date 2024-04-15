@@ -39,17 +39,21 @@
 .info__author {
   color: var(--highlighted-color);
   font-weight: bold;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
 }
 
 .info__back-btn {
   font-size: 1.4rem;
+  padding: 5px 10px;
+  transition: 0.3s;
 }
 
 .info-btn {
   position: absolute;
   top: 20px;
   right: 20px;
+  padding: 5px 15px;
+  font-size: 1.2rem;
 }
 
 .info-btn:has(~ .info),

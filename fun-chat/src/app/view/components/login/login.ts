@@ -43,7 +43,7 @@ export const passwordInput: HTMLInputElement = createElem('input', {
 passwordLabel.append(passwordInput);
 
 export const loginBtn: HTMLButtonElement = createElem('button', {
-  class: 'login__btn_login'
+  class: 'login__btn_login button-hover'
 });
 loginBtn.textContent = 'Login';
 

@@ -40,6 +40,26 @@ span {
 
 button {
   cursor: pointer;
+  outline: none;
+  border: none;
+}
+
+.button-hover {
+  background-color: transparent;
+  outline: 1px solid #ffffff;
+  color: #ffffff;
+  transition: 0.3s;
+}
+
+.button-hover:hover {
+  background-color: #ffffff;
+  color: #000000;
+  box-shadow: 0 0 12px 2px #ffffff;
+  border-radius: 0 0 15px 0;
+}
+
+.button-hover:active {
+  transform: scale(0.9);
 }
 
 .header,

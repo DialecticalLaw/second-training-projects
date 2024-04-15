@@ -17,7 +17,9 @@ const infoAuthor: HTMLAnchorElement = createElem('a', {
 });
 infoAuthor.textContent = 'Author: DialecticalLaw';
 
-export const backBtn: HTMLButtonElement = createElem('button', { class: 'info__back-btn' });
+export const backBtn: HTMLButtonElement = createElem('button', {
+  class: 'info__back-btn button-hover'
+});
 backBtn.textContent = 'Back';
 
 infoPage.append(infoTitle, infoText, infoAuthor, backBtn);

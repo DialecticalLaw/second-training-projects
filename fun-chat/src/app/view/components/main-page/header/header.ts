@@ -10,7 +10,9 @@ usernameText.append('User: ', username);
 const appName: HTMLParagraphElement = createElem('p', { class: 'header__app-name' });
 appName.textContent = 'Fun chat';
 
-export const logoutBtn: HTMLButtonElement = createElem('button', { class: 'header__logout' });
+export const logoutBtn: HTMLButtonElement = createElem('button', {
+  class: 'header__logout button-hover'
+});
 logoutBtn.textContent = 'Logout';
 
 header.append(usernameText, appName, logoutBtn);
