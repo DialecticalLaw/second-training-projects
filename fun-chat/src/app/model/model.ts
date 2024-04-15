@@ -5,7 +5,7 @@ export class Model {
 
   public id: string;
 
-  private login?: string;
+  public login?: string;
 
   private password?: string;
 
@@ -45,6 +45,19 @@ export class Model {
           password: this.password
         }
       }
+    });
+  }
+
+  public sendGetUsersRequests(): void {
+    this.webSocketApiService.sendUserData({
+      id: this.id,
+      type: 'USER_ACTIVE',
+      payload: null
+    });
+    this.webSocketApiService.sendUserData({
+      id: this.id,
+      type: 'USER_INACTIVE',
+      payload: null
     });
   }
 }

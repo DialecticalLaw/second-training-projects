@@ -15,7 +15,9 @@ export enum Events {
   IncorrectPassword = 'incorrectpassword',
   AlreadyAuth = 'alreadyauth',
   Logined = 'logined',
-  Logout = 'logout'
+  Logout = 'logout',
+  UserList = 'userlist',
+  ThirdParty = 'thirdparty'
 }
 
 interface ClientUserData {
@@ -23,7 +25,7 @@ interface ClientUserData {
   password: string;
 }
 
-interface ServerUserData {
+export interface ServerUserData {
   login: string;
   isLogined: boolean;
 }
@@ -71,4 +73,8 @@ export interface APIRequest {
   id: string | null;
   type: string;
   payload: MessageData | UserData | Users | Messages | null | { error: string };
+}
+
+export interface EventDetail {
+  [key: string]: string | null | ServerUserData[] | boolean;
 }

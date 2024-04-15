@@ -12,8 +12,8 @@ import {
   passwordInput
 } from '../view/components/login/login';
 import { logoutBtn, username } from '../view/components/main-page/header/header';
-import { clearLogin } from '../view/login-view/login-view';
-import { updateMainPageData } from '../view/main-view/main-view';
+import { clearLogin, markError } from '../view/login-view/login-view';
+import { clearMainPage, updateMainPageData } from '../view/main-view/main-view';
 
 export class LoginController {
   private isFormValid: boolean;
@@ -27,14 +27,32 @@ export class LoginController {
     document.addEventListener(Events.Logined, (event: Event): void => {
       if (event instanceof CustomEvent && event.detail.login === nameInput.value) {
         clearLogin();
-        updateMainPageData(event.detail.login);
+        this.model.sendGetUsersRequests();
         Router.moveToPage(Page.Main);
       }
     });
 
     document.addEventListener(Events.Logout, (event: Event): void => {
       if (event instanceof CustomEvent && event.detail.login === username.textContent) {
+        clearMainPage();
         Router.moveToPage(Page.Login);
+      }
+    });
+
+    document.addEventListener(Events.IncorrectPassword, () => {
+      clearLogin();
+      markError(Events.IncorrectPassword);
+    });
+
+    document.addEventListener(Events.AlreadyAuth, () => {
+      clearLogin();
+      markError(Events.AlreadyAuth);
+    });
+
+    document.addEventListener(Events.UserList, (event: Event) => {
+      if (event instanceof CustomEvent) {
+        if (!this.model.login) throw new Error('login is undefined');
+        updateMainPageData(event.detail.users, this.model.login);
       }
     });
   }

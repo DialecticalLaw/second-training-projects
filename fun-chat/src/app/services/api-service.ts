@@ -4,12 +4,33 @@ import { dispatch } from './events-service';
 function dispatchUserRequest(data: APIRequest): void {
   if (!(data.payload && 'user' in data.payload)) throw new Error('user not found in payload');
 
-  if ('isLogined' in data.payload.user) {
+  if (
+    'isLogined' in data.payload.user &&
+    (data.type === 'USER_LOGIN' || data.type === 'USER_LOGOUT')
+  ) {
     if (data.payload.user.isLogined) {
       dispatch(Events.Logined, { id: data.id, login: data.payload.user.login });
     } else {
       dispatch(Events.Logout, { id: data.id, login: data.payload.user.login });
     }
+  }
+
+  if (
+    'isLogined' in data.payload.user &&
+    (data.type === 'USER_EXTERNAL_LOGIN' || data.type === 'USER_EXTERNAL_LOGOUT')
+  ) {
+    dispatch(Events.ThirdParty, {
+      login: data.payload.user.login,
+      isLogined: data.payload.user.isLogined
+    });
+  }
+}
+
+function dispatchUsersRequest(data: APIRequest): void {
+  if (!(data.payload && 'users' in data.payload)) throw new Error('users not found in payload');
+
+  if (data.type === 'USER_ACTIVE' || data.type === 'USER_INACTIVE') {
+    dispatch(Events.UserList, { users: data.payload.users });
   }
 }
 
@@ -64,6 +85,10 @@ export class WebSocketApiService {
 
       if ('user' in data.payload) {
         dispatchUserRequest(data);
+      }
+
+      if ('users' in data.payload) {
+        dispatchUsersRequest(data);
       }
 
       if ('error' in data.payload) {

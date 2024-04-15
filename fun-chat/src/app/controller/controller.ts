@@ -5,19 +5,19 @@ import { drawMainMarkup, toggleWaitingConnectWindow } from '../view/app-view';
 import { LoginController } from './login-controller';
 import { infoBtn } from '../view/components/container/container';
 import { backBtn } from '../view/components/info-page/info-page';
-import { ErrorController } from './error-controller';
+import { ChatController } from './chat-controller';
 
 export class Controller {
+  private model: Model;
+
   private loginController: LoginController;
 
-  private errorController: ErrorController;
-
-  private model: Model;
+  private chatController: ChatController;
 
   constructor() {
     this.model = new Model();
     this.loginController = new LoginController(this.model);
-    this.errorController = new ErrorController(this.model);
+    this.chatController = new ChatController(this.model);
 
     document.addEventListener(Events.CloseConnect, () => {
       toggleWaitingConnectWindow(true);

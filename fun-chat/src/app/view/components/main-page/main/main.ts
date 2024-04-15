@@ -10,8 +10,8 @@ const searchInput: HTMLInputElement = createElem('input', {
   type: 'text',
   placeholder: 'Search...'
 });
-const users: HTMLUListElement = createElem('ul', { class: 'main__users' });
-userList.append(searchInput, users);
+export const mainUsers: HTMLUListElement = createElem('ul', { class: 'main__users' });
+userList.append(searchInput, mainUsers);
 
 const interlocutorDialogue: HTMLDivElement = createElem('div', { class: 'main__dialogue' });
 
