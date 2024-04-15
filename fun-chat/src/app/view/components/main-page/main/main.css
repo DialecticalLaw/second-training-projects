@@ -28,6 +28,7 @@
   flex-direction: column;
   justify-content: flex-start;
   gap: 10px;
+  overflow: auto;
   width: 25%;
   height: 100%;
   padding: 10px;
@@ -45,6 +46,7 @@
   position: relative;
   width: 100%;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 .main__user_login {
@@ -79,6 +81,10 @@
 
 .main__user_login {
   color: #ffffff;
+}
+
+.main__user[hidden] {
+  display: none;
 }
 
 .main__dialogue {

@@ -5,7 +5,7 @@ export const main: HTMLElement = createElem('main', { class: 'main' });
 
 const userList: HTMLDivElement = createElem('div', { class: 'main__user-list' });
 
-const searchInput: HTMLInputElement = createElem('input', {
+export const searchInput: HTMLInputElement = createElem('input', {
   class: 'main__search-user',
   type: 'text',
   placeholder: 'Search...'
