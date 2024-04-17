@@ -7,9 +7,6 @@ import { main, mainUsers } from '../components/main-page/main/main';
 
 export function drawMainPage() {
   container.append(header, main, footer);
-  header.hidden = false;
-  main.hidden = false;
-  footer.hidden = false;
 }
 
 function createUserElem(login: string, isLogined: boolean): HTMLLIElement {

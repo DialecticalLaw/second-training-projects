@@ -1,4 +1,3 @@
-import { SWITCH_VIEW_ANIMATION_DURATION } from '../..';
 import { container } from './components/container/container';
 import { waitingWindow } from './components/waiting-window/waiting-window';
 
@@ -22,10 +21,7 @@ export function hideCurrentView(): void {
       const elemLink: HTMLElement = elem;
 
       if (!elem.classList.contains('info-btn') && !elem.classList.contains('waiting-window')) {
-        elemLink.hidden = true;
-        setTimeout(() => {
-          elemLink.remove();
-        }, SWITCH_VIEW_ANIMATION_DURATION);
+        elemLink.remove();
       }
     }
   });

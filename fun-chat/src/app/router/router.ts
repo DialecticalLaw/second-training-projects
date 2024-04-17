@@ -1,4 +1,3 @@
-import { SWITCH_VIEW_ANIMATION_DURATION } from '../..';
 import { Page } from '../../interfaces';
 import { hideCurrentView } from '../view/app-view';
 import { drawInfoPage } from '../view/info-view/info-view';
@@ -27,9 +26,8 @@ export class Router {
         draw = drawLogin; // TODO: replace draw Login with 404 rendering
         pageName = '404';
     }
-    setTimeout(() => {
-      draw();
-    }, SWITCH_VIEW_ANIMATION_DURATION);
+
+    draw();
     window.history.pushState({ page }, '', pageName);
   }
 }
@@ -51,7 +49,5 @@ window.addEventListener('popstate', (event: PopStateEvent) => {
       draw = drawLogin; // TODO: replace draw Login with 404 rendering
       break;
   }
-  setTimeout(() => {
-    draw();
-  }, SWITCH_VIEW_ANIMATION_DURATION);
+  draw();
 });

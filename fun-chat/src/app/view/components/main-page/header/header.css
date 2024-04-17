@@ -1,6 +1,4 @@
 .header {
-  position: absolute;
-  opacity: 0;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -11,14 +9,6 @@
     0 0 10px 6px var(--addition-color),
     inset 0 0 8px 4px var(--addition-color);
   border-radius: 15px;
-}
-
-.header:not([hidden]) {
-  animation: appear 0.5s forwards;
-}
-
-.header[hidden] {
-  animation: hide 0.5s ease-in forwards;
 }
 
 .header__user-name,

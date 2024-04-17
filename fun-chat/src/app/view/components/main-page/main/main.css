@@ -1,6 +1,4 @@
 .main {
-  position: absolute;
-  opacity: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,14 +11,6 @@
     0 0 10px 6px var(--addition-color),
     inset 0 0 8px 4px var(--addition-color);
   border-radius: 15px;
-}
-
-.main:not([hidden]) {
-  animation: appear 0.5s forwards;
-}
-
-.main[hidden] {
-  animation: hide 0.5s ease-in forwards;
 }
 
 .main__user-list {

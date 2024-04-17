@@ -4,8 +4,6 @@ import { loginWrapper, nameInput, nameLabel, passwordInput } from '../components
 
 export function drawLogin() {
   container.append(loginWrapper);
-  // console.log(loginWrapper);
-  loginWrapper.hidden = false;
 }
 
 export function clearLogin(): void {
@@ -15,7 +13,7 @@ export function clearLogin(): void {
 
   const hints: HTMLLIElement[] = Array.from(document.querySelectorAll('.login__validate-hint'));
   hints.forEach((hint: HTMLLIElement) => {
-    hint.classList.remove('valid');
+    if (!hint.classList.contains('max-length-hint')) hint.classList.remove('valid');
   });
 }
 

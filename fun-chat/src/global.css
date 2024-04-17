@@ -67,30 +67,3 @@ button {
 .footer {
   max-width: 1200px;
 }
-
-@keyframes hide {
-  0% {
-    position: static;
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    position: static;
-    opacity: 0;
-    transform: translateY(-100%);
-  }
-}
-
-@keyframes appear {
-  0% {
-    position: static;
-    opacity: 0;
-    transform: translateY(100%);
-  }
-
-  100% {
-    position: static;
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
