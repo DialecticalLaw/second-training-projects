@@ -1,7 +1,12 @@
 import { Events } from '../../interfaces';
 import { Model } from '../model/model';
 import { isMatch } from '../utils/is-match';
-import { searchInput } from '../view/components/main-page/main/main';
+import {
+  dialogueInput,
+  dialogueSend,
+  interlocutorName,
+  searchInput
+} from '../view/components/main-page/main/main';
 import {
   showMessageHistory,
   showSelectedUser,
@@ -39,6 +44,12 @@ export class ChatController {
         showMessageHistory(event.detail.messages);
       }
     });
+
+    dialogueSend.addEventListener('click', (event: MouseEvent) => {
+      event.preventDefault();
+      this.sendMessage.call(this, dialogueInput.value);
+      dialogueInput.value = '';
+    });
   }
 
   private handleUserSelect(): void {
@@ -62,5 +73,11 @@ export class ChatController {
     if (!userElem.textContent) throw new Error('userElem textContent is null');
     this.model.getMessageHistory(userElem.textContent);
     showSelectedUser(userElem);
+  }
+
+  private sendMessage(message: string): void {
+    if (message.trim() === '') return;
+    if (!interlocutorName.textContent) throw new Error('interlocutor name is null');
+    this.model.sendMessage(interlocutorName.textContent, message.trim());
   }
 }

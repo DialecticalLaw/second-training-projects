@@ -34,6 +34,10 @@ function dispatchUsersRequest(data: APIRequest): void {
   }
 }
 
+function dispatchMessageRequest(data: APIRequest): void {
+  if (!(data.payload && 'message' in data.payload)) throw new Error('message not found in payload');
+}
+
 function dispatchMessagesRequest(data: APIRequest): void {
   if (!(data.payload && 'messages' in data.payload)) {
     throw new Error('message not found in payload');
@@ -102,6 +106,10 @@ export class WebSocketApiService {
 
       if ('error' in data.payload) {
         dispatchErrorRequest(data);
+      }
+
+      if ('message' in data.payload) {
+        dispatchMessageRequest(data);
       }
 
       if ('messages' in data.payload) {

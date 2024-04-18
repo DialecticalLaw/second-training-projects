@@ -62,13 +62,25 @@ export class Model {
   }
 
   public getMessageHistory(interlocutor: string): void {
-    if (!this.login) throw new Error('login or password is undefined');
     this.webSocketApiService.sendData({
       id: this.id,
       type: 'MSG_FROM_USER',
       payload: {
         user: {
           login: interlocutor
+        }
+      }
+    });
+  }
+
+  public sendMessage(interlocutor: string, message: string): void {
+    this.webSocketApiService.sendData({
+      id: this.id,
+      type: 'MSG_SEND',
+      payload: {
+        message: {
+          to: interlocutor,
+          text: message
         }
       }
     });

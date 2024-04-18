@@ -46,7 +46,8 @@
   font-size: 1.2rem;
 }
 
-.main__users::-webkit-scrollbar {
+.main__users::-webkit-scrollbar,
+.main__dialogue_content::-webkit-scrollbar {
   width: 12px;
   background-color: #191919;
   border-radius: 15px;
@@ -128,7 +129,6 @@
   justify-content: space-between;
   width: 75%;
   height: 100%;
-  padding: 10px;
   outline: 1px solid #ffffff;
   border-radius: 15px;
 }
@@ -138,7 +138,7 @@
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  padding-bottom: 10px;
+  padding: 10px;
   border-bottom: 1px solid #ffffff;
 }
 
@@ -159,20 +159,70 @@
 }
 
 .main__dialogue_content {
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  gap: 10px;
   width: 100%;
   height: 100%;
-}
-
-.main__dialogue_content.not-empty {
-  justify-content: space-between;
+  padding: 0 15px;
 }
 
 .main__dialogue_content.empty {
   justify-content: center;
   align-items: center;
+}
+
+.main__dialogue_message {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: max-content;
+  min-width: 40%;
+  max-width: 70%;
+  padding: 10px 0;
+}
+
+.interlocutor-message {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px 15px 15px 0;
+  background: linear-gradient(-153deg, rgba(80, 80, 80, 0.6) 20%, rgba(26, 26, 26, 0.6) 100%);
+}
+
+.own-message {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px 15px 0px 15px;
+  background: rgb(44, 44, 207);
+  background: linear-gradient(153deg, rgba(41, 41, 179, 0.6) 20%, rgba(120, 37, 255, 0.6) 100%);
+}
+
+.main__dialogue_message-header,
+.main__dialogue_message-footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 3px 10px;
+  font-size: 0.9rem;
+  color: #c6c6c6;
+}
+
+.main__dialogue_message-header {
+  border-bottom: 1px solid gray;
+}
+
+.main__dialogue_message-footer {
+  border-top: 1px solid gray;
+}
+
+.main__dialogue_message-text {
+  padding: 3px 10px;
+  font-size: 1.2rem;
+  color: #ffffff;
+  word-break: break-word;
 }
 
 .main__dialogue_hint {
@@ -186,13 +236,15 @@
   justify-content: space-between;
   gap: 15px;
   width: 100%;
+  padding: 10px;
+  border-top: 1px solid #ffffff;
 }
 
 .main__dialogue_input {
   width: 100%;
   padding: 6px;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   border-radius: 10px;
   transition: 0.3s;
 }

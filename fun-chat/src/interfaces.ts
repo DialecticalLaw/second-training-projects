@@ -40,7 +40,7 @@ export interface UserData {
   user: ClientUserData | ServerUserData;
 }
 
-interface MessageStatus {
+export interface MessageStatus {
   isDelivered: boolean;
   isReaded: boolean;
   isEdited: boolean;
