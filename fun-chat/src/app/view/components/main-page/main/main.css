@@ -109,6 +109,7 @@
 }
 
 .main__user_login {
+  pointer-events: none;
   color: #ffffff;
 }
 
@@ -117,6 +118,7 @@
 }
 
 .main__user.selected {
+  pointer-events: none;
   background-color: #48ade269;
 }
 
