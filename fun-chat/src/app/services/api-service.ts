@@ -34,14 +34,23 @@ function dispatchUsersRequest(data: APIRequest): void {
   }
 }
 
+function dispatchMessagesRequest(data: APIRequest): void {
+  if (!(data.payload && 'messages' in data.payload)) {
+    throw new Error('message not found in payload');
+  }
+
+  dispatch(Events.MessageHistory, { messages: data.payload.messages });
+}
+
 function dispatchErrorRequest(data: APIRequest): void {
   if (!(data.payload && 'error' in data.payload)) throw new Error('error not found in payload');
 
   if (data.payload.error === 'incorrect password') {
     dispatch(Events.IncorrectPassword);
-  }
-  if (data.payload.error === 'a user with this login is already authorized') {
+  } else if (data.payload.error === 'a user with this login is already authorized') {
     dispatch(Events.AlreadyAuth);
+  } else {
+    throw new Error(data.payload.error);
   }
 }
 
@@ -71,7 +80,7 @@ export class WebSocketApiService {
     };
   }
 
-  public async sendUserData(userData: APIRequest): Promise<void> {
+  public sendData(userData: APIRequest): void {
     if (!this.socket) throw new Error('socket is undefined');
     this.socket.send(JSON.stringify(userData));
   }
@@ -93,6 +102,10 @@ export class WebSocketApiService {
 
       if ('error' in data.payload) {
         dispatchErrorRequest(data);
+      }
+
+      if ('messages' in data.payload) {
+        dispatchMessagesRequest(data);
       }
     };
   }

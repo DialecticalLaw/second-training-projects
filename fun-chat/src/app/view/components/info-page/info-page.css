@@ -46,8 +46,7 @@
   font-size: 1.2rem;
 }
 
-.info-btn:has(~ .info),
-.info-btn:has(~ [hidden]) {
+.info-btn:has(~ .info) {
   opacity: 0.7;
   pointer-events: none;
 }

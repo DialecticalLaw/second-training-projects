@@ -17,12 +17,14 @@ export enum Events {
   Logined = 'logined',
   Logout = 'logout',
   UserList = 'userlist',
-  ThirdParty = 'thirdparty'
+  ThirdParty = 'thirdparty',
+  HandleUserSelect = 'handleuserselect',
+  MessageHistory = 'messagehistory'
 }
 
 interface ClientUserData {
   login: string;
-  password: string;
+  password?: string;
 }
 
 export interface ServerUserData {
@@ -45,7 +47,7 @@ interface MessageStatus {
   isDeleted: boolean;
 }
 
-interface ServerMsgSend {
+export interface ServerMsgSend {
   id: string;
   from: string;
   to: string;
@@ -76,5 +78,5 @@ export interface APIRequest {
 }
 
 export interface EventDetail {
-  [key: string]: string | null | ServerUserData[] | boolean;
+  [key: string]: ServerUserData[] | ServerMsgSend[] | string | boolean | null;
 }

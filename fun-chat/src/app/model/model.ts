@@ -22,7 +22,7 @@ export class Model {
     this.login = login;
     this.password = password;
 
-    this.webSocketApiService.sendUserData({
+    this.webSocketApiService.sendData({
       id: this.id,
       type: 'USER_LOGIN',
       payload: {
@@ -36,7 +36,7 @@ export class Model {
 
   public sendLogout(): void {
     if (!this.login || !this.password) throw new Error('login or password is undefined');
-    this.webSocketApiService.sendUserData({
+    this.webSocketApiService.sendData({
       id: this.id,
       type: 'USER_LOGOUT',
       payload: {
@@ -49,15 +49,28 @@ export class Model {
   }
 
   public sendGetUsersRequests(): void {
-    this.webSocketApiService.sendUserData({
+    this.webSocketApiService.sendData({
       id: this.id,
       type: 'USER_ACTIVE',
       payload: null
     });
-    this.webSocketApiService.sendUserData({
+    this.webSocketApiService.sendData({
       id: this.id,
       type: 'USER_INACTIVE',
       payload: null
+    });
+  }
+
+  public getMessageHistory(interlocutor: string): void {
+    if (!this.login) throw new Error('login or password is undefined');
+    this.webSocketApiService.sendData({
+      id: this.id,
+      type: 'MSG_FROM_USER',
+      payload: {
+        user: {
+          login: interlocutor
+        }
+      }
     });
   }
 }
