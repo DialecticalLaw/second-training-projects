@@ -130,9 +130,10 @@ export function updateMessageStatus(
     if ('isDeleted' in status && status.isDeleted) {
       message.remove();
     } else {
-      const messageFooter: Element | null = message.lastElementChild;
+      const messageFooter: Element | undefined | null = message.lastElementChild?.lastElementChild;
       const statusElem: Element | null | undefined = messageFooter?.lastElementChild;
-      if (!messageFooter || !statusElem) throw new Error('footer or status message is null');
+      if (!messageFooter || !statusElem) throw new Error('footer or status of message is null');
+
       if (status.isEdited) {
         const editedElem: HTMLSpanElement = createElem('span', {
           class: 'main__dialogue_edited-status'
@@ -148,6 +149,9 @@ export function updateMessageStatus(
 }
 
 function createMessageParts(): HTMLElement[] {
+  const messageWrapper: HTMLDivElement = createElem('div', {
+    class: 'main__dialogue_message-wrapper'
+  });
   const messageElem: HTMLDivElement = createElem('div', { class: 'main__dialogue_message' });
   const messageHeader: HTMLParagraphElement = createElem('p', {
     class: 'main__dialogue_message-header'
@@ -159,12 +163,13 @@ function createMessageParts(): HTMLElement[] {
     class: 'main__dialogue_message-footer'
   });
 
-  return [messageElem, messageHeader, textElem, messageFooter];
+  return [messageWrapper, messageElem, messageHeader, textElem, messageFooter];
 }
 
 export function drawMessage(message: ServerMsgSend): void {
   if (document.querySelector('.main__dialogue_hint')) dialogueContent.replaceChildren('');
-  const [messageElem, messageHeader, textElem, messageFooter]: HTMLElement[] = createMessageParts();
+  const [messageWrapper, messageElem, messageHeader, textElem, messageFooter]: HTMLElement[] =
+    createMessageParts();
 
   textElem.textContent = message.text;
 
@@ -175,12 +180,14 @@ export function drawMessage(message: ServerMsgSend): void {
   });
   messageHeader.append(authorElem, timeElem);
   messageElem.append(messageHeader, textElem, messageFooter);
+  messageWrapper.append(messageElem);
 
   if (message.from === interlocutorName.textContent) {
-    messageElem.classList.add('interlocutor-message');
+    messageWrapper.classList.add('interlocutor-message');
     authorElem.textContent = message.from;
+    if (!message.status.isReaded) messageWrapper.classList.add('new-message');
   } else {
-    messageElem.classList.add('own-message');
+    messageWrapper.classList.add('own-message');
     authorElem.textContent = 'You';
     const statusElem: HTMLSpanElement = createElem('span', {
       class: 'main__dialogue_message-status'
@@ -188,10 +195,10 @@ export function drawMessage(message: ServerMsgSend): void {
 
     statusElem.textContent = 'sent';
     messageFooter.append(statusElem);
-    updateMessageStatus([messageElem], message.status);
+    updateMessageStatus([messageWrapper], message.status);
   }
 
-  dialogueContent.append(messageElem);
+  dialogueContent.append(messageWrapper);
   dialogueContent.scrollTop = dialogueContent.scrollHeight;
 }
 

@@ -163,7 +163,7 @@
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
   height: 100%;
   padding: 0 15px;
@@ -172,6 +172,48 @@
 .main__dialogue_content.empty {
   justify-content: center;
   align-items: center;
+}
+
+.main__dialogue_message-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.new-message {
+  margin-top: 2.5rem;
+}
+
+.new-message::after {
+  position: absolute;
+  content: 'New messages';
+  left: 0;
+  right: 0;
+  text-align: center;
+  top: -1.8rem;
+  color: #e1e1e1;
+  font-family: Comfortaa;
+  font-size: 1rem;
+}
+
+.new-message::before {
+  position: absolute;
+  content: '';
+  top: -0.5rem;
+  width: 100%;
+  height: 1px;
+  margin: 0 auto;
+  background-color: #e1e1e1;
+}
+
+.new-message ~ .new-message {
+  margin: 0;
+}
+
+.new-message ~ .new-message::after,
+.new-message ~ .new-message::before {
+  display: none;
 }
 
 .main__dialogue_message {
@@ -184,7 +226,7 @@
   padding: 10px 0;
 }
 
-.interlocutor-message {
+.interlocutor-message .main__dialogue_message {
   align-self: flex-start;
   display: flex;
   flex-direction: column;
@@ -193,7 +235,7 @@
   animation: interlocutor-message-appear 0.3s;
 }
 
-.own-message {
+.own-message .main__dialogue_message {
   align-self: flex-end;
   display: flex;
   flex-direction: column;
