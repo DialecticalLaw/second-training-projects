@@ -14,7 +14,8 @@ import {
   interlocutorName,
   interlocutorStatus,
   main,
-  mainUsers
+  mainUsers,
+  searchInput
 } from '../components/main-page/main/main';
 
 export function drawMainPage() {
@@ -98,6 +99,14 @@ export function updateUserStatus(login: string, isLogined: boolean) {
 
 export function clearMainPage(): void {
   mainUsers.replaceChildren('');
+  dialogueContent.replaceChildren('');
+
+  searchInput.value = '';
+  dialogueInput.value = '';
+
+  dialogueContent.classList.add('empty');
+  dialogueContent.append(chatHint);
+  chatHint.textContent = 'Select a person to talk with';
 }
 
 export function showSelectedUser(userElem: HTMLElement): void {
