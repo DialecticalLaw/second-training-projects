@@ -160,6 +160,7 @@
 
 .main__dialogue_content {
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -189,6 +190,7 @@
   flex-direction: column;
   border-radius: 15px 15px 15px 0;
   background: linear-gradient(-153deg, rgba(80, 80, 80, 0.6) 20%, rgba(26, 26, 26, 0.6) 100%);
+  animation: interlocutor-message-appear 0.3s;
 }
 
 .own-message {
@@ -198,6 +200,7 @@
   border-radius: 15px 15px 0px 15px;
   background: rgb(44, 44, 207);
   background: linear-gradient(153deg, rgba(41, 41, 179, 0.6) 20%, rgba(120, 37, 255, 0.6) 100%);
+  animation: own-message-appear 0.3s;
 }
 
 .main__dialogue_message-header,
@@ -290,4 +293,26 @@
 
 .main__dialogue_send:active::after {
   transform: scaleX(1);
+}
+
+@keyframes own-message-appear {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes interlocutor-message-appear {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
