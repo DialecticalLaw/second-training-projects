@@ -1,5 +1,20 @@
-import { Events, APIRequest } from '../../interfaces';
+import { Events, APIRequest, ServerMsgSend } from '../../interfaces';
 import { dispatch } from './events-service';
+
+function isMessageReceiveData(data: unknown): data is ServerMsgSend {
+  if (
+    data instanceof Object &&
+    'id' in data &&
+    'from' in data &&
+    'to' in data &&
+    'text' in data &&
+    'datetime' in data &&
+    'status' in data
+  ) {
+    return true;
+  }
+  return false;
+}
 
 function dispatchUserRequest(data: APIRequest): void {
   if (!(data.payload && 'user' in data.payload)) throw new Error('user not found in payload');
@@ -36,6 +51,10 @@ function dispatchUsersRequest(data: APIRequest): void {
 
 function dispatchMessageRequest(data: APIRequest): void {
   if (!(data.payload && 'message' in data.payload)) throw new Error('message not found in payload');
+
+  if (isMessageReceiveData(data.payload.message)) {
+    dispatch(Events.ReceivedMessage, { message: data.payload.message });
+  }
 }
 
 function dispatchMessagesRequest(data: APIRequest): void {

@@ -19,7 +19,8 @@ export enum Events {
   UserList = 'userlist',
   ThirdParty = 'thirdparty',
   HandleUserSelect = 'handleuserselect',
-  MessageHistory = 'messagehistory'
+  MessageHistory = 'messagehistory',
+  ReceivedMessage = 'receivedmessage'
 }
 
 interface ClientUserData {
@@ -75,8 +76,4 @@ export interface APIRequest {
   id: string | null;
   type: string;
   payload: MessageData | UserData | Users | Messages | null | { error: string };
-}
-
-export interface EventDetail {
-  [key: string]: ServerUserData[] | ServerMsgSend[] | string | boolean | null;
 }

@@ -1,5 +1,5 @@
-import { EventDetail, Events } from '../../interfaces';
+import { Events } from '../../interfaces';
 
-export function dispatch(eventName: Events, detailData?: EventDetail) {
+export function dispatch(eventName: Events, detailData?: unknown) {
   document.dispatchEvent(new CustomEvent(eventName, { detail: detailData }));
 }

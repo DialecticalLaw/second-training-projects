@@ -2,6 +2,7 @@ import { Events, MessageStatus, ServerMsgSend, ServerUserData } from '../../../i
 import { dispatch } from '../../services/events-service';
 import { createElem } from '../../utils/create-elem';
 import { getFormatTime } from '../../utils/get-format-time';
+import { isMatch } from '../../utils/is-match';
 import { container } from '../components/container/container';
 import { footer } from '../components/main-page/footer/footer';
 import { header, username } from '../components/main-page/header/header';
@@ -45,6 +46,17 @@ export function updateMainPageData(users: ServerUserData[], currentUserLogin: st
     }
   });
   dispatch(Events.HandleUserSelect);
+}
+
+export function updateUserList(template: string): void {
+  const allUserElems: HTMLLIElement[] = Array.from(document.querySelectorAll('.main__user'));
+
+  allUserElems.forEach((userElem: HTMLLIElement) => {
+    const userElemLink: HTMLLIElement = userElem;
+    if (!isMatch(userElemLink.textContent ?? '', template)) {
+      userElemLink.hidden = true;
+    } else userElemLink.removeAttribute('hidden');
+  });
 }
 
 function updateInterlocutorStatus(isOnline: boolean): void {
@@ -106,7 +118,7 @@ export function updateMessageStatus(
   status: Partial<MessageStatus>
 ): void {
   messageElems.forEach((message: HTMLElement) => {
-    if (status.isDeleted) {
+    if ('isDeleted' in status && status.isDeleted) {
       message.remove();
     } else {
       const messageFooter: Element | null = message.lastElementChild;
@@ -126,37 +138,45 @@ export function updateMessageStatus(
   });
 }
 
-export function drawMessage(message: ServerMsgSend): void {
+function createMessageParts(): HTMLElement[] {
   const messageElem: HTMLDivElement = createElem('div', { class: 'main__dialogue_message' });
-
-  const textElem: HTMLParagraphElement = createElem('p', {
-    class: 'main__dialogue_message-text'
-  });
-  textElem.textContent = message.text;
-
   const messageHeader: HTMLParagraphElement = createElem('p', {
     class: 'main__dialogue_message-header'
+  });
+  const textElem: HTMLParagraphElement = createElem('p', {
+    class: 'main__dialogue_message-text'
   });
   const messageFooter: HTMLParagraphElement = createElem('p', {
     class: 'main__dialogue_message-footer'
   });
+
+  return [messageElem, messageHeader, textElem, messageFooter];
+}
+
+export function drawMessage(message: ServerMsgSend): void {
+  if (document.querySelector('.main__dialogue_hint')) dialogueContent.replaceChildren('');
+  const [messageElem, messageHeader, textElem, messageFooter]: HTMLElement[] = createMessageParts();
+
+  textElem.textContent = message.text;
 
   const timeElem: HTMLSpanElement = createElem('span', { class: 'main__dialogue_message-time' });
   timeElem.textContent = getFormatTime(message.datetime);
   const authorElem: HTMLSpanElement = createElem('span', {
     class: 'main__dialogue_message-author'
   });
-  authorElem.textContent = message.from;
   messageHeader.append(authorElem, timeElem);
   messageElem.append(messageHeader, textElem, messageFooter);
 
   if (message.from === interlocutorName.textContent) {
     messageElem.classList.add('interlocutor-message');
+    authorElem.textContent = message.from;
   } else {
     messageElem.classList.add('own-message');
+    authorElem.textContent = 'You';
     const statusElem: HTMLSpanElement = createElem('span', {
       class: 'main__dialogue_message-status'
     });
+
     statusElem.textContent = 'sent';
     messageFooter.append(statusElem);
     updateMessageStatus([messageElem], message.status);

@@ -1,6 +1,5 @@
 import { Events } from '../../interfaces';
 import { Model } from '../model/model';
-import { isMatch } from '../utils/is-match';
 import {
   dialogueInput,
   dialogueSend,
@@ -8,8 +7,10 @@ import {
   searchInput
 } from '../view/components/main-page/main/main';
 import {
+  drawMessage,
   showMessageHistory,
   showSelectedUser,
+  updateUserList,
   updateUserStatus
 } from '../view/main-view/main-view';
 
@@ -29,14 +30,7 @@ export class ChatController {
     document.addEventListener(Events.HandleUserSelect, this.handleUserSelect.bind(this));
 
     searchInput.addEventListener('input', () => {
-      const allUserElems: HTMLLIElement[] = Array.from(document.querySelectorAll('.main__user'));
-
-      allUserElems.forEach((userElem: HTMLLIElement) => {
-        const userElemLink: HTMLLIElement = userElem;
-        if (!isMatch(userElemLink.textContent ?? '', searchInput.value)) {
-          userElemLink.hidden = true;
-        } else userElemLink.removeAttribute('hidden');
-      });
+      updateUserList(searchInput.value);
     });
 
     document.addEventListener(Events.MessageHistory, (event: Event) => {
@@ -49,6 +43,16 @@ export class ChatController {
       event.preventDefault();
       this.sendMessage.call(this, dialogueInput.value);
       dialogueInput.value = '';
+    });
+
+    document.addEventListener(Events.ReceivedMessage, (event: Event) => {
+      if (
+        event instanceof CustomEvent &&
+        (event.detail.message.from === interlocutorName.textContent ||
+          event.detail.message.from === model.login)
+      ) {
+        drawMessage(event.detail.message);
+      }
     });
   }
 
