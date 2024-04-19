@@ -192,6 +192,7 @@ export function drawMessage(message: ServerMsgSend): void {
   }
 
   dialogueContent.append(messageElem);
+  dialogueContent.scrollTop = dialogueContent.scrollHeight;
 }
 
 export function showMessageHistory(messages: ServerMsgSend[]): void {
