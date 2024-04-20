@@ -1,4 +1,4 @@
-import { Events, APIRequest, ServerMsgSend } from '../../interfaces';
+import { Events, APIRequest, ServerMsgSend, MessageNotification } from '../../interfaces';
 import { dispatch } from './events-service';
 
 function isMessageReceiveData(data: unknown): data is ServerMsgSend {
@@ -10,6 +10,18 @@ function isMessageReceiveData(data: unknown): data is ServerMsgSend {
     'text' in data &&
     'datetime' in data &&
     'status' in data
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function isNotification(data: unknown): data is MessageNotification {
+  if (
+    data instanceof Object &&
+    'id' in data &&
+    'status' in data &&
+    Object.keys(data).length === 2
   ) {
     return true;
   }
@@ -54,6 +66,10 @@ function dispatchMessageRequest(data: APIRequest): void {
 
   if (isMessageReceiveData(data.payload.message)) {
     dispatch(Events.ReceivedMessage, { message: data.payload.message });
+  }
+
+  if (isNotification(data.payload.message)) {
+    dispatch(Events.Notification, { message: data.payload.message });
   }
 }
 

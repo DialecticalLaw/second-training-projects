@@ -54,6 +54,7 @@ export class LoginController {
       if (event instanceof CustomEvent) {
         if (!this.model.login) throw new Error('login is undefined');
         updateMainPageData(event.detail.users, this.model.login);
+        this.model.getMessageHistory(event.detail.users);
       }
     });
   }

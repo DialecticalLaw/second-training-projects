@@ -8,6 +8,7 @@ import {
 } from '../view/components/main-page/main/main';
 import {
   drawMessage,
+  markMessagesStatus,
   showMessageHistory,
   showSelectedUser,
   updateUserList,
@@ -39,21 +40,29 @@ export class ChatController {
       }
     });
 
-    dialogueSend.addEventListener('click', (event: MouseEvent) => {
-      event.preventDefault();
-      this.sendMessage.call(this, dialogueInput.value);
-      dialogueInput.value = '';
-    });
+    dialogueSend.addEventListener('click', this.sendMessage.bind(this));
+    document.addEventListener(Events.ReceivedMessage, this.receiveMessage.bind(this));
+    document.addEventListener(Events.Notification, ChatController.receiveNotification);
+  }
 
-    document.addEventListener(Events.ReceivedMessage, (event: Event) => {
-      if (
-        event instanceof CustomEvent &&
-        (event.detail.message.from === interlocutorName.textContent ||
-          event.detail.message.from === model.login)
-      ) {
-        drawMessage(event.detail.message);
-      }
-    });
+  private static receiveNotification(event: Event): void {
+    if (!(event instanceof CustomEvent)) throw new Error('event is not custom');
+    const messageInfo = event.detail.message;
+
+    if ('isDelivered' in messageInfo.status && messageInfo.status.isDelivered) {
+      const messageElem: HTMLElement | null = document.querySelector(`[id="${messageInfo.id}"]`);
+      if (messageElem) markMessagesStatus([messageElem], messageInfo.status);
+    }
+  }
+
+  private receiveMessage(event: Event): void {
+    if (
+      event instanceof CustomEvent &&
+      (event.detail.message.from === interlocutorName.textContent ||
+        event.detail.message.from === this.model.login)
+    ) {
+      drawMessage(event.detail.message);
+    }
   }
 
   private handleUserSelect(): void {
@@ -79,9 +88,15 @@ export class ChatController {
     showSelectedUser(userElem);
   }
 
-  private sendMessage(message: string): void {
-    if (message.trim() === '') return;
+  private sendMessage(event: MouseEvent): void {
+    event.preventDefault();
+    if (dialogueInput.value.trim() === '') {
+      dialogueInput.value = '';
+      return;
+    }
+
     if (!interlocutorName.textContent) throw new Error('interlocutor name is null');
-    this.model.sendMessage(interlocutorName.textContent, message.trim());
+    this.model.sendMessage(interlocutorName.textContent, dialogueInput.value.trim());
+    dialogueInput.value = '';
   }
 }

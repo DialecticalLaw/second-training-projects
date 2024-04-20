@@ -20,6 +20,7 @@ import {
 
 export function drawMainPage() {
   container.append(header, main, footer);
+  dialogueContent.scrollTop = dialogueContent.scrollHeight;
 }
 
 function createUserElem(login: string, isLogined: boolean): HTMLLIElement {
@@ -122,7 +123,7 @@ export function showSelectedUser(userElem: HTMLElement): void {
   } else updateInterlocutorStatus(false);
 }
 
-export function updateMessageStatus(
+export function markMessagesStatus(
   messageElems: HTMLElement[],
   status: Partial<MessageStatus>
 ): void {
@@ -134,7 +135,7 @@ export function updateMessageStatus(
       const statusElem: Element | null | undefined = messageFooter?.lastElementChild;
       if (!messageFooter || !statusElem) throw new Error('footer or status of message is null');
 
-      if (status.isEdited) {
+      if ('isEdited' in status && status.isEdited) {
         const editedElem: HTMLSpanElement = createElem('span', {
           class: 'main__dialogue_edited-status'
         });
@@ -142,8 +143,8 @@ export function updateMessageStatus(
         messageFooter.prepend(editedElem);
       }
 
-      if (status.isReaded) statusElem.textContent = 'read';
-      if (status.isDelivered) statusElem.textContent = 'delivered';
+      if ('isReaded' in status && status.isReaded) statusElem.textContent = 'read';
+      if ('isDelivered' in status && status.isDelivered) statusElem.textContent = 'delivered';
     }
   });
 }
@@ -170,6 +171,7 @@ export function drawMessage(message: ServerMsgSend): void {
   if (document.querySelector('.main__dialogue_hint')) dialogueContent.replaceChildren('');
   const [messageWrapper, messageElem, messageHeader, textElem, messageFooter]: HTMLElement[] =
     createMessageParts();
+  messageWrapper.id = message.id;
 
   textElem.textContent = message.text;
 
@@ -195,7 +197,7 @@ export function drawMessage(message: ServerMsgSend): void {
 
     statusElem.textContent = 'sent';
     messageFooter.append(statusElem);
-    updateMessageStatus([messageWrapper], message.status);
+    markMessagesStatus([messageWrapper], message.status);
   }
 
   dialogueContent.append(messageWrapper);

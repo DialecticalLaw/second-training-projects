@@ -1,3 +1,4 @@
+import { ServerUserData } from '../../interfaces';
 import { WebSocketApiService } from '../services/api-service';
 
 export class Model {
@@ -61,16 +62,32 @@ export class Model {
     });
   }
 
-  public getMessageHistory(interlocutor: string): void {
-    this.webSocketApiService.sendData({
-      id: this.id,
-      type: 'MSG_FROM_USER',
-      payload: {
-        user: {
-          login: interlocutor
+  public getMessageHistory(interlocutors: string | ServerUserData[]): void {
+    if (Array.isArray(interlocutors)) {
+      interlocutors
+        .filter((interlocutor: ServerUserData) => interlocutor.login !== this.login)
+        .forEach((interlocutor: ServerUserData) => {
+          this.webSocketApiService.sendData({
+            id: this.id,
+            type: 'MSG_FROM_USER',
+            payload: {
+              user: {
+                login: interlocutor.login
+              }
+            }
+          });
+        });
+    } else {
+      this.webSocketApiService.sendData({
+        id: this.id,
+        type: 'MSG_FROM_USER',
+        payload: {
+          user: {
+            login: interlocutors
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   public sendMessage(interlocutor: string, message: string): void {

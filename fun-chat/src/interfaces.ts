@@ -20,7 +20,8 @@ export enum Events {
   ThirdParty = 'thirdparty',
   HandleUserSelect = 'handleuserselect',
   MessageHistory = 'messagehistory',
-  ReceivedMessage = 'receivedmessage'
+  ReceivedMessage = 'receivedmessage',
+  Notification = 'notification'
 }
 
 interface ClientUserData {
@@ -59,7 +60,7 @@ export interface ServerMsgSend {
 
 type ClientMsgSend = Pick<ServerMsgSend, 'to' | 'text'>;
 
-interface MessageNotification {
+export interface MessageNotification {
   id: string;
   status: Partial<MessageStatus>;
 }
