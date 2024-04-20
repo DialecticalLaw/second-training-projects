@@ -84,8 +84,8 @@ export class ChatController {
 
   private selectUser(userElem: HTMLElement): void {
     if (!userElem.textContent) throw new Error('userElem textContent is null');
-    this.model.getMessageHistory(userElem.textContent);
     showSelectedUser(userElem);
+    this.model.getMessageHistory(userElem.textContent);
   }
 
   private sendMessage(event: MouseEvent): void {

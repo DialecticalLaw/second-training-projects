@@ -104,6 +104,11 @@ export function clearMainPage(): void {
 
   searchInput.value = '';
   dialogueInput.value = '';
+  dialogueInput.disabled = true;
+  dialogueSend.disabled = true;
+
+  interlocutorName.textContent = '';
+  interlocutorStatus.textContent = '';
 
   dialogueContent.classList.add('empty');
   dialogueContent.append(chatHint);
@@ -209,11 +214,20 @@ export function showMessageHistory(messages: ServerMsgSend[]): void {
   dialogueSend.disabled = false;
   dialogueContent.replaceChildren('');
 
-  if (messages.length) {
+  const isInterlocutorSelected: boolean = interlocutorName.textContent !== '';
+
+  if (messages.length && isInterlocutorSelected) {
     dialogueContent.classList.remove('empty');
     messages.forEach((message: ServerMsgSend) => {
       drawMessage(message);
     });
+  } else if (messages.length && !isInterlocutorSelected) {
+    dialogueInput.disabled = true;
+    dialogueSend.disabled = true;
+
+    dialogueContent.classList.add('empty');
+    dialogueContent.append(chatHint);
+    chatHint.textContent = 'Select a person to talk with';
   } else {
     dialogueContent.classList.add('empty');
     dialogueContent.append(chatHint);
