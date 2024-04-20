@@ -102,4 +102,16 @@ export class Model {
       }
     });
   }
+
+  public deleteMessage(id: string): void {
+    this.webSocketApiService.sendData({
+      id: this.id,
+      type: 'MSG_DELETE',
+      payload: {
+        message: {
+          id
+        }
+      }
+    });
+  }
 }

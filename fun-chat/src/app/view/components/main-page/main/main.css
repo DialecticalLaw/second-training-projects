@@ -217,6 +217,7 @@
 }
 
 .main__dialogue_message {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -228,8 +229,6 @@
 
 .interlocutor-message .main__dialogue_message {
   align-self: flex-start;
-  display: flex;
-  flex-direction: column;
   border-radius: 15px 15px 15px 0;
   background: linear-gradient(-153deg, rgba(80, 80, 80, 0.6) 20%, rgba(26, 26, 26, 0.6) 100%);
   animation: interlocutor-message-appear 0.3s;
@@ -237,12 +236,11 @@
 
 .own-message .main__dialogue_message {
   align-self: flex-end;
-  display: flex;
-  flex-direction: column;
   border-radius: 15px 15px 0px 15px;
   background: rgb(44, 44, 207);
   background: linear-gradient(153deg, rgba(41, 41, 179, 0.6) 20%, rgba(120, 37, 255, 0.6) 100%);
   animation: own-message-appear 0.3s;
+  cursor: pointer;
 }
 
 .main__dialogue_message-header,
@@ -268,6 +266,42 @@
   font-size: 1.2rem;
   color: #ffffff;
   word-break: break-word;
+}
+
+.main__dialogue_context-menu {
+  position: absolute;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 160px;
+  padding: 8px;
+  box-shadow:
+    0 0 5px 5px #1e84b3,
+    5px 5px 12px 1px #000000;
+  background-color: #1e84b3f6;
+  border-radius: 15px;
+  animation: context-menu-appear 0.3s;
+}
+
+.main__dialogue_message:has(.main__dialogue_context-menu) {
+  cursor: default;
+}
+
+.main__dialogue_edit-btn,
+.main__dialogue_delete-btn {
+  font-size: 1rem;
+  color: #ffffff;
+  background-color: transparent;
+  border-radius: 6px;
+}
+
+.main__dialogue_edit-btn:hover {
+  background-color: rgb(0, 160, 77);
+}
+
+.main__dialogue_delete-btn:hover {
+  background-color: rgb(255, 71, 71);
 }
 
 .main__dialogue_hint {
@@ -356,5 +390,16 @@
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@keyframes context-menu-appear {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }

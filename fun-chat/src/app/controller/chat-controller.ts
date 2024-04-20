@@ -9,11 +9,21 @@ import {
 import {
   drawMessage,
   markMessagesStatus,
+  showContextMenu,
   showMessageHistory,
   showSelectedUser,
   updateUserList,
   updateUserStatus
 } from '../view/main-view/main-view';
+
+document.addEventListener('click', (event: MouseEvent) => {
+  const target: EventTarget | null = event.target;
+  const contextMenu: HTMLElement | null = document.querySelector('.main__dialogue_context-menu');
+
+  if (target instanceof HTMLElement && contextMenu) {
+    if (!contextMenu.contains(target)) contextMenu.remove();
+  }
+});
 
 export class ChatController {
   model: Model;
@@ -37,6 +47,7 @@ export class ChatController {
     document.addEventListener(Events.MessageHistory, (event: Event) => {
       if (event instanceof CustomEvent) {
         showMessageHistory(event.detail.messages);
+        this.handleContextMenuOpen();
       }
     });
 
@@ -48,10 +59,12 @@ export class ChatController {
   private static receiveNotification(event: Event): void {
     if (!(event instanceof CustomEvent)) throw new Error('event is not custom');
     const messageInfo = event.detail.message;
+    const messageElem: HTMLElement | null = document.querySelector(`[id="${messageInfo.id}"]`);
 
     if ('isDelivered' in messageInfo.status && messageInfo.status.isDelivered) {
-      const messageElem: HTMLElement | null = document.querySelector(`[id="${messageInfo.id}"]`);
       if (messageElem) markMessagesStatus([messageElem], messageInfo.status);
+    } else if ('isDeleted' in messageInfo.status && messageInfo.status.isDeleted) {
+      if (messageElem) messageElem.remove();
     }
   }
 
@@ -62,6 +75,67 @@ export class ChatController {
         event.detail.message.from === this.model.login)
     ) {
       drawMessage(event.detail.message);
+      this.handleContextMenuOpen();
+    }
+  }
+
+  private handleContextMenuOpen(): void {
+    const allMessageElems: HTMLElement[] = Array.from(
+      document.querySelectorAll('.main__dialogue_message')
+    );
+
+    allMessageElems.forEach((elem: HTMLElement) => {
+      const elemLink = elem;
+      if (!elemLink.oncontextmenu) {
+        elemLink.oncontextmenu = (event: MouseEvent) => {
+          event.preventDefault();
+          const target: EventTarget | null = event.currentTarget;
+          const isMenuOpen: boolean = Boolean(
+            elemLink.lastElementChild?.classList.contains('main__dialogue_context-menu')
+          );
+
+          if (
+            target instanceof HTMLElement &&
+            target.parentElement &&
+            target.parentElement.classList.contains('own-message') &&
+            !isMenuOpen
+          ) {
+            const contextMenu: HTMLElement | null = document.querySelector(
+              '.main__dialogue_context-menu'
+            );
+            if (contextMenu) contextMenu.remove();
+
+            showContextMenu(target);
+            this.handleContextMenuActions();
+          }
+        };
+      }
+    });
+  }
+
+  private handleContextMenuActions(): void {
+    const contextMenu: HTMLFormElement | null = document.querySelector(
+      '.main__dialogue_context-menu'
+    );
+    const editBtn: HTMLButtonElement | null = document.querySelector('.main__dialogue_edit-btn');
+    const deleteBtn: HTMLButtonElement | null = document.querySelector(
+      '.main__dialogue_delete-btn'
+    );
+
+    if (editBtn && deleteBtn && contextMenu) {
+      editBtn.addEventListener('click', (event: MouseEvent) => {
+        event.preventDefault();
+        contextMenu.remove();
+      });
+
+      deleteBtn.addEventListener('click', (event: MouseEvent) => {
+        event.preventDefault();
+        const messageWrapper: HTMLElement | undefined | null =
+          contextMenu.parentElement?.parentElement;
+        if (!messageWrapper) throw new Error('messageWrapper not found');
+        this.model.deleteMessage(messageWrapper.id);
+        contextMenu.remove();
+      });
     }
   }
 

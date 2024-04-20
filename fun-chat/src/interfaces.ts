@@ -66,7 +66,7 @@ export interface MessageNotification {
 }
 
 interface MessageData {
-  message: ClientMsgSend | ServerMsgSend | MessageNotification;
+  message: ClientMsgSend | ServerMsgSend | MessageNotification | { id: string };
 }
 
 interface Messages {

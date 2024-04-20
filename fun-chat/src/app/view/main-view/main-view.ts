@@ -234,3 +234,15 @@ export function showMessageHistory(messages: ServerMsgSend[]): void {
     chatHint.textContent = 'Send the first message to the user';
   }
 }
+
+export function showContextMenu(elem: HTMLElement): void {
+  const contextMenu: HTMLFormElement = createElem('form', { class: 'main__dialogue_context-menu' });
+
+  const editBtn: HTMLButtonElement = createElem('button', { class: 'main__dialogue_edit-btn' });
+  editBtn.textContent = 'Edit';
+  const deleteBtn: HTMLButtonElement = createElem('button', { class: 'main__dialogue_delete-btn' });
+  deleteBtn.textContent = 'Delete';
+
+  contextMenu.append(editBtn, deleteBtn);
+  elem.append(contextMenu);
+}
