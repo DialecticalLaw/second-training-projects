@@ -18,6 +18,15 @@ import {
   searchInput
 } from '../components/main-page/main/main';
 
+document.addEventListener('click', (event: MouseEvent) => {
+  const target: EventTarget | null = event.target;
+  const contextMenu: HTMLElement | null = document.querySelector('.main__dialogue_context-menu');
+
+  if (target instanceof HTMLElement && contextMenu) {
+    if (!contextMenu.contains(target)) contextMenu.remove();
+  }
+});
+
 export function drawMainPage() {
   container.append(header, main, footer);
   dialogueContent.scrollTop = dialogueContent.scrollHeight;
@@ -235,7 +244,7 @@ export function showMessageHistory(messages: ServerMsgSend[]): void {
   }
 }
 
-export function showContextMenu(elem: HTMLElement): void {
+export function showContextMenu(messageElem: HTMLElement): void {
   const contextMenu: HTMLFormElement = createElem('form', { class: 'main__dialogue_context-menu' });
 
   const editBtn: HTMLButtonElement = createElem('button', { class: 'main__dialogue_edit-btn' });
@@ -244,5 +253,18 @@ export function showContextMenu(elem: HTMLElement): void {
   deleteBtn.textContent = 'Delete';
 
   contextMenu.append(editBtn, deleteBtn);
-  elem.append(contextMenu);
+  messageElem.append(contextMenu);
+}
+
+export function removeMessage(messageElem: HTMLElement): void {
+  messageElem.remove();
+  const isHistoryClear: boolean = Boolean(
+    document.querySelector('.main__dialogue_message-wrapper')
+  );
+
+  if (!isHistoryClear) {
+    dialogueContent.classList.add('empty');
+    dialogueContent.append(chatHint);
+    chatHint.textContent = 'Send the first message to the user';
+  }
 }

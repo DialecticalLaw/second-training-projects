@@ -9,21 +9,13 @@ import {
 import {
   drawMessage,
   markMessagesStatus,
+  removeMessage,
   showContextMenu,
   showMessageHistory,
   showSelectedUser,
   updateUserList,
   updateUserStatus
 } from '../view/main-view/main-view';
-
-document.addEventListener('click', (event: MouseEvent) => {
-  const target: EventTarget | null = event.target;
-  const contextMenu: HTMLElement | null = document.querySelector('.main__dialogue_context-menu');
-
-  if (target instanceof HTMLElement && contextMenu) {
-    if (!contextMenu.contains(target)) contextMenu.remove();
-  }
-});
 
 export class ChatController {
   model: Model;
@@ -64,7 +56,7 @@ export class ChatController {
     if ('isDelivered' in messageInfo.status && messageInfo.status.isDelivered) {
       if (messageElem) markMessagesStatus([messageElem], messageInfo.status);
     } else if ('isDeleted' in messageInfo.status && messageInfo.status.isDeleted) {
-      if (messageElem) messageElem.remove();
+      if (messageElem) removeMessage(messageElem);
     }
   }
 
