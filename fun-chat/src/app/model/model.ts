@@ -10,6 +10,8 @@ export class Model {
 
   private password?: string;
 
+  public editingMessageId?: string;
+
   constructor() {
     this.webSocketApiService = new WebSocketApiService();
     this.id = crypto.randomUUID();
@@ -103,13 +105,26 @@ export class Model {
     });
   }
 
-  public deleteMessage(id: string): void {
+  public sendDeleteMessage(id: string): void {
     this.webSocketApiService.sendData({
       id: this.id,
       type: 'MSG_DELETE',
       payload: {
         message: {
           id
+        }
+      }
+    });
+  }
+
+  public sendEditMessage(id: string, text: string): void {
+    this.webSocketApiService.sendData({
+      id: this.id,
+      type: 'MSG_EDIT',
+      payload: {
+        message: {
+          id,
+          text
         }
       }
     });

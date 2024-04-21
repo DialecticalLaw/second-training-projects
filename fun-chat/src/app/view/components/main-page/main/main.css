@@ -371,6 +371,15 @@
   transform: scaleX(1);
 }
 
+.main__dialogue_send.edit {
+  outline: 1px solid rgb(0, 190, 92);
+  color: rgb(0, 190, 92);
+}
+
+.main__dialogue_send.edit::after {
+  background-color: rgb(0, 190, 92);
+}
+
 @keyframes own-message-appear {
   from {
     opacity: 0;

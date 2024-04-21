@@ -8,13 +8,16 @@ import {
 } from '../view/components/main-page/main/main';
 import {
   drawMessage,
+  startEditMessage,
   markMessagesStatus,
   removeMessage,
   showContextMenu,
   showMessageHistory,
   showSelectedUser,
   updateUserList,
-  updateUserStatus
+  updateUserStatus,
+  endEditMessage,
+  editMessage
 } from '../view/main-view/main-view';
 
 export class ChatController {
@@ -54,9 +57,11 @@ export class ChatController {
     const messageElem: HTMLElement | null = document.querySelector(`[id="${messageInfo.id}"]`);
 
     if ('isDelivered' in messageInfo.status && messageInfo.status.isDelivered) {
-      if (messageElem) markMessagesStatus([messageElem], messageInfo.status);
+      if (messageElem) markMessagesStatus(messageElem, messageInfo.status);
     } else if ('isDeleted' in messageInfo.status && messageInfo.status.isDeleted) {
       if (messageElem) removeMessage(messageElem);
+    } else if ('isEdited' in messageInfo.status && messageInfo.status.isEdited) {
+      if (messageElem) editMessage(messageElem, messageInfo.text);
     }
   }
 
@@ -117,6 +122,14 @@ export class ChatController {
     if (editBtn && deleteBtn && contextMenu) {
       editBtn.addEventListener('click', (event: MouseEvent) => {
         event.preventDefault();
+        const messageTextElem: Element | undefined | null =
+          contextMenu.previousElementSibling?.previousElementSibling;
+        const messageWrapper: HTMLElement | undefined | null =
+          contextMenu.parentElement?.parentElement;
+        if (!messageTextElem || !messageWrapper) throw new Error('message elem not found');
+
+        startEditMessage(messageTextElem.textContent as string);
+        this.model.editingMessageId = messageWrapper.id;
         contextMenu.remove();
       });
 
@@ -125,7 +138,7 @@ export class ChatController {
         const messageWrapper: HTMLElement | undefined | null =
           contextMenu.parentElement?.parentElement;
         if (!messageWrapper) throw new Error('messageWrapper not found');
-        this.model.deleteMessage(messageWrapper.id);
+        this.model.sendDeleteMessage(messageWrapper.id);
         contextMenu.remove();
       });
     }
@@ -150,6 +163,8 @@ export class ChatController {
 
   private selectUser(userElem: HTMLElement): void {
     if (!userElem.textContent) throw new Error('userElem textContent is null');
+    if (dialogueSend.classList.contains('edit')) endEditMessage();
+    dialogueInput.value = '';
     showSelectedUser(userElem);
     this.model.getMessageHistory(userElem.textContent);
   }
@@ -158,6 +173,13 @@ export class ChatController {
     event.preventDefault();
     if (dialogueInput.value.trim() === '') {
       dialogueInput.value = '';
+      if (dialogueSend.classList.contains('edit')) endEditMessage();
+      return;
+    }
+
+    if (dialogueSend.classList.contains('edit') && this.model.editingMessageId) {
+      this.model.sendEditMessage(this.model.editingMessageId, dialogueInput.value);
+      endEditMessage();
       return;
     }
 

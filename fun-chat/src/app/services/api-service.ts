@@ -21,7 +21,7 @@ function isNotification(data: unknown): data is MessageNotification {
     data instanceof Object &&
     'id' in data &&
     'status' in data &&
-    Object.keys(data).length === 2
+    (Object.keys(data).length === 2 || Object.keys(data).length === 3)
   ) {
     return true;
   }

@@ -137,30 +137,27 @@ export function showSelectedUser(userElem: HTMLElement): void {
   } else updateInterlocutorStatus(false);
 }
 
-export function markMessagesStatus(
-  messageElems: HTMLElement[],
-  status: Partial<MessageStatus>
-): void {
-  messageElems.forEach((message: HTMLElement) => {
-    if ('isDeleted' in status && status.isDeleted) {
-      message.remove();
-    } else {
-      const messageFooter: Element | undefined | null = message.lastElementChild?.lastElementChild;
-      const statusElem: Element | null | undefined = messageFooter?.lastElementChild;
-      if (!messageFooter || !statusElem) throw new Error('footer or status of message is null');
+export function markMessagesStatus(message: HTMLElement, status: Partial<MessageStatus>): void {
+  if ('isDeleted' in status && status.isDeleted) {
+    message.remove();
+  } else {
+    const messageFooter: Element | undefined | null = message.lastElementChild?.lastElementChild;
+    const statusElem: Element | null | undefined = messageFooter?.lastElementChild;
 
-      if ('isEdited' in status && status.isEdited) {
-        const editedElem: HTMLSpanElement = createElem('span', {
-          class: 'main__dialogue_edited-status'
-        });
-        editedElem.textContent = 'Edited';
-        messageFooter.prepend(editedElem);
-      }
-
-      if ('isReaded' in status && status.isReaded) statusElem.textContent = 'read';
-      if ('isDelivered' in status && status.isDelivered) statusElem.textContent = 'delivered';
+    if ('isEdited' in status && status.isEdited) {
+      const editedElem: HTMLSpanElement = createElem('span', {
+        class: 'main__dialogue_edited-status'
+      });
+      editedElem.textContent = 'Edited';
+      if (!messageFooter) throw new Error('messageFooter not found');
+      messageFooter.prepend(editedElem);
     }
-  });
+
+    if (message.classList.contains('interlocutor-message')) return;
+    if (!statusElem) throw new Error('statusElem not found');
+    if ('isReaded' in status && status.isReaded) statusElem.textContent = 'read';
+    if ('isDelivered' in status && status.isDelivered) statusElem.textContent = 'delivered';
+  }
 }
 
 function createMessageParts(): HTMLElement[] {
@@ -211,7 +208,7 @@ export function drawMessage(message: ServerMsgSend): void {
 
     statusElem.textContent = 'sent';
     messageFooter.append(statusElem);
-    markMessagesStatus([messageWrapper], message.status);
+    markMessagesStatus(messageWrapper, message.status);
   }
 
   dialogueContent.append(messageWrapper);
@@ -230,7 +227,7 @@ export function showMessageHistory(messages: ServerMsgSend[]): void {
     messages.forEach((message: ServerMsgSend) => {
       drawMessage(message);
     });
-  } else if (messages.length && !isInterlocutorSelected) {
+  } else if (!isInterlocutorSelected) {
     dialogueInput.disabled = true;
     dialogueSend.disabled = true;
 
@@ -267,4 +264,25 @@ export function removeMessage(messageElem: HTMLElement): void {
     dialogueContent.append(chatHint);
     chatHint.textContent = 'Send the first message to the user';
   }
+}
+
+export function startEditMessage(messageText: string): void {
+  dialogueInput.value = messageText;
+  dialogueSend.classList.add('edit');
+  dialogueSend.textContent = 'Edit';
+}
+
+export function endEditMessage(): void {
+  dialogueInput.value = '';
+  dialogueSend.classList.remove('edit');
+  dialogueSend.textContent = 'Send';
+}
+
+export function editMessage(messageElem: HTMLElement, editingText: string): void {
+  const textElem: Element | null | undefined =
+    messageElem.lastElementChild?.firstElementChild?.nextElementSibling;
+  if (!textElem) throw new Error('textElem not found');
+
+  textElem.textContent = editingText;
+  markMessagesStatus(messageElem, { isEdited: true });
 }
