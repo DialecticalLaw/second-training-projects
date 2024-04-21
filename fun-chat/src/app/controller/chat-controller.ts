@@ -17,7 +17,9 @@ import {
   updateUserList,
   updateUserStatus,
   endEditMessage,
-  editMessage
+  editMessage,
+  markUnreadMsgCount,
+  incrementUnreadMsgCount
 } from '../view/main-view/main-view';
 
 export class ChatController {
@@ -42,6 +44,7 @@ export class ChatController {
     document.addEventListener(Events.MessageHistory, (event: Event) => {
       if (event instanceof CustomEvent) {
         showMessageHistory(event.detail.messages);
+        markUnreadMsgCount(event.detail.messages);
         this.handleContextMenuOpen();
       }
     });
@@ -66,13 +69,17 @@ export class ChatController {
   }
 
   private receiveMessage(event: Event): void {
-    if (
-      event instanceof CustomEvent &&
-      (event.detail.message.from === interlocutorName.textContent ||
-        event.detail.message.from === this.model.login)
-    ) {
-      drawMessage(event.detail.message);
-      this.handleContextMenuOpen();
+    if (event instanceof CustomEvent) {
+      if (event.detail.message.from !== this.model.login)
+        incrementUnreadMsgCount(event.detail.message);
+
+      if (
+        event.detail.message.from === interlocutorName.textContent ||
+        event.detail.message.from === this.model.login
+      ) {
+        drawMessage(event.detail.message);
+        this.handleContextMenuOpen();
+      }
     }
   }
 
@@ -162,11 +169,14 @@ export class ChatController {
   }
 
   private selectUser(userElem: HTMLElement): void {
-    if (!userElem.textContent) throw new Error('userElem textContent is null');
+    const userFirstChild: Element | null = userElem.firstElementChild;
+    if (!userFirstChild || !userFirstChild.textContent)
+      throw new Error('userFirstChild is not found or empty textContent');
+
     if (dialogueSend.classList.contains('edit')) endEditMessage();
     dialogueInput.value = '';
     showSelectedUser(userElem);
-    this.model.getMessageHistory(userElem.textContent);
+    this.model.getMessageHistory(userFirstChild.textContent);
   }
 
   private sendMessage(event: MouseEvent): void {

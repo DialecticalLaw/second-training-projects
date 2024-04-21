@@ -48,7 +48,7 @@ export function updateMainPageData(users: ServerUserData[], currentUserLogin: st
   username.textContent = currentUserLogin;
 
   users.forEach((user: ServerUserData) => {
-    if (!(user.login === currentUserLogin)) {
+    if (user.login !== currentUserLogin) {
       const userElem: HTMLLIElement = createUserElem(user.login, user.isLogined);
 
       if (userElem.classList.contains('main__user_active')) {
@@ -89,8 +89,9 @@ export function updateUserStatus(login: string, isLogined: boolean) {
   const allUserElems: HTMLLIElement[] = Array.from(document.querySelectorAll('.main__user'));
 
   let targetUser: HTMLLIElement | undefined = allUserElems.find(
-    (userElem: HTMLLIElement): boolean => userElem.textContent === login
+    (userElem: HTMLLIElement): boolean => userElem.firstElementChild?.textContent === login
   );
+
   if (!targetUser) {
     targetUser = createUserElem(login, isLogined);
   }
@@ -125,12 +126,15 @@ export function clearMainPage(): void {
 }
 
 export function showSelectedUser(userElem: HTMLElement): void {
+  const userFirstChild: Element | null = userElem.firstElementChild;
+  if (!userFirstChild || !userFirstChild.textContent)
+    throw new Error('userFirstChild is not found or empty textContent');
+
   const allUserElems: HTMLLIElement[] = Array.from(document.querySelectorAll('.main__user'));
   allUserElems.forEach((user: HTMLLIElement) => user.classList.remove('selected'));
   userElem.classList.add('selected');
 
-  interlocutorName.textContent = userElem.textContent;
-  if (!userElem.textContent) throw new Error('userElem textContent is null');
+  interlocutorName.textContent = userFirstChild.textContent;
 
   if (userElem.classList.contains('main__user_active')) {
     updateInterlocutorStatus(true);
@@ -176,6 +180,57 @@ function createMessageParts(): HTMLElement[] {
   });
 
   return [messageWrapper, messageElem, messageHeader, textElem, messageFooter];
+}
+
+export function incrementUnreadMsgCount(message: ServerMsgSend): void {
+  const allUserElems: HTMLLIElement[] = Array.from(document.querySelectorAll('.main__user'));
+  const targetUser: HTMLLIElement | undefined = allUserElems.find(
+    (userElem: HTMLLIElement): boolean => userElem.firstElementChild?.textContent === message.from
+  );
+  if (!targetUser) throw new Error('targetUser not found');
+
+  const targetLastElem: Element | null = targetUser.lastElementChild;
+  if (!targetLastElem) throw new Error('targetLastElem not found');
+
+  if (targetLastElem.classList.contains('main__user_new-messages-count')) {
+    targetLastElem.textContent = (Number(targetLastElem.textContent) + 1).toString();
+  } else {
+    const countElem: HTMLDivElement = createElem('div', {
+      class: 'main__user_new-messages-count'
+    });
+    countElem.textContent = '1';
+    targetUser.append(countElem);
+  }
+}
+
+export function markUnreadMsgCount(messages: ServerMsgSend[]): void {
+  const allUserElems: HTMLLIElement[] = Array.from(document.querySelectorAll('.main__user'));
+  const interlocutorMessages: ServerMsgSend[] = [...messages].filter(
+    (message: ServerMsgSend) => message.from !== username.textContent
+  );
+  if (!interlocutorMessages.length) return;
+
+  const targetUser: HTMLLIElement | undefined = allUserElems.find(
+    (userElem: HTMLLIElement): boolean =>
+      userElem.firstElementChild?.textContent === interlocutorMessages[0].from
+  );
+  if (!targetUser) throw new Error('targetUser not found');
+
+  let unreadMsgCount: number = 0;
+  interlocutorMessages.forEach((message: ServerMsgSend) => {
+    const targetLastElem: Element | null = targetUser.lastElementChild;
+    if (targetLastElem && targetLastElem.classList.contains('main__user_new-messages-count'))
+      targetLastElem.remove();
+    if (!message.status.isReaded) unreadMsgCount += 1;
+  });
+
+  if (unreadMsgCount) {
+    const countElem: HTMLDivElement = createElem('div', {
+      class: 'main__user_new-messages-count'
+    });
+    countElem.textContent = unreadMsgCount.toString();
+    targetUser.append(countElem);
+  }
 }
 
 export function drawMessage(message: ServerMsgSend): void {
@@ -230,8 +285,8 @@ export function showMessageHistory(messages: ServerMsgSend[]): void {
   } else if (!isInterlocutorSelected) {
     dialogueInput.disabled = true;
     dialogueSend.disabled = true;
-
     dialogueContent.classList.add('empty');
+
     dialogueContent.append(chatHint);
     chatHint.textContent = 'Select a person to talk with';
   } else {

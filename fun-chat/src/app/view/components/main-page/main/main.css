@@ -72,6 +72,9 @@
 
 .main__user {
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   padding: 8px 0;
   text-wrap: pretty;
@@ -80,7 +83,11 @@
 }
 
 .main__user_login {
+  pointer-events: none;
+  max-width: 70%;
   margin-left: 30px;
+  word-break: break-all;
+  color: #ffffff;
 }
 
 .main__user:hover {
@@ -109,11 +116,6 @@
   background-color: rgb(255, 42, 42);
 }
 
-.main__user_login {
-  pointer-events: none;
-  color: #ffffff;
-}
-
 .main__user[hidden] {
   display: none;
 }
@@ -121,6 +123,17 @@
 .main__user.selected {
   pointer-events: none;
   background-color: #48ade269;
+}
+
+.main__user_new-messages-count {
+  height: max-content;
+  margin-right: 15px;
+  padding: 5px;
+  font-family: Comfortaa;
+  font-size: 0.6rem;
+  color: #00ff00;
+  outline: 1px solid #00ff00;
+  border-radius: 50%;
 }
 
 .main__dialogue {
