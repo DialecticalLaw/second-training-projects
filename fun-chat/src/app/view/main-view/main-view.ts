@@ -28,10 +28,22 @@ document.addEventListener('click', (event: MouseEvent) => {
   }
 });
 
+function scrollToCorrectEnd(): void {
+  const newMessageElem: HTMLElement | null = document.querySelector('.new-message');
+
+  if (newMessageElem) {
+    const newMessageMarkHeight: number = 45;
+    const newMessageOffsetTop: number = newMessageElem.offsetTop;
+    dialogueContent.scrollTo({
+      top: newMessageOffsetTop - dialogueContent.offsetTop - newMessageMarkHeight
+    });
+  } else dialogueContent.scrollTo({ top: dialogueContent.scrollHeight });
+}
+
 export function drawMainPage() {
   container.append(header, main, footer);
   scrollState.isScrollByUser = false;
-  dialogueContent.scrollTo({ top: dialogueContent.scrollHeight });
+  scrollToCorrectEnd();
 }
 
 function createUserElem(login: string, isLogined: boolean): HTMLLIElement {
@@ -274,7 +286,7 @@ export function drawMessage(message: ServerMsgSend): void {
 
   dialogueContent.append(messageWrapper);
   scrollState.isScrollByUser = false;
-  dialogueContent.scrollTo({ top: dialogueContent.scrollHeight });
+  scrollToCorrectEnd();
 }
 
 export function showMessageHistory(messages: ServerMsgSend[]): void {
