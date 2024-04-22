@@ -23,7 +23,7 @@ export class Router {
         // pageName = '/info';
         break;
       default:
-        draw = drawLogin; // TODO: replace draw Login with 404 rendering
+        draw = drawLogin;
         pageName = '404';
     }
 
@@ -46,7 +46,7 @@ window.addEventListener('popstate', (event: PopStateEvent) => {
       draw = drawInfoPage;
       break;
     default:
-      draw = drawLogin; // TODO: replace draw Login with 404 rendering
+      draw = drawLogin;
       break;
   }
   draw();

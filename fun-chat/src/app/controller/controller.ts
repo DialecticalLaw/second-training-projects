@@ -30,6 +30,7 @@ export class Controller {
 
     document.addEventListener(Events.Connect, () => {
       toggleWaitingConnectWindow(false);
+      this.model.tryRelogin();
     });
   }
 

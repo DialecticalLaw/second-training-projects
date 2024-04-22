@@ -25,7 +25,7 @@ export enum Events {
   ReadMessages = 'readmessages'
 }
 
-interface ClientUserData {
+export interface ClientUserData {
   login: string;
   password?: string;
 }

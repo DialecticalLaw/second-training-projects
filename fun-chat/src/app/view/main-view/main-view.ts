@@ -133,6 +133,7 @@ export function clearMainPage(): void {
 
   interlocutorName.textContent = '';
   interlocutorStatus.textContent = '';
+  username.textContent = '';
 
   dialogueContent.classList.add('empty');
   dialogueContent.append(chatHint);

@@ -16,6 +16,15 @@ import { logoutBtn, username } from '../view/components/main-page/header/header'
 import { clearLogin, markError } from '../view/login-view/login-view';
 import { clearMainPage, updateMainPageData } from '../view/main-view/main-view';
 
+function handleLoginError(err: Events.IncorrectPassword | Events.AlreadyAuth): void {
+  clearLogin();
+  if (err === Events.IncorrectPassword) {
+    markError(Events.IncorrectPassword);
+  } else {
+    markError(Events.AlreadyAuth);
+  }
+}
+
 export class LoginController {
   private isFormValid: boolean;
 
@@ -26,8 +35,12 @@ export class LoginController {
     this.model = model;
 
     document.addEventListener(Events.Logined, (event: Event): void => {
-      if (event instanceof CustomEvent && event.detail.login === nameInput.value) {
+      if (
+        event instanceof CustomEvent &&
+        (event.detail.login === nameInput.value || event.detail.login === username.textContent)
+      ) {
         clearLogin();
+        clearMainPage();
         this.model.sendGetUsersRequests();
         Router.moveToPage(Page.Main);
       }
@@ -40,15 +53,11 @@ export class LoginController {
       }
     });
 
-    document.addEventListener(Events.IncorrectPassword, () => {
-      clearLogin();
-      markError(Events.IncorrectPassword);
-    });
+    document.addEventListener(Events.IncorrectPassword, () =>
+      handleLoginError(Events.IncorrectPassword)
+    );
 
-    document.addEventListener(Events.AlreadyAuth, () => {
-      clearLogin();
-      markError(Events.AlreadyAuth);
-    });
+    document.addEventListener(Events.AlreadyAuth, () => handleLoginError(Events.AlreadyAuth));
 
     document.addEventListener(Events.UserList, (event: Event) => {
       if (event instanceof CustomEvent) {

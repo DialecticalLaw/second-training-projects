@@ -1,5 +1,9 @@
-import { NotificationType, ServerUserData } from '../../interfaces';
+import { ClientUserData, NotificationType, ServerUserData } from '../../interfaces';
 import { WebSocketApiService } from '../services/api-service';
+
+window.addEventListener('beforeunload', () => {
+  sessionStorage.removeItem('dialecticallaw-fun-chat');
+});
 
 export class Model {
   private webSocketApiService: WebSocketApiService;
@@ -24,6 +28,7 @@ export class Model {
   public sendLogin(login: string, password: string): void {
     this.login = login;
     this.password = password;
+    sessionStorage.setItem('dialecticallaw-fun-chat', JSON.stringify({ login, password }));
 
     this.webSocketApiService.sendData({
       id: this.id,
@@ -37,8 +42,17 @@ export class Model {
     });
   }
 
+  public tryRelogin(): void {
+    const sessionData: string | null = sessionStorage.getItem('dialecticallaw-fun-chat');
+    if (sessionData) {
+      const parsedLsData: Required<ClientUserData> = JSON.parse(sessionData);
+      this.sendLogin(parsedLsData.login, parsedLsData.password);
+    }
+  }
+
   public sendLogout(): void {
     if (!this.login || !this.password) throw new Error('login or password is undefined');
+    sessionStorage.removeItem('dialecticallaw-fun-chat');
     this.webSocketApiService.sendData({
       id: this.id,
       type: 'USER_LOGOUT',
