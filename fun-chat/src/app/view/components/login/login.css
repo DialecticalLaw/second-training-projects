@@ -96,3 +96,25 @@
   opacity: 1;
   cursor: pointer;
 }
+
+@media screen and (max-width: 560px) {
+  .login__validate-hint {
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  .login__label_name,
+  .login__label_password {
+    align-items: center;
+    font-size: 1rem;
+  }
+
+  .login__input_name,
+  .login__input_password {
+    font-size: 0.8rem;
+  }
+
+  .login__btn_login {
+    font-size: 1.2rem;
+  }
+}

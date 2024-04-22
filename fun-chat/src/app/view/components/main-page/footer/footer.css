@@ -37,3 +37,26 @@
   background-repeat: no-repeat;
   background-position: center;
 }
+
+@media screen and (max-width: 480px) {
+  .footer__github_link,
+  .footer__year {
+    font-size: 1rem;
+  }
+
+  .footer__github_icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .footer__rss_logo {
+    width: 70px;
+    height: 27px;
+  }
+}
+
+@media screen and (max-height: 590px) {
+  .footer {
+    padding: 5px;
+  }
+}

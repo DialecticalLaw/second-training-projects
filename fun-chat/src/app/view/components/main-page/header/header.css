@@ -38,3 +38,51 @@
   box-shadow: 0 0 12px 2px #ff2424;
   border-radius: 0 0 15px 0;
 }
+
+@media screen and (max-width: 920px) {
+  .header__user-name {
+    overflow: hidden;
+    max-width: 44%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 1.4rem;
+  }
+
+  .header__user-name_value {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .header__user-name,
+  .header__app-name {
+    font-size: 1.2rem;
+  }
+
+  .header__user-name_value {
+    font-size: 1.3rem;
+  }
+
+  .button-hover.header__logout {
+    padding: 5px 10px;
+    font-size: 1.2rem;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .header__app-name,
+  .button-hover.header__logout,
+  .header__user-name {
+    font-size: 0.9rem;
+  }
+
+  .header__user-name_value {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-height: 590px) {
+  .header {
+    padding: 5px;
+  }
+}

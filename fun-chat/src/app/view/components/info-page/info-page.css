@@ -39,6 +39,7 @@
 }
 
 .info-btn {
+  z-index: 2;
   position: absolute;
   top: 20px;
   right: 20px;
@@ -49,4 +50,30 @@
 .info-btn:has(~ .info) {
   opacity: 0.7;
   pointer-events: none;
+}
+
+@media screen and (max-width: 1000px) {
+  .info-btn {
+    top: 15px;
+    right: 15px;
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 570px) {
+  .info__title {
+    font-size: 1.7rem;
+  }
+
+  .info__content {
+    font-size: 1.2rem;
+  }
+
+  .info__author {
+    font-size: 1rem;
+  }
+
+  .info__back-btn {
+    font-size: 1.2rem;
+  }
 }
