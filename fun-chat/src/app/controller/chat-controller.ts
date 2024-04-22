@@ -1,6 +1,9 @@
-import { Events } from '../../interfaces';
+import { scrollState } from '../..';
+import { Events, NotificationType } from '../../interfaces';
 import { Model } from '../model/model';
+import { dispatch } from '../services/events-service';
 import {
+  dialogueContent,
   dialogueInput,
   dialogueSend,
   interlocutorName,
@@ -21,6 +24,34 @@ import {
   markUnreadMsgCount,
   incrementUnreadMsgCount
 } from '../view/main-view/main-view';
+
+function receiveNotification(event: Event): void {
+  if (!(event instanceof CustomEvent)) throw new Error('event is not custom');
+  const messageInfo = event.detail.message;
+  const messageElem: HTMLElement | null = document.querySelector(`[id="${messageInfo.id}"]`);
+
+  if ('isDelivered' in messageInfo.status && messageInfo.status.isDelivered) {
+    if (messageElem) markMessagesStatus(messageElem, messageInfo.status);
+  } else if ('isDeleted' in messageInfo.status && messageInfo.status.isDeleted) {
+    if (messageElem) removeMessage(messageElem);
+  } else if ('isEdited' in messageInfo.status && messageInfo.status.isEdited) {
+    if (messageElem) editMessage(messageElem, messageInfo.text);
+  } else if ('isReaded' in messageInfo.status && messageInfo.status.isReaded) {
+    if (messageElem) markMessagesStatus(messageElem, messageInfo.status);
+  }
+}
+
+dialogueContent.addEventListener('click', () => {
+  dispatch(Events.ReadMessages);
+});
+
+dialogueContent.addEventListener('scroll', () => {
+  if (scrollState.isScrollByUser) dispatch(Events.ReadMessages);
+});
+
+dialogueContent.addEventListener('scrollend', () => {
+  scrollState.isScrollByUser = true;
+});
 
 export class ChatController {
   model: Model;
@@ -51,21 +82,31 @@ export class ChatController {
 
     dialogueSend.addEventListener('click', this.sendMessage.bind(this));
     document.addEventListener(Events.ReceivedMessage, this.receiveMessage.bind(this));
-    document.addEventListener(Events.Notification, ChatController.receiveNotification);
+    document.addEventListener(Events.Notification, receiveNotification);
+    document.addEventListener(Events.ReadMessages, this.readMessages.bind(this));
   }
 
-  private static receiveNotification(event: Event): void {
-    if (!(event instanceof CustomEvent)) throw new Error('event is not custom');
-    const messageInfo = event.detail.message;
-    const messageElem: HTMLElement | null = document.querySelector(`[id="${messageInfo.id}"]`);
+  private readMessages(): void {
+    const allMessageWrappers: HTMLElement[] = Array.from(
+      document.querySelectorAll('.main__dialogue_message-wrapper')
+    );
+    const allUserElems: HTMLLIElement[] = Array.from(document.querySelectorAll('.main__user'));
+    const selectedUser = allUserElems.find((user) => user.classList.contains('selected'));
 
-    if ('isDelivered' in messageInfo.status && messageInfo.status.isDelivered) {
-      if (messageElem) markMessagesStatus(messageElem, messageInfo.status);
-    } else if ('isDeleted' in messageInfo.status && messageInfo.status.isDeleted) {
-      if (messageElem) removeMessage(messageElem);
-    } else if ('isEdited' in messageInfo.status && messageInfo.status.isEdited) {
-      if (messageElem) editMessage(messageElem, messageInfo.text);
-    }
+    if (
+      !selectedUser ||
+      !selectedUser.lastElementChild?.classList.contains('main__user_new-messages-count')
+    )
+      return;
+    selectedUser.lastElementChild.remove();
+
+    allMessageWrappers.forEach((messageWrapper: HTMLElement) => {
+      if (
+        messageWrapper.classList.contains('interlocutor-message') &&
+        messageWrapper.classList.contains('new-message')
+      )
+        this.model.sendNotificationMessage(NotificationType.Read, messageWrapper.id);
+    });
   }
 
   private receiveMessage(event: Event): void {
@@ -145,7 +186,7 @@ export class ChatController {
         const messageWrapper: HTMLElement | undefined | null =
           contextMenu.parentElement?.parentElement;
         if (!messageWrapper) throw new Error('messageWrapper not found');
-        this.model.sendDeleteMessage(messageWrapper.id);
+        this.model.sendNotificationMessage(NotificationType.Delete, messageWrapper.id);
         contextMenu.remove();
       });
     }
@@ -181,6 +222,7 @@ export class ChatController {
 
   private sendMessage(event: MouseEvent): void {
     event.preventDefault();
+    dispatch(Events.ReadMessages);
     if (dialogueInput.value.trim() === '') {
       dialogueInput.value = '';
       if (dialogueSend.classList.contains('edit')) endEditMessage();
@@ -188,7 +230,11 @@ export class ChatController {
     }
 
     if (dialogueSend.classList.contains('edit') && this.model.editingMessageId) {
-      this.model.sendEditMessage(this.model.editingMessageId, dialogueInput.value);
+      this.model.sendNotificationMessage(
+        NotificationType.Edit,
+        this.model.editingMessageId,
+        dialogueInput.value
+      );
       endEditMessage();
       return;
     }

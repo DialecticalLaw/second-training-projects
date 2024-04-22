@@ -21,7 +21,8 @@ export enum Events {
   HandleUserSelect = 'handleuserselect',
   MessageHistory = 'messagehistory',
   ReceivedMessage = 'receivedmessage',
-  Notification = 'notification'
+  Notification = 'notification',
+  ReadMessages = 'readmessages'
 }
 
 interface ClientUserData {
@@ -77,4 +78,10 @@ export interface APIRequest {
   id: string | null;
   type: string;
   payload: MessageData | UserData | Users | Messages | null | { error: string };
+}
+
+export enum NotificationType {
+  Delete = 'MSG_DELETE',
+  Edit = 'MSG_EDIT',
+  Read = 'MSG_READ'
 }

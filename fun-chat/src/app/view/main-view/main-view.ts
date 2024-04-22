@@ -1,3 +1,4 @@
+import { scrollState } from '../../..';
 import { Events, MessageStatus, ServerMsgSend, ServerUserData } from '../../../interfaces';
 import { dispatch } from '../../services/events-service';
 import { createElem } from '../../utils/create-elem';
@@ -29,7 +30,8 @@ document.addEventListener('click', (event: MouseEvent) => {
 
 export function drawMainPage() {
   container.append(header, main, footer);
-  dialogueContent.scrollTop = dialogueContent.scrollHeight;
+  scrollState.isScrollByUser = false;
+  dialogueContent.scrollTo({ top: dialogueContent.scrollHeight });
 }
 
 function createUserElem(login: string, isLogined: boolean): HTMLLIElement {
@@ -157,8 +159,12 @@ export function markMessagesStatus(message: HTMLElement, status: Partial<Message
       messageFooter.prepend(editedElem);
     }
 
-    if (message.classList.contains('interlocutor-message')) return;
+    if (message.classList.contains('interlocutor-message')) {
+      if ('isReaded' in status && status.isReaded) message.classList.remove('new-message');
+      return;
+    }
     if (!statusElem) throw new Error('statusElem not found');
+
     if ('isReaded' in status && status.isReaded) statusElem.textContent = 'read';
     if ('isDelivered' in status && status.isDelivered) statusElem.textContent = 'delivered';
   }
@@ -267,7 +273,8 @@ export function drawMessage(message: ServerMsgSend): void {
   }
 
   dialogueContent.append(messageWrapper);
-  dialogueContent.scrollTop = dialogueContent.scrollHeight;
+  scrollState.isScrollByUser = false;
+  dialogueContent.scrollTo({ top: dialogueContent.scrollHeight });
 }
 
 export function showMessageHistory(messages: ServerMsgSend[]): void {

@@ -128,7 +128,7 @@
 .main__user_new-messages-count {
   height: max-content;
   margin-right: 15px;
-  padding: 5px;
+  padding: 3px 5px;
   font-family: Comfortaa;
   font-size: 0.6rem;
   color: #00ff00;

@@ -1,4 +1,4 @@
-import { ServerUserData } from '../../interfaces';
+import { NotificationType, ServerUserData } from '../../interfaces';
 import { WebSocketApiService } from '../services/api-service';
 
 export class Model {
@@ -105,28 +105,29 @@ export class Model {
     });
   }
 
-  public sendDeleteMessage(id: string): void {
-    this.webSocketApiService.sendData({
-      id: this.id,
-      type: 'MSG_DELETE',
-      payload: {
-        message: {
-          id
+  public sendNotificationMessage(notifType: NotificationType, id: string, text?: string): void {
+    if (notifType === NotificationType.Delete || notifType === NotificationType.Read) {
+      this.webSocketApiService.sendData({
+        id: this.id,
+        type: notifType,
+        payload: {
+          message: {
+            id
+          }
         }
-      }
-    });
-  }
-
-  public sendEditMessage(id: string, text: string): void {
-    this.webSocketApiService.sendData({
-      id: this.id,
-      type: 'MSG_EDIT',
-      payload: {
-        message: {
-          id,
-          text
+      });
+    } else {
+      if (!text) throw new Error('text is undefined');
+      this.webSocketApiService.sendData({
+        id: this.id,
+        type: 'MSG_EDIT',
+        payload: {
+          message: {
+            id,
+            text
+          }
         }
-      }
-    });
+      });
+    }
   }
 }
