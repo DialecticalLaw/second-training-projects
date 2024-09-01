@@ -1,3 +1,0 @@
-# YouTube Link:
-
-# Presentation Link:
